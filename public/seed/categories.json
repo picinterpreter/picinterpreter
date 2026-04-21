@@ -1,0 +1,74 @@
+[
+  {
+    "id": "quickchat",
+    "name": "快速沟通",
+    "icon": "💬",
+    "sortOrder": 1
+  },
+  {
+    "id": "actions",
+    "name": "动作",
+    "icon": "🤚",
+    "sortOrder": 2
+  },
+  {
+    "id": "emotions",
+    "name": "情绪感觉",
+    "icon": "😊",
+    "sortOrder": 3
+  },
+  {
+    "id": "food",
+    "name": "食物饮品",
+    "icon": "🍎",
+    "sortOrder": 4
+  },
+  {
+    "id": "people",
+    "name": "人物",
+    "icon": "👤",
+    "sortOrder": 5
+  },
+  {
+    "id": "places",
+    "name": "地点",
+    "icon": "📍",
+    "sortOrder": 6
+  },
+  {
+    "id": "medical",
+    "name": "医疗健康",
+    "icon": "🏥",
+    "sortOrder": 7
+  },
+  {
+    "id": "time",
+    "name": "时间",
+    "icon": "🕐",
+    "sortOrder": 8
+  },
+  {
+    "id": "animals",
+    "name": "动物",
+    "icon": "🐾",
+    "sortOrder": 9
+  },
+  {
+    "id": "colors",
+    "name": "颜色",
+    "icon": "🎨",
+    "sortOrder": 10
+  },
+  {
+    "id": "daily",
+    "name": "日常",
+    "icon": "🏠",
+    "sortOrder": 11
+  },
+  {
+    "id": "objects",
+    "name": "物品",
+    "icon": "🎒",
+    "sortOrder": 12
+  }
+]

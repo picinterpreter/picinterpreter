@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+/* 高对比度模式：加深文字和边框颜色 */
+.hc {
+  --tw-contrast: contrast(1.3);
+  filter: var(--tw-contrast);
+}
+
+/* 高对比度下强化边框和文字 */
+.hc button,
+.hc input,
+.hc [class*="border"] {
+  border-color: #111 !important;
+}
+
+.hc [class*="text-gray"] {
+  color: #111 !important;
+}
+
+/* 确保所有可交互元素最小触控面积 */
+button, a, [role="button"] {
+  min-height: 44px;
+}
+
+/* 滚动条优化 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 隐藏滚动条（分类 tab 横向滚动） */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* 禁止长按选中（移动端交互优化） */
+.select-none {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* iOS safe area padding */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}

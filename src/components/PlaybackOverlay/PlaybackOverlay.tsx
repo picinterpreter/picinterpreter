@@ -88,6 +88,21 @@ export function PlaybackOverlay() {
     })
   }
 
+  // Escape 键关闭播报
+  useEffect(() => {
+    if (!showPlayback) return
+
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        ai.stopSpeaking()
+        stopPlayback()
+      }
+    }
+
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [ai, showPlayback, stopPlayback])
+
   if (!showPlayback) return null
 
   function handleReplay() {
@@ -111,15 +126,6 @@ export function PlaybackOverlay() {
       })
     }
   }
-
-  // Escape 键关闭播报
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') handleDone()
-    }
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  })
 
   function handleDone() {
     ai.stopSpeaking()

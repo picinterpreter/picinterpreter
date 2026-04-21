@@ -27,6 +27,7 @@ export function SettingsDrawer() {
   // Mirror of `previewing` as a ref so the close-effect can read the latest
   // value without re-running the effect on every previewing state change
   const previewingRef = useRef(false)
+  const canUseSpeechSynthesis = typeof window !== 'undefined' && 'speechSynthesis' in window
 
   // API 连接测试状态
   type TestStatus = 'idle' | 'testing' | 'ok' | 'error'
@@ -141,7 +142,7 @@ export function SettingsDrawer() {
       if (u.protocol !== 'https:' && u.protocol !== 'http:') return null
       // In production, only allow http for localhost to prevent credential exfiltration
       if (
-        import.meta.env.PROD &&
+        process.env.NODE_ENV === 'production' &&
         u.protocol === 'http:' &&
         u.hostname !== 'localhost' &&
         u.hostname !== '127.0.0.1'
@@ -446,7 +447,7 @@ export function SettingsDrawer() {
             </label>
 
             {/* 语音选择 */}
-            {'speechSynthesis' in window && (
+            {canUseSpeechSynthesis && (
               <label className="block">
                 <span className="text-sm text-gray-600">语音</span>
                 <select
@@ -470,7 +471,7 @@ export function SettingsDrawer() {
             )}
 
             {/* 试听按钮 */}
-            {'speechSynthesis' in window && (
+            {canUseSpeechSynthesis && (
               <button
                 onClick={handlePreviewTts}
                 className={`mt-3 w-full py-2.5 rounded-xl border text-base font-medium transition-colors min-h-[44px] flex items-center justify-center gap-2 ${

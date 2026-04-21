@@ -7,17 +7,18 @@
  *   - ARASAAC / GlobalSymbols 图片：Stale-While-Revalidate，离线时用缓存
  *   - LLM API 请求：Network Only（不缓存，降级到 TemplateNLG 由前端处理）
  *
- * 版本号：每次 build 时由 vite.config.ts 的 injectSwVersion 插件替换为时间戳
+ * 版本号：由注册 URL 上的 ?v=buildId 驱动，确保每次 Next.js 构建都触发 SW 更新。
  */
 
-const CACHE_VERSION = 'v2'
+const CACHE_VERSION = new URL(self.location.href).searchParams.get('v') ?? 'v2'
 const SHELL_CACHE   = `tuyujia-shell-${CACHE_VERSION}`
 const IMAGE_CACHE   = `tuyujia-images-${CACHE_VERSION}`
 const SEED_CACHE    = `tuyujia-seed-${CACHE_VERSION}`
 
 const SHELL_URLS = [
   '/',
-  '/index.html',
+  '/debug',
+  '/import',
 ]
 
 const SEED_URLS = [

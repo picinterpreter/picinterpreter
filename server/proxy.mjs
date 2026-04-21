@@ -11,7 +11,7 @@
  *   LLM_BASE_URL           选填，LLM API 地址（默认 https://api.openai.com/v1）
  *   LLM_MODEL              选填，默认模型（默认 gpt-4o-mini）
  *   PORT                   选填，监听端口（默认 3001）
- *   ALLOWED_ORIGIN         选填，允许的前端域（默认 http://localhost:5173）
+ *   ALLOWED_ORIGIN         选填，允许的前端域（默认 http://localhost:3000）
  *   DOUBAO_ASR_APP_ID      必填（ASR），豆包语音 APP ID
  *   DOUBAO_ASR_ACCESS_TOKEN 必填（ASR），豆包语音 Access Token
  *   DOUBAO_ASR_RESOURCE_ID 选填，识别资源 ID（默认 volc.bigasr.sauc.duration）
@@ -47,7 +47,7 @@ const API_KEY       = process.env.LLM_API_KEY ?? ''
 const BASE_URL      = (process.env.LLM_BASE_URL ?? 'https://api.openai.com/v1').replace(/\/$/, '')
 const DEFAULT_MODEL = process.env.LLM_MODEL ?? 'gpt-4o-mini'
 const PORT          = parseInt(process.env.PORT ?? '3001', 10)
-const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN ?? 'http://localhost:5173'
+const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN ?? 'http://localhost:3000'
 
 const ASR_APP_ID      = process.env.DOUBAO_ASR_APP_ID ?? ''
 const ASR_ACCESS_TOKEN = process.env.DOUBAO_ASR_ACCESS_TOKEN ?? ''

@@ -4,7 +4,7 @@
  * 用途：用 lexicon.ts 的词条搜索 ARASAAC API，生成含真实图片 URL 的
  *       pictograms.json，替换占位 SVG。
  *
- * 入口：URL hash = #import
+ * 入口：/import
  * 流程：
  *   1. 展示 lexicon 全部词条
  *   2. 点击「开始导入」逐词搜索 ARASAAC（含进度条）
@@ -136,7 +136,7 @@ export function ImportToolPage() {
           <h1 className="text-lg font-bold">图语家 · ARASAAC 导入工具</h1>
           <p className="text-xs text-indigo-200">从 ARASAAC API 批量下载图片元数据</p>
         </div>
-        <a href="#" className="text-sm text-indigo-200 hover:text-white underline">
+        <a href="/" className="text-sm text-indigo-200 hover:text-white underline">
           返回主界面
         </a>
       </header>

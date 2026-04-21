@@ -148,7 +148,7 @@ export function parseResegmentResponse(raw: string): string[] | null {
   if (!raw || raw.trim().length === 0) return null
 
   // 优先尝试提取 JSON 数组（可能被 markdown 代码块包裹）
-  const jsonMatch = raw.match(/\[[\s\S]*?\]/)
+  const jsonMatch = raw.match(/[[][\s\S]*?]/)
   if (jsonMatch) {
     try {
       const parsed: unknown = JSON.parse(jsonMatch[0])
@@ -167,7 +167,7 @@ export function parseResegmentResponse(raw: string): string[] | null {
   }
 
   // 降级：按换行分割，过滤掉明显的 JSON 结构符号行，最多 30 个词
-  const SKIP_RE = /^[\[\]{},"\s]*$/
+  const SKIP_RE = /^(?:\[|\]|\{|\}|,|"|\s)*$/
   const lines = raw
     .split('\n')
     .map((s) => s.replace(/^[\s\-*•·]+|[\s,，。？！]+$/g, '').trim())

@@ -2,7 +2,7 @@
 
 图语家是一个面向失语症患者和照护者的图片辅助沟通应用。用户可以通过点选图片表达需求，由系统生成候选句子并朗读出来；也支持把照护者输入的文字或语音反向转换为图片序列，帮助患者理解。
 
-项目当前采用 `React 19 + TypeScript + Vite` 构建前端，使用 `Dexie` 管理本地 `IndexedDB` 数据，并提供一个可选的本地 Node 代理，用于接入 OpenAI 兼容大模型和豆包实时语音识别。
+项目当前采用 `Next.js + React 19 + TypeScript` 构建前端，使用 `Dexie` 管理本地 `IndexedDB` 数据，并提供一个可选的本地 Node 代理，用于接入 OpenAI 兼容大模型和豆包实时语音识别。
 
 ## 核心功能
 
@@ -48,7 +48,7 @@ npm run dev:all
 
 默认端口：
 
-- 前端：`http://localhost:5173`
+- 前端：`http://localhost:3000`
 - 代理：`http://localhost:3001`
 
 ## 本地代理配置
@@ -68,7 +68,7 @@ LLM_API_KEY=
 LLM_BASE_URL=https://api.openai.com/v1
 LLM_MODEL=gpt-4o-mini
 PORT=3001
-ALLOWED_ORIGIN=http://localhost:5173
+ALLOWED_ORIGIN=http://localhost:3000
 
 DOUBAO_ASR_APP_ID=
 DOUBAO_ASR_ACCESS_TOKEN=
@@ -87,7 +87,7 @@ npm run dev
 npm run dev:proxy
 npm run dev:all
 npm run build
-npm run preview
+npm run start
 npm run lint
 npm run test
 npm run test:watch
@@ -105,8 +105,8 @@ npm run test:coverage
 
 ## 调试与工具页
 
-- `http://localhost:5173/#debug`：图片匹配验证工具
-- `http://localhost:5173/#import`：ARASAAC 批量导入工具
+- `http://localhost:3000/debug`：图片匹配验证工具
+- `http://localhost:3000/import`：ARASAAC 批量导入工具
 
 其中导入工具会根据词库搜索 ARASAAC 图片并导出新的 `pictograms.json`，便于更新种子数据。
 
@@ -135,7 +135,7 @@ scripts/
 
 - React 19
 - TypeScript
-- Vite
+- Next.js
 - Tailwind CSS 4
 - Zustand
 - Dexie
@@ -144,7 +144,7 @@ scripts/
 
 ## 当前状态
 
-这是一个以移动端触控体验为优先的原型项目，已经具备完整的本地表达流程、接收流程和可选 AI 能力。后续如果继续演进，优先方向通常会是：
+这是一个以移动端触控体验为优先的原型项目，已经具备完整的本地表达流程、接收流程和可选 AI 能力。当前版本已切换到 Next.js 路由与构建体系。后续如果继续演进，优先方向通常会是：
 
 - 更完整的无障碍与大字体优化
 - 更稳定的图片词库与审核流程

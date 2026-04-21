@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@source "./";
+@source "../app";
 
 /* 高对比度模式：加深文字和边框颜色 */
 .hc {

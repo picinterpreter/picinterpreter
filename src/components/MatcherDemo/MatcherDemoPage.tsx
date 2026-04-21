@@ -6,7 +6,7 @@
  * - 每个 token 的匹配图片和匹配方式
  * - 整体匹配率和耗时指标
  *
- * 入口：URL hash = #debug
+ * 入口：/debug
  */
 
 import { useState, useCallback } from 'react'
@@ -126,7 +126,7 @@ export function MatcherDemoPage() {
           <p className="text-xs text-blue-200">Phase 1.5 — 文本→图片管线</p>
         </div>
         <a
-          href="#"
+          href="/"
           className="text-sm text-blue-200 hover:text-white underline"
         >
           返回主界面

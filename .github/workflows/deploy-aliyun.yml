@@ -12,6 +12,7 @@ on:
       - "package.json"
       - "package-lock.json"
       - "next.config.ts"
+      - "ecosystem.config.*"
       - "postcss.config.mjs"
       - "tsconfig.json"
       - ".env.example"

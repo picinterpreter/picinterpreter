@@ -136,6 +136,11 @@ fi
 if [[ -f .env.production ]]; then
   cp .env.production "$PACKAGE_DIR/.env.production"
 fi
+for ecosystem_file in ecosystem.config.js ecosystem.config.cjs ecosystem.config.json; do
+  if [[ -f "$ecosystem_file" ]]; then
+    cp "$ecosystem_file" "$PACKAGE_DIR/$ecosystem_file"
+  fi
+done
 
 echo "[3/7] 打包构建产物 -> $ARTIFACT_PATH"
 tar -C "$PACKAGE_DIR" -czf "$ARTIFACT_PATH" .
@@ -162,6 +167,6 @@ ssh "${SSH_OPTS[@]}" "$HOST" "mkdir -p '$REMOTE_PATH'"
 scp "${SCP_OPTS[@]}" "$ARTIFACT_PATH" "$HOST:$REMOTE_PATH/$ARTIFACT_NAME"
 
 echo "[6/7] 服务器解压部署包并重启服务"
-ssh "${SSH_OPTS[@]}" "$HOST" "set -e; cd '$REMOTE_PATH'; rm -rf .next public node_modules server.js package.json .env.production .env.local .env.development.local .env.production.local; tar -xzf '$ARTIFACT_NAME'; rm -f '$ARTIFACT_NAME'; if $RESTART_CMD; then echo '远程服务重启成功'; else echo '远程服务重启失败'; if [ -n \"$START_CMD\" ]; then echo '尝试执行启动命令'; $START_CMD; else echo '未提供 --start，部署已完成但服务未启动'; echo '可重试并增加参数：--start \"pm2 start server.js --name picinterpreter --update-env\"'; exit 1; fi; fi"
+ssh "${SSH_OPTS[@]}" "$HOST" "set -e; cd '$REMOTE_PATH'; rm -rf .next public node_modules server.js package.json .env.production .env.local .env.development.local .env.production.local ecosystem.config.js ecosystem.config.cjs ecosystem.config.json; tar -xzf '$ARTIFACT_NAME'; rm -f '$ARTIFACT_NAME'; if $RESTART_CMD; then echo '远程服务重启成功'; else echo '远程服务重启失败'; if [ -n \"$START_CMD\" ]; then echo '尝试执行启动命令'; $START_CMD; else echo '未提供 --start，部署已完成但服务未启动'; echo '可重试并增加参数：--start \"pm2 start server.js --name picinterpreter --update-env\"'; exit 1; fi; fi"
 
 echo "[7/7] 部署完成: $HOST:$REMOTE_PATH"

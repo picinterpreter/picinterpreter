@@ -10,6 +10,7 @@
     "start": "next start -p 3001",
     "preview": "next start -p 3001",
     "deploy:aliyun": "bash scripts/deploy-aliyun.sh",
+    "sync:env:secret": "bash scripts/sync-env-secret.sh",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"

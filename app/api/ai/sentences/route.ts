@@ -28,7 +28,11 @@ export async function POST(request: Request) {
     return NextResponse.json(result)
   } catch (error) {
     const message = error instanceof Error ? error.message : 'AI request failed'
-    const status = message.includes('not configured') ? 503 : 502
+    const status = message.includes('not configured')
+      ? 503
+      : message.toLowerCase().includes('timeout')
+        ? 504
+        : 502
     return NextResponse.json({ error: { message } }, { status })
   }
 }

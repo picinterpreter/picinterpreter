@@ -3,6 +3,8 @@ import { getPictogramVocabularyHint } from './pictogram-vocabulary'
 import { parseResegmentResponse } from '@/utils/ai-resegment'
 import type { NLGRequest, NLGResponse } from '@/types'
 
+const AI_UPSTREAM_TIMEOUT_MS = 15_000
+
 interface ChatCompletionResponse {
   choices?: Array<{
     message?: {
@@ -16,6 +18,33 @@ interface ResegmentRequest {
   unmatchedTokens: string[]
 }
 
+function withTimeout(signal: AbortSignal | undefined, timeoutMs: number) {
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => {
+    controller.abort(new Error(`AI upstream timeout after ${timeoutMs}ms`))
+  }, timeoutMs)
+
+  const abortFromCaller = () => {
+    controller.abort(signal?.reason)
+  }
+
+  if (signal) {
+    if (signal.aborted) {
+      abortFromCaller()
+    } else {
+      signal.addEventListener('abort', abortFromCaller, { once: true })
+    }
+  }
+
+  return {
+    signal: controller.signal,
+    cleanup: () => {
+      clearTimeout(timeoutId)
+      signal?.removeEventListener('abort', abortFromCaller)
+    },
+  }
+}
+
 async function requestChatCompletion(
   body: Record<string, unknown>,
   signal?: AbortSignal,
@@ -25,18 +54,31 @@ async function requestChatCompletion(
     throw new Error('AI_API_KEY is not configured')
   }
 
-  const response = await fetch(`${config.baseUrl}/chat/completions`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${config.apiKey}`,
-    },
-    body: JSON.stringify({
-      model: config.model,
-      ...body,
-    }),
-    signal,
-  })
+  const timeout = withTimeout(signal, AI_UPSTREAM_TIMEOUT_MS)
+  let response: Response
+
+  try {
+    response = await fetch(`${config.baseUrl}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${config.apiKey}`,
+      },
+      body: JSON.stringify({
+        model: config.model,
+        ...body,
+      }),
+      signal: timeout.signal,
+    })
+  } catch (error) {
+    timeout.cleanup()
+    if (timeout.signal.aborted && !signal?.aborted) {
+      throw new Error(`AI upstream timeout after ${AI_UPSTREAM_TIMEOUT_MS / 1000}s`)
+    }
+    throw error
+  }
+
+  timeout.cleanup()
 
   if (!response.ok) {
     const text = await response.text()

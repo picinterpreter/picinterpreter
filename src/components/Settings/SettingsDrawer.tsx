@@ -149,7 +149,7 @@ export function SettingsDrawer() {
 
     const timeoutId = setTimeout(
       () => ctrl.abort(new DOMException('Timeout', 'TimeoutError')),
-      100_000,
+      10_000,
     )
 
     try {
@@ -182,7 +182,7 @@ export function SettingsDrawer() {
       if (ctrl.signal.aborted && !(error instanceof Error && error.name === 'TimeoutError')) return
       setTestStatus('error')
       if (error instanceof Error && error.name === 'TimeoutError') {
-        setTestMessage('请求超时（10s）')
+        setTestMessage('请求超时（100s）')
       } else if (error instanceof TypeError) {
         setTestMessage('网络错误，请检查 Next.js 服务是否正常运行')
       } else {

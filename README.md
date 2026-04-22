@@ -61,7 +61,7 @@ AI_MODEL=gpt-4o-mini
 npm run dev
 ```
 
-默认端口：`http://localhost:3000`
+默认端口：`http://localhost:3001`
 
 ## AI 后端接口
 
@@ -162,8 +162,8 @@ npm run deploy:aliyun -- \
 
 ## 调试与工具页
 
-- `http://localhost:3000/debug`：图片匹配验证工具
-- `http://localhost:3000/import`：ARASAAC 批量导入工具
+- `http://localhost:3001/debug`：图片匹配验证工具
+- `http://localhost:3001/import`：ARASAAC 批量导入工具
 
 其中导入工具会根据词库搜索 ARASAAC 图片并导出新的 `pictograms.json`，便于更新种子数据。
 

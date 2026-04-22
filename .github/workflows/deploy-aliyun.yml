@@ -1,0 +1,121 @@
+name: Deploy To Aliyun
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "app/**"
+      - "src/**"
+      - "public/**"
+      - "scripts/deploy-aliyun.sh"
+      - "package.json"
+      - "package-lock.json"
+      - "next.config.ts"
+      - "postcss.config.mjs"
+      - "tsconfig.json"
+      - ".env.example"
+      - ".github/workflows/deploy-aliyun.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Write .env.production
+        run: |
+          set -euo pipefail
+          if [[ -n "${DEPLOY_ENV_FILE:-}" ]]; then
+            printf "%s" "${DEPLOY_ENV_FILE}" > .env.production
+            chmod 600 .env.production
+          else
+            echo "DEPLOY_ENV_FILE 未设置，跳过 CI 环境文件写入"
+          fi
+        env:
+          DEPLOY_ENV_FILE: ${{ secrets.DEPLOY_ENV_FILE }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Restore Next Build Cache
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: next-cache-${{ runner.os }}-${{ github.ref_name }}-${{ hashFiles('package-lock.json', 'next.config.ts') }}
+          restore-keys: |
+            next-cache-${{ runner.os }}-${{ github.ref_name }}-
+            next-cache-${{ runner.os }}-
+
+      - name: Install Dependencies
+        run: npm ci --prefer-offline --no-audit --no-fund
+
+      - name: Build
+        run: npm run build
+
+      - name: Setup SSH Agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+
+      - name: Setup Known Hosts
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf "%s\n" "${DEPLOY_KNOWN_HOSTS}" >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+        env:
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+
+      - name: Deploy
+        env:
+          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+          DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
+          DEPLOY_PORT: ${{ vars.DEPLOY_PORT }}
+          DEPLOY_RESTART_CMD: ${{ vars.DEPLOY_RESTART_CMD }}
+          DEPLOY_START_CMD: ${{ vars.DEPLOY_START_CMD }}
+        run: |
+          set -euo pipefail
+
+          : "${DEPLOY_HOST:?missing variable DEPLOY_HOST}"
+          : "${DEPLOY_PATH:?missing variable DEPLOY_PATH}"
+
+          if [[ -z "${DEPLOY_PORT}" ]]; then
+            DEPLOY_PORT="22"
+          fi
+
+          if [[ -z "${DEPLOY_RESTART_CMD}" ]]; then
+            DEPLOY_RESTART_CMD="systemctl restart picinterpreter"
+          fi
+
+          DEPLOY_CMD=(
+            npm run deploy:aliyun --
+            --host "${DEPLOY_HOST}"
+            --path "${DEPLOY_PATH}"
+            --port "${DEPLOY_PORT}"
+            --restart "${DEPLOY_RESTART_CMD}"
+            --skip-build
+          )
+
+          if [[ -n "${DEPLOY_START_CMD}" ]]; then
+            DEPLOY_CMD+=(--start "${DEPLOY_START_CMD}")
+          fi
+
+          "${DEPLOY_CMD[@]}"

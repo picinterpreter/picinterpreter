@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "start": "next start",
     "preview": "next start",
+    "deploy:aliyun": "bash scripts/deploy-aliyun.sh",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"

@@ -6,6 +6,7 @@ const projectRoot = dirname(fileURLToPath(import.meta.url))
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  output: 'standalone',
   outputFileTracingRoot: projectRoot,
 }
 

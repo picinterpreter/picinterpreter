@@ -42,6 +42,19 @@ AI_MODEL=gpt-4o-mini
 
 这些变量只在 Next.js 服务端读取，不会暴露到浏览器。
 
+建议按下面的约定使用：
+
+- 本地开发：使用 `.env.local`。
+- 仓库示例：保留 `.env.example`，不要提交真实密钥。
+- CI 构建：只有在构建阶段确实需要时，才由 GitHub Actions 临时写入 `.env.production`。
+- 生产运行：优先通过 `systemd`、`pm2` 或容器平台直接注入环境变量，不依赖服务器上的环境文件。
+
+原因：
+
+- 这个项目本地开发约定已经是 `.env.local`。
+- Next.js 在 `production` 环境下会优先读取 `process.env`，然后读取 `.env.production.local`、`.env.local`、`.env.production`、`.env`。这意味着如果服务器上同时存在 `.env.local` 和 `.env.production`，前者会覆盖后者。
+- 因此不建议在服务器长期保留 `.env.local`，否则很容易出现“CI 传了 `.env.production`，但运行时实际没生效”的问题。
+
 ## 本地开发
 
 ```bash
@@ -66,11 +79,77 @@ npm run dev
 npm run dev
 npm run build
 npm run start
+npm run deploy:aliyun -- --host root@1.2.3.4 --path /opt/picinterpreter
 npm run lint
 npm run test
 npm run test:watch
 npm run test:coverage
 ```
+
+## 生产部署（参考 firstEnglishBook 自动化流程）
+
+项目已提供一套和 `firstEnglishBook` 类似的自动化部署链路：
+
+- GitHub Actions 在 `main` 分支变更后自动构建。
+- 构建产物使用 Next.js `standalone` 输出，适合直接部署到云服务器。
+- Actions 通过 SSH 把部署包上传到阿里云服务器，并执行远程重启命令。
+
+### 1. GitHub Actions 配置
+
+工作流文件：`.github/workflows/deploy-aliyun.yml`
+
+需要在 GitHub 仓库的 `production` Environment 中配置：
+
+- Secret `DEPLOY_SSH_PRIVATE_KEY`：部署用私钥。
+- Secret `DEPLOY_KNOWN_HOSTS`：目标服务器的 `known_hosts` 内容。
+- Secret `DEPLOY_ENV_FILE`：可选。写入 CI 的 `.env.production`，用于构建期需要的环境变量。
+- Variable `DEPLOY_HOST`：服务器地址，例如 `root@1.2.3.4`。
+- Variable `DEPLOY_PATH`：部署目录，例如 `/opt/picinterpreter`。
+- Variable `DEPLOY_PORT`：可选，默认 `22`。
+- Variable `DEPLOY_RESTART_CMD`：可选，默认 `systemctl restart picinterpreter`。
+- Variable `DEPLOY_START_CMD`：可选。首发部署或重启失败时的兜底启动命令。
+
+### 2. 服务器要求
+
+- Node.js 20+。
+- 目标目录具备写权限。
+- 远程服务建议通过 `systemd` 或 `pm2` 托管。
+
+部署脚本会上传这些产物：
+
+- `server.js` 与 `node_modules`（来自 `.next/standalone`）
+- `.next/static`
+- `public`
+- `.env.production`（如果 CI 工作区中存在）
+
+生产环境建议这样分层：
+
+- 首选：在 `systemd`/`pm2`/容器平台中直接配置 `AI_API_KEY`、`AI_BASE_URL`、`AI_MODEL`。
+- 次选：如果确实需要随部署包下发，再使用 `.env.production`。
+- 避免：在服务器手工放置 `.env.local`。
+
+### 3. 手动部署
+
+也可以在本地直接执行：
+
+```bash
+npm run deploy:aliyun -- \
+  --host root@1.2.3.4 \
+  --path /opt/picinterpreter \
+  --restart "systemctl restart picinterpreter"
+```
+
+首发部署如果远程服务还没创建，可以附带启动命令，例如：
+
+```bash
+npm run deploy:aliyun -- \
+  --host root@1.2.3.4 \
+  --path /opt/picinterpreter \
+  --restart "systemctl restart picinterpreter" \
+  --start "pm2 start server.js --name picinterpreter --update-env"
+```
+
+如果你的生产环境依赖 `AI_API_KEY`、`AI_BASE_URL`、`AI_MODEL`，建议优先通过 `systemd`/`pm2` 的环境配置注入，而不是只依赖构建期变量。只有在构建期或打包部署链路明确需要时，再额外提供 `.env.production`。
 
 ## 数据与存储
 

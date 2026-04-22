@@ -21,7 +21,7 @@
 
 /* 确保所有可交互元素最小触控面积 */
 button, a, [role="button"] {
-  min-height: 44px;
+  min-height: 20px;
 }
 
 /* 滚动条优化 */

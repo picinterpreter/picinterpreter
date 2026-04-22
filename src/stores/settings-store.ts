@@ -5,11 +5,6 @@ export type FontSize = 'normal' | 'large' | 'xlarge'
 export type GridCols = 2 | 3 | 4
 
 interface SettingsState {
-  /** NLG provider 配置 */
-  nlgBaseUrl: string
-  nlgApiKey: string
-  nlgModel: string
-
   /** TTS 语速 */
   ttsRate: number
   /** TTS 首选语音名称（空字符串 = 自动选择最佳中文语音） */
@@ -28,7 +23,6 @@ interface SettingsState {
   hiddenCategoryIds: string[]
 
   // Actions
-  setNlgConfig: (baseUrl: string, apiKey: string, model: string) => void
   setTtsRate: (rate: number) => void
   setTtsVoiceName: (name: string) => void
   setHighContrast: (v: boolean) => void
@@ -40,18 +34,12 @@ interface SettingsState {
 export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
-      nlgBaseUrl: 'https://api.openai.com/v1',
-      nlgApiKey: '',
-      nlgModel: 'gpt-4o-mini',
       ttsRate: 0.9,
       ttsVoiceName: '',
       highContrast: false,
       fontSize: 'normal',
       gridCols: 3,
       hiddenCategoryIds: [],
-
-      setNlgConfig: (baseUrl, apiKey, model) =>
-        set({ nlgBaseUrl: baseUrl, nlgApiKey: apiKey, nlgModel: model }),
 
       setTtsRate: (rate) => set({ ttsRate: rate }),
       setTtsVoiceName: (name) => set({ ttsVoiceName: name }),

@@ -5,12 +5,9 @@
  * 调用 LLM 将原始文本重新映射到图库词汇，提升图片匹配成功率。
  *
  * 设计原则：
- *  - aiResegment()   : I/O 副作用（DB + fetch），失败时返回 null，绝不抛出
+ *  - aiResegment()   : I/O 副作用（fetch），失败时返回 null，绝不抛出
  *  - parseResegmentResponse() : 纯函数，单独暴露以便单元测试
- *  - buildPictogramVocabularyHint() : DB 只读，可被 NLG 管线复用
  */
-
-import { db } from '@/db'
 
 // ─── 类型 ────────────────────────────────────────────────────────────────── //
 
@@ -19,51 +16,8 @@ export interface AiResegmentParams {
   text: string
   /** 规则分词后仍未匹配到图片的词语列表 */
   unmatchedTokens: string[]
-  /** OpenAI 兼容 endpoint 的 base URL（不含 /chat/completions）*/
-  baseUrl: string
-  /** API Key（本地代理模式可为空字符串） */
-  apiKey: string
-  /** 模型名称 */
-  model: string
   /** AbortSignal，用于组件卸载 / 重置时取消请求 */
   signal?: AbortSignal
-}
-
-// ─── 词汇提示构建 ────────────────────────────────────────────────────────── //
-
-/**
- * 从图库中取使用频率最高的 `limit` 个图片的主标签，
- * 拼成顿号分隔的词汇提示字符串，供 LLM 参考。
- *
- * - 按 usageCount 降序，高频词排在前面
- * - 去重（多个图片共享同一主标签时只保留一次）
- * - 总字符数不超过 MAX_VOCAB_CHARS，避免撑爆 LLM 上下文
- */
-const MAX_VOCAB_CHARS = 1500
-
-export async function buildPictogramVocabularyHint(limit = 400): Promise<string> {
-  const pictograms = await db.pictograms
-    .orderBy('usageCount')
-    .reverse()
-    .limit(limit)
-    .toArray()
-
-  const seen = new Set<string>()
-  const parts: string[] = []
-  let total = 0
-
-  for (const p of pictograms) {
-    const label = p.labels?.zh?.[0]
-    if (typeof label !== 'string' || label.length === 0) continue
-    if (seen.has(label)) continue
-    seen.add(label)
-    // +1 for the '、' separator
-    if (total + label.length + 1 > MAX_VOCAB_CHARS) break
-    parts.push(label)
-    total += label.length + 1
-  }
-
-  return parts.join('、')
 }
 
 // ─── AI 分词 ─────────────────────────────────────────────────────────────── //
@@ -75,57 +29,25 @@ export async function buildPictogramVocabularyHint(limit = 400): Promise<string>
  * 任何错误（网络、超时、解析失败）均返回 `null`，调用方回退到规则式结果。
  */
 export async function aiResegment(params: AiResegmentParams): Promise<string[] | null> {
-  const { text, unmatchedTokens, baseUrl, apiKey, model, signal } = params
-
-  let vocabulary: string
-  try {
-    vocabulary = await buildPictogramVocabularyHint(400)
-  } catch {
-    return null
-  }
-
-  if (!vocabulary) return null
-
-  const systemPrompt =
-    `你是一个辅助失语症患者的图片词库专家。\n` +
-    `图库中所有可用词汇如下（按使用频率排序）：\n${vocabulary}\n\n` +
-    `任务：\n` +
-    `1. 分析给定的中文句子\n` +
-    `2. 将句子中的语义成分一一映射到图库词汇\n` +
-    `3. 对于图库中没有的词，用意思最接近的图库词替代\n` +
-    `4. 以 JSON 数组输出，每个元素是一个图库词，如：["吃饭","睡觉","开心"]\n` +
-    `5. 只输出 JSON 数组，不要有任何其他文字`
-
-  const userPrompt =
-    unmatchedTokens.length > 0
-      ? `句子：${text}\n\n以下词语未匹配到图片，请重新分析整句并替换为图库词：${unmatchedTokens.join('、')}`
-      : `句子：${text}`
+  const { text, unmatchedTokens, signal } = params
 
   try {
-    const url = `${baseUrl}/chat/completions`
-    const response = await fetch(url, {
+    const response = await fetch('/api/ai/resegment', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt },
-        ],
-        temperature: 0.2,
-        max_tokens: 150,
+        text,
+        unmatchedTokens,
       }),
       signal,
     })
 
     if (!response.ok) return null
 
-    const data = await response.json()
-    const raw: string = data.choices?.[0]?.message?.content ?? ''
-    return parseResegmentResponse(raw)
+    const data = await response.json() as { tokens?: string[] | null }
+    return Array.isArray(data.tokens) && data.tokens.length > 0 ? data.tokens : null
   } catch {
     // AbortError、网络错误、JSON 解析失败等均静默返回 null
     return null

@@ -12,12 +12,10 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useWebSpeech } from '@/hooks/use-web-speech'
-import { useDoubaoAsr } from '@/hooks/use-doubao-asr'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { matchTextToImages } from '@/utils/text-to-image-matcher'
 import { aiResegment } from '@/utils/ai-resegment'
 import { resolveImageSrc } from '@/utils/generate-placeholder-svg'
-import { useSettingsStore } from '@/stores/settings-store'
 import { db } from '@/db'
 import type { PictogramEntry } from '@/types'
 import type { MatchedToken } from '@/utils/text-to-image-matcher'
@@ -28,7 +26,7 @@ import { ReceiverDisplayOverlay, type DisplayItem } from './ReceiverDisplayOverl
 /**
  * 阶段流转：
  *   idle → matching → (ai-refining?) → review
- *   ai-refining 仅在匹配率 < 0.6 或存在未匹配词，且 AI 已配置时触发。
+ *   ai-refining 仅在匹配率 < 0.6 或存在未匹配词时触发。
  */
 type Phase = 'idle' | 'matching' | 'ai-refining' | 'review'
 
@@ -83,17 +81,10 @@ const MATCH_TYPE_LABEL: Record<ItemMatchType, string> = {
 
 // ─── 主组件 ──────────────────────────────────────────────────────────────── //
 
-/** 本地代理检测正则（与 use-ai.ts 保持一致） */
-const LOCAL_PROXY_RE = /^https?:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/i
-
 export function ReceiverPanel() {
   const [phase, setPhase] = useState<Phase>('idle')
   const [inputText, setInputText] = useState('')
   const [items, setItems] = useState<EditableItem[]>([])
-
-  // ── AI 配置（用于判断能否触发 AI 辅助重分词） ─────────────────────────── //
-  const { nlgBaseUrl, nlgApiKey, nlgModel } = useSettingsStore()
-  const canUseAI = Boolean(nlgApiKey) || LOCAL_PROXY_RE.test(nlgBaseUrl)
 
   // AbortController ref：在组件卸载 / 重置时取消正在进行的 AI fetch 请求
   const aiAbortRef = useRef<AbortController | null>(null)
@@ -105,17 +96,11 @@ export function ReceiverPanel() {
   // ── 语音输入 ──────────────────────────────────────────────────────────── //
   // Web Speech API（浏览器内置，无需代理）
   const webSpeech = useWebSpeech()
-  // 豆包 ASR（高质量中文，需运行本地代理）
-  const doubaoAsr = useDoubaoAsr()
-  // 当前激活的引擎：'browser' | 'doubao'
-  const [asrEngine, setAsrEngine] = useState<'browser' | 'doubao'>('browser')
-
-  // 统一接口：根据当前引擎路由调用
-  const isListening  = asrEngine === 'browser' ? webSpeech.isListening  : doubaoAsr.isListening
-  const interimText  = asrEngine === 'browser' ? webSpeech.interimText  : doubaoAsr.interimText
-  const asrError     = asrEngine === 'browser' ? webSpeech.error        : doubaoAsr.error
-  const startListening = asrEngine === 'browser' ? webSpeech.startListening : doubaoAsr.startListening
-  const stopListening  = asrEngine === 'browser' ? webSpeech.stopListening  : doubaoAsr.stopListening
+  const isListening = webSpeech.isListening
+  const interimText = webSpeech.interimText
+  const asrError = webSpeech.error
+  const startListening = webSpeech.startListening
+  const stopListening = webSpeech.stopListening
 
   const [matchError, setMatchError] = useState<string | null>(null)
 
@@ -191,8 +176,7 @@ export function ReceiverPanel() {
       const unmatchedTokens = result.matches
         .filter((m) => m.pictogram === null)
         .map((m) => m.token)
-      const needsAiFallback =
-        canUseAI && (result.matchRate < 0.6 || unmatchedTokens.length > 0)
+      const needsAiFallback = result.matchRate < 0.6 || unmatchedTokens.length > 0
 
       if (needsAiFallback) {
         setPhase('ai-refining')
@@ -203,9 +187,6 @@ export function ReceiverPanel() {
         const aiTokens = await aiResegment({
           text: trimmed,
           unmatchedTokens,
-          baseUrl: nlgBaseUrl,
-          apiKey: nlgApiKey,
-          model: nlgModel,
           signal: ctrl.signal,
         })
 
@@ -352,37 +333,8 @@ export function ReceiverPanel() {
             </button>
           </form>
 
-          {/* 语音引擎选择 */}
-          <div className="flex gap-1.5">
-            {webSpeech.isAvailable && (
-              <button
-                type="button"
-                onClick={() => setAsrEngine('browser')}
-                className={`flex-1 py-2 rounded-xl border text-xs font-medium transition-colors min-h-[40px]
-                  ${asrEngine === 'browser'
-                    ? 'border-purple-400 bg-purple-50 text-purple-700'
-                    : 'border-gray-200 bg-white text-gray-500 hover:bg-gray-50'
-                  }`}
-              >
-                🎤 浏览器识别
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={() => setAsrEngine('doubao')}
-              title="需运行本地代理 npm run dev:proxy"
-              className={`flex-1 py-2 rounded-xl border text-xs font-medium transition-colors min-h-[40px]
-                ${asrEngine === 'doubao'
-                  ? 'border-purple-400 bg-purple-50 text-purple-700'
-                  : 'border-gray-200 bg-white text-gray-500 hover:bg-gray-50'
-                }`}
-            >
-              🫘 豆包识别
-            </button>
-          </div>
-
           {/* 语音输入按钮 */}
-          {(asrEngine === 'browser' ? webSpeech.isAvailable : true) ? (
+          {webSpeech.isAvailable ? (
             <button
               type="button"
               onClick={() => {
@@ -412,11 +364,6 @@ export function ReceiverPanel() {
           ) : (
             <p className="text-xs text-gray-400 text-center">
               浏览器识别需要 Chrome / Edge
-            </p>
-          )}
-          {asrEngine === 'doubao' && !isListening && (
-            <p className="text-xs text-gray-400 text-center -mt-2">
-              豆包识别需运行本地代理：<code className="bg-gray-100 px-1 rounded">npm run dev:proxy</code>
             </p>
           )}
 

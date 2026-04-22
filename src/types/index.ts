@@ -99,8 +99,7 @@ export interface NLGRequest {
     recentSentences?: string[]
     scene?: string
     /**
-     * 图库词汇提示，供 LLM 优先选用图片中已有的词语造句。
-     * 由 buildPictogramVocabularyHint() 生成，格式为逗号分隔的词语列表。
+     * 预留给服务端/客户端扩展的词汇提示字段。
      */
     pictogramVocabulary?: string
   }

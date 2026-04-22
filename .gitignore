@@ -26,8 +26,9 @@ coverage
 *.sln
 *.sw?
 
-# API proxy secrets
-server/.env
+# Local env
+.env.local
+.env.*.local
 
 # Python cache
 __pycache__/

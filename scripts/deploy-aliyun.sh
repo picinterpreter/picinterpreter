@@ -131,7 +131,8 @@ echo "[2/7] 整理 standalone 部署包"
 cp -R .next/standalone/. "$PACKAGE_DIR/"
 cp -R .next/static "$PACKAGE_DIR/.next/static"
 if [[ -d public ]]; then
-  cp -R public "$PACKAGE_DIR/public"
+  mkdir -p "$PACKAGE_DIR/public"
+  cp -R public/. "$PACKAGE_DIR/public"
 fi
 if [[ -f .env.production ]]; then
   cp .env.production "$PACKAGE_DIR/.env.production"

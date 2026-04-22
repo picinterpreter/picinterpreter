@@ -149,7 +149,7 @@ export function SettingsDrawer() {
 
     const timeoutId = setTimeout(
       () => ctrl.abort(new DOMException('Timeout', 'TimeoutError')),
-      10_000,
+      100_000,
     )
 
     try {

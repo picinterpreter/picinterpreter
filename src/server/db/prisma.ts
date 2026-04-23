@@ -1,5 +1,8 @@
 import { PrismaClient } from '@prisma/client'
+import { config as loadDotenv } from 'dotenv'
+import fs from 'node:fs'
 import mysql from 'mysql2/promise'
+import path from 'node:path'
 import type { RowDataPacket } from 'mysql2/promise'
 
 const globalForPrisma = globalThis as typeof globalThis & {
@@ -8,6 +11,8 @@ const globalForPrisma = globalThis as typeof globalThis & {
 }
 
 const SCHEMA_INIT_LOCK_NAME = 'picinterpreter_schema_init'
+
+loadRuntimeEnvFiles()
 
 const CREATE_SCHEMA_STATEMENTS = [
   `CREATE TABLE \`User\` (
@@ -168,6 +173,20 @@ const CREATE_SCHEMA_STATEMENTS = [
       ON DELETE SET NULL ON UPDATE CASCADE
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
 ]
+
+function loadRuntimeEnvFiles(): void {
+  const cwd = process.cwd()
+  const candidateFiles =
+    process.env.NODE_ENV === 'production'
+      ? ['.env.production.local', '.env.local', '.env.production', '.env']
+      : ['.env.local', '.env']
+
+  for (const relativePath of candidateFiles) {
+    const envPath = path.join(cwd, relativePath)
+    if (!fs.existsSync(envPath)) continue
+    loadDotenv({ path: envPath, override: false })
+  }
+}
 
 export function isDatabaseConfigured(): boolean {
   return typeof process.env.DATABASE_URL === 'string' && process.env.DATABASE_URL.trim().length > 0

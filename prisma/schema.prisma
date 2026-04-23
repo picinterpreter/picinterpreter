@@ -4,6 +4,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 enum UserStatus {
@@ -31,8 +32,11 @@ model User {
   mergedUsers      User[]             @relation("MergedUsers")
   devices          Device[]
   authAccounts     AuthAccount[]
+  passwordCredential PasswordCredential?
+  sessions         UserSession[]
   expressions      ExpressionRecord[]
   savedPhrases     SavedPhraseRecord[]
+  lastLoginAt      DateTime?
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
 
@@ -49,6 +53,7 @@ model Device {
   createdAt                 DateTime            @default(now())
   updatedAt                 DateTime            @updatedAt
   user                      User                @relation(fields: [userId], references: [id], onDelete: Restrict)
+  sessions                  UserSession[]
   modifiedExpressions       ExpressionRecord[]  @relation("ExpressionLastModifiedBy")
   modifiedSavedPhrases      SavedPhraseRecord[] @relation("SavedPhraseLastModifiedBy")
   emittedSyncChanges        SyncChange[]        @relation("SyncChangeDevice")
@@ -67,6 +72,36 @@ model AuthAccount {
 
   @@unique([provider, providerAccountId])
   @@index([userId])
+}
+
+model PasswordCredential {
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  username           String
+  normalizedUsername String   @unique
+  phone              String
+  normalizedPhone    String   @unique
+  passwordHash       String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserSession {
+  id         String    @id @default(cuid())
+  userId     String
+  deviceId   String?
+  tokenHash  String    @unique
+  expiresAt  DateTime
+  lastSeenAt DateTime  @default(now())
+  revokedAt  DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  device     Device?   @relation(fields: [deviceId], references: [id], onDelete: SetNull)
+
+  @@index([userId, expiresAt])
+  @@index([deviceId])
 }
 
 model ExpressionRecord {

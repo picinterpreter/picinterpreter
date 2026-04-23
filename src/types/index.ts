@@ -183,6 +183,7 @@ export interface SyncState {
   installId: string
   deviceId: string | null
   userId: string | null
+  authUserId?: string | null
   lastPulledChangeId: number
   lastBootstrapAt?: number
   lastSyncAt?: number
@@ -241,4 +242,45 @@ export interface SyncPullResponse {
   changes: SyncPullChange[]
   nextChangeId: number
   hasMore: boolean
+}
+
+// ===== Auth =====
+
+export type LocalDataAction = 'merge' | 'discard'
+export type AuthStatus = 'loading' | 'anonymous' | 'authenticated'
+
+export interface AuthenticatedUserSummary {
+  id: string
+  username: string
+  phoneMasked: string
+}
+
+export interface RegisterRequest {
+  username: string
+  password: string
+  phone: string
+  localDataAction?: LocalDataAction
+}
+
+export interface RegisterResponse {
+  user: AuthenticatedUserSummary
+}
+
+export interface LoginRequest {
+  username: string
+  password: string
+  localDataAction: LocalDataAction
+}
+
+export interface LoginResponse {
+  user: AuthenticatedUserSummary
+}
+
+export interface LogoutRequest {
+  preserveLocal: boolean
+}
+
+export interface AuthMeResponse {
+  authenticated: boolean
+  user: AuthenticatedUserSummary | null
 }

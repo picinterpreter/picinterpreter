@@ -23,6 +23,10 @@ class SyncService {
   private syncPromise: Promise<void> | null = null
   private started = false
 
+  async bootstrap(): Promise<SyncState | null> {
+    return this.ensureBootstrapped()
+  }
+
   start(): void {
     if (this.started || typeof window === 'undefined') return
     this.started = true
@@ -107,6 +111,7 @@ class SyncService {
           installId,
           deviceId: result.deviceId,
           userId: result.userId,
+          authUserId: (await getSyncState())?.authUserId ?? null,
           lastPulledChangeId: (await getSyncState())?.lastPulledChangeId ?? result.lastPulledChangeId,
           lastBootstrapAt: Date.now(),
           lastError: null,
@@ -211,6 +216,7 @@ class SyncService {
       installId: current?.installId ?? getOrCreateInstallId(),
       deviceId: current?.deviceId ?? null,
       userId: current?.userId ?? null,
+      authUserId: current?.authUserId ?? null,
       lastPulledChangeId: current?.lastPulledChangeId ?? 0,
       lastBootstrapAt: current?.lastBootstrapAt,
       lastSyncAt: current?.lastSyncAt,
@@ -220,6 +226,100 @@ class SyncService {
 
   private async writeSyncState(state: SyncState): Promise<void> {
     await writeSyncState(state)
+  }
+
+  async setAuthUserId(authUserId: string | null): Promise<void> {
+    const current = await getSyncState()
+    await writeSyncState({
+      id: SYNC_STATE_ID,
+      installId: current?.installId ?? getOrCreateInstallId(),
+      deviceId: current?.deviceId ?? null,
+      userId: current?.userId ?? null,
+      authUserId,
+      lastPulledChangeId: current?.lastPulledChangeId ?? 0,
+      lastBootstrapAt: current?.lastBootstrapAt,
+      lastSyncAt: current?.lastSyncAt,
+      lastError: current?.lastError ?? null,
+    })
+  }
+
+  async prepareLocalDataForAuth(action: 'merge' | 'discard'): Promise<void> {
+    if (action === 'merge') {
+      await this.scheduleSync()
+      return
+    }
+
+    const current = await getSyncState()
+    await db.transaction('rw', db.expressions, db.savedPhrases, db.syncOutbox, db.syncState, async () => {
+      await db.expressions.clear()
+      await db.savedPhrases.clear()
+      await db.syncOutbox.clear()
+      await db.syncState.put({
+        id: SYNC_STATE_ID,
+        installId: current?.installId ?? getOrCreateInstallId(),
+        deviceId: current?.deviceId ?? null,
+        userId: current?.userId ?? null,
+        authUserId: null,
+        lastPulledChangeId: 0,
+        lastBootstrapAt: current?.lastBootstrapAt,
+        lastSyncAt: current?.lastSyncAt,
+        lastError: null,
+      })
+    })
+  }
+
+  async completeAuthTransition(authUserId: string): Promise<void> {
+    this.bootstrapPromise = null
+    const current = await getSyncState()
+    await writeSyncState({
+      id: SYNC_STATE_ID,
+      installId: current?.installId ?? getOrCreateInstallId(),
+      deviceId: null,
+      userId: null,
+      authUserId,
+      lastPulledChangeId: 0,
+      lastBootstrapAt: undefined,
+      lastSyncAt: current?.lastSyncAt,
+      lastError: null,
+    })
+    await this.ensureBootstrapped()
+    await this.scheduleSync()
+  }
+
+  async detachLocalAccountData(): Promise<void> {
+    const [current, expressions, savedPhrases] = await Promise.all([
+      getSyncState(),
+      db.expressions.toArray(),
+      db.savedPhrases.toArray(),
+    ])
+
+    await db.transaction('rw', db.expressions, db.savedPhrases, db.syncOutbox, db.syncState, async () => {
+      await db.expressions.bulkPut(expressions.map((record) => ({
+        ...record,
+        serverVersion: 0,
+        lastModifiedByDeviceId: null,
+      })))
+      await db.savedPhrases.bulkPut(savedPhrases.map((record) => ({
+        ...record,
+        serverVersion: 0,
+        lastModifiedByDeviceId: null,
+      })))
+      await db.syncOutbox.clear()
+      await db.syncState.put({
+        id: SYNC_STATE_ID,
+        installId: current?.installId ?? getOrCreateInstallId(),
+        deviceId: null,
+        userId: null,
+        authUserId: null,
+        lastPulledChangeId: 0,
+        lastBootstrapAt: undefined,
+        lastSyncAt: current?.lastSyncAt,
+        lastError: null,
+      })
+    })
+
+    this.bootstrapPromise = null
+    await this.ensureBootstrapped()
   }
 }
 
@@ -251,6 +351,7 @@ async function applyPulledChanges(changes: SyncPullChange[], nextChangeId: numbe
       installId: state?.installId ?? getOrCreateInstallId(),
       deviceId: state?.deviceId ?? null,
       userId: state?.userId ?? null,
+      authUserId: state?.authUserId ?? null,
       lastPulledChangeId: nextChangeId,
       lastBootstrapAt: state?.lastBootstrapAt,
       lastSyncAt: Date.now(),
@@ -273,6 +374,14 @@ export async function enqueueOutboxItem(item: Omit<SyncOutboxItem, 'id' | 'creat
     createdAt: Date.now(),
     ...item,
   })
+}
+
+export async function hasLocalCloudData(): Promise<boolean> {
+  const [expressionCount, savedPhraseCount] = await Promise.all([
+    db.expressions.count(),
+    db.savedPhrases.count(),
+  ])
+  return expressionCount > 0 || savedPhraseCount > 0
 }
 
 function getOrCreateInstallId(): string {

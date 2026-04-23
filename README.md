@@ -81,7 +81,7 @@ npm run dev
 ## MySQL 同步架构
 
 - 前端继续用 `Dexie` 作为本地主存储，保证离线体验。
-- 服务端通过 `Prisma 7 + @prisma/adapter-mariadb` 连接 MySQL 8。
+- 服务端通过 `Prisma 6 + mysql` 连接 MySQL 8。
 - 当前已上云的数据仅包括 `expressions` 与 `saved_phrases`。
 - 首次打开会自动 bootstrap 一个匿名设备身份；未来接入正式登录后，可把匿名用户数据合并到账号用户。
 - 本地新增了 `syncOutbox` / `syncState` 两张 Dexie 表，用于后台同步与增量游标管理。

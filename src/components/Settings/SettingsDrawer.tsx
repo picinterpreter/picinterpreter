@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useAppStore } from '@/stores/app-store'
 import { useSettingsStore, type FontSize, type GridCols } from '@/stores/settings-store'
+import { AuthSettingsSection } from '@/components/Settings/AuthSettingsSection'
 import { ONBOARDING_STORAGE_KEY } from '@/components/Onboarding/OnboardingModal'
 import { db } from '@/db'
 
@@ -216,6 +217,8 @@ export function SettingsDrawer() {
         </div>
 
         <div className="flex-1 overflow-y-auto p-4 space-y-6">
+          <AuthSettingsSection />
+
           <section>
             <h3 className="text-base font-semibold text-gray-700 mb-3">AI 句子生成</h3>
 

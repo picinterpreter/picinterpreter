@@ -6,7 +6,7 @@ import {
   type ExpressionRecord,
   type SavedPhraseRecord,
 } from '@prisma/client'
-import { getPrismaClient } from '@/server/db/prisma'
+import { ensureDatabaseSchema, getPrismaClient } from '@/server/db/prisma'
 import type {
   BootstrapRequest,
   BootstrapResponse,
@@ -38,6 +38,7 @@ export async function bootstrapClientIdentity(
   input: BootstrapRequest,
   cookieDeviceId?: string,
 ): Promise<BootstrapResponse> {
+  await ensureDatabaseSchema()
   const prisma = getPrismaClient()
   const installIdHash = hashInstallId(input.installId)
 
@@ -105,6 +106,7 @@ export async function pushClientMutations(
   deviceId: string,
   request: SyncPushRequest,
 ): Promise<SyncPushResponse> {
+  await ensureDatabaseSchema()
   const prisma = getPrismaClient()
   const context = await requireDeviceContext(deviceId)
 
@@ -125,6 +127,7 @@ export async function pullClientChanges(
   deviceId: string,
   afterChangeId: number,
 ): Promise<SyncPullResponse> {
+  await ensureDatabaseSchema()
   const prisma = getPrismaClient()
   const context = await requireDeviceContext(deviceId)
 
@@ -206,6 +209,7 @@ export async function pullClientChanges(
 }
 
 async function requireDeviceContext(deviceId: string): Promise<DeviceContext> {
+  await ensureDatabaseSchema()
   const prisma = getPrismaClient()
   const device = await prisma.device.findUnique({
     where: { id: deviceId },

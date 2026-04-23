@@ -31,11 +31,13 @@ npm install
 复制 `.env.example` 为 `.env.local`，按需填写：
 
 ```env
+DATABASE_URL=mysql://root:password@127.0.0.1:3306/picinterpreter
 AI_API_KEY=
 AI_BASE_URL=https://api.openai.com/v1
 AI_MODEL=gpt-4o-mini
 ```
 
+- `DATABASE_URL`：MySQL 连接串，供 Prisma 7 驱动适配器使用。
 - `AI_API_KEY`：服务端调用上游 LLM 的密钥，必填。
 - `AI_BASE_URL`：OpenAI-compatible 接口地址，默认 `https://api.openai.com/v1`。
 - `AI_MODEL`：默认模型名，默认 `gpt-4o-mini`。
@@ -70,8 +72,26 @@ npm run dev
 - `GET /api/ai/health`：读取后端 AI 配置状态。
 - `POST /api/ai/sentences`：生成候选句。
 - `POST /api/ai/resegment`：AI 辅助重分词。
+- `POST /api/client/bootstrap`：注册/恢复匿名设备身份，并设置 HttpOnly 设备 Cookie。
+- `POST /api/sync/push`：把本地 `expressions` / `saved_phrases` 变更推送到服务端 MySQL。
+- `GET /api/sync/pull`：按增量游标拉取服务端变更并回放到本地 Dexie。
 
 前端只调用这些内部接口；实际的 `API Key`、`Base URL`、`Model` 均由服务端环境变量控制。
+
+## MySQL 同步架构
+
+- 前端继续用 `Dexie` 作为本地主存储，保证离线体验。
+- 服务端通过 `Prisma 7 + @prisma/adapter-mariadb` 连接 MySQL 8。
+- 当前已上云的数据仅包括 `expressions` 与 `saved_phrases`。
+- 首次打开会自动 bootstrap 一个匿名设备身份；未来接入正式登录后，可把匿名用户数据合并到账号用户。
+- 本地新增了 `syncOutbox` / `syncState` 两张 Dexie 表，用于后台同步与增量游标管理。
+
+首次初始化数据库可用：
+
+```bash
+npm run prisma:generate
+npm run prisma:push
+```
 
 ## 常用命令
 
@@ -79,6 +99,8 @@ npm run dev
 npm run dev
 npm run build
 npm run start
+npm run prisma:generate
+npm run prisma:push
 npm run deploy:aliyun -- --host root@1.2.3.4 --path /opt/picinterpreter
 npm run lint
 npm run test

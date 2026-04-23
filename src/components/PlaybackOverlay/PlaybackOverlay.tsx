@@ -5,6 +5,7 @@ import { useSettingsStore } from '@/stores/settings-store'
 import { useAI } from '@/hooks/use-ai'
 import { resolveImageSrc } from '@/utils/generate-placeholder-svg'
 import { db } from '@/db'
+import { addSavedPhraseIfMissing } from '@/repositories/saved-phrases-repository'
 import type { PictogramEntry } from '@/types'
 
 /**
@@ -112,19 +113,7 @@ export function PlaybackOverlay() {
   async function handleFavorite() {
     if (saved) return
     setSaved(true)
-    // 去重：句子已存在则不重复插入（常见场景：从常用语列表播放后再次点收藏）
-    const exists = await db.savedPhrases
-      .filter((p) => p.sentence === playbackSentence)
-      .first()
-    if (!exists) {
-      await db.savedPhrases.add({
-        id: crypto.randomUUID(),
-        sentence: playbackSentence,
-        pictogramIds: selectedPictograms.map((p) => p.id),
-        usageCount: 0,
-        lastUsedAt: Date.now(),
-      })
-    }
+    await addSavedPhraseIfMissing(playbackSentence, selectedPictograms.map((p) => p.id))
   }
 
   function handleDone() {

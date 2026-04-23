@@ -5,6 +5,8 @@ import type {
   Expression,
   SavedPhrase,
   TextToImageResult,
+  SyncOutboxItem,
+  SyncState,
 } from '@/types'
 
 class TuYuJiaDB extends Dexie {
@@ -13,6 +15,8 @@ class TuYuJiaDB extends Dexie {
   expressions!: EntityTable<Expression, 'id'>
   savedPhrases!: EntityTable<SavedPhrase, 'id'>
   textToImageResults!: EntityTable<TextToImageResult, 'id'>
+  syncOutbox!: EntityTable<SyncOutboxItem, 'id'>
+  syncState!: EntityTable<SyncState, 'id'>
 
   constructor() {
     super('TuYuJiaDB')
@@ -38,6 +42,15 @@ class TuYuJiaDB extends Dexie {
       expressions: 'id, sessionId, createdAt, isFavorite',
       savedPhrases: 'id, usageCount, lastUsedAt',
       textToImageResults: 'id, createdAt',
+    })
+    this.version(4).stores({
+      categories: 'id, sortOrder',
+      pictograms: 'id, categoryId, *synonyms, usageCount, lastUsedAt',
+      expressions: 'id, sessionId, createdAt, isFavorite, updatedAt',
+      savedPhrases: 'id, usageCount, lastUsedAt, updatedAt',
+      textToImageResults: 'id, createdAt',
+      syncOutbox: 'id, createdAt, entityType, recordId',
+      syncState: 'id',
     })
   }
 }

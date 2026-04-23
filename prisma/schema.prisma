@@ -1,0 +1,127 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum UserStatus {
+  ACTIVE
+  MERGED
+  DISABLED
+}
+
+enum SyncEntityType {
+  EXPRESSION
+  SAVED_PHRASE
+}
+
+enum SyncOperation {
+  UPSERT
+  DELETE
+}
+
+model User {
+  id               String             @id @default(cuid())
+  isAnonymous      Boolean            @default(true)
+  status           UserStatus         @default(ACTIVE)
+  mergedIntoUserId String?
+  mergedIntoUser   User?              @relation("MergedUsers", fields: [mergedIntoUserId], references: [id], onDelete: SetNull)
+  mergedUsers      User[]             @relation("MergedUsers")
+  devices          Device[]
+  authAccounts     AuthAccount[]
+  expressions      ExpressionRecord[]
+  savedPhrases     SavedPhraseRecord[]
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  @@index([mergedIntoUserId])
+}
+
+model Device {
+  id                        String              @id @default(cuid())
+  userId                    String
+  installIdHash             String              @unique
+  platform                  String?
+  appVersion                String?
+  lastSeenAt                DateTime            @default(now())
+  createdAt                 DateTime            @default(now())
+  updatedAt                 DateTime            @updatedAt
+  user                      User                @relation(fields: [userId], references: [id], onDelete: Restrict)
+  modifiedExpressions       ExpressionRecord[]  @relation("ExpressionLastModifiedBy")
+  modifiedSavedPhrases      SavedPhraseRecord[] @relation("SavedPhraseLastModifiedBy")
+  emittedSyncChanges        SyncChange[]        @relation("SyncChangeDevice")
+
+  @@index([userId])
+}
+
+model AuthAccount {
+  id                String   @id @default(cuid())
+  userId            String
+  provider          String
+  providerAccountId String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model ExpressionRecord {
+  id                     String   @id
+  userId                 String
+  sessionId              String
+  direction              String
+  pictogramIds           Json
+  pictogramLabels        Json
+  candidateSentences     Json
+  selectedSentence       String?
+  inputText              String?
+  isFavorite             Boolean  @default(false)
+  createdAt              DateTime
+  updatedAt              DateTime
+  deletedAt              DateTime?
+  version                Int      @default(1)
+  lastModifiedByDeviceId String?
+  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lastModifiedByDevice   Device?  @relation("ExpressionLastModifiedBy", fields: [lastModifiedByDeviceId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([userId, sessionId, createdAt])
+}
+
+model SavedPhraseRecord {
+  id                     String   @id
+  userId                 String
+  sentence               String
+  pictogramIds           Json
+  usageCount             Int      @default(0)
+  lastUsedAt             DateTime
+  createdAt              DateTime
+  updatedAt              DateTime
+  deletedAt              DateTime?
+  version                Int      @default(1)
+  lastModifiedByDeviceId String?
+  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lastModifiedByDevice   Device?  @relation("SavedPhraseLastModifiedBy", fields: [lastModifiedByDeviceId], references: [id], onDelete: SetNull)
+
+  @@index([userId, lastUsedAt])
+  @@index([userId, updatedAt])
+}
+
+model SyncChange {
+  id            Int            @id @default(autoincrement())
+  userId        String
+  entityType    SyncEntityType
+  recordId      String
+  operation     SyncOperation
+  recordVersion Int
+  changedAt     DateTime       @default(now())
+  deviceId      String?
+  device        Device?        @relation("SyncChangeDevice", fields: [deviceId], references: [id], onDelete: SetNull)
+
+  @@index([userId, id])
+  @@index([userId, entityType, recordId, id])
+}

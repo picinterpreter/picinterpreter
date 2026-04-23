@@ -10,8 +10,7 @@
 
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { db } from '@/db'
-import type { Expression } from '@/types'
+import { createExpression } from '@/repositories/expressions-repository'
 
 /** 30 分钟无活动 → 开新会话 */
 const SESSION_IDLE_MS = 30 * 60 * 1000
@@ -64,9 +63,7 @@ export const useConversationStore = create<ConversationState>()(
       recordExpression: async (input) => {
         const { sessionId, touchActivity } = get()
         touchActivity()
-
-        const record: Expression = {
-          id: crypto.randomUUID(),
+        await createExpression({
           sessionId,
           direction: input.direction,
           pictogramIds: input.pictogramIds,
@@ -74,11 +71,7 @@ export const useConversationStore = create<ConversationState>()(
           candidateSentences: input.candidateSentences,
           selectedSentence: input.selectedSentence,
           inputText: input.inputText,
-          createdAt: Date.now(),
-          isFavorite: false,
-        }
-
-        await db.expressions.add(record)
+        })
       },
     }),
     { name: 'tuyujia-conversation-session' },

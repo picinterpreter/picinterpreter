@@ -13,7 +13,7 @@ import { useAppStore } from '@/stores/app-store'
 import { useSettingsStore } from '@/stores/settings-store'
 import { useConversationStore } from '@/stores/conversation-store'
 import { useAI } from '@/hooks/use-ai'
-import { db } from '@/db'
+import { addSavedPhraseIfMissing } from '@/repositories/saved-phrases-repository'
 
 type Phase = 'generating' | 'playing' | 'done' | 'error'
 
@@ -104,7 +104,7 @@ export function CandidatePanel() {
 
     return () => {
       // 递增使旧 runId 失效，让正在运行的 playSentences 自行退出，不再更新 UI
-      playRunRef.current++
+      playRunRef.current = runId + 1
       ai.stopSpeaking()
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -176,19 +176,7 @@ export function CandidatePanel() {
     // 保存当前选中/停留的那句
     const sentence = candidateSentences[playIndex] ?? candidateSentences[0]
     setSaved(true)
-    // 去重：句子已存在则不重复插入
-    const exists = await db.savedPhrases
-      .filter((p) => p.sentence === sentence)
-      .first()
-    if (!exists) {
-      await db.savedPhrases.add({
-        id: crypto.randomUUID(),
-        sentence,
-        pictogramIds: selectedPictograms.map((p) => p.id),
-        usageCount: 0,
-        lastUsedAt: Date.now(),
-      })
-    }
+    await addSavedPhraseIfMissing(sentence, selectedPictograms.map((p) => p.id))
   }
 
   function handleBack() {

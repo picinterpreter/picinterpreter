@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '@/db'
+import {
+  addSavedPhrase,
+  deleteSavedPhrase,
+  importSavedPhrases,
+  updateSavedPhrase,
+} from '@/repositories/saved-phrases-repository'
 import { useAppStore } from '@/stores/app-store'
 import { resolveImageSrc } from '@/utils/generate-placeholder-svg'
 import {
@@ -87,8 +93,6 @@ export function SavedPhrasesDrawer() {
       cancelEditing()
       setShowAddForm(false)
     }
-  // cancelEditing is defined below, but it's stable (no deps) — safe to exclude
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showSavedPhrases])
 
   if (!showSavedPhrases) return null
@@ -108,10 +112,11 @@ export function SavedPhrasesDrawer() {
       sentence: text,
       pictogramIds: [],
       usageCount: 0,
+      createdAt: Date.now(),
       lastUsedAt: Date.now(),
     }
     try {
-      await db.savedPhrases.add(phrase)
+      await addSavedPhrase(phrase)
       setShowAddForm(false)
     } catch (err) {
       console.error('添加短语失败:', err)
@@ -145,7 +150,7 @@ export function SavedPhrasesDrawer() {
       return
     }
     try {
-      await db.savedPhrases.update(id, { sentence: text })
+      await updateSavedPhrase(id, { sentence: text })
     } catch (err) {
       console.error('重命名短语失败:', err)
     }
@@ -156,7 +161,7 @@ export function SavedPhrasesDrawer() {
 
   async function handlePlay(sentence: string, id: string) {
     const phrase = phrases?.find((p) => p.id === id)
-    await db.savedPhrases.update(id, {
+    await updateSavedPhrase(id, {
       usageCount: (phrase?.usageCount ?? 0) + 1,
       lastUsedAt: Date.now(),
     })
@@ -164,7 +169,7 @@ export function SavedPhrasesDrawer() {
   }
 
   async function handleDelete(id: string) {
-    await db.savedPhrases.delete(id)
+    await deleteSavedPhrase(id)
   }
 
   // ── 导出 ────────────────────────────────────────────────────────────────── //
@@ -250,7 +255,7 @@ export function SavedPhrasesDrawer() {
           const missingIds = allRefIds.filter((_, i) => found[i] == null)
           missingPictogramCount = missingIds.length
         }
-        await db.savedPhrases.bulkAdd(toAdd)
+        await importSavedPhrases(toAdd)
       }
 
       showToast({ added: toAdd.length, skipped: skippedCount, missingPictogramCount })

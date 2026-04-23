@@ -63,6 +63,10 @@ export interface Expression {
   inputText?: string
 
   createdAt: number
+  updatedAt?: number
+  deletedAt?: number | null
+  serverVersion?: number | null
+  lastModifiedByDeviceId?: string | null
   isFavorite: boolean
 }
 
@@ -72,7 +76,12 @@ export interface SavedPhrase {
   sentence: string
   pictogramIds: string[]
   usageCount: number
+  createdAt?: number
   lastUsedAt: number
+  updatedAt?: number
+  deletedAt?: number | null
+  serverVersion?: number | null
+  lastModifiedByDeviceId?: string | null
 }
 
 // ===== Phase 1.5 预留 =====
@@ -149,4 +158,87 @@ export interface ASRProvider {
   readonly name: string
   recognize(audio: Blob): Promise<ASRResult>
   isAvailable(): boolean
+}
+
+// ===== Sync / Cloud Persistence =====
+
+export type SyncEntityType = 'expression' | 'saved_phrase'
+export type SyncOperation = 'upsert' | 'delete'
+
+export interface BootstrapRequest {
+  installId: string
+  platform?: string
+  appVersion?: string
+}
+
+export interface BootstrapResponse {
+  deviceId: string
+  userId: string
+  isAnonymous: boolean
+  lastPulledChangeId: number
+}
+
+export interface SyncState {
+  id: 'main'
+  installId: string
+  deviceId: string | null
+  userId: string | null
+  lastPulledChangeId: number
+  lastBootstrapAt?: number
+  lastSyncAt?: number
+  lastError?: string | null
+}
+
+export interface SyncOutboxItem {
+  id: string
+  entityType: SyncEntityType
+  operation: SyncOperation
+  recordId: string
+  baseVersion: number | null
+  payload: Expression | SavedPhrase | null
+  createdAt: number
+}
+
+export interface SyncMutation {
+  mutationId: string
+  entityType: SyncEntityType
+  operation: SyncOperation
+  recordId: string
+  baseVersion: number | null
+  payload: Expression | SavedPhrase | null
+}
+
+export interface SyncPushRequest {
+  mutations: SyncMutation[]
+}
+
+export interface SyncPushResult {
+  mutationId: string
+  entityType: SyncEntityType
+  recordId: string
+  accepted: boolean
+  conflicted: boolean
+  deleted: boolean
+  serverVersion: number | null
+  changeId: number | null
+  record: Expression | SavedPhrase | null
+}
+
+export interface SyncPushResponse {
+  results: SyncPushResult[]
+}
+
+export interface SyncPullChange {
+  changeId: number
+  entityType: SyncEntityType
+  operation: SyncOperation
+  recordId: string
+  recordVersion: number
+  record: Expression | SavedPhrase | null
+}
+
+export interface SyncPullResponse {
+  changes: SyncPullChange[]
+  nextChangeId: number
+  hasMore: boolean
 }

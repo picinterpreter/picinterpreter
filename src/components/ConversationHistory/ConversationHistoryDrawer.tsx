@@ -7,6 +7,11 @@
 
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '@/db'
+import {
+  clearExpressions,
+  deleteExpression,
+  updateExpressionFavorite,
+} from '@/repositories/expressions-repository'
 import { useAppStore } from '@/stores/app-store'
 import type { Expression } from '@/types'
 
@@ -109,11 +114,11 @@ function ExpressionCard({ expr, onPlay }: { expr: Expression; onPlay: PlayFn }) 
       : expr.inputText ?? null
 
   async function handleToggleFavorite() {
-    await db.expressions.update(expr.id, { isFavorite: !expr.isFavorite })
+    await updateExpressionFavorite(expr.id, !expr.isFavorite)
   }
 
   async function handleDelete() {
-    await db.expressions.delete(expr.id)
+    await deleteExpression(expr.id)
   }
 
   return (
@@ -239,7 +244,7 @@ export function ConversationHistoryDrawer() {
 
   async function handleClearAll() {
     if (!confirm('确定要清空全部对话记录吗？此操作不可恢复。')) return
-    await db.expressions.clear()
+    await clearExpressions()
   }
 
   return (

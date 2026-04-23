@@ -1,10 +1,8 @@
-import { useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '@/db'
 import { useAppStore } from '@/stores/app-store'
 import { useSettingsStore, type GridCols } from '@/stores/settings-store'
 import { generatePlaceholderSvg, resolveImageSrc } from '@/utils/generate-placeholder-svg'
-import { useDebounce } from '@/hooks/use-debounce'
 import type { PictogramEntry } from '@/types'
 
 // Tailwind 类必须是完整字符串，不可动态拼接
@@ -103,22 +101,7 @@ export function PictogramGrid() {
   const gridCols = useSettingsStore((s) => s.gridCols)
   const categories = useLiveQuery(() => db.categories.orderBy('sortOrder').toArray())
 
-  const [searchQuery, setSearchQuery] = useState('')
-  // 防抖：250 ms 后才触发 Dexie 查询，避免每次按键都扫描全库
-  const debouncedQuery = useDebounce(searchQuery, 250)
-
   const pictograms = useLiveQuery(async (): Promise<PictogramWithSource[]> => {
-    const q = debouncedQuery.trim()
-
-    // 搜索模式：跨所有分类搜索（不显示来源）
-    if (q) {
-      const items = await db.pictograms.filter((p) =>
-        p.labels.zh.some((l) => l.includes(q)) ||
-        p.synonyms.some((s) => s.includes(q)),
-      ).toArray()
-      return items.map((p) => ({ ...p, sourceName: null }))
-    }
-
     // 最近使用：按上次使用时间倒序
     if (activeCategoryId === 'recent') {
       const used = await db.pictograms.filter((p) => (p.lastUsedAt ?? 0) > 0).toArray()
@@ -144,7 +127,7 @@ export function PictogramGrid() {
     }
 
     return result
-  }, [activeCategoryId, debouncedQuery])
+  }, [activeCategoryId])
 
   function handleSelect(p: PictogramEntry) {
     addPictogram(p)
@@ -155,7 +138,6 @@ export function PictogramGrid() {
   }
 
   const color = CATEGORY_COLORS[activeCategoryId] ?? '#4A90D9'
-  const isSearching = debouncedQuery.trim().length > 0
   // 当前结果中是否有来自链接分类的图片
   const hasLinkedItems = pictograms?.some((p) => p.sourceName !== null) ?? false
   const activeCategory = activeCategoryId === 'recent'
@@ -165,34 +147,11 @@ export function PictogramGrid() {
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-white">
       <div className="sticky top-0 z-10 border-b border-stone-200 bg-white px-3 py-2 sm:px-4">
-        <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-            🔍
-          </span>
-          <input
-            type="search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="搜索图片…"
-            className="min-h-12 w-full rounded-2xl border border-stone-200 bg-white py-3 pl-10 pr-10 text-base text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-300"
-          />
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 inline-flex size-8 -translate-y-1/2 items-center justify-center rounded-full text-stone-400"
-              aria-label="清除搜索"
-            >
-              ✕
-            </button>
-          )}
-        </div>
         <div className="mt-2 flex items-center justify-between gap-2 text-[11px] text-stone-500">
           <span>
-            {isSearching
-              ? `找到 ${pictograms?.length ?? 0} 个结果`
-              : `${activeCategory?.icon ?? '🗂'} ${activeCategory?.name ?? '图片分类'}`}
+            {`${activeCategory?.icon ?? '🗂'} ${activeCategory?.name ?? '图片分类'}`}
           </span>
-          {!isSearching && hasLinkedItems && <span>含链接分类图片</span>}
+          {hasLinkedItems && <span>含链接分类图片</span>}
         </div>
       </div>
 
@@ -232,19 +191,13 @@ export function PictogramGrid() {
           ))}
         </div>
 
-        {pictograms?.length === 0 && isSearching && (
-          <div className="mt-12 rounded-3xl border border-dashed border-stone-300 bg-white px-6 py-10 text-center text-stone-500">
-            <p className="text-lg font-medium text-slate-700">没有找到“{debouncedQuery}”</p>
-            <p className="mt-2 text-sm text-pretty">换个词试试，或者切回分类板继续浏览。</p>
-          </div>
-        )}
-        {pictograms?.length === 0 && !isSearching && activeCategoryId === 'recent' && (
+        {pictograms?.length === 0 && activeCategoryId === 'recent' && (
           <div className="mt-12 rounded-3xl border border-dashed border-stone-300 bg-white px-6 py-10 text-center text-stone-500">
             <p className="text-lg font-medium text-slate-700">还没有最近使用记录</p>
             <p className="mt-2 text-sm text-pretty">从任意分类里点一张图片，它就会出现在这里。</p>
           </div>
         )}
-        {pictograms?.length === 0 && !isSearching && activeCategoryId !== 'recent' && (
+        {pictograms?.length === 0 && activeCategoryId !== 'recent' && (
           <div className="mt-12 rounded-3xl border border-dashed border-stone-300 bg-white px-6 py-10 text-center text-stone-500">
             <p className="text-lg font-medium text-slate-700">这个分类还没有图卡</p>
             <p className="mt-2 text-sm text-pretty">可以先切换到别的分类继续表达。</p>

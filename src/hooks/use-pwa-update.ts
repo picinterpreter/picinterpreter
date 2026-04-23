@@ -13,6 +13,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { SERVICE_WORKER_ENABLED } from '@/utils/service-worker'
 
 export interface PwaUpdateState {
   /** 是否有新版本等待激活 */
@@ -28,7 +29,7 @@ export function usePwaUpdate(): PwaUpdateState {
   const newWorkerRef = useRef<ServiceWorker | null>(null)
 
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'production') return
+    if (!SERVICE_WORKER_ENABLED) return
     if (!('serviceWorker' in navigator)) return
 
     let cancelled = false

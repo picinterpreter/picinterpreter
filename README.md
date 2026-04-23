@@ -35,14 +35,16 @@ DATABASE_URL=mysql://root:password@127.0.0.1:3306/picinterpreter
 AI_API_KEY=
 AI_BASE_URL=https://api.openai.com/v1
 AI_MODEL=gpt-4o-mini
+NEXT_PUBLIC_ENABLE_SERVICE_WORKER=false
 ```
 
 - `DATABASE_URL`：MySQL 连接串，供 Prisma 7 驱动适配器使用。
 - `AI_API_KEY`：服务端调用上游 LLM 的密钥，必填。
 - `AI_BASE_URL`：OpenAI-compatible 接口地址，默认 `https://api.openai.com/v1`。
 - `AI_MODEL`：默认模型名，默认 `gpt-4o-mini`。
+- `NEXT_PUBLIC_ENABLE_SERVICE_WORKER`：是否启用前端 Service Worker，默认 `false`。仅在显式设置为 `true` 时启用。
 
-这些变量只在 Next.js 服务端读取，不会暴露到浏览器。
+其中 `NEXT_PUBLIC_ENABLE_SERVICE_WORKER` 会在构建时注入前端，其余变量仅在 Next.js 服务端读取。
 
 建议按下面的约定使用：
 
@@ -124,7 +126,7 @@ npm run test:coverage
 
 - Secret `DEPLOY_SSH_PRIVATE_KEY`：部署用私钥。
 - Secret `DEPLOY_KNOWN_HOSTS`：目标服务器的 `known_hosts` 内容。
-- Secret `DEPLOY_ENV_FILE`：可选。写入 CI 的 `.env.production`，用于构建期需要的环境变量。
+- Secret `DEPLOY_ENV_FILE`：可选。写入 CI 的 `.env.production`，用于构建期需要的环境变量。若暂时不希望启用 Service Worker，请在其中加入 `NEXT_PUBLIC_ENABLE_SERVICE_WORKER=false`。
 - Variable `DEPLOY_HOST`：服务器地址，例如 `root@1.2.3.4`。
 - Variable `DEPLOY_PATH`：部署目录，例如 `/opt/picinterpreter`。
 - Variable `DEPLOY_PORT`：可选，默认 `22`。
@@ -172,6 +174,8 @@ npm run deploy:aliyun -- \
 ```
 
 如果你的生产环境依赖 `AI_API_KEY`、`AI_BASE_URL`、`AI_MODEL`，建议优先通过 `systemd`/`pm2` 的环境配置注入，而不是只依赖构建期变量。只有在构建期或打包部署链路明确需要时，再额外提供 `.env.production`。
+
+当前仓库默认关闭 Service Worker，部署后会主动清理旧的 `tuyujia-*` 缓存和已注册的 Service Worker，避免浏览器继续使用旧版本静态资源。以后如果需要重新启用，只需在生产环境中把 `NEXT_PUBLIC_ENABLE_SERVICE_WORKER=true` 后重新部署即可。
 
 ## 数据与存储
 

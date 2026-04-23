@@ -8,10 +8,12 @@ export const runtime = 'nodejs'
 
 export async function POST(request: Request) {
   if (!isDatabaseConfigured()) {
-    return NextResponse.json(
-      { error: { message: 'DATABASE_URL is not configured' } },
-      { status: 503 },
-    )
+    return NextResponse.json({
+      deviceId: null,
+      userId: null,
+      isAnonymous: true,
+      lastPulledChangeId: 0,
+    })
   }
 
   let body: BootstrapRequest
@@ -45,7 +47,12 @@ export async function POST(request: Request) {
     })
     return response
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Bootstrap failed'
-    return NextResponse.json({ error: { message } }, { status: 500 })
+    console.warn('POST /api/client/bootstrap fallback to local-only mode:', error)
+    return NextResponse.json({
+      deviceId: null,
+      userId: null,
+      isAnonymous: true,
+      lastPulledChangeId: 0,
+    })
   }
 }

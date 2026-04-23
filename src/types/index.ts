@@ -172,8 +172,8 @@ export interface BootstrapRequest {
 }
 
 export interface BootstrapResponse {
-  deviceId: string
-  userId: string
+  deviceId: string | null
+  userId: string | null
   isAnonymous: boolean
   lastPulledChangeId: number
 }

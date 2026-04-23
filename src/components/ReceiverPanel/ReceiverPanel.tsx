@@ -17,6 +17,7 @@ import { matchTextToImages } from '@/utils/text-to-image-matcher'
 import { aiResegment } from '@/utils/ai-resegment'
 import { resolveImageSrc } from '@/utils/generate-placeholder-svg'
 import { db } from '@/db'
+import { useAppStore } from '@/stores/app-store'
 import type { PictogramEntry } from '@/types'
 import type { MatchedToken } from '@/utils/text-to-image-matcher'
 import { ReceiverDisplayOverlay, type DisplayItem } from './ReceiverDisplayOverlay'
@@ -82,6 +83,7 @@ const MATCH_TYPE_LABEL: Record<ItemMatchType, string> = {
 // ─── 主组件 ──────────────────────────────────────────────────────────────── //
 
 export function ReceiverPanel() {
+  const setActiveMode = useAppStore((s) => s.setActiveMode)
   const [phase, setPhase] = useState<Phase>('idle')
   const [inputText, setInputText] = useState('')
   const [items, setItems] = useState<EditableItem[]>([])
@@ -291,6 +293,18 @@ export function ReceiverPanel() {
   // ── 渲染 ─────────────────────────────────────────────────────────────── //
   return (
     <div className="flex-1 overflow-y-auto flex flex-col min-h-0">
+      <div className="sticky top-0 z-10 flex min-h-12 items-center justify-between border-b border-stone-300 bg-[#2d2d2d] px-3 text-white">
+        <button
+          onClick={() => setActiveMode('express')}
+          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg text-2xl"
+          aria-label="返回主界面"
+          title="返回主界面"
+        >
+          ←
+        </button>
+        <p className="truncate px-3 text-sm font-medium">接收模式</p>
+        <div className="min-w-11" aria-hidden="true" />
+      </div>
 
       {/* ── 输入阶段 ──────────────────────────────────────────────────── */}
       {phase === 'idle' && (

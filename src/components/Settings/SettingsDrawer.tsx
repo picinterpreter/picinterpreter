@@ -220,22 +220,6 @@ export function SettingsDrawer() {
           <AuthSettingsSection />
 
           <section>
-            <h3 className="text-base font-semibold text-gray-700 mb-3">AI 句子生成</h3>
-
-            <div className="rounded-xl border border-gray-200 bg-gray-50 p-3 space-y-2">
-              <p className="text-sm text-gray-700">
-                当前 AI 统一由 Next.js 后端调用，前端不再保存 API Key 或 Token。
-              </p>
-              <p className="text-xs text-gray-500">
-                请在项目根目录创建 <code className="bg-white px-1 rounded">.env.local</code>，
-                配置 <code className="bg-white px-1 rounded">AI_API_KEY</code>、
-                <code className="bg-white px-1 rounded">AI_BASE_URL</code>、
-                <code className="bg-white px-1 rounded">AI_MODEL</code>。
-              </p>
-              <p className="text-xs text-gray-500">
-                可参考 <code className="bg-white px-1 rounded">.env.example</code>。
-              </p>
-            </div>
 
             <div className="mt-3 rounded-xl border border-gray-200 bg-white p-3 space-y-1 text-sm">
               <p className="font-medium text-gray-700">

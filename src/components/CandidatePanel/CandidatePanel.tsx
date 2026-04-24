@@ -221,7 +221,7 @@ export function CandidatePanel() {
       role="region"
       aria-label="候选句播报面板"
       aria-live="polite"
-      className="apple-panel mx-3 mb-3 rounded-[28px] px-4 py-4"
+      className="mx-3 mb-3 rounded-[28px] border-2 border-purple-300 bg-purple-50 px-4 py-4 shadow-[0_12px_30px_rgba(88,28,135,0.16)]"
     >
       {/* 头部 */}
       <div className="flex items-center justify-between mb-3">
@@ -389,8 +389,8 @@ export function CandidatePanel() {
               {saved ? '已收藏' : '收藏此句'}
             </button>
             <button
-              onClick={handleDone}
-              className="apple-press flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-full bg-slate-950 py-3 text-base font-semibold text-white transition-colors hover:bg-slate-800"
+            onClick={handleDone}
+              className="apple-press flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-full bg-purple-700 py-3 text-base font-semibold text-white transition-colors hover:bg-purple-800"
             >
               <LineIcon name="check" className="h-5 w-5" />
               完成

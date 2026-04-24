@@ -43,16 +43,16 @@ export function CategoryTabs() {
   }, [activeCategoryId])
 
   return (
-    <div className="relative bg-white border-b border-slate-200">
+    <div className="relative border-b-2 border-cyan-200 bg-cyan-50">
       {/* 左渐变遮罩 */}
       {showLeftFade && (
         <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 z-10
-          bg-gradient-to-r from-white to-transparent" />
+          bg-gradient-to-r from-cyan-50 to-transparent" />
       )}
       {/* 右渐变遮罩 */}
       {showRightFade && (
         <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 z-10
-          bg-gradient-to-l from-white to-transparent" />
+          bg-gradient-to-l from-cyan-50 to-transparent" />
       )}
 
       <nav
@@ -67,8 +67,8 @@ export function CategoryTabs() {
           onClick={() => setActiveCategory('recent')}
           className={`apple-press flex items-center gap-1.5 px-4 py-2.5 rounded-full text-base font-semibold whitespace-nowrap transition-colors min-h-[48px] flex-shrink-0
             ${activeCategoryId === 'recent'
-              ? 'bg-slate-950 text-white shadow-sm'
-              : 'bg-white/80 text-slate-700 shadow-[inset_0_0_0_1px_rgba(15,23,42,0.08)] hover:bg-white'
+              ? 'bg-cyan-700 text-white shadow-sm'
+              : 'bg-white text-cyan-900 shadow-[inset_0_0_0_2px_rgba(125,211,252,0.8)] hover:bg-cyan-100'
             }`}
           aria-pressed={activeCategoryId === 'recent'}
         >
@@ -83,8 +83,8 @@ export function CategoryTabs() {
             onClick={() => setActiveCategory(cat.id)}
             className={`apple-press flex items-center gap-1.5 px-4 py-2.5 rounded-full text-base font-semibold whitespace-nowrap transition-colors min-h-[48px] flex-shrink-0
               ${activeCategoryId === cat.id
-                ? 'bg-slate-950 text-white shadow-sm'
-                : 'bg-white/80 text-slate-700 shadow-[inset_0_0_0_1px_rgba(15,23,42,0.08)] hover:bg-white'
+                ? 'bg-cyan-700 text-white shadow-sm'
+                : 'bg-white text-cyan-900 shadow-[inset_0_0_0_2px_rgba(125,211,252,0.8)] hover:bg-cyan-100'
               }`}
             aria-pressed={activeCategoryId === cat.id}
           >

@@ -34,6 +34,38 @@ const CATEGORY_COLORS: Record<string, string> = {
   objects:   '#8E44AD',
 }
 
+const CARD_TONE_CLASS: Record<string, string> = {
+  recent:    'bg-amber-100 border-amber-200 text-amber-950',
+  quickchat: 'bg-sky-100 border-sky-200 text-sky-950',
+  actions:   'bg-emerald-100 border-emerald-200 text-emerald-950',
+  emotions:  'bg-orange-100 border-orange-200 text-orange-950',
+  food:      'bg-rose-100 border-rose-200 text-rose-950',
+  people:    'bg-violet-100 border-violet-200 text-violet-950',
+  places:    'bg-cyan-100 border-cyan-200 text-cyan-950',
+  medical:   'bg-teal-100 border-teal-200 text-teal-950',
+  time:      'bg-yellow-100 border-yellow-200 text-yellow-950',
+  animals:   'bg-lime-100 border-lime-200 text-lime-950',
+  colors:    'bg-pink-100 border-pink-200 text-pink-950',
+  daily:     'bg-blue-100 border-blue-200 text-blue-950',
+  objects:   'bg-fuchsia-100 border-fuchsia-200 text-fuchsia-950',
+}
+
+const GRID_TONE_CLASS: Record<string, string> = {
+  recent:    'bg-amber-50',
+  quickchat: 'bg-sky-50',
+  actions:   'bg-emerald-50',
+  emotions:  'bg-orange-50',
+  food:      'bg-rose-50',
+  people:    'bg-violet-50',
+  places:    'bg-cyan-50',
+  medical:   'bg-teal-50',
+  time:      'bg-yellow-50',
+  animals:   'bg-lime-50',
+  colors:    'bg-pink-50',
+  daily:     'bg-blue-50',
+  objects:   'bg-fuchsia-50',
+}
+
 /**
  * 递归收集分类自身及其所有链接分类的图片。
  *
@@ -138,9 +170,11 @@ export function PictogramGrid() {
   }
 
   const color = CATEGORY_COLORS[activeCategoryId] ?? '#4A90D9'
+  const cardTone = CARD_TONE_CLASS[activeCategoryId] ?? 'bg-slate-100 border-slate-200 text-slate-950'
+  const gridTone = GRID_TONE_CLASS[activeCategoryId] ?? 'bg-slate-50'
 
   return (
-    <div className="flex-1 overflow-y-auto flex flex-col min-h-0">
+    <div className={`flex-1 overflow-y-auto flex flex-col min-h-0 ${gridTone}`}>
       {/* 图片网格 */}
       <div className="p-4">
         <div className={`grid ${GRID_CLASS[gridCols]} gap-3`}>
@@ -148,7 +182,7 @@ export function PictogramGrid() {
             <button
               key={p.id}
               onClick={() => handleSelect(p)}
-              className="apple-press flex flex-col items-center gap-1.5 p-3 rounded-[22px] bg-white/90 border border-white shadow-[0_1px_2px_rgba(15,23,42,0.05),0_10px_28px_rgba(15,23,42,0.08)] hover:shadow-[0_2px_5px_rgba(15,23,42,0.08),0_16px_34px_rgba(15,23,42,0.10)] transition-all min-h-[96px] relative"
+              className={`apple-press relative flex min-h-[112px] flex-col items-center gap-1.5 rounded-[22px] border-2 p-3 shadow-[0_2px_4px_rgba(15,23,42,0.08),0_10px_22px_rgba(15,23,42,0.10)] transition-all hover:shadow-[0_3px_8px_rgba(15,23,42,0.10),0_16px_30px_rgba(15,23,42,0.12)] ${cardTone}`}
               aria-label={p.labels.zh[0]}
             >
               {/* 来源标记（链接分类的图片） */}

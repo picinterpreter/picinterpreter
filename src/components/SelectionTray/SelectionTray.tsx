@@ -42,7 +42,7 @@ function SortableItem({ pictogram, index, onRemove }: {
     <div
       ref={setNodeRef}
       style={style}
-      className="relative flex min-w-[5.25rem] flex-col items-center gap-0.5 rounded-[22px] bg-white p-2 shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_18px_rgba(15,23,42,0.08)] select-none"
+      className="relative flex min-w-[5.25rem] select-none flex-col items-center gap-0.5 rounded-[22px] border-2 border-blue-200 bg-blue-50 p-2 shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_18px_rgba(37,99,235,0.16)]"
       {...attributes}
       {...listeners}
     >
@@ -92,7 +92,7 @@ export function SelectionTray() {
 
   if (selectedPictograms.length === 0) {
     return (
-      <div className="flex h-24 items-center justify-center border-b border-slate-200 bg-white/85 text-slate-300 backdrop-blur-xl" aria-label="图片序列">
+      <div className="flex h-24 items-center justify-center border-b-2 border-blue-200 bg-blue-50 text-blue-300" aria-label="图片序列">
         <LineIcon name="message" className="h-9 w-9" />
       </div>
     )
@@ -100,7 +100,7 @@ export function SelectionTray() {
 
   return (
     <>
-      <div className="border-b border-slate-200 bg-white/85 px-3 py-3 backdrop-blur-xl">
+      <div className="border-b-2 border-blue-200 bg-blue-50 px-3 py-3">
         <div className="flex items-stretch gap-3">
           <DndContext
             sensors={sensors}
@@ -127,7 +127,7 @@ export function SelectionTray() {
           <div className="flex w-24 shrink-0 flex-col gap-2 sm:w-32">
             <button
               onClick={clearSelection}
-              className="apple-press flex flex-1 items-center justify-center gap-1.5 rounded-[22px] bg-slate-100 px-3 py-2 text-base font-semibold text-slate-600 transition-colors hover:bg-slate-200"
+              className="apple-press flex flex-1 items-center justify-center gap-1.5 rounded-[22px] bg-white px-3 py-2 text-base font-semibold text-blue-900 shadow-[inset_0_0_0_2px_rgba(147,197,253,0.8)] transition-colors hover:bg-blue-100"
             >
               <LineIcon name="trash" className="h-5 w-5" />
               清空
@@ -135,7 +135,7 @@ export function SelectionTray() {
             <button
               onClick={() => setShowCandidatePanel(true)}
               disabled={isGenerating}
-              className="apple-press flex flex-[1.4] items-center justify-center gap-1.5 rounded-[22px] bg-slate-950 px-3 py-2.5 text-base font-semibold text-white shadow-sm transition-colors hover:bg-slate-800 disabled:opacity-45"
+              className="apple-press flex flex-[1.4] items-center justify-center gap-1.5 rounded-[22px] bg-blue-700 px-3 py-2.5 text-base font-semibold text-white shadow-sm transition-colors hover:bg-blue-800 disabled:opacity-45"
             >
               <LineIcon name={isGenerating ? 'loader' : 'sound'} className={`h-5 w-5 ${isGenerating ? 'animate-spin' : ''}`} />
               {isGenerating ? '生成中' : '说'}

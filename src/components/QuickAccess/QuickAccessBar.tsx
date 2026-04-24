@@ -36,7 +36,7 @@ export function QuickAccessBar() {
 
   return (
     <div
-      className="px-3 py-2 bg-white/70 border-b border-slate-200 flex items-center gap-2 overflow-x-auto shrink-0 scrollbar-hide backdrop-blur-xl"
+      className="flex shrink-0 items-center gap-2 overflow-x-auto border-b-2 border-amber-200 bg-amber-50 px-3 py-2 scrollbar-hide"
       role="toolbar"
       aria-label="常用语快捷播报"
     >
@@ -46,7 +46,7 @@ export function QuickAccessBar() {
           key={phrase.id}
           onClick={() => handleTap(phrase)}
           aria-label={`一键播报：${phrase.sentence}`}
-          className="apple-press shrink-0 px-3 py-1.5 bg-white text-slate-800 text-sm font-semibold rounded-full max-w-[160px] truncate min-h-[44px] shadow-[inset_0_0_0_1px_rgba(15,23,42,0.08)] hover:bg-slate-50 transition-colors"
+          className="apple-press min-h-[44px] max-w-[160px] shrink-0 truncate rounded-full bg-white px-3 py-1.5 text-sm font-semibold text-amber-950 shadow-[inset_0_0_0_2px_rgba(251,191,36,0.55)] transition-colors hover:bg-amber-100"
         >
           {phrase.sentence}
         </button>

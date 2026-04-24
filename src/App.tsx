@@ -44,11 +44,37 @@ export default function App() {
   return (
     <div className={`h-screen flex flex-col bg-[#f5f5f7] overflow-hidden text-slate-950 ${highContrast ? 'hc' : ''}`}>
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 bg-white/85 text-slate-950 shadow-[0_1px_0_rgba(15,23,42,0.08)] backdrop-blur-xl">
-        <div className="min-w-0">
+      <header className="flex items-center gap-2 bg-white/85 px-3 py-2 text-slate-950 shadow-[0_1px_0_rgba(15,23,42,0.08)] backdrop-blur-xl sm:px-4">
+        <div className="hidden min-w-0 shrink-0 sm:block">
           <h1 className="text-xl font-semibold leading-tight tracking-normal">图语家</h1>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="grid h-11 min-w-[9rem] max-w-[12rem] flex-1 grid-cols-2 gap-1 rounded-full bg-slate-100 p-1 sm:ml-2 sm:flex-none" role="tablist" aria-label="模式切换">
+          <button
+            onClick={() => setActiveMode('express')}
+            aria-pressed={activeMode === 'express'}
+            className={`flex items-center justify-center gap-1.5 rounded-full px-2 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:text-base ${
+              activeMode === 'express'
+                ? 'bg-white text-slate-950 shadow-[0_1px_6px_rgba(15,23,42,0.10)]'
+                : 'text-slate-500 hover:bg-white/60 hover:text-slate-700'
+            }`}
+          >
+            <LineIcon name="message" className="h-5 w-5" />
+            <span>表达</span>
+          </button>
+          <button
+            onClick={() => setActiveMode('receive')}
+            aria-pressed={activeMode === 'receive'}
+            className={`flex items-center justify-center gap-1.5 rounded-full px-2 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-500 sm:text-base ${
+              activeMode === 'receive'
+                ? 'bg-white text-slate-950 shadow-[0_1px_6px_rgba(15,23,42,0.10)]'
+                : 'text-slate-500 hover:bg-white/60 hover:text-slate-700'
+            }`}
+          >
+            <LineIcon name="ear" className="h-5 w-5" />
+            <span>接收</span>
+          </button>
+        </div>
+        <div className="ml-auto flex shrink-0 items-center gap-1">
           <a
             href="/debug"
             className="hidden min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100 hover:text-slate-950 sm:flex focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
@@ -91,33 +117,6 @@ export default function App() {
         </div>
       </header>
 
-      {/* 模式切换标签 */}
-      <div className="grid grid-cols-2 gap-1 border-b border-slate-200 bg-white/80 p-1.5 shrink-0 backdrop-blur-xl">
-        <button
-          onClick={() => setActiveMode('express')}
-          aria-pressed={activeMode === 'express'}
-          className={`flex items-center justify-center gap-2 rounded-full py-2.5 text-base font-semibold transition-colors min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 ${
-            activeMode === 'express'
-              ? 'text-slate-950 bg-white shadow-[0_1px_6px_rgba(15,23,42,0.10)]'
-              : 'text-slate-500 hover:text-slate-700 hover:bg-white/60'
-          }`}
-        >
-          <LineIcon name="message" className="h-5 w-5" />
-          <span>表达</span>
-        </button>
-        <button
-          onClick={() => setActiveMode('receive')}
-          aria-pressed={activeMode === 'receive'}
-          className={`flex items-center justify-center gap-2 rounded-full py-2.5 text-base font-semibold transition-colors min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-500 ${
-            activeMode === 'receive'
-              ? 'text-slate-950 bg-white shadow-[0_1px_6px_rgba(15,23,42,0.10)]'
-              : 'text-slate-500 hover:text-slate-700 hover:bg-white/60'
-          }`}
-        >
-          <LineIcon name="ear" className="h-5 w-5" />
-          <span>接收</span>
-        </button>
-      </div>
 
       {activeMode === 'express' ? (
         <div className="flex min-h-0 flex-1 flex-col">
@@ -125,10 +124,10 @@ export default function App() {
           <SelectionTray />
 
           <div className="flex min-h-0 flex-1">
-            <aside className="flex w-[4.75rem] shrink-0 flex-col gap-3 border-r border-slate-200 bg-white/75 px-2 py-3 backdrop-blur-xl sm:w-24">
+            <aside className="flex w-[4.75rem] shrink-0 flex-col gap-3 border-r-2 border-rose-200 bg-rose-50 px-2 py-3 sm:w-24">
               <button
                 onClick={() => setActiveCategory('quickchat')}
-                className="apple-press flex min-h-[68px] flex-col items-center justify-center gap-1 rounded-[24px] bg-slate-950 text-white shadow-sm"
+                className="apple-press flex min-h-[68px] flex-col items-center justify-center gap-1 rounded-[24px] bg-rose-600 text-white shadow-sm"
                 aria-label="首页"
               >
                 <LineIcon name="message" className="h-7 w-7" />
@@ -136,7 +135,7 @@ export default function App() {
               </button>
               <button
                 onClick={() => setActiveCategory('recent')}
-                className="apple-press flex min-h-[68px] flex-col items-center justify-center gap-1 rounded-[24px] bg-white text-slate-800 shadow-[inset_0_0_0_1px_rgba(15,23,42,0.08)]"
+                className="apple-press flex min-h-[68px] flex-col items-center justify-center gap-1 rounded-[24px] bg-white text-rose-950 shadow-[inset_0_0_0_2px_rgba(251,113,133,0.35)]"
                 aria-label="最近"
               >
                 <LineIcon name="clock" className="h-7 w-7" />
@@ -144,7 +143,7 @@ export default function App() {
               </button>
               <button
                 onClick={() => setShowSavedPhrases(true)}
-                className="apple-press flex min-h-[68px] flex-col items-center justify-center gap-1 rounded-[24px] bg-white text-slate-800 shadow-[inset_0_0_0_1px_rgba(15,23,42,0.08)]"
+                className="apple-press flex min-h-[68px] flex-col items-center justify-center gap-1 rounded-[24px] bg-white text-rose-950 shadow-[inset_0_0_0_2px_rgba(251,113,133,0.35)]"
                 aria-label="常用语"
               >
                 <LineIcon name="star" className="h-7 w-7" />
@@ -152,7 +151,7 @@ export default function App() {
               </button>
               <button
                 onClick={() => setShowCategoryLinks(true)}
-                className="apple-press mt-auto flex min-h-[60px] items-center justify-center rounded-[22px] bg-white text-slate-500 shadow-[inset_0_0_0_1px_rgba(15,23,42,0.08)]"
+                className="apple-press mt-auto flex min-h-[60px] items-center justify-center rounded-[22px] bg-white text-rose-700 shadow-[inset_0_0_0_2px_rgba(251,113,133,0.35)]"
                 aria-label="分类链接"
               >
                 <LineIcon name="link" className="h-6 w-6" />

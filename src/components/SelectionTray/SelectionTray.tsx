@@ -1,4 +1,3 @@
-import { SuggestionStrip } from './SuggestionStrip'
 import {
   DndContext,
   closestCenter,
@@ -93,12 +92,9 @@ export function SelectionTray() {
 
   if (selectedPictograms.length === 0) {
     return (
-      <>
-        <div className="flex h-24 items-center justify-center border-b border-slate-200 bg-white/85 text-slate-300 backdrop-blur-xl" aria-label="图片序列">
-          <LineIcon name="message" className="h-9 w-9" />
-        </div>
-        <SuggestionStrip />
-      </>
+      <div className="flex h-24 items-center justify-center border-b border-slate-200 bg-white/85 text-slate-300 backdrop-blur-xl" aria-label="图片序列">
+        <LineIcon name="message" className="h-9 w-9" />
+      </div>
     )
   }
 
@@ -147,9 +143,6 @@ export function SelectionTray() {
           </div>
         </div>
       </div>
-
-      {/* 下一词建议 */}
-      <SuggestionStrip />
     </>
   )
 }

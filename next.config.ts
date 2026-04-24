@@ -10,6 +10,19 @@ const nextConfig: NextConfig = {
   distDir: isDevelopment ? '.next-dev' : '.next',
   output: 'standalone',
   outputFileTracingRoot: projectRoot,
+  async headers() {
+    return [
+      {
+        source: '/sw.js',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-store, no-cache, must-revalidate',
+          },
+        ],
+      },
+    ]
+  },
 }
 
 export default nextConfig

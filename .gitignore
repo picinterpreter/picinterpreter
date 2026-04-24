@@ -33,3 +33,6 @@ coverage
 # Python cache
 __pycache__/
 *.pyc
+
+
+.next-dev

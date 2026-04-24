@@ -15,6 +15,8 @@ export function CategoryTabs() {
 
   const activeCategoryId = useAppStore((s) => s.activeCategoryId)
   const setActiveCategory = useAppStore((s) => s.setActiveCategory)
+  const setShowSavedPhrases = useAppStore((s) => s.setShowSavedPhrases)
+  const setShowCategoryLinks = useAppStore((s) => s.setShowCategoryLinks)
   const scrollRef = useRef<HTMLDivElement>(null)
   const [showRightFade, setShowRightFade] = useState(true)
   const [showLeftFade, setShowLeftFade] = useState(false)
@@ -43,16 +45,16 @@ export function CategoryTabs() {
   }, [activeCategoryId])
 
   return (
-    <div className="relative border-b-2 border-cyan-200 bg-cyan-50">
+    <div className="relative border-b border-stone-200 bg-stone-50">
       {/* 左渐变遮罩 */}
       {showLeftFade && (
         <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 z-10
-          bg-gradient-to-r from-cyan-50 to-transparent" />
+          bg-gradient-to-r from-stone-50 to-transparent" />
       )}
       {/* 右渐变遮罩 */}
       {showRightFade && (
         <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 z-10
-          bg-gradient-to-l from-cyan-50 to-transparent" />
+          bg-gradient-to-l from-stone-50 to-transparent" />
       )}
 
       <nav
@@ -63,12 +65,25 @@ export function CategoryTabs() {
       >
         {/* 最近使用（虚拟分类，不在 DB 中） */}
         <button
+          data-cat="quickchat"
+          onClick={() => setActiveCategory('quickchat')}
+          className={`apple-press flex min-h-[48px] flex-shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-4 py-2.5 text-base font-semibold transition-colors
+            ${activeCategoryId === 'quickchat'
+              ? 'bg-slate-900 text-white shadow-sm'
+              : 'bg-white text-slate-800 shadow-[inset_0_0_0_1px_rgba(120,113,108,0.26)] hover:bg-stone-100'
+            }`}
+          aria-pressed={activeCategoryId === 'quickchat'}
+        >
+          <LineIcon name="message" className="h-5 w-5" />
+          <span>首页</span>
+        </button>
+        <button
           data-cat="recent"
           onClick={() => setActiveCategory('recent')}
           className={`apple-press flex items-center gap-1.5 px-4 py-2.5 rounded-full text-base font-semibold whitespace-nowrap transition-colors min-h-[48px] flex-shrink-0
             ${activeCategoryId === 'recent'
-              ? 'bg-cyan-700 text-white shadow-sm'
-              : 'bg-white text-cyan-900 shadow-[inset_0_0_0_2px_rgba(125,211,252,0.8)] hover:bg-cyan-100'
+              ? 'bg-slate-900 text-white shadow-sm'
+              : 'bg-white text-slate-800 shadow-[inset_0_0_0_1px_rgba(120,113,108,0.26)] hover:bg-stone-100'
             }`}
           aria-pressed={activeCategoryId === 'recent'}
         >
@@ -83,8 +98,8 @@ export function CategoryTabs() {
             onClick={() => setActiveCategory(cat.id)}
             className={`apple-press flex items-center gap-1.5 px-4 py-2.5 rounded-full text-base font-semibold whitespace-nowrap transition-colors min-h-[48px] flex-shrink-0
               ${activeCategoryId === cat.id
-                ? 'bg-cyan-700 text-white shadow-sm'
-                : 'bg-white text-cyan-900 shadow-[inset_0_0_0_2px_rgba(125,211,252,0.8)] hover:bg-cyan-100'
+                ? 'bg-slate-900 text-white shadow-sm'
+                : 'bg-white text-slate-800 shadow-[inset_0_0_0_1px_rgba(120,113,108,0.26)] hover:bg-stone-100'
               }`}
             aria-pressed={activeCategoryId === cat.id}
           >
@@ -92,6 +107,22 @@ export function CategoryTabs() {
             <span>{cat.name}</span>
           </button>
         ))}
+        <button
+          onClick={() => setShowSavedPhrases(true)}
+          className="apple-press flex min-h-[48px] flex-shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-white px-4 py-2.5 text-base font-semibold text-slate-800 shadow-[inset_0_0_0_1px_rgba(120,113,108,0.26)] transition-colors hover:bg-stone-100"
+          aria-label="常用语"
+        >
+          <LineIcon name="star" className="h-5 w-5" />
+          <span>常用</span>
+        </button>
+        <button
+          onClick={() => setShowCategoryLinks(true)}
+          className="apple-press flex min-h-[48px] min-w-[48px] flex-shrink-0 items-center justify-center rounded-full bg-white text-slate-700 shadow-[inset_0_0_0_1px_rgba(120,113,108,0.26)] transition-colors hover:bg-stone-100"
+          aria-label="分类链接管理"
+          title="分类链接管理"
+        >
+          <LineIcon name="link" className="h-5 w-5" />
+        </button>
       </nav>
     </div>
   )

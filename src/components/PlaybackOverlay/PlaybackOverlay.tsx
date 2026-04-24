@@ -152,17 +152,16 @@ export function PlaybackOverlay() {
         </p>
 
         {isSpeaking && (
-          <p className="mb-6 flex items-center justify-center gap-2 text-xl text-blue-600 animate-pulse">
+          <div className="mb-6 flex items-center justify-center gap-2 text-xl text-slate-600 animate-pulse" aria-label="正在播报">
             <LineIcon name="sound" className="h-5 w-5" />
-            <span>正在播报...</span>
-          </p>
+          </div>
         )}
 
         {ttsError && (
-          <p className="text-lg text-amber-600 mb-6">
-            {ttsError}<br />
-            <span className="text-base text-slate-500">无法播报</span>
-          </p>
+          <div className="mb-6 flex items-center justify-center gap-2 text-lg text-amber-700" role="alert">
+            <LineIcon name="alert" className="h-5 w-5" />
+            <span>无法播报</span>
+          </div>
         )}
 
         <div className="flex gap-4 justify-center flex-wrap">
@@ -170,24 +169,27 @@ export function PlaybackOverlay() {
             onClick={handleReplay}
             disabled={isSpeaking}
             aria-label="重新播报"
-            className="apple-press px-6 py-3 rounded-full bg-slate-100 text-slate-800 text-lg font-semibold hover:bg-slate-200 disabled:opacity-50 transition-colors min-h-[52px]"
+            className="apple-press flex min-h-[52px] items-center justify-center gap-2 rounded-full bg-slate-100 px-6 py-3 text-lg font-semibold text-slate-800 transition-colors hover:bg-slate-200 disabled:opacity-50"
           >
+            <LineIcon name="refresh" className="h-5 w-5" />
             重播
           </button>
           <button
             onClick={handleFavorite}
             disabled={isSpeaking || saved}
             aria-label={saved ? '已收藏' : '收藏此句'}
-            className={`apple-press px-6 py-3 rounded-full text-lg font-semibold transition-colors min-h-[52px] disabled:opacity-50
+            className={`apple-press flex min-h-[52px] items-center justify-center gap-2 rounded-full px-6 py-3 text-lg font-semibold transition-colors disabled:opacity-50
               ${saved ? 'bg-slate-100 text-slate-400 cursor-default' : 'bg-slate-100 text-slate-800 hover:bg-slate-200'}`}
           >
+            <LineIcon name={saved ? 'check' : 'star'} className="h-5 w-5" />
             {saved ? '已收藏' : '收藏'}
           </button>
           <button
             onClick={handleDone}
             aria-label="播报完成，关闭"
-            className="apple-press px-6 py-3 rounded-full bg-slate-950 text-white text-lg font-semibold hover:bg-slate-800 transition-colors min-h-[52px]"
+            className="apple-press flex min-h-[52px] items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-3 text-lg font-semibold text-white transition-colors hover:bg-slate-800"
           >
+            <LineIcon name="check" className="h-5 w-5" />
             完成
           </button>
         </div>

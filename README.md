@@ -1,4 +1,4 @@
-原仓库地址 [https://github.com/lightcoloror/picinterpreter](https://github.com/lightcoloror/PicInterpreter)
+原仓库地址 [https://github.com/picinterpreter/picinterpreter](https://github.com/lightcoloror/PicInterpreter)
 - 寻全栈开发者共建 AAC 失语症沟通应用（完整版）
 	- 项目名称
 		- 图语家PicInterpreter

@@ -138,8 +138,23 @@ export function PictogramGrid() {
   }
 
   const color = CATEGORY_COLORS[activeCategoryId] ?? '#4A90D9'
+  // 当前结果中是否有来自链接分类的图片
+  const hasLinkedItems = pictograms?.some((p) => p.sourceName !== null) ?? false
+  const activeCategory = activeCategoryId === 'recent'
+    ? { name: '最近使用', icon: '🕐' }
+    : categories?.find((category) => category.id === activeCategoryId)
+
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-white">
+      <div className="sticky top-0 z-10 border-b border-stone-200 bg-white px-3 py-2 sm:px-4">
+        <div className="mt-2 flex items-center justify-between gap-2 text-[11px] text-stone-500">
+          <span>
+            {`${activeCategory?.icon ?? '🗂'} ${activeCategory?.name ?? '图片分类'}`}
+          </span>
+          {hasLinkedItems && <span>含链接分类图片</span>}
+        </div>
+      </div>
+
       <div className="bg-stone-50 p-3 sm:p-4">
         <div className={`grid ${GRID_CLASS[gridCols]} gap-3 sm:gap-4`}>
           {pictograms?.map((p) => (

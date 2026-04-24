@@ -10,7 +10,6 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '@/db'
 import { useAppStore } from '@/stores/app-store'
 import type { SavedPhrase } from '@/types'
-import { cn } from '@/utils/cn'
 
 const MAX_QUICK = 6
 
@@ -36,35 +35,21 @@ export function QuickAccessBar() {
 
   return (
     <div
-      className="shrink-0 border-b border-stone-200 bg-[#f6f6f6] px-3 py-2 sm:px-4"
+      className="px-3 py-1.5 bg-amber-50 border-b border-amber-100 flex items-center gap-2 overflow-x-auto shrink-0 scrollbar-hide"
       role="toolbar"
       aria-label="常用语快捷播报"
     >
-      <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide">
-        <div className="shrink-0">
-          <p className="text-[11px] uppercase text-stone-500">常用句</p>
-          <p className="text-xs font-medium text-slate-700">快速播放</p>
-        </div>
-
-        {topPhrases.map((phrase, index) => (
-          <button
-            key={phrase.id}
-            onClick={() => handleTap(phrase)}
-            aria-label={`一键播报：${phrase.sentence}`}
-            className={cn(
-              'min-h-12 min-w-32 shrink-0 rounded-xl border px-3 py-2 text-left',
-              index === 0
-                ? 'border-amber-300 bg-amber-100 text-amber-950'
-                : 'border-stone-200 bg-stone-50 text-slate-700',
-            )}
-          >
-            <span className="block text-[11px] uppercase text-stone-500">短句 {index + 1}</span>
-            <span className="mt-1 block truncate text-sm font-medium">
-              {phrase.sentence}
-            </span>
-          </button>
-        ))}
-      </div>
+      <span className="text-xs text-amber-400 shrink-0 select-none" aria-hidden="true">⭐</span>
+      {topPhrases.map((phrase) => (
+        <button
+          key={phrase.id}
+          onClick={() => handleTap(phrase)}
+          aria-label={`一键播报：${phrase.sentence}`}
+          className="shrink-0 px-3 py-1.5 bg-amber-100 hover:bg-amber-200 active:bg-amber-300 text-amber-900 text-sm font-medium rounded-xl max-w-[160px] truncate min-h-[44px] transition-colors"
+        >
+          {phrase.sentence}
+        </button>
+      ))}
     </div>
   )
 }

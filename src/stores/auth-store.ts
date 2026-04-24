@@ -26,21 +26,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
 
   refreshMe: async () => {
-    try {
-      const result = await authService.getMe()
-      await syncService.setAuthUserId(result.user?.id ?? null)
-      set({
-        status: result.authenticated ? 'authenticated' : 'anonymous',
-        user: result.user,
-      })
-    } catch (error) {
-      console.warn('Auth initialization fallback to anonymous:', error)
-      await syncService.setAuthUserId(null)
-      set({
-        status: 'anonymous',
-        user: null,
-      })
-    }
+    const result = await authService.getMe()
+    await syncService.setAuthUserId(result.user?.id ?? null)
+    set({
+      status: result.authenticated ? 'authenticated' : 'anonymous',
+      user: result.user,
+    })
   },
 
   initialize: async () => {

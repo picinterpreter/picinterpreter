@@ -96,22 +96,22 @@ export function SuggestionStrip() {
       : `${lastSelected.labels.zh[0]}相关`
 
   return (
-    <div className="shrink-0 border-t border-stone-200 bg-white px-3 py-3 sm:px-4">
-      <p className="mb-2 text-xs uppercase text-stone-500 select-none">下一步建议 · {hint}</p>
-      <div className="flex gap-2 overflow-x-auto pb-1">
+    <div className="px-3 pt-1.5 pb-2 bg-gray-50 border-t border-gray-100">
+      <p className="text-xs text-gray-400 mb-1.5 select-none">💡 {hint}</p>
+      <div className="flex gap-2 overflow-x-auto pb-0.5">
         {suggestions.map((p) => (
           <button
             key={p.id}
             onClick={() => handleSelect(p)}
-            className="flex min-w-[84px] shrink-0 flex-col items-center gap-1 rounded-2xl border border-stone-200 bg-stone-50 p-2"
+            className="flex flex-col items-center gap-0.5 p-1.5 rounded-lg bg-white border border-gray-200 hover:border-blue-400 hover:shadow-sm transition-all shrink-0 min-w-[60px] active:scale-95"
             aria-label={`快速添加：${p.labels.zh[0]}`}
           >
             <img
               src={resolveImageSrc(p.imageUrl, p.labels.zh[0], '#6B7280')}
               alt={p.labels.zh[0]}
-              className="size-11 object-contain pointer-events-none"
+              className="w-10 h-10 object-contain pointer-events-none"
             />
-            <span className="max-w-[70px] truncate text-xs font-medium text-slate-700 select-none">
+            <span className="text-xs text-gray-700 truncate max-w-[56px] select-none">
               {p.labels.zh[0]}
             </span>
           </button>

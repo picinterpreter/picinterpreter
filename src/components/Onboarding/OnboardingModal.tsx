@@ -33,6 +33,13 @@ export function OnboardingModal() {
   const showOnboarding = useAppStore((s) => s.showOnboarding)
   const setShowOnboarding = useAppStore((s) => s.setShowOnboarding)
 
+  // Show on first visit (no localStorage flag)
+  useEffect(() => {
+    if (!localStorage.getItem(STORAGE_KEY)) {
+      setVisible(true)
+    }
+  }, [])
+
   // Also respond to the "重看引导" trigger from SettingsDrawer
   useEffect(() => {
     if (showOnboarding) {
@@ -230,3 +237,4 @@ export function OnboardingModal() {
     </div>
   )
 }
+

@@ -3,7 +3,6 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '@/db'
 import { useAppStore } from '@/stores/app-store'
 import { useSettingsStore } from '@/stores/settings-store'
-import { cn } from '@/utils/cn'
 
 export function CategoryTabs() {
   const allCategories = useLiveQuery(() =>
@@ -19,16 +18,16 @@ export function CategoryTabs() {
   const setShowCategoryLinks = useAppStore((s) => s.setShowCategoryLinks)
 
   const scrollRef = useRef<HTMLDivElement>(null)
-  const [canScrollForward, setCanScrollForward] = useState(true)
-  const [canScrollBackward, setCanScrollBackward] = useState(false)
+  const [showRightFade, setShowRightFade] = useState(true)
+  const [showLeftFade, setShowLeftFade] = useState(false)
 
   // 监听滚动位置，控制左右渐变遮罩
   useEffect(() => {
     const el = scrollRef.current
     if (!el) return
     const onScroll = () => {
-      setCanScrollBackward(el.scrollLeft > 8)
-      setCanScrollForward(el.scrollLeft < el.scrollWidth - el.clientWidth - 8)
+      setShowLeftFade(el.scrollLeft > 8)
+      setShowRightFade(el.scrollLeft < el.scrollWidth - el.clientWidth - 8)
     }
     el.addEventListener('scroll', onScroll, { passive: true })
     onScroll()
@@ -46,26 +45,37 @@ export function CategoryTabs() {
   }, [activeCategoryId])
 
   return (
-    <div className="shrink-0 border-b border-stone-200 bg-white">
+    <div className="relative bg-white border-b border-gray-200">
+      {/* 左渐变遮罩 */}
+      {showLeftFade && (
+        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 z-10
+          bg-gradient-to-r from-white to-transparent" />
+      )}
+      {/* 右渐变遮罩 */}
+      {showRightFade && (
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 z-10
+          bg-gradient-to-l from-white to-transparent" />
+      )}
+
       <nav
         ref={scrollRef}
-        className="flex gap-2 overflow-x-auto px-3 py-2 scrollbar-hide sm:px-4"
+        className="flex gap-2 overflow-x-auto px-4 py-3 scrollbar-hide"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         aria-label="图片分类"
       >
+        {/* 最近使用（虚拟分类，不在 DB 中） */}
         <button
           data-cat="recent"
           onClick={() => setActiveCategory('recent')}
-          className={cn(
-            'flex min-h-16 min-w-20 shrink-0 flex-col items-center justify-center gap-1 rounded-xl border px-2 text-center',
-            activeCategoryId === 'recent'
-              ? 'border-amber-300 bg-amber-200 text-slate-950'
-              : 'border-stone-200 bg-white text-stone-600',
-          )}
+          className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-base font-medium whitespace-nowrap transition-colors min-h-[48px] flex-shrink-0
+            ${activeCategoryId === 'recent'
+              ? 'bg-blue-600 text-white shadow-md'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
           aria-pressed={activeCategoryId === 'recent'}
         >
-          <span className="text-2xl" aria-hidden="true">🕐</span>
-          <span className="text-sm font-medium">最近</span>
+          <span className="text-lg">🕐</span>
+          <span>最近</span>
         </button>
 
         {categories?.map((cat) => (
@@ -73,43 +83,33 @@ export function CategoryTabs() {
             key={cat.id}
             data-cat={cat.id}
             onClick={() => setActiveCategory(cat.id)}
-            className={cn(
-              'flex min-h-16 min-w-20 shrink-0 flex-col items-center justify-center gap-1 rounded-xl border px-2 text-center',
-              activeCategoryId === cat.id
-                ? 'border-amber-300 bg-amber-200 text-slate-950'
-                : 'border-stone-200 bg-white text-stone-600',
-            )}
+            className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-base font-medium whitespace-nowrap transition-colors min-h-[48px] flex-shrink-0
+              ${activeCategoryId === cat.id
+                ? 'bg-blue-600 text-white shadow-md'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
             aria-pressed={activeCategoryId === cat.id}
           >
-            <span className="text-2xl" aria-hidden="true">{cat.icon}</span>
-            <span className="line-clamp-2 text-sm font-medium leading-tight">
-              {cat.name}
-            </span>
+            <span className="text-lg">{cat.icon}</span>
+            <span>{cat.name}</span>
           </button>
         ))}
-
         <button
           onClick={() => setShowCategoryLinks(true)}
-          className="flex min-h-16 min-w-16 shrink-0 flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-stone-300 bg-white px-2 text-center text-stone-600"
+          className="flex items-center justify-center px-3 py-2.5 rounded-xl text-base font-medium whitespace-nowrap bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors min-h-[48px] min-w-[48px] flex-shrink-0"
           title="管理分类链接"
           aria-label="管理分类链接"
         >
-          <span className="text-2xl" aria-hidden="true">🔗</span>
-          <span className="text-xs font-medium">链接</span>
+          <span className="text-lg">🔗</span>
         </button>
         <button
           onClick={() => setShowSavedPhrases(true)}
-          className="ml-auto flex min-h-16 min-w-20 shrink-0 flex-col items-center justify-center gap-1 rounded-xl border border-stone-200 bg-slate-900 px-2 text-center text-white"
+          className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-base font-medium whitespace-nowrap bg-amber-50 text-amber-700 hover:bg-amber-100 transition-colors min-h-[48px] ml-auto flex-shrink-0"
         >
-          <span className="text-2xl" aria-hidden="true">⭐</span>
-          <span className="text-sm font-medium">常用语</span>
+          <span className="text-lg">⭐</span>
+          <span>常用语</span>
         </button>
       </nav>
-
-      <div className="flex items-center justify-between px-3 pb-2 text-[11px] text-stone-500 sm:px-4">
-        <span>{canScrollBackward ? '向左查看更多分类' : '从左到右浏览分类'}</span>
-        <span>{canScrollForward ? '向右滑动' : '已到末尾'}</span>
-      </div>
     </div>
   )
 }

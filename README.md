@@ -1,76 +1,235 @@
-原仓库地址 [https://github.com/picinterpreter/picinterpreter](https://github.com/lightcoloror/PicInterpreter)
-- 寻全栈开发者共建 AAC 失语症沟通应用（完整版）
-	- 项目名称
-		- 图语家PicInterpreter
-	- 事先说明
-		- 先说清楚：这个项目目前没有稳定资金，合作方式是 公益贡献 或者 以后可能有的其他收益，而且只是可能有而已。
-	- 我是谁
-		- 我曾是一名康复科医生，目前转行卖保险了。父亲患有完全性失语。这个项目的初心就是为了打造一个工具让我父亲和家人重新能够沟通。如果可以的话，把这个工具带给更多有需要的人，他们不仅表达困难，理解他人也存在障碍。
-		- 我没有编程经验，部分文档为AI生成，我会标注出来。
-	- 项目是做什么的
-		- 失语症患者脑子是清醒的，只是没法用语言表达。现有的 AAC（辅助沟通）工具大多是国外做的，主要针对自闭症人群，使用起来学习门槛有点高，表达也不够自然。他们最迫切的需求，是一座新的沟通桥梁。
-		- 图语家目前的MVP想解决两件事：
-			- 别人说话时，系统把语音转成图片序列，让患者"看懂"
-			- 患者选图片，系统结合场景和上下文用 LLM 生成完整的句子，替他们"说出来"
-		- 目前计划将开源 AAC（辅助与替代沟通）软件改造为现代化 Web 端应用，后续移植为微信小程序。
-		- 这不是一个纯工具类产品，它承载着真实的医疗和情感需求。
-	- 跟其他现有AAC产品区别
-		- 现有产品多数针对自闭症等儿童的群体的单向表达，没有语音转图片序列的功能，图片序列转语音没有上下文功能表达不够自然。我打算做的目前主要针对失语群体的双向沟通。
-	- 当前进展
-		- 核心功能模块的产品需求文档已完成
-		- 技术架构已有初步构思
-		- 核心功能模块我自己通过AI编程已验证可行
-		- 已通过企业主体进行小程序注册
-		- 运营资金来源正在寻找：完善 Demo 后，我会尝试寻找资金支持。如申请各类公益基金（如腾讯科技向善、阿里巴巴公益等）、医疗创新大赛奖金，或探索适老化产品的商业化路径（如 B 端医院/康复机构定制）甚至众筹。
-	- 我在找什么样的工程师（此部分为AI生成，因为我没有编程经验）
-		- 你不需要现在就是全栈大神，也可以一起探讨架构后认领功能模块。
-		- 技术要求
-			- 掌握
-				- **前端**：React / Next.js，能够构建 PWA；熟悉无障碍设计实践（WCAG 标准）
-				- **后端**：Node.js 或 Python，能够设计 RESTful / WebSocket API
-				- **数据库**：PostgreSQL 基础使用；了解 IndexedDB 或类似本地存储方案
-				- **AI 接口对接**：有过 LLM API（OpenAI、Claude、国内大模型均可）、语音识别、TTS 等接口的实际对接经验
-				- **国内生态**：熟悉微信小程序开发（第二阶段核心）；了解国内常用 AI 服务（讯飞、腾讯云、阿里云语音、火山引擎等）
-			- 加分项
-				- 有过医疗健康类、无障碍类产品的开发经验
-				- 了解 pgvector / 向量检索，或有 RAG 实现经验
-				- 有 PWA 离线方案设计经验（Service Worker、本地缓存策略）
-				- 了解图像检索或以图搜图技术
-				- 有 WebSocket 实时通信经验（语音流处理）
-				- 了解 ARASAAC 或其他开源 AAC 图库
-	- 你在这个项目中要做什么（此部分为AI生成，因为我没有编程经验）
-		- 第一阶段：Web 端 MVP（优先）
-			- 基于现有原型和技术架构文档，搭建可用的 Web 端应用
-			- 实现患者端极简操作界面（无障碍优先：大图标、高对比度、≤3 步完成核心交互）
-			- 集成 ASR 语音识别（支持粤语，优先使用讯飞/Azure，需设计离线兜底方案）
-			- 实现图库管理系统（ARASAAC 图库导入、自定义图片上传、词汇-图片多对多映射）
-			- 对接 LLM API 实现"图片组合→自然语言句子"生成逻辑，包含上下文管理
-			- 集成 TTS 语音合成（支持语速/音色调整）
-			- 搭建护理者后台（图库管理、患者档案、使用记录查看）
-			- 设计并实现本地优先（offline-first）的数据架构，核心功能支持完全离线
-		- 第二阶段：小程序移植
-			- 基于 Web 端成果，完成微信小程序适配
-			- 处理小程序环境下 ASR/TTS/LLM 接口的调用差异
-			- 解决小程序包体积限制与图库资源加载问题
-	- 我可以做什么
-		- 目前保险经纪的工作让我有比较灵活的时间，可以实地跑广佛周边、处理各种事务来提供必要支持
-		- 提供医生相关经验（我以前就是康复科的医生）
-		- 提供真实的产品使用反馈（我父亲就是完全性失语的病人）
-	- 我重视的特质
-		- 能够在需求模糊时主动澄清、推动决策，而不是等待指令
-		- 代码习惯良好，写出来的东西自己能维护
-		- 对失语症群体或弱势群体有基本的同理心，理解这个产品的使用场景
-		- 愿意在早期阶段承担一定不确定性
-	- 你能获得
-		- 1.  完整公益开源项目实战经验，代码署名，纳入项目贡献者名单，丰富 GitHub 履历。
-		- 2.  深耕无障碍开发、离线 AI 部署、跨端（Web + 小程序）移植，提升技术竞争力。
-		- 3.  亲手打造帮助失语患者的实用工具，收获实实在在的社会价值与成就感。
-	- 联系方式
-		- 有意向的话，回复或发邮件告诉我：
-			- 1.  你最近做的一个完整项目，技术栈、你负责什么、遇到什么坑、怎么解决的
-			- 2.  你对这个 MVP 的初步判断——大概要多久，你会怎么拆解
-			- 3.  你期望的合作形式
-		- **联系方式**（请备注：AAC合作）
-			- 微信：insurance-doctor-H
-			- bingcan.huang@foxmail.com
-	- 仓库地址： https://github.com/lightcoloror/PicInterpreter/tree/main
+# 图语家
+
+图语家是一个面向失语症患者和照护者的图片辅助沟通应用。用户可以通过点选图片表达需求，由系统生成候选句子并朗读出来；也支持把照护者输入的文字或语音反向转换为图片序列，帮助患者理解。
+
+项目当前采用 `Next.js + React 19 + TypeScript` 构建，使用 `Dexie` 管理本地 `IndexedDB` 数据。AI 相关请求统一通过 Next.js 后端 `app/api` 转发，前端不再保存任何 API Key 或 Token。
+
+## 核心功能
+
+- 表达模式：按分类浏览图片卡片，拼接表达内容，生成候选句子并语音播报。
+- 接收模式：输入文字或语音，自动匹配为图片序列，支持删改、换图、排序和全屏展示。
+- AI 句子生成：默认可离线使用模板生成；配置后端 AI 环境变量后可切换到在线模型。
+- 语音能力：浏览器原生 TTS 播报，支持试听与语速、语音人配置。
+- 语音输入：支持浏览器 Web Speech API。
+- 本地数据持久化：分类、图片、表达记录、收藏短语和文本转图片结果保存在浏览器本地。
+- 首次使用引导、紧急求助面板、常用语快捷栏、对话历史、分类可见性和高对比度设置。
+- 调试工具页：内置图片匹配验证页和 ARASAAC 导入工具页。
+
+## 运行环境
+
+- Node.js 18+，当前项目在 `Node 24` 环境下开发。
+- npm
+
+安装依赖：
+
+```bash
+npm install
+```
+
+## 环境变量
+
+复制 `.env.example` 为 `.env.local`，按需填写：
+
+```env
+DATABASE_URL=mysql://root:password@127.0.0.1:3306/picinterpreter
+AI_API_KEY=
+AI_BASE_URL=https://api.openai.com/v1
+AI_MODEL=gpt-4o-mini
+NEXT_PUBLIC_ENABLE_SERVICE_WORKER=false
+```
+
+- `DATABASE_URL`：MySQL 连接串，供 Prisma 7 驱动适配器使用。
+- `AI_API_KEY`：服务端调用上游 LLM 的密钥，必填。
+- `AI_BASE_URL`：OpenAI-compatible 接口地址，默认 `https://api.openai.com/v1`。
+- `AI_MODEL`：默认模型名，默认 `gpt-4o-mini`。
+- `NEXT_PUBLIC_ENABLE_SERVICE_WORKER`：是否启用前端 Service Worker，默认 `false`。仅在显式设置为 `true` 时启用。
+
+其中 `NEXT_PUBLIC_ENABLE_SERVICE_WORKER` 会在构建时注入前端，其余变量仅在 Next.js 服务端读取。
+
+建议按下面的约定使用：
+
+- 本地开发：使用 `.env.local`。
+- 仓库示例：保留 `.env.example`，不要提交真实密钥。
+- CI 构建：只有在构建阶段确实需要时，才由 GitHub Actions 临时写入 `.env.production`。
+- 生产运行：优先通过 `systemd`、`pm2` 或容器平台直接注入环境变量，不依赖服务器上的环境文件。
+
+原因：
+
+- 这个项目本地开发约定已经是 `.env.local`。
+- Next.js 在 `production` 环境下会优先读取 `process.env`，然后读取 `.env.production.local`、`.env.local`、`.env.production`、`.env`。这意味着如果服务器上同时存在 `.env.local` 和 `.env.production`，前者会覆盖后者。
+- 因此不建议在服务器长期保留 `.env.local`，否则很容易出现“CI 传了 `.env.production`，但运行时实际没生效”的问题。
+
+## 本地开发
+
+```bash
+npm run dev
+```
+
+默认端口：`http://localhost:3001`
+
+## AI 后端接口
+
+当前由 Next.js Route Handlers 提供：
+
+- `GET /api/ai/health`：读取后端 AI 配置状态。
+- `POST /api/ai/sentences`：生成候选句。
+- `POST /api/ai/resegment`：AI 辅助重分词。
+- `POST /api/client/bootstrap`：注册/恢复匿名设备身份，并设置 HttpOnly 设备 Cookie。
+- `POST /api/sync/push`：把本地 `expressions` / `saved_phrases` 变更推送到服务端 MySQL。
+- `GET /api/sync/pull`：按增量游标拉取服务端变更并回放到本地 Dexie。
+
+前端只调用这些内部接口；实际的 `API Key`、`Base URL`、`Model` 均由服务端环境变量控制。
+
+## MySQL 同步架构
+
+- 前端继续用 `Dexie` 作为本地主存储，保证离线体验。
+- 服务端通过 `Prisma 6 + mysql` 连接 MySQL 8。
+- 当前已上云的数据仅包括 `expressions` 与 `saved_phrases`。
+- 首次打开会自动 bootstrap 一个匿名设备身份；未来接入正式登录后，可把匿名用户数据合并到账号用户。
+- 本地新增了 `syncOutbox` / `syncState` 两张 Dexie 表，用于后台同步与增量游标管理。
+
+首次初始化数据库可用：
+
+```bash
+npm run prisma:generate
+npm run prisma:push
+```
+
+## 常用命令
+
+```bash
+npm run dev
+npm run build
+npm run start
+npm run prisma:generate
+npm run prisma:push
+npm run deploy:aliyun -- --host root@1.2.3.4 --path /opt/picinterpreter
+npm run lint
+npm run test
+npm run test:watch
+npm run test:coverage
+```
+
+## 生产部署（参考 firstEnglishBook 自动化流程）
+
+项目已提供一套和 `firstEnglishBook` 类似的自动化部署链路：
+
+- GitHub Actions 在 `main` 分支变更后自动构建。
+- 构建产物使用 Next.js `standalone` 输出，适合直接部署到云服务器。
+- Actions 通过 SSH 把部署包上传到阿里云服务器，并执行远程重启命令。
+
+### 1. GitHub Actions 配置
+
+工作流文件：`.github/workflows/deploy-aliyun.yml`
+
+需要在 GitHub 仓库的 `production` Environment 中配置：
+
+- Secret `DEPLOY_SSH_PRIVATE_KEY`：部署用私钥。
+- Secret `DEPLOY_KNOWN_HOSTS`：目标服务器的 `known_hosts` 内容。
+- Secret `DEPLOY_ENV_FILE`：可选。写入 CI 的 `.env.production`，用于构建期需要的环境变量。若暂时不希望启用 Service Worker，请在其中加入 `NEXT_PUBLIC_ENABLE_SERVICE_WORKER=false`。
+- Variable `DEPLOY_HOST`：服务器地址，例如 `root@1.2.3.4`。
+- Variable `DEPLOY_PATH`：部署目录，例如 `/opt/picinterpreter`。
+- Variable `DEPLOY_PORT`：可选，默认 `22`。
+- Variable `DEPLOY_RESTART_CMD`：可选，默认 `systemctl restart picinterpreter`。
+- Variable `DEPLOY_START_CMD`：可选。首发部署或重启失败时的兜底启动命令。
+
+### 2. 服务器要求
+
+- Node.js 20+。
+- 目标目录具备写权限。
+- 远程服务建议通过 `systemd` 或 `pm2` 托管。
+
+部署脚本会上传这些产物：
+
+- `server.js` 与 `node_modules`（来自 `.next/standalone`）
+- `.next/static`
+- `public`
+- `.env.production`（如果 CI 工作区中存在）
+
+生产环境建议这样分层：
+
+- 首选：在 `systemd`/`pm2`/容器平台中直接配置 `AI_API_KEY`、`AI_BASE_URL`、`AI_MODEL`。
+- 次选：如果确实需要随部署包下发，再使用 `.env.production`。
+- 避免：在服务器手工放置 `.env.local`。
+
+### 3. 手动部署
+
+也可以在本地直接执行：
+
+```bash
+npm run deploy:aliyun -- \
+  --host root@1.2.3.4 \
+  --path /opt/picinterpreter \
+  --restart "systemctl restart picinterpreter"
+```
+
+首发部署如果远程服务还没创建，可以附带启动命令，例如：
+
+```bash
+npm run deploy:aliyun -- \
+  --host root@1.2.3.4 \
+  --path /opt/picinterpreter \
+  --restart "systemctl restart picinterpreter" \
+  --start "pm2 start server.js --name picinterpreter --update-env"
+```
+
+如果你的生产环境依赖 `AI_API_KEY`、`AI_BASE_URL`、`AI_MODEL`，建议优先通过 `systemd`/`pm2` 的环境配置注入，而不是只依赖构建期变量。只有在构建期或打包部署链路明确需要时，再额外提供 `.env.production`。
+
+当前仓库默认关闭 Service Worker，部署后会主动清理旧的 `tuyujia-*` 缓存和已注册的 Service Worker，避免浏览器继续使用旧版本静态资源。以后如果需要重新启用，只需在生产环境中把 `NEXT_PUBLIC_ENABLE_SERVICE_WORKER=true` 后重新部署即可。
+
+## 数据与存储
+
+- 种子数据位于 [public/seed/categories.json](public/seed/categories.json) 和 [public/seed/pictograms.json](public/seed/pictograms.json)。
+- 首次加载或种子版本升级时，前端会将种子数据导入本地 `IndexedDB`。
+- 用户自己的表达记录、收藏短语和部分设置不会因种子重导而清空。
+- 首次使用引导状态和部分 UI 配置保存在 `localStorage`。
+
+数据库初始化逻辑见 [src/db/index.ts](src/db/index.ts#L1)。
+
+## 调试与工具页
+
+- `http://localhost:3001/debug`：图片匹配验证工具
+- `http://localhost:3001/import`：ARASAAC 批量导入工具
+
+其中导入工具会根据词库搜索 ARASAAC 图片并导出新的 `pictograms.json`，便于更新种子数据。
+
+## 项目结构
+
+```text
+app/
+  api/               Next.js 后端接口
+src/
+  components/        UI 组件与页面片段
+  hooks/             AI、语音、PWA 等自定义 Hook
+  providers/         NLG / TTS 提供者适配层
+  server/            服务端 AI 配置与调用封装
+  stores/            Zustand 状态管理
+  db/                Dexie 数据库与种子导入
+  utils/             文本匹配、重分词、占位图等工具函数
+  data/              词库数据
+public/
+  seed/              分类与图片种子数据
+  manifest.json      PWA 清单
+  sw.js              Service Worker
+scripts/
+  *.py               图片与种子数据整理脚本
+```
+
+## 技术栈
+
+- React 19
+- TypeScript
+- Next.js
+- Tailwind CSS 4
+- Zustand
+- Dexie
+- Vitest
+
+## 当前状态
+
+这是一个以移动端触控体验为优先的原型项目，已经具备完整的本地表达流程、接收流程和可选 AI 能力。当前版本已将 AI 请求收口到 Next.js 后端，后续如果继续演进，优先方向通常会是：
+
+- 更完整的无障碍与大字体优化
+- 更稳定的图片词库与审核流程
+- 更清晰的部署方式与生产环境配置
+- 更系统的端到端测试

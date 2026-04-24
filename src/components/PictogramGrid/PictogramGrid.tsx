@@ -185,15 +185,7 @@ export function PictogramGrid() {
               className={`apple-press relative flex min-h-[112px] flex-col items-center gap-1.5 rounded-[22px] border-2 p-3 shadow-[0_2px_4px_rgba(15,23,42,0.08),0_10px_22px_rgba(15,23,42,0.10)] transition-all hover:shadow-[0_3px_8px_rgba(15,23,42,0.10),0_16px_30px_rgba(15,23,42,0.12)] ${cardTone}`}
               aria-label={p.labels.zh[0]}
             >
-              {/* 来源标记（链接分类的图片） */}
-              {p.sourceName !== null && (
-                <span
-                  aria-label={`来自：${p.sourceName}`}
-                  className="absolute top-1 right-1 text-[10px] px-1 py-0.5 rounded-full bg-blue-100 text-blue-600 leading-none max-w-[60px] truncate"
-                >
-                  {p.sourceName}
-                </span>
-              )}
+             
               <img
                 src={resolveImageSrc(p.imageUrl, p.labels.zh[0], color)}
                 alt={p.labels.zh[0]}

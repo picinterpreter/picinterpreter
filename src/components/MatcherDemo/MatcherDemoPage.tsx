@@ -122,9 +122,12 @@ export function MatcherDemoPage() {
     <div className="min-h-screen bg-[#f5f5f7] text-slate-950">
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-white/85 text-slate-950 shadow-[0_1px_0_rgba(15,23,42,0.08)] backdrop-blur-xl">
-        <div>
-          <h1 className="text-lg font-bold">图语家 · 匹配验证工具</h1>
-          <p className="text-xs text-slate-500">Phase 1.5 — 文本→图片管线</p>
+        <div className="flex min-w-0 items-center gap-2">
+          <img src="/logo.png" alt="" className="size-9 rounded-xl" aria-hidden="true" />
+          <div className="min-w-0">
+            <h1 className="text-lg font-bold">图语家 · 匹配验证工具</h1>
+            <p className="text-xs text-slate-500">Phase 1.5 — 文本→图片管线</p>
+          </div>
         </div>
         <a
           href="/"

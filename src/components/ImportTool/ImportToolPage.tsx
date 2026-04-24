@@ -133,9 +133,12 @@ export function ImportToolPage() {
     <div className="min-h-screen bg-[#f5f5f7] text-slate-950">
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-white/85 text-slate-950 shadow-[0_1px_0_rgba(15,23,42,0.08)] backdrop-blur-xl">
-        <div>
-          <h1 className="text-lg font-bold">图语家 · ARASAAC 导入工具</h1>
-          <p className="text-xs text-slate-500">从 ARASAAC API 批量下载图片元数据</p>
+        <div className="flex min-w-0 items-center gap-2">
+          <img src="/logo.png" alt="" className="size-9 rounded-xl" aria-hidden="true" />
+          <div className="min-w-0">
+            <h1 className="text-lg font-bold">图语家 · ARASAAC 导入工具</h1>
+            <p className="text-xs text-slate-500">从 ARASAAC API 批量下载图片元数据</p>
+          </div>
         </div>
         <a href="/" className="flex min-h-[44px] items-center gap-1.5 rounded-xl px-2 text-sm text-slate-500 hover:text-slate-950">
           <LineIcon name="arrowLeft" className="h-4 w-4" />

@@ -41,7 +41,8 @@ export default function App() {
     <div className={`h-screen flex flex-col bg-[#f5f5f7] overflow-hidden text-slate-950 ${highContrast ? 'hc' : ''}`}>
       {/* Header */}
       <header className="flex items-center gap-2 bg-white/85 px-3 py-2 text-slate-950 shadow-[0_1px_0_rgba(15,23,42,0.08)] backdrop-blur-xl sm:px-4">
-        <div className="hidden min-w-0 shrink-0 sm:block">
+        <div className="hidden min-w-0 shrink-0 items-center gap-2 sm:flex">
+          <img src="/logo.png" alt="" className="size-9 rounded-xl" aria-hidden="true" />
           <h1 className="text-xl font-semibold leading-tight tracking-normal">图语家</h1>
         </div>
         <div className="grid h-11 min-w-[9rem] max-w-[12rem] flex-1 grid-cols-2 gap-1 rounded-full bg-slate-100 p-1 sm:ml-2 sm:flex-none" role="tablist" aria-label="模式切换">

@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '@/db'
 import { useAppStore } from '@/stores/app-store'
@@ -19,21 +19,6 @@ export function CategoryTabs() {
   const setShowCategoryLinks = useAppStore((s) => s.setShowCategoryLinks)
 
   const scrollRef = useRef<HTMLDivElement>(null)
-  const [canScrollForward, setCanScrollForward] = useState(true)
-  const [canScrollBackward, setCanScrollBackward] = useState(false)
-
-  // 监听滚动位置，控制左右渐变遮罩
-  useEffect(() => {
-    const el = scrollRef.current
-    if (!el) return
-    const onScroll = () => {
-      setCanScrollBackward(el.scrollLeft > 8)
-      setCanScrollForward(el.scrollLeft < el.scrollWidth - el.clientWidth - 8)
-    }
-    el.addEventListener('scroll', onScroll, { passive: true })
-    onScroll()
-    return () => el.removeEventListener('scroll', onScroll)
-  }, [categories])
 
   // 激活分类切换时自动滚动到对应 tab
   useEffect(() => {
@@ -105,11 +90,6 @@ export function CategoryTabs() {
           <span className="text-sm font-medium">常用语</span>
         </button>
       </nav>
-
-      <div className="flex items-center justify-between px-3 pb-2 text-[11px] text-stone-500 sm:px-4">
-        <span>{canScrollBackward ? '向左查看更多分类' : '从左到右浏览分类'}</span>
-        <span>{canScrollForward ? '向右滑动' : '已到末尾'}</span>
-      </div>
     </div>
   )
 }

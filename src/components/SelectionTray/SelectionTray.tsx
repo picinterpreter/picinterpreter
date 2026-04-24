@@ -30,10 +30,7 @@ export function SelectionTray() {
           </button>
 
           <div className="min-w-0 flex-1">
-            <p className="text-[11px] text-purple-200">
-              句子预览：这里会显示图片序列重组后的表达句子
-            </p>
-            <p className="mt-1 truncate text-2xl font-semibold">
+            <p className="truncate text-2xl font-semibold">
               {hasSelection ? sentencePreview : '请先点击上方图片开始表达'}
             </p>
           </div>

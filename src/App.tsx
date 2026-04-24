@@ -92,9 +92,6 @@ export default function App() {
                 👂
               </button>
               <div className="min-w-0 flex-1 overflow-hidden rounded-xl border border-stone-200 bg-stone-50">
-                <div className="border-b border-stone-200 px-3 py-1.5 text-[11px] text-stone-500">
-                  图片序列预览：点击可按顺序播报上方图片对应的词语
-                </div>
                 {selectedPictograms.length > 0 ? (
                   <button
                     onClick={() => startPlayback(selectedSentencePreview, selectedPictograms.map((p) => p.id))}
@@ -118,9 +115,7 @@ export default function App() {
                     ))}
                   </button>
                 ) : (
-                  <div className="flex min-h-[72px] items-center px-4 text-sm text-stone-500">
-                    这里会按顺序显示你选择的图片序列
-                  </div>
+                  <div className="min-h-[72px]" />
                 )}
               </div>
               <button

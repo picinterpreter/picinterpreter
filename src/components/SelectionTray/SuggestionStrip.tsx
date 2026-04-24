@@ -13,6 +13,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '@/db'
 import { useAppStore } from '@/stores/app-store'
 import { resolveImageSrc } from '@/utils/generate-placeholder-svg'
+import { LineIcon } from '@/components/ui/LineIcon'
 import type { PictogramEntry } from '@/types'
 
 const MAX_SUGGESTIONS = 8
@@ -96,14 +97,17 @@ export function SuggestionStrip() {
       : `${lastSelected.labels.zh[0]}相关`
 
   return (
-    <div className="px-3 pt-1.5 pb-2 bg-gray-50 border-t border-gray-100">
-      <p className="text-xs text-gray-400 mb-1.5 select-none">💡 {hint}</p>
+    <div className="px-3 pt-2 pb-2 bg-white/65 border-t border-slate-200 backdrop-blur-xl">
+      <p className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-slate-400 select-none" aria-label={hint}>
+        <LineIcon name="sparkle" className="h-3.5 w-3.5" />
+        <span className="sr-only">{hint}</span>
+      </p>
       <div className="flex gap-2 overflow-x-auto pb-0.5">
         {suggestions.map((p) => (
           <button
             key={p.id}
             onClick={() => handleSelect(p)}
-            className="flex flex-col items-center gap-0.5 p-1.5 rounded-lg bg-white border border-gray-200 hover:border-blue-400 hover:shadow-sm transition-all shrink-0 min-w-[60px] active:scale-95"
+            className="apple-press flex flex-col items-center gap-0.5 p-1.5 rounded-2xl bg-white border border-white shadow-[0_1px_2px_rgba(15,23,42,0.05),0_8px_18px_rgba(15,23,42,0.06)] hover:shadow-[0_2px_5px_rgba(15,23,42,0.08),0_12px_24px_rgba(15,23,42,0.08)] transition-all shrink-0 min-w-[64px]"
             aria-label={`快速添加：${p.labels.zh[0]}`}
           >
             <img
@@ -111,7 +115,7 @@ export function SuggestionStrip() {
               alt={p.labels.zh[0]}
               className="w-10 h-10 object-contain pointer-events-none"
             />
-            <span className="text-xs text-gray-700 truncate max-w-[56px] select-none">
+            <span className="text-xs font-medium text-slate-700 truncate max-w-[56px] select-none">
               {p.labels.zh[0]}
             </span>
           </button>

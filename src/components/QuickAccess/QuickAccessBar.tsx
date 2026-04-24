@@ -9,6 +9,7 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '@/db'
 import { useAppStore } from '@/stores/app-store'
+import { LineIcon } from '@/components/ui/LineIcon'
 import type { SavedPhrase } from '@/types'
 
 const MAX_QUICK = 6
@@ -35,17 +36,17 @@ export function QuickAccessBar() {
 
   return (
     <div
-      className="px-3 py-1.5 bg-amber-50 border-b border-amber-100 flex items-center gap-2 overflow-x-auto shrink-0 scrollbar-hide"
+      className="px-3 py-2 bg-white/70 border-b border-slate-200 flex items-center gap-2 overflow-x-auto shrink-0 scrollbar-hide backdrop-blur-xl"
       role="toolbar"
       aria-label="常用语快捷播报"
     >
-      <span className="text-xs text-amber-400 shrink-0 select-none" aria-hidden="true">⭐</span>
+      <LineIcon name="star" className="h-4 w-4 shrink-0 text-amber-500" />
       {topPhrases.map((phrase) => (
         <button
           key={phrase.id}
           onClick={() => handleTap(phrase)}
           aria-label={`一键播报：${phrase.sentence}`}
-          className="shrink-0 px-3 py-1.5 bg-amber-100 hover:bg-amber-200 active:bg-amber-300 text-amber-900 text-sm font-medium rounded-xl max-w-[160px] truncate min-h-[44px] transition-colors"
+          className="apple-press shrink-0 px-3 py-1.5 bg-white text-slate-800 text-sm font-semibold rounded-full max-w-[160px] truncate min-h-[44px] shadow-[inset_0_0_0_1px_rgba(15,23,42,0.08)] hover:bg-slate-50 transition-colors"
         >
           {phrase.sentence}
         </button>

@@ -3,6 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '@/db'
 import { useAppStore } from '@/stores/app-store'
 import { useSettingsStore } from '@/stores/settings-store'
+import { LineIcon } from '@/components/ui/LineIcon'
 
 export function CategoryTabs() {
   const allCategories = useLiveQuery(() =>
@@ -45,7 +46,7 @@ export function CategoryTabs() {
   }, [activeCategoryId])
 
   return (
-    <div className="relative bg-white border-b border-gray-200">
+    <div className="relative bg-white border-b border-slate-200">
       {/* 左渐变遮罩 */}
       {showLeftFade && (
         <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 z-10
@@ -67,14 +68,14 @@ export function CategoryTabs() {
         <button
           data-cat="recent"
           onClick={() => setActiveCategory('recent')}
-          className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-base font-medium whitespace-nowrap transition-colors min-h-[48px] flex-shrink-0
+          className={`apple-press flex items-center gap-1.5 px-4 py-2.5 rounded-full text-base font-semibold whitespace-nowrap transition-colors min-h-[48px] flex-shrink-0
             ${activeCategoryId === 'recent'
-              ? 'bg-blue-600 text-white shadow-md'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              ? 'bg-slate-950 text-white shadow-sm'
+              : 'bg-white/80 text-slate-700 shadow-[inset_0_0_0_1px_rgba(15,23,42,0.08)] hover:bg-white'
             }`}
           aria-pressed={activeCategoryId === 'recent'}
         >
-          <span className="text-lg">🕐</span>
+          <LineIcon name="clock" className="h-5 w-5" />
           <span>最近</span>
         </button>
 
@@ -83,10 +84,10 @@ export function CategoryTabs() {
             key={cat.id}
             data-cat={cat.id}
             onClick={() => setActiveCategory(cat.id)}
-            className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-base font-medium whitespace-nowrap transition-colors min-h-[48px] flex-shrink-0
+            className={`apple-press flex items-center gap-1.5 px-4 py-2.5 rounded-full text-base font-semibold whitespace-nowrap transition-colors min-h-[48px] flex-shrink-0
               ${activeCategoryId === cat.id
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-slate-950 text-white shadow-sm'
+                : 'bg-white/80 text-slate-700 shadow-[inset_0_0_0_1px_rgba(15,23,42,0.08)] hover:bg-white'
               }`}
             aria-pressed={activeCategoryId === cat.id}
           >
@@ -96,17 +97,17 @@ export function CategoryTabs() {
         ))}
         <button
           onClick={() => setShowCategoryLinks(true)}
-          className="flex items-center justify-center px-3 py-2.5 rounded-xl text-base font-medium whitespace-nowrap bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors min-h-[48px] min-w-[48px] flex-shrink-0"
+          className="apple-press flex items-center justify-center px-3 py-2.5 rounded-full text-base font-semibold whitespace-nowrap bg-white/80 text-slate-700 shadow-[inset_0_0_0_1px_rgba(15,23,42,0.08)] hover:bg-white transition-colors min-h-[48px] min-w-[48px] flex-shrink-0"
           title="管理分类链接"
           aria-label="管理分类链接"
         >
-          <span className="text-lg">🔗</span>
+          <LineIcon name="link" className="h-5 w-5" />
         </button>
         <button
           onClick={() => setShowSavedPhrases(true)}
-          className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-base font-medium whitespace-nowrap bg-amber-50 text-amber-700 hover:bg-amber-100 transition-colors min-h-[48px] ml-auto flex-shrink-0"
+          className="apple-press flex items-center gap-1.5 px-4 py-2.5 rounded-full text-base font-semibold whitespace-nowrap bg-white/80 text-slate-700 shadow-[inset_0_0_0_1px_rgba(15,23,42,0.08)] hover:bg-white transition-colors min-h-[48px] ml-auto flex-shrink-0"
         >
-          <span className="text-lg">⭐</span>
+          <LineIcon name="star" className="h-5 w-5" />
           <span>常用语</span>
         </button>
       </nav>

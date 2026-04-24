@@ -13,6 +13,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAppStore } from '@/stores/app-store'
 import { useAI } from '@/hooks/use-ai'
+import { LineIcon } from '@/components/ui/LineIcon'
 
 // ─── 预定义紧急短语 ──────────────────────────────────────────────────────── //
 
@@ -175,29 +176,28 @@ export function EmergencyPanel() {
   return (
     /* 全屏遮罩 */
     <div
-      className="fixed inset-0 z-50 bg-red-900 flex flex-col"
+      className="fixed inset-0 z-50 bg-rose-950 flex flex-col"
       role="dialog"
       aria-modal="true"
       aria-label="紧急求助"
     >
       {/* 标题栏 */}
-      <div className="flex items-center justify-between px-4 py-3 bg-red-950 shrink-0">
+      <div className="flex items-center justify-between px-4 py-3 bg-white/10 shrink-0 backdrop-blur-xl">
         <div className="flex items-center gap-2">
-          <span className="text-2xl" aria-hidden="true">🆘</span>
+          <LineIcon name="alert" className="h-6 w-6 text-white" />
           <h2 className="text-xl font-bold text-white">紧急求助</h2>
-          <span className="text-sm text-red-300 ml-2">点击按钮立即播报</span>
         </div>
         <button
           ref={closeButtonRef}
           onClick={() => setShowEmergency(false)}
           className="
-            p-2 rounded-xl text-white bg-red-800 hover:bg-red-700 active:bg-red-600
+            p-2 rounded-full text-white bg-white/10 hover:bg-white/15 active:bg-white/20
             min-h-[44px] min-w-[44px] flex items-center justify-center text-2xl
             focus:outline-none focus:ring-4 focus:ring-white focus:ring-opacity-60
           "
           aria-label="关闭紧急求助"
         >
-          ✕
+          <LineIcon name="close" className="h-6 w-6" />
         </button>
       </div>
 
@@ -210,7 +210,7 @@ export function EmergencyPanel() {
               onClick={() => handleSpeak(phrase)}
               className={`
                 ${phrase.colorClass}
-                min-h-24 rounded-2xl
+                apple-press min-h-24 rounded-[28px]
                 flex flex-col items-center justify-center gap-2
                 text-white font-bold text-xl
                 shadow-lg active:scale-95 transition-transform
@@ -218,18 +218,11 @@ export function EmergencyPanel() {
               `}
               aria-label={`播报：${phrase.text}`}
             >
-              <span className="text-3xl" aria-hidden="true">
-                {PHRASE_ICONS[phrase.id] ?? '🔊'}
-              </span>
+              <LineIcon name="sound" className="h-8 w-8" />
               <span>{phrase.label}</span>
             </button>
           ))}
         </div>
-      </div>
-
-      {/* 底部提示 */}
-      <div className="px-4 py-3 bg-red-950 text-center text-red-300 text-sm shrink-0">
-        按 <kbd className="px-1 py-0.5 bg-red-800 rounded text-xs">Esc</kbd> 或点击 ✕ 返回主界面
       </div>
 
       {/* TTS 失败时的大字文本覆盖：让照护者直接看到患者的需求 */}
@@ -246,11 +239,11 @@ export function EmergencyPanel() {
           <p className="text-white text-7xl font-bold text-center leading-tight">
             {ttsFailureText}
           </p>
-          <p className="text-gray-300 text-lg text-center">（语音播报不可用，请将屏幕展示给照护者）</p>
+          <p className="text-slate-300 text-lg text-center">无法播报</p>
           <button
             onClick={() => setTtsFailureText(null)}
             className="
-              mt-2 px-6 py-3 rounded-2xl
+              apple-press mt-2 px-6 py-3 rounded-full
               bg-white text-black font-bold text-xl
               active:bg-gray-200 transition-colors
             "
@@ -261,17 +254,4 @@ export function EmergencyPanel() {
       )}
     </div>
   )
-}
-
-// ─── 图标映射 ────────────────────────────────────────────────────────────── //
-
-const PHRASE_ICONS: Record<string, string> = {
-  help:          '🙏',
-  pain:          '😣',
-  doctor:        '👨‍⚕️',
-  scared:        '😨',
-  uncomfortable: '🤢',
-  quiet:         '🤫',
-  water:         '💧',
-  toilet:        '🚻',
 }

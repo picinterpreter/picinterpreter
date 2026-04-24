@@ -13,6 +13,7 @@
 
 import { useEffect, useState } from 'react'
 import { useAppStore } from '@/stores/app-store'
+import { LineIcon } from '@/components/ui/LineIcon'
 
 export const ONBOARDING_STORAGE_KEY = 'tuyujia_onboarded'
 const STORAGE_KEY = ONBOARDING_STORAGE_KEY
@@ -66,23 +67,26 @@ export function OnboardingModal() {
       id: 0,
       content: (
         <div className="flex flex-col items-center text-center gap-5">
-          <span className="text-6xl">🗣️</span>
+          <div className="flex h-16 w-16 items-center justify-center rounded-[24px] bg-slate-950 text-white shadow-lg">
+            <LineIcon name="message" className="h-8 w-8" />
+          </div>
           <h2 className="text-2xl font-bold text-gray-900">欢迎使用图语家</h2>
-          <p className="text-gray-600 text-base leading-relaxed max-w-xs">
-            图语家是专为<strong>失语症患者</strong>设计的图片辅助沟通工具。<br />
-            用图片表达你的想法，AI 自动组成自然的句子，再朗读出来。
-          </p>
+          <div className="flex items-center gap-3 text-slate-500" aria-label="图片到语音">
+            <LineIcon name="message" className="h-6 w-6" />
+            <span className="h-px w-8 bg-slate-300" />
+            <LineIcon name="sound" className="h-6 w-6" />
+          </div>
           <div className="flex flex-wrap justify-center gap-3 mt-1">
             {[
-              { icon: '🖼️', label: '图片选择' },
-              { icon: '🤖', label: 'AI 生成句子' },
-              { icon: '🔊', label: '语音朗读' },
+              { icon: 'message' as const, label: '图片选择' },
+              { icon: 'sparkle' as const, label: 'AI 生成句子' },
+              { icon: 'sound' as const, label: '语音朗读' },
             ].map(({ icon, label }) => (
               <div
                 key={label}
                 className="flex flex-col items-center gap-1 px-4 py-3 rounded-xl bg-blue-50 border border-blue-100 min-w-[80px]"
               >
-                <span className="text-2xl">{icon}</span>
+                <LineIcon name={icon} className="h-6 w-6 text-blue-700" />
                 <span className="text-xs text-blue-700 font-medium">{label}</span>
               </div>
             ))}
@@ -94,32 +98,26 @@ export function OnboardingModal() {
       id: 1,
       content: (
         <div className="flex flex-col items-center text-center gap-4">
-          <span className="text-5xl">📱</span>
+          <LineIcon name="message" className="h-10 w-10 text-slate-900" />
           <h2 className="text-xl font-bold text-gray-900">三步完成一次表达</h2>
           <div className="w-full space-y-3">
             {[
               {
                 num: '1',
                 color: 'blue',
-                icon: '🖼️',
                 title: '选图片',
-                desc: '从分类库中点选代表你想说的事物的图片',
               },
               {
                 num: '2',
                 color: 'green',
-                icon: '🤖',
                 title: '生成句子',
-                desc: '点击「生成句子」，AI 根据图片组成 2-3 个候选句',
               },
               {
                 num: '3',
                 color: 'purple',
-                icon: '🔊',
                 title: '朗读',
-                desc: '选择最合适的句子，设备自动朗读给照护者听',
               },
-            ].map(({ num, color, icon, title, desc }) => (
+            ].map(({ num, color, title }) => (
               <div
                 key={num}
                 className={`flex items-start gap-3 p-3 rounded-xl text-left bg-${color}-50 border border-${color}-100`}
@@ -131,9 +129,8 @@ export function OnboardingModal() {
                 </span>
                 <div>
                   <p className="font-semibold text-gray-800">
-                    {icon} {title}
+                    {title}
                   </p>
-                  <p className="text-sm text-gray-500 mt-0.5">{desc}</p>
                 </div>
               </div>
             ))}
@@ -145,20 +142,14 @@ export function OnboardingModal() {
       id: 2,
       content: (
         <div className="flex flex-col items-center text-center gap-5">
-          <span className="text-5xl">⚙️</span>
+          <LineIcon name="settings" className="h-10 w-10 text-slate-900" />
           <h2 className="text-xl font-bold text-gray-900">配置 AI（可选）</h2>
           <div className="w-full space-y-3">
             <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-left">
-              <p className="font-semibold text-amber-800 mb-1">📴 离线模式（默认）</p>
-              <p className="text-sm text-amber-700">
-                无需配置，直接使用。使用本地模板生成句子，质量较基础，但完全离线可用。
-              </p>
+              <p className="font-semibold text-amber-800 mb-1">离线模式（默认）</p>
             </div>
             <div className="p-4 rounded-xl bg-green-50 border border-green-200 text-left">
-              <p className="font-semibold text-green-800 mb-1">🌐 AI 模式（推荐）</p>
-              <p className="text-sm text-green-700">
-                填入 OpenAI / DeepSeek 等服务的 API Key，生成更自然、更贴切的句子。
-              </p>
+              <p className="font-semibold text-green-800 mb-1">AI 模式（推荐）</p>
             </div>
           </div>
           <div className="flex flex-col gap-2 w-full mt-1">
@@ -166,7 +157,7 @@ export function OnboardingModal() {
               onClick={handleOpenSettings}
               className="w-full py-3 rounded-xl bg-blue-600 text-white font-semibold text-base hover:bg-blue-700 transition-colors"
             >
-              ⚙️ 现在去配置 API Key
+              现在去配置 API Key
             </button>
             <button
               onClick={handleFinish}
@@ -237,4 +228,3 @@ export function OnboardingModal() {
     </div>
   )
 }
-

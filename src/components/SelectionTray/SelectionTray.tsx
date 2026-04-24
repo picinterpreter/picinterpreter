@@ -16,6 +16,7 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 import { useAppStore } from '@/stores/app-store'
 import { resolveImageSrc } from '@/utils/generate-placeholder-svg'
+import { LineIcon } from '@/components/ui/LineIcon'
 import type { PictogramEntry } from '@/types'
 
 function SortableItem({ pictogram, index, onRemove }: {
@@ -42,7 +43,7 @@ function SortableItem({ pictogram, index, onRemove }: {
     <div
       ref={setNodeRef}
       style={style}
-      className="relative flex flex-col items-center gap-0.5 p-2 rounded-lg bg-blue-50 border border-blue-200 min-w-[72px] select-none"
+      className="relative flex flex-col items-center gap-0.5 p-2 rounded-2xl bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_18px_rgba(15,23,42,0.08)] min-w-[72px] select-none"
       {...attributes}
       {...listeners}
     >
@@ -51,7 +52,7 @@ function SortableItem({ pictogram, index, onRemove }: {
         alt={pictogram.labels.zh[0]}
         className="w-12 h-12 object-contain pointer-events-none"
       />
-      <span className="text-sm font-medium text-blue-800">
+      <span className="text-sm font-semibold text-slate-800">
         {pictogram.labels.zh[0]}
       </span>
       <button
@@ -59,10 +60,10 @@ function SortableItem({ pictogram, index, onRemove }: {
           e.stopPropagation()
           onRemove(index)
         }}
-        className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-red-500 text-white text-xs flex items-center justify-center hover:bg-red-600 shadow"
+        className="absolute -top-1.5 -right-1.5 w-7 h-7 rounded-full bg-slate-950 text-white flex items-center justify-center hover:bg-slate-700 shadow"
         aria-label={`移除 ${pictogram.labels.zh[0]}`}
       >
-        ×
+        <LineIcon name="close" className="h-3.5 w-3.5" />
       </button>
     </div>
   )
@@ -93,8 +94,8 @@ export function SelectionTray() {
   if (selectedPictograms.length === 0) {
     return (
       <>
-        <div className="px-4 py-3 bg-gray-50 border-t border-gray-200 text-center text-gray-400 text-base">
-          点击上方图片开始选择
+        <div className="px-4 py-4 bg-white/70 border-t border-slate-200 text-center text-slate-400 backdrop-blur-xl" aria-label="选择图片">
+          <LineIcon name="message" className="mx-auto h-7 w-7" />
         </div>
         <SuggestionStrip />
       </>
@@ -103,7 +104,7 @@ export function SelectionTray() {
 
   return (
     <>
-      <div className="px-4 py-3 bg-gray-50 border-t border-gray-200">
+      <div className="px-4 py-3 bg-white/75 border-t border-slate-200 backdrop-blur-xl">
         <div className="flex items-center gap-3">
           <DndContext
             sensors={sensors}
@@ -114,7 +115,7 @@ export function SelectionTray() {
               items={selectedPictograms.map((_, i) => `sel-${i}`)}
               strategy={horizontalListSortingStrategy}
             >
-              <div className="flex gap-2 overflow-x-auto flex-1 py-1">
+              <div className="flex gap-2 overflow-x-auto flex-1 py-1.5">
                 {selectedPictograms.map((p, i) => (
                   <SortableItem
                     key={`${p.id}-${i}`}
@@ -130,23 +131,24 @@ export function SelectionTray() {
           <div className="flex flex-col gap-2 shrink-0">
             <button
               onClick={clearSelection}
-              className="px-3 py-2 rounded-lg bg-gray-200 text-gray-600 text-sm hover:bg-gray-300 transition-colors min-h-[44px]"
+              className="apple-press px-3 py-2 rounded-full bg-slate-100 text-slate-600 text-sm font-semibold hover:bg-slate-200 transition-colors min-h-[44px]"
             >
               清空
             </button>
             <button
               onClick={() => setShowCandidatePanel(true)}
               disabled={isGenerating}
-              className="px-4 py-2.5 rounded-lg bg-green-600 text-white text-base font-medium hover:bg-green-700 transition-colors disabled:opacity-50 min-h-[44px] shadow"
+              className="apple-press px-4 py-2.5 rounded-full bg-slate-950 text-white text-base font-semibold hover:bg-slate-800 transition-colors disabled:opacity-45 min-h-[44px] shadow-sm"
             >
-              {isGenerating ? '生成中...' : '生成句子 ▶'}
+              {isGenerating ? '生成中...' : '生成句子'}
             </button>
           </div>
         </div>
 
-        {/* 实时句子预览 */}
-        <p className="mt-1.5 text-sm text-gray-400 truncate">
-          🗣 {selectedPictograms.map((p) => p.labels.zh[0]).join('')}…
+        {/* 实时图片序列 */}
+        <p className="mt-1.5 flex items-center gap-1.5 text-sm text-slate-400 truncate" aria-label="已选图片">
+          <LineIcon name="message" className="h-4 w-4 shrink-0" />
+          <span className="truncate">{selectedPictograms.map((p) => p.labels.zh[0]).join('')}…</span>
         </p>
       </div>
 

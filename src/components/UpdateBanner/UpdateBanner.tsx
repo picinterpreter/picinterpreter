@@ -7,6 +7,7 @@
  */
 
 import { usePwaUpdate } from '@/hooks/use-pwa-update'
+import { LineIcon } from '@/components/ui/LineIcon'
 
 export function UpdateBanner() {
   const { isUpdateAvailable, applyUpdate, dismissUpdate } = usePwaUpdate()
@@ -21,12 +22,12 @@ export function UpdateBanner() {
         fixed top-0 inset-x-0 z-40
         flex items-center justify-between gap-3
         px-4 py-2.5
-        bg-blue-700 text-white text-sm
-        shadow-lg
+        bg-white/90 text-slate-900 text-sm
+        shadow-[0_8px_30px_rgba(15,23,42,0.12)] backdrop-blur-xl
       "
     >
       <span className="flex items-center gap-2 min-w-0">
-        <span className="text-base shrink-0" aria-hidden="true">🔄</span>
+        <LineIcon name="loader" className="h-4 w-4 shrink-0" />
         <span className="truncate">新版本已就绪，刷新即可获得最新功能</span>
       </span>
 
@@ -34,8 +35,8 @@ export function UpdateBanner() {
         <button
           onClick={applyUpdate}
           className="
-            px-3 py-1 rounded-lg font-medium
-            bg-white text-blue-700 hover:bg-blue-50 active:bg-blue-100
+            px-3 py-1 rounded-full font-semibold
+            bg-slate-950 text-white hover:bg-slate-800
             transition-colors text-sm
           "
         >
@@ -44,12 +45,12 @@ export function UpdateBanner() {
         <button
           onClick={dismissUpdate}
           className="
-            p-1 rounded hover:bg-blue-600 active:bg-blue-500
+            p-1 rounded-full hover:bg-slate-100
             transition-colors
           "
           aria-label="忽略更新"
         >
-          ✕
+          <LineIcon name="close" className="h-4 w-4" />
         </button>
       </div>
     </div>

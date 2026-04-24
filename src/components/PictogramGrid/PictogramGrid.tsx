@@ -5,6 +5,7 @@ import { useAppStore } from '@/stores/app-store'
 import { useSettingsStore, type GridCols } from '@/stores/settings-store'
 import { generatePlaceholderSvg, resolveImageSrc } from '@/utils/generate-placeholder-svg'
 import { useDebounce } from '@/hooks/use-debounce'
+import { LineIcon } from '@/components/ui/LineIcon'
 import type { PictogramEntry } from '@/types'
 
 // Tailwind 类必须是完整字符串，不可动态拼接
@@ -161,38 +162,27 @@ export function PictogramGrid() {
   return (
     <div className="flex-1 overflow-y-auto flex flex-col min-h-0">
       {/* 搜索栏 */}
-      <div className="sticky top-0 bg-white z-10 px-4 pt-3 pb-2.5 border-b border-gray-100 shadow-sm">
+      <div className="sticky top-0 bg-white z-10 px-4 pt-3 pb-2.5 border-b border-slate-100 shadow-sm">
         <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-            🔍
-          </span>
+          <LineIcon name="magnifier" className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400 pointer-events-none" />
           <input
             type="search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="搜索图片…"
-            className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-base focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-colors"
+            placeholder="搜索"
+            className="w-full pl-9 pr-10 py-3 rounded-xl border border-slate-200 bg-slate-50 text-base text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-colors"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 min-w-[28px] min-h-[28px] flex items-center justify-center rounded-full"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 min-w-[32px] min-h-[32px] flex items-center justify-center rounded-full hover:bg-slate-100"
               aria-label="清除搜索"
             >
-              ✕
+              <LineIcon name="close" className="h-4 w-4" />
             </button>
           )}
         </div>
-        {isSearching && (
-          <p className="mt-1.5 text-sm text-gray-500">
-            找到 {pictograms?.length ?? 0} 个结果
-          </p>
-        )}
-        {!isSearching && hasLinkedItems && (
-          <p className="mt-1.5 text-xs text-blue-500">
-            🔗 包含链接分类的图片
-          </p>
-        )}
+        {!isSearching && hasLinkedItems && <div className="mt-1.5 h-1 w-8 rounded-full bg-blue-500" aria-hidden="true" />}
       </div>
 
       {/* 图片网格 */}
@@ -202,16 +192,16 @@ export function PictogramGrid() {
             <button
               key={p.id}
               onClick={() => handleSelect(p)}
-              className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-white border-2 border-gray-200 hover:border-blue-400 hover:shadow-md transition-all active:scale-95 min-h-[90px] relative"
+              className="apple-press flex flex-col items-center gap-1.5 p-3 rounded-[22px] bg-white/90 border border-white shadow-[0_1px_2px_rgba(15,23,42,0.05),0_10px_28px_rgba(15,23,42,0.08)] hover:shadow-[0_2px_5px_rgba(15,23,42,0.08),0_16px_34px_rgba(15,23,42,0.10)] transition-all min-h-[96px] relative"
               aria-label={p.labels.zh[0]}
             >
               {/* 来源标记（链接分类的图片） */}
               {p.sourceName !== null && (
                 <span
                   aria-label={`来自：${p.sourceName}`}
-                  className="absolute top-1 right-1 text-[10px] px-1 py-0.5 rounded bg-blue-100 text-blue-600 leading-none max-w-[60px] truncate"
+                  className="absolute top-1 right-1 text-[10px] px-1 py-0.5 rounded-full bg-blue-100 text-blue-600 leading-none max-w-[60px] truncate"
                 >
-                  🔗 {p.sourceName}
+                  {p.sourceName}
                 </span>
               )}
               <img
@@ -226,7 +216,7 @@ export function PictogramGrid() {
                   }
                 }}
               />
-              <span className="text-base font-medium text-gray-800 text-center leading-tight">
+              <span className="text-base font-semibold text-slate-800 text-center leading-tight">
                 {p.labels.zh[0]}
               </span>
             </button>
@@ -235,22 +225,20 @@ export function PictogramGrid() {
 
         {/* 空状态 */}
         {pictograms?.length === 0 && isSearching && (
-          <div className="text-center text-gray-400 mt-12 space-y-2">
-            <p className="text-4xl">🔍</p>
-            <p className="text-lg">没有找到「{debouncedQuery}」</p>
-            <p className="text-base">换个词试试，或浏览分类找图片</p>
+          <div className="text-center text-slate-400 mt-12 space-y-2">
+            <LineIcon name="magnifier" className="mx-auto h-10 w-10" />
+            <p className="text-lg">未找到</p>
           </div>
         )}
         {pictograms?.length === 0 && !isSearching && activeCategoryId === 'recent' && (
-          <div className="text-center text-gray-400 mt-12 space-y-2">
-            <p className="text-4xl">🕐</p>
-            <p className="text-lg">还没有使用记录</p>
-            <p className="text-base">点击任意图片后会出现在这里</p>
+          <div className="text-center text-slate-400 mt-12 space-y-2">
+            <LineIcon name="clock" className="mx-auto h-10 w-10" />
+            <p className="text-lg">暂无</p>
           </div>
         )}
         {pictograms?.length === 0 && !isSearching && activeCategoryId !== 'recent' && (
-          <div className="text-center text-gray-400 text-lg mt-12">
-            该分类暂无图片
+          <div className="text-center text-slate-400 text-lg mt-12">
+            暂无
           </div>
         )}
       </div>

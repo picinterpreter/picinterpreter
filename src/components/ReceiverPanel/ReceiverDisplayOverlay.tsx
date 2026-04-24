@@ -10,6 +10,7 @@ import { useAI } from '@/hooks/use-ai'
 import { useConversationStore } from '@/stores/conversation-store'
 import { useSettingsStore } from '@/stores/settings-store'
 import { resolveImageSrc } from '@/utils/generate-placeholder-svg'
+import { LineIcon } from '@/components/ui/LineIcon'
 import type { PictogramEntry } from '@/types'
 
 export interface DisplayItem {
@@ -110,13 +111,13 @@ export function ReceiverDisplayOverlay({ items, inputText, onDone, onBack }: Pro
       role="dialog"
       aria-modal="true"
       aria-label="图片序列展示"
-      className="fixed inset-0 z-50 bg-gray-900 flex flex-col"
+      className="fixed inset-0 z-50 bg-slate-950 flex flex-col"
     >
       {/* 顶部操作栏 */}
-      <div className="flex items-center justify-between px-4 py-3 bg-black/40">
+      <div className="flex items-center justify-between px-4 py-3 bg-white/10 backdrop-blur-xl">
         <button
           onClick={onBack}
-          className="text-white/70 hover:text-white text-sm px-3 py-2 rounded-lg min-h-[44px]"
+          className="apple-press text-white/70 hover:text-white text-sm font-medium px-3 py-2 rounded-full min-h-[44px] hover:bg-white/10"
           aria-label="返回修改图片"
         >
           ← 返回修改
@@ -124,26 +125,21 @@ export function ReceiverDisplayOverlay({ items, inputText, onDone, onBack }: Pro
 
         <div className="flex items-center gap-2">
           {isSpeaking && (
-            <span className="text-white/80 text-sm animate-pulse">🔊 播报中…</span>
+            <LineIcon name="sound" className="h-5 w-5 text-white/80 animate-pulse" />
           )}
           {ttsError && !isSpeaking && (
-            <span className="text-amber-400 text-sm">⚠ 语音不可用</span>
+            <span className="text-amber-300 text-sm">无法播报</span>
           )}
         </div>
 
         <button
           onClick={speakText}
           disabled={isSpeaking}
-          className="text-white/70 hover:text-white text-sm px-3 py-2 rounded-lg min-h-[44px] disabled:opacity-40"
+          className="apple-press text-white/70 hover:text-white text-sm font-medium px-3 py-2 rounded-full min-h-[44px] disabled:opacity-40 hover:bg-white/10"
           aria-label="重播语音"
         >
-          🔁 重播
+          重播
         </button>
-      </div>
-
-      {/* 原始文本提示 */}
-      <div className="px-6 pt-3 pb-1">
-        <p className="text-white/50 text-sm text-center truncate">「{inputText}」</p>
       </div>
 
       {/* 图片序列 — 垂直居中，横排，支持换行 */}
@@ -152,14 +148,14 @@ export function ReceiverDisplayOverlay({ items, inputText, onDone, onBack }: Pro
           {items.map((item) => (
             <div
               key={item.id}
-              className="flex flex-col items-center gap-2 bg-white rounded-2xl p-3 w-24 sm:w-28 shadow-xl"
+            className="flex flex-col items-center gap-2 bg-white/95 rounded-[26px] p-3 w-24 sm:w-28 shadow-[0_18px_45px_rgba(0,0,0,0.24)]"
             >
               <img
                 src={resolveImageSrc(item.pictogram.imageUrl, item.token, '#7c3aed')}
                 alt={item.pictogram.labels.zh[0]}
                 className="w-16 h-16 sm:w-20 sm:h-20 object-contain"
               />
-              <span className="text-sm sm:text-base font-semibold text-gray-800 text-center leading-tight">
+              <span className="text-sm sm:text-base font-semibold text-slate-900 text-center leading-tight">
                 {item.pictogram.labels.zh[0]}
               </span>
             </div>
@@ -169,8 +165,8 @@ export function ReceiverDisplayOverlay({ items, inputText, onDone, onBack }: Pro
 
       {/* 保存失败提示 */}
       {saveError && (
-        <div className="mx-4 mb-2 px-4 py-2 rounded-xl bg-red-900/50 border border-red-500 text-red-200 text-sm text-center">
-          ⚠ {saveError}
+        <div className="mx-4 mb-2 px-4 py-2 rounded-2xl bg-rose-500/15 border border-rose-400/40 text-rose-100 text-sm text-center">
+          {saveError}
         </div>
       )}
 
@@ -178,9 +174,9 @@ export function ReceiverDisplayOverlay({ items, inputText, onDone, onBack }: Pro
       <div className="p-4">
         <button
           onClick={handleDone}
-          className="w-full py-4 rounded-2xl bg-green-600 text-white text-xl font-bold hover:bg-green-700 transition-colors shadow-lg min-h-[56px]"
+          className="apple-press w-full py-4 rounded-full bg-white text-slate-950 text-xl font-semibold hover:bg-slate-100 transition-colors shadow-lg min-h-[56px]"
         >
-          ✓ 完成
+          完成
         </button>
       </div>
     </div>

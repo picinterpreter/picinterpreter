@@ -20,6 +20,7 @@ import { db } from '@/db'
 import type { PictogramEntry } from '@/types'
 import type { MatchedToken } from '@/utils/text-to-image-matcher'
 import { ReceiverDisplayOverlay, type DisplayItem } from './ReceiverDisplayOverlay'
+import { LineIcon } from '@/components/ui/LineIcon'
 
 // ─── 类型 ────────────────────────────────────────────────────────────────── //
 
@@ -67,7 +68,7 @@ const MATCH_TYPE_BADGE: Record<ItemMatchType, string> = {
   'lexicon-synonym': 'bg-yellow-100 text-yellow-700',
   partial:           'bg-orange-100 text-orange-700',
   manual:            'bg-purple-100 text-purple-700',
-  none:              'bg-gray-100 text-gray-400',
+  none:              'bg-slate-100 text-slate-400',
 }
 
 const MATCH_TYPE_LABEL: Record<ItemMatchType, string> = {
@@ -285,9 +286,6 @@ export function ReceiverPanel() {
   const unmatchedCount = items.filter((item) => item.pictogram === null).length
   const matchedCount = displayItems.length
 
-  // 当前正在换图的 item（用于弹窗标题）
-  const swapItem = items.find((item) => item.id === swapItemId)
-
   // ── 渲染 ─────────────────────────────────────────────────────────────── //
   return (
     <div className="flex-1 overflow-y-auto flex flex-col min-h-0">
@@ -295,13 +293,9 @@ export function ReceiverPanel() {
       {/* ── 输入阶段 ──────────────────────────────────────────────────── */}
       {phase === 'idle' && (
         <div className="p-4 space-y-4">
-          <p className="text-sm text-gray-500 leading-relaxed">
-            输入家人 / 护工想说的内容，自动转为图片序列展示给患者。
-          </p>
-
           {matchError && (
-            <div className="px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700">
-              ⚠ {matchError}
+            <div className="px-4 py-3 rounded-2xl bg-red-50 border border-red-200 text-sm text-red-700">
+              未识别
             </div>
           )}
 
@@ -313,12 +307,12 @@ export function ReceiverPanel() {
               type="text"
               value={isListening ? interimText || inputText : inputText}
               onChange={(e) => { if (!isListening) setInputText(e.target.value) }}
-              placeholder={isListening ? '正在聆听…' : '输入一句话，如：今天吃什么'}
+              placeholder={isListening ? '聆听中' : '输入'}
               readOnly={isListening}
-              className={`flex-1 border rounded-xl px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:border-transparent transition-colors
+              className={`flex-1 border rounded-2xl px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:border-transparent transition-colors
                 ${isListening
                   ? 'border-red-300 bg-red-50 text-red-700 focus:ring-red-300'
-                  : 'border-gray-300 focus:ring-purple-400'
+                  : 'border-slate-200 focus:ring-purple-400'
                 }`}
               autoFocus
               aria-live="polite"
@@ -327,7 +321,7 @@ export function ReceiverPanel() {
             <button
               type="submit"
               disabled={!inputText.trim() || isListening}
-              className="px-5 py-3 bg-purple-600 text-white rounded-xl font-medium disabled:opacity-40 hover:bg-purple-700 transition-colors min-h-[44px]"
+              className="px-5 py-3 bg-slate-950 text-white rounded-2xl font-medium disabled:opacity-40 hover:bg-slate-800 transition-colors min-h-[44px]"
             >
               转换
             </button>
@@ -350,39 +344,36 @@ export function ReceiverPanel() {
                 }
               }}
               aria-label={isListening ? '停止录音' : '开始语音输入'}
-              className={`w-full py-3 rounded-xl border-2 text-base font-medium flex items-center justify-center gap-2 transition-all min-h-[44px]
+              className={`w-full py-3 rounded-2xl border-2 text-base font-medium flex items-center justify-center gap-2 transition-all min-h-[44px]
                 ${isListening
                   ? 'border-red-400 bg-red-50 text-red-600 animate-pulse'
-                  : 'border-purple-300 bg-purple-50 text-purple-700 hover:bg-purple-100'
+                  : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
                 }`}
             >
               {isListening
-                ? <><span className="text-xl">🔴</span> 聆听中，点击停止</>
-                : <><span className="text-xl">🎤</span> 开始录音</>
+                ? <><span className="h-2.5 w-2.5 rounded-full bg-rose-500 animate-pulse" /> 停止</>
+                : <><LineIcon name="sound" className="h-5 w-5" /> 录音</>
               }
             </button>
           ) : (
-            <p className="text-xs text-gray-400 text-center">
-              浏览器识别需要 Chrome / Edge
-            </p>
+            <LineIcon name="sound" className="mx-auto h-5 w-5 text-slate-300" />
           )}
 
           {/* ASR 错误提示 */}
           {asrError && (
-            <div className="px-4 py-2.5 rounded-xl bg-amber-50 border border-amber-200 text-sm text-amber-700">
-              ⚠ {asrError}
+            <div className="px-4 py-2.5 rounded-2xl bg-amber-50 border border-amber-200 text-sm text-amber-700">
+              无法录音
             </div>
           )}
 
           {/* 示例短语 */}
           <div>
-            <p className="text-xs text-gray-400 mb-2">常见示例：</p>
             <div className="flex flex-wrap gap-2">
               {EXAMPLE_PHRASES.map((phrase) => (
                 <button
                   key={phrase}
                   onClick={() => { setInputText(phrase); doMatch(phrase) }}
-                  className="text-sm px-3 py-1.5 bg-purple-50 hover:bg-purple-100 rounded-full text-purple-700 transition-colors"
+                  className="text-sm px-3 py-1.5 bg-white hover:bg-slate-50 rounded-full text-slate-700 shadow-[inset_0_0_0_1px_rgba(15,23,42,0.08)] transition-colors"
                 >
                   {phrase}
                 </button>
@@ -397,7 +388,7 @@ export function ReceiverPanel() {
         <div className="flex-1 flex items-center justify-center p-8">
           <div className="text-center space-y-3">
             <div className="w-10 h-10 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-gray-500">正在匹配图片…</p>
+            <p className="text-gray-500">匹配中</p>
           </div>
         </div>
       )}
@@ -407,8 +398,7 @@ export function ReceiverPanel() {
         <div className="flex-1 flex items-center justify-center p-8">
           <div className="text-center space-y-3">
             <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-gray-600 font-medium">AI 正在优化匹配…</p>
-            <p className="text-xs text-gray-400">部分词语未找到图片，正在用 AI 重新分析</p>
+            <LineIcon name="sparkle" className="mx-auto h-5 w-5 text-slate-400" />
           </div>
         </div>
       )}
@@ -420,32 +410,22 @@ export function ReceiverPanel() {
           {/* 原始输入 + 重新输入按钮 */}
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <p className="text-xs text-gray-400">原始输入</p>
-              <p className="text-base text-gray-800 font-medium break-words">{inputText}</p>
+              <p className="text-base text-slate-900 font-medium break-words">{inputText}</p>
             </div>
             <button
               onClick={handleReset}
-              className="text-sm text-gray-400 hover:text-gray-600 px-3 py-2 rounded-lg shrink-0 min-h-[44px]"
+              className="text-sm text-slate-400 hover:text-gray-600 px-3 py-2 rounded-xl shrink-0 min-h-[44px]"
             >
               重新输入
             </button>
           </div>
 
           {/* 匹配统计 + 操作提示 */}
-          <div className="text-xs text-gray-400 space-y-0.5">
-            <p>
-              共 {items.length} 个词，已匹配 {matchedCount} 个图片
-            </p>
-            {unmatchedCount > 0 && (
-              <p className="text-amber-600">
-                {unmatchedCount} 个词未找到图片，点击卡片左侧「?」可手动选图
-              </p>
-            )}
-            {matchedCount === 0 && (
-              <p className="text-red-600 font-medium">
-                无可展示图片，请点击「?」手动选图或重新输入
-              </p>
-            )}
+          <div className="flex gap-1" aria-label={`已匹配 ${matchedCount} 张图片`}>
+            {Array.from({ length: Math.max(matchedCount, 1) }).slice(0, 8).map((_, idx) => (
+              <span key={idx} className={`h-1.5 w-6 rounded-full ${matchedCount > 0 ? 'bg-slate-900' : 'bg-rose-400'}`} />
+            ))}
+            {unmatchedCount > 0 && <span className="h-1.5 w-6 rounded-full bg-amber-400" />}
           </div>
 
           {/* 词条卡片列表 */}
@@ -455,10 +435,10 @@ export function ReceiverPanel() {
               return (
                 <div
                   key={item.id}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl border-2 ${
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-2xl border-2 ${
                     hasImage
                       ? 'border-purple-200 bg-white'
-                      : 'border-dashed border-gray-200 bg-gray-50'
+                      : 'border-dashed border-gray-200 bg-slate-50'
                   }`}
                 >
                   {/* 图片缩略图（点击换图） */}
@@ -472,23 +452,23 @@ export function ReceiverPanel() {
                       <img
                         src={resolveImageSrc(item.pictogram!.imageUrl, item.token, '#7c3aed')}
                         alt={item.pictogram!.labels.zh[0]}
-                        className="w-12 h-12 object-contain rounded-lg group-hover:opacity-70 transition-opacity"
+                        className="w-12 h-12 object-contain rounded-xl group-hover:opacity-70 transition-opacity"
                       />
                     ) : (
-                      <div className="w-12 h-12 rounded-xl bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 text-xl group-hover:bg-purple-50 group-hover:border-purple-300 transition-colors">
+                      <div className="w-12 h-12 rounded-2xl bg-slate-100 border-2 border-dashed border-slate-200 flex items-center justify-center text-slate-400 text-xl group-hover:bg-purple-50 group-hover:border-purple-300 transition-colors">
                         ?
                       </div>
                     )}
-                    <span className="text-xs text-gray-400 mt-0.5 group-hover:text-purple-500 transition-colors leading-none">
-                      换图
+                    <span className="text-xs text-slate-400 mt-0.5 group-hover:text-purple-500 transition-colors leading-none">
+                      换
                     </span>
                   </button>
 
                   {/* 词条 + 标签 */}
                   <div className="flex-1 min-w-0">
-                    <p className="text-base font-medium text-gray-800 truncate">{item.token}</p>
+                    <p className="text-base font-medium text-slate-900 truncate">{item.token}</p>
                     {hasImage && (
-                      <p className="text-xs text-gray-400 truncate">{item.pictogram!.labels.zh[0]}</p>
+                      <p className="text-xs text-slate-400 truncate">{item.pictogram!.labels.zh[0]}</p>
                     )}
                     <span className={`inline-block text-xs px-1.5 py-0.5 rounded-full mt-0.5 ${MATCH_TYPE_BADGE[item.matchType]}`}>
                       {MATCH_TYPE_LABEL[item.matchType]}
@@ -500,7 +480,7 @@ export function ReceiverPanel() {
                     <button
                       onClick={() => handleMoveLeft(index)}
                       disabled={index === 0}
-                      className="w-11 h-11 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 disabled:opacity-30 transition-colors"
+                      className="w-11 h-11 rounded-xl flex items-center justify-center text-slate-400 hover:text-gray-600 hover:bg-slate-100 disabled:opacity-30 transition-colors"
                       aria-label="向前移动"
                     >
                       ←
@@ -508,14 +488,14 @@ export function ReceiverPanel() {
                     <button
                       onClick={() => handleMoveRight(index)}
                       disabled={index === items.length - 1}
-                      className="w-11 h-11 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 disabled:opacity-30 transition-colors"
+                      className="w-11 h-11 rounded-xl flex items-center justify-center text-slate-400 hover:text-gray-600 hover:bg-slate-100 disabled:opacity-30 transition-colors"
                       aria-label="向后移动"
                     >
                       →
                     </button>
                     <button
                       onClick={() => handleDelete(item.id)}
-                      className="w-11 h-11 rounded-lg flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                      className="w-11 h-11 rounded-xl flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 transition-colors"
                       aria-label={`删除「${item.token}」`}
                     >
                       ×
@@ -530,9 +510,9 @@ export function ReceiverPanel() {
           <button
             onClick={() => setShowDisplay(true)}
             disabled={matchedCount === 0}
-            className="w-full py-3.5 rounded-xl bg-purple-600 text-white text-lg font-medium hover:bg-purple-700 disabled:opacity-40 transition-colors min-h-[48px] shadow"
+            className="apple-press w-full py-3.5 rounded-full bg-slate-950 text-white text-lg font-semibold hover:bg-slate-800 disabled:opacity-40 transition-colors min-h-[48px] shadow-sm"
           >
-            展示给患者 ▶
+            展示给患者
           </button>
         </div>
       )}
@@ -543,31 +523,31 @@ export function ReceiverPanel() {
           role="dialog"
           aria-modal="true"
           aria-labelledby="swap-dialog-title"
-          className="fixed inset-0 z-50 bg-black/60 flex items-end"
+          className="fixed inset-0 z-50 bg-slate-950/55 backdrop-blur-xl flex items-end"
           onClick={() => setSwapItemId(null)}
         >
           <div
-            className="w-full bg-white rounded-t-3xl p-4 max-h-[72vh] flex flex-col gap-3"
+            className="w-full bg-white rounded-t-[32px] p-4 max-h-[72vh] flex flex-col gap-3"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between">
-              <h3 id="swap-dialog-title" className="text-base font-semibold text-gray-800">
-                替换「{swapItem?.token ?? '…'}」的图片
+              <h3 id="swap-dialog-title" className="text-base font-semibold text-slate-900">
+                换图
               </h3>
               <button
                 onClick={() => setSwapItemId(null)}
-                className="text-gray-400 hover:text-gray-600 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg"
+                className="text-slate-400 hover:text-gray-600 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl"
                 aria-label="关闭换图"
               >
-                ✕
+                <LineIcon name="close" className="h-5 w-5" />
               </button>
             </div>
             <input
               type="search"
               value={swapQuery}
               onChange={(e) => setSwapQuery(e.target.value)}
-              placeholder="搜索图片…"
-              className="border border-gray-300 rounded-xl px-4 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-purple-400"
+              placeholder="搜索"
+              className="border border-slate-200 rounded-2xl px-4 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-purple-400"
               autoFocus
             />
             <div className="overflow-y-auto grid grid-cols-4 gap-2 pb-2">
@@ -575,26 +555,26 @@ export function ReceiverPanel() {
                 <button
                   key={p.id}
                   onClick={() => handleSelectSwap(p)}
-                  className="flex flex-col items-center gap-1 p-2 rounded-xl border-2 border-gray-100 hover:border-purple-400 hover:bg-purple-50 transition-colors active:scale-95"
+                  className="flex flex-col items-center gap-1 p-2 rounded-2xl border-2 border-slate-100 hover:border-purple-400 hover:bg-purple-50 transition-colors active:scale-95"
                 >
                   <img
                     src={resolveImageSrc(p.imageUrl, p.labels.zh[0], '#7c3aed')}
                     alt={p.labels.zh[0]}
                     className="w-12 h-12 object-contain"
                   />
-                  <span className="text-xs text-center text-gray-700 truncate w-full leading-tight">
+                  <span className="text-xs text-center text-slate-700 truncate w-full leading-tight">
                     {p.labels.zh[0]}
                   </span>
                 </button>
               ))}
               {(swapResults ?? []).length === 0 && debouncedSwapQuery.trim() && (
-                <div className="col-span-4 text-center py-8 text-gray-400 text-sm">
-                  没有找到「{debouncedSwapQuery}」
+                <div className="col-span-4 text-center py-8 text-slate-400 text-sm">
+                  未找到
                 </div>
               )}
               {(swapResults ?? []).length === 0 && !debouncedSwapQuery.trim() && swapItemId !== null && (
-                <div className="col-span-4 text-center py-8 text-gray-400 text-sm">
-                  正在加载…
+                <div className="col-span-4 text-center py-8 text-slate-400 text-sm">
+                  加载中
                 </div>
               )}
             </div>

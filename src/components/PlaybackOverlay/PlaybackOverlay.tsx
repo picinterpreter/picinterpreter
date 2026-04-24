@@ -6,6 +6,7 @@ import { useAI } from '@/hooks/use-ai'
 import { resolveImageSrc } from '@/utils/generate-placeholder-svg'
 import { db } from '@/db'
 import { addSavedPhraseIfMissing } from '@/repositories/saved-phrases-repository'
+import { LineIcon } from '@/components/ui/LineIcon'
 import type { PictogramEntry } from '@/types'
 
 /**
@@ -127,9 +128,9 @@ export function PlaybackOverlay() {
       role="dialog"
       aria-modal="true"
       aria-labelledby="playback-sentence"
-      className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-6"
+      className="fixed inset-0 z-50 bg-slate-950/70 flex items-center justify-center p-6 backdrop-blur-xl"
     >
-      <div className="bg-white rounded-3xl p-8 max-w-lg w-full text-center shadow-2xl">
+      <div className="apple-panel rounded-[32px] p-8 max-w-lg w-full text-center">
         {/* 配套图片行（来自收藏短语的图片 ID） */}
         {(playbackPictograms?.length ?? 0) > 0 && (
           <div className="flex flex-wrap justify-center gap-3 mb-6">
@@ -138,28 +139,29 @@ export function PlaybackOverlay() {
                 <img
                   src={resolveImageSrc(p.imageUrl, p.labels.zh[0], '#2563EB')}
                   alt={p.labels.zh[0]}
-                  className="w-16 h-16 sm:w-20 sm:h-20 object-contain rounded-xl border border-blue-100 bg-blue-50 p-1"
+                  className="w-16 h-16 sm:w-20 sm:h-20 object-contain rounded-2xl bg-white p-1 shadow-[inset_0_0_0_1px_rgba(15,23,42,0.08)]"
                 />
-                <span className="text-sm text-gray-600 max-w-[72px] truncate">{p.labels.zh[0]}</span>
+                <span className="text-sm text-slate-600 max-w-[72px] truncate">{p.labels.zh[0]}</span>
               </div>
             ))}
           </div>
         )}
 
-        <p id="playback-sentence" className="text-3xl md:text-4xl font-bold text-gray-900 leading-relaxed mb-8">
+        <p id="playback-sentence" className="text-3xl md:text-4xl font-semibold text-slate-950 leading-relaxed mb-8">
           {playbackSentence}
         </p>
 
         {isSpeaking && (
-          <p className="text-xl text-blue-600 mb-6 animate-pulse">
-            🔊 正在播报...
+          <p className="mb-6 flex items-center justify-center gap-2 text-xl text-blue-600 animate-pulse">
+            <LineIcon name="sound" className="h-5 w-5" />
+            <span>正在播报...</span>
           </p>
         )}
 
         {ttsError && (
           <p className="text-lg text-amber-600 mb-6">
-            ⚠ {ttsError}<br />
-            <span className="text-base text-gray-500">请朗读上方句子</span>
+            {ttsError}<br />
+            <span className="text-base text-slate-500">无法播报</span>
           </p>
         )}
 
@@ -168,25 +170,25 @@ export function PlaybackOverlay() {
             onClick={handleReplay}
             disabled={isSpeaking}
             aria-label="重新播报"
-            className="px-6 py-3 rounded-xl bg-blue-600 text-white text-lg font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors min-h-[52px]"
+            className="apple-press px-6 py-3 rounded-full bg-slate-100 text-slate-800 text-lg font-semibold hover:bg-slate-200 disabled:opacity-50 transition-colors min-h-[52px]"
           >
-            🔁 重播
+            重播
           </button>
           <button
             onClick={handleFavorite}
             disabled={isSpeaking || saved}
             aria-label={saved ? '已收藏' : '收藏此句'}
-            className={`px-6 py-3 rounded-xl text-white text-lg font-medium transition-colors min-h-[52px] disabled:opacity-50
-              ${saved ? 'bg-amber-300 cursor-default' : 'bg-amber-500 hover:bg-amber-600'}`}
+            className={`apple-press px-6 py-3 rounded-full text-lg font-semibold transition-colors min-h-[52px] disabled:opacity-50
+              ${saved ? 'bg-slate-100 text-slate-400 cursor-default' : 'bg-slate-100 text-slate-800 hover:bg-slate-200'}`}
           >
-            {saved ? '✓ 已收藏' : '⭐ 收藏'}
+            {saved ? '已收藏' : '收藏'}
           </button>
           <button
             onClick={handleDone}
             aria-label="播报完成，关闭"
-            className="px-6 py-3 rounded-xl bg-green-600 text-white text-lg font-medium hover:bg-green-700 transition-colors min-h-[52px]"
+            className="apple-press px-6 py-3 rounded-full bg-slate-950 text-white text-lg font-semibold hover:bg-slate-800 transition-colors min-h-[52px]"
           >
-            ✓ 完成
+            完成
           </button>
         </div>
       </div>

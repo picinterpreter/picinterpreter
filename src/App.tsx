@@ -15,6 +15,7 @@ import { QuickAccessBar } from '@/components/QuickAccess/QuickAccessBar'
 import { EmergencyPanel } from '@/components/Emergency/EmergencyPanel'
 import { UpdateBanner } from '@/components/UpdateBanner/UpdateBanner'
 import { OnboardingModal } from '@/components/Onboarding/OnboardingModal'
+import { LineIcon } from '@/components/ui/LineIcon'
 
 const FONT_SIZE_MAP: Record<FontSize, string> = {
   normal: '16px',
@@ -38,74 +39,80 @@ export default function App() {
   }, [fontSize])
 
   return (
-    <div className={`h-screen flex flex-col bg-gray-50 overflow-hidden ${highContrast ? 'hc' : ''}`}>
+    <div className={`h-screen flex flex-col bg-[#f5f5f7] overflow-hidden text-slate-950 ${highContrast ? 'hc' : ''}`}>
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-2 bg-blue-700 text-white">
-        <h1 className="text-xl font-bold">图语家</h1>
+      <header className="flex items-center justify-between px-4 py-3 bg-white/85 text-slate-950 shadow-[0_1px_0_rgba(15,23,42,0.08)] backdrop-blur-xl">
+        <div className="min-w-0">
+          <h1 className="text-xl font-semibold leading-tight tracking-normal">图语家</h1>
+        </div>
         <div className="flex items-center gap-1">
           <a
             href="/debug"
-            className="text-xs text-blue-300 hover:text-white px-2 py-1 rounded hidden sm:block"
+            className="hidden min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100 hover:text-slate-950 sm:flex focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
             title="匹配验证工具"
+            aria-label="匹配验证工具"
           >
-            🔍
+            <LineIcon name="magnifier" className="h-5 w-5" />
           </a>
           <a
             href="/import"
-            className="text-xs text-blue-300 hover:text-white px-2 py-1 rounded hidden sm:block"
+            className="hidden min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100 hover:text-slate-950 sm:flex focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
             title="ARASAAC 导入工具"
+            aria-label="ARASAAC 导入工具"
           >
-            📥
+            <LineIcon name="download" className="h-5 w-5" />
           </a>
           <button
             onClick={() => setShowEmergency(true)}
-            className="p-2 hover:bg-red-600 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="p-2 rounded-full min-h-[44px] min-w-[44px] flex items-center justify-center text-rose-600 transition hover:bg-rose-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500"
             aria-label="紧急求助"
             title="紧急求助"
           >
-            <span className="text-xl">🆘</span>
+            <LineIcon name="alert" className="h-5 w-5" />
           </button>
           <button
             onClick={() => setShowHistory(true)}
-            className="p-2 hover:bg-blue-600 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="p-2 rounded-full min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-500 transition hover:bg-slate-100 hover:text-slate-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
             aria-label="对话记录"
             title="对话记录"
           >
-            <span className="text-xl">📖</span>
+            <LineIcon name="book" className="h-5 w-5" />
           </button>
           <button
             onClick={() => setShowSettings(true)}
-            className="p-2 hover:bg-blue-600 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="p-2 rounded-full min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-500 transition hover:bg-slate-100 hover:text-slate-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
             aria-label="设置"
           >
-            <span className="text-xl">⚙</span>
+            <LineIcon name="settings" className="h-5 w-5" />
           </button>
         </div>
       </header>
 
       {/* 模式切换标签 */}
-      <div className="flex border-b border-gray-200 bg-white shrink-0">
+      <div className="grid grid-cols-2 gap-1 border-b border-slate-200 bg-white/80 p-1.5 shrink-0 backdrop-blur-xl">
         <button
           onClick={() => setActiveMode('express')}
           aria-pressed={activeMode === 'express'}
-          className={`flex-1 py-2.5 text-base font-medium transition-colors ${
+          className={`flex items-center justify-center gap-2 rounded-full py-2.5 text-base font-semibold transition-colors min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 ${
             activeMode === 'express'
-              ? 'text-blue-700 border-b-2 border-blue-600 bg-blue-50'
-              : 'text-gray-500 hover:text-gray-700'
+              ? 'text-slate-950 bg-white shadow-[0_1px_6px_rgba(15,23,42,0.10)]'
+              : 'text-slate-500 hover:text-slate-700 hover:bg-white/60'
           }`}
         >
-          💬 表达
+          <LineIcon name="message" className="h-5 w-5" />
+          <span>表达</span>
         </button>
         <button
           onClick={() => setActiveMode('receive')}
           aria-pressed={activeMode === 'receive'}
-          className={`flex-1 py-2.5 text-base font-medium transition-colors ${
+          className={`flex items-center justify-center gap-2 rounded-full py-2.5 text-base font-semibold transition-colors min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-500 ${
             activeMode === 'receive'
-              ? 'text-purple-700 border-b-2 border-purple-600 bg-purple-50'
-              : 'text-gray-500 hover:text-gray-700'
+              ? 'text-slate-950 bg-white shadow-[0_1px_6px_rgba(15,23,42,0.10)]'
+              : 'text-slate-500 hover:text-slate-700 hover:bg-white/60'
           }`}
         >
-          👂 接收
+          <LineIcon name="ear" className="h-5 w-5" />
+          <span>接收</span>
         </button>
       </div>
 

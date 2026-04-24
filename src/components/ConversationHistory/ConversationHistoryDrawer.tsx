@@ -13,6 +13,7 @@ import {
   updateExpressionFavorite,
 } from '@/repositories/expressions-repository'
 import { useAppStore } from '@/stores/app-store'
+import { LineIcon } from '@/components/ui/LineIcon'
 import type { Expression } from '@/types'
 
 // startPlayback is needed inside ExpressionCard; pass as prop
@@ -58,7 +59,7 @@ function buildExportText(expressions: Expression[]): string {
     const items = [...session.items].reverse()
     for (const expr of items) {
       const timeStr = formatFullTime(expr.createdAt)
-      const direction = expr.direction === 'express' ? '💬 表达' : '👂 接收'
+      const direction = expr.direction === 'express' ? '表达' : '接收'
       lines.push('')
       lines.push(`[${direction}]  ${timeStr}`)
 
@@ -73,7 +74,7 @@ function buildExportText(expressions: Expression[]): string {
         lines.push(`图片：${expr.pictogramLabels.map((l) => `[${l}]`).join(' ')}`)
       }
 
-      if (expr.isFavorite) lines.push('⭐ 已收藏')
+      if (expr.isFavorite) lines.push('已收藏')
     }
 
     lines.push('')
@@ -123,10 +124,10 @@ function ExpressionCard({ expr, onPlay }: { expr: Expression; onPlay: PlayFn }) 
 
   return (
     <div
-      className={`rounded-xl border p-3 space-y-1.5 ${
+      className={`rounded-2xl border p-3 space-y-1.5 shadow-sm ${
         isExpress
-          ? 'bg-blue-50 border-blue-200'
-          : 'bg-purple-50 border-purple-200'
+          ? 'bg-white border-slate-200'
+          : 'bg-white border-slate-200'
       }`}
     >
       {/* 方向 + 时间 */}
@@ -134,18 +135,18 @@ function ExpressionCard({ expr, onPlay }: { expr: Expression; onPlay: PlayFn }) 
         <span
           className={`text-xs font-medium px-2 py-0.5 rounded-full ${
             isExpress
-              ? 'bg-blue-100 text-blue-700'
-              : 'bg-purple-100 text-purple-700'
+              ? 'bg-slate-100 text-slate-700'
+              : 'bg-slate-100 text-slate-700'
           }`}
         >
-          {isExpress ? '💬 表达' : '👂 接收'}
+          {isExpress ? '表达' : '接收'}
         </span>
-        <span className="text-xs text-gray-400">{formatTime(expr.createdAt)}</span>
+        <span className="text-xs text-slate-400">{formatTime(expr.createdAt)}</span>
       </div>
 
       {/* 主文本 */}
       {mainText && (
-        <p className="text-base text-gray-900 leading-snug">{mainText}</p>
+        <p className="text-base text-slate-950 leading-snug">{mainText}</p>
       )}
 
       {/* 图片标签 */}
@@ -154,7 +155,7 @@ function ExpressionCard({ expr, onPlay }: { expr: Expression; onPlay: PlayFn }) 
           {expr.pictogramLabels.map((label, i) => (
             <span
               key={i}
-              className="text-xs px-1.5 py-0.5 bg-white/70 border border-gray-200 rounded-md text-gray-600"
+              className="text-xs px-1.5 py-0.5 bg-white/70 border border-slate-200 rounded-md text-slate-600"
             >
               {label}
             </span>
@@ -168,16 +169,16 @@ function ExpressionCard({ expr, onPlay }: { expr: Expression; onPlay: PlayFn }) 
         {isExpress && mainText && (
           <button
             onClick={() => onPlay(mainText)}
-            className="min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-300 hover:text-blue-500 rounded-lg transition-colors"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-300 hover:text-blue-500 rounded-xl transition-colors"
             aria-label={`重播：${mainText}`}
             title="重新播报"
           >
-            ▶
+            <LineIcon name="sound" className="h-4 w-4" />
           </button>
         )}
         <button
           onClick={handleToggleFavorite}
-          className={`min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg transition-colors ${
+          className={`min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl transition-colors ${
             expr.isFavorite
               ? 'text-amber-500 hover:text-amber-600'
               : 'text-gray-300 hover:text-amber-400'
@@ -185,11 +186,11 @@ function ExpressionCard({ expr, onPlay }: { expr: Expression; onPlay: PlayFn }) 
           aria-label={expr.isFavorite ? '取消收藏' : '收藏'}
           title={expr.isFavorite ? '取消收藏' : '收藏'}
         >
-          ⭐
+          <LineIcon name="star" className="h-4 w-4" />
         </button>
         <button
           onClick={handleDelete}
-          className="min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-300 hover:text-red-500 rounded-lg transition-colors"
+          className="min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-300 hover:text-red-500 rounded-xl transition-colors"
           aria-label="删除此记录"
           title="删除"
         >
@@ -256,22 +257,22 @@ export function ConversationHistoryDrawer() {
     >
       {/* 背景遮罩 */}
       <div
-        className="flex-1 bg-black/40"
+        className="flex-1 bg-slate-950/45 backdrop-blur-[1px]"
         onClick={() => setShowHistory(false)}
         aria-hidden="true"
       />
 
       {/* 抽屉主体 */}
-      <div className="w-[22rem] max-w-[90vw] bg-white shadow-xl flex flex-col">
+      <div className="w-[22rem] max-w-[90vw] bg-slate-50 shadow-2xl flex flex-col">
         {/* 头部 */}
-        <div className="flex items-center justify-between px-4 py-3 border-b bg-white shrink-0">
-          <h2 className="text-lg font-bold text-gray-800">📖 对话记录</h2>
+        <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-white shrink-0">
+          <h2 className="text-lg font-bold text-slate-900">对话记录</h2>
           <div className="flex items-center gap-1">
             {(expressions?.length ?? 0) > 0 && (
               <>
                 <button
                   onClick={handleExport}
-                  className="text-xs text-gray-600 hover:text-blue-600 px-2 py-1.5 rounded-lg transition-colors min-h-[44px]"
+                  className="text-xs text-slate-600 hover:text-blue-600 px-2 py-1.5 rounded-xl transition-colors min-h-[44px]"
                   aria-label="导出对话记录"
                   title="下载为文本文件"
                 >
@@ -279,7 +280,7 @@ export function ConversationHistoryDrawer() {
                 </button>
                 <button
                   onClick={handleClearAll}
-                  className="text-xs text-gray-600 hover:text-red-500 px-2 py-1.5 rounded-lg transition-colors min-h-[44px]"
+                  className="text-xs text-slate-600 hover:text-red-500 px-2 py-1.5 rounded-xl transition-colors min-h-[44px]"
                   aria-label="清空全部记录"
                 >
                   清空
@@ -288,10 +289,10 @@ export function ConversationHistoryDrawer() {
             )}
             <button
               onClick={() => setShowHistory(false)}
-              className="p-2 text-gray-400 hover:text-gray-600 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg"
+              className="p-2 text-slate-400 hover:text-slate-600 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl"
               aria-label="关闭"
             >
-              ✕
+              <LineIcon name="close" className="h-5 w-5" />
             </button>
           </div>
         </div>
@@ -299,8 +300,8 @@ export function ConversationHistoryDrawer() {
         {/* 内容 */}
         <div className="flex-1 overflow-y-auto p-3 space-y-4">
           {(expressions?.length ?? 0) === 0 && (
-            <div className="text-center text-gray-400 mt-12 space-y-2">
-              <p className="text-3xl">💬</p>
+            <div className="text-center text-slate-400 mt-12 space-y-2">
+              <LineIcon name="message" className="mx-auto h-9 w-9" />
               <p className="text-base">还没有对话记录</p>
               <p className="text-sm">使用「表达」或「接收」功能后记录会出现在这里</p>
             </div>
@@ -310,11 +311,11 @@ export function ConversationHistoryDrawer() {
             <div key={session.sessionId} className="space-y-2">
               {/* 会话分隔线 */}
               <div className="flex items-center gap-2">
-                <div className="flex-1 h-px bg-gray-200" />
-                <span className="text-xs text-gray-400 shrink-0 px-1">
+        <div className="flex-1 h-px bg-slate-200" />
+                <span className="text-xs text-slate-400 shrink-0 px-1">
                   会话 {sessions.length - sessionIdx}
                 </span>
-                <div className="flex-1 h-px bg-gray-200" />
+                <div className="flex-1 h-px bg-slate-200" />
               </div>
 
               {/* 该会话内的事件（时间升序：最早的在上） */}
@@ -332,7 +333,7 @@ export function ConversationHistoryDrawer() {
           ))}
 
           {(expressions?.length ?? 0) >= 100 && (
-            <p className="text-center text-xs text-gray-400 pb-2">
+            <p className="text-center text-xs text-slate-400 pb-2">
               仅显示最近 100 条记录
             </p>
           )}

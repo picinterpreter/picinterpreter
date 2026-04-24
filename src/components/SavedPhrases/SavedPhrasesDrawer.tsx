@@ -14,6 +14,7 @@ import {
   mergePhrases,
   parsePhrasesImport,
 } from '@/utils/phrase-transfer'
+import { LineIcon } from '@/components/ui/LineIcon'
 import type { PictogramEntry, SavedPhrase } from '@/types'
 
 // ─── 导入结果提示（5 秒后自动消失） ─────────────────────────────────────── //
@@ -273,28 +274,28 @@ export function SavedPhrasesDrawer() {
     <div className="fixed inset-0 z-40 flex">
       {/* Backdrop */}
       <div
-        className="flex-1 bg-black/40"
+        className="flex-1 bg-slate-950/45 backdrop-blur-[1px]"
         onClick={() => setShowSavedPhrases(false)}
       />
 
       {/* Drawer */}
-      <div className="w-80 max-w-[85vw] bg-white shadow-xl flex flex-col">
+      <div className="w-80 max-w-[85vw] bg-slate-50 shadow-2xl flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b gap-2">
-          <h2 className="text-lg font-bold text-gray-800 shrink-0">⭐ 常用表达</h2>
+        <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-white gap-2">
+          <h2 className="text-lg font-bold text-slate-900 shrink-0">常用表达</h2>
 
           {/* 手动添加按钮 */}
           <button
             onClick={() => setShowAddForm((v) => !v)}
-            className={`p-2 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center text-xl transition-colors ${
+            className={`p-2 rounded-xl min-h-[44px] min-w-[44px] flex items-center justify-center text-xl transition-colors ${
               showAddForm
                 ? 'bg-blue-100 text-blue-700'
-                : 'text-gray-400 hover:text-blue-600 hover:bg-blue-50'
+                : 'text-slate-400 hover:text-blue-600 hover:bg-blue-50'
             }`}
             aria-label="手动添加短语"
             title="手动添加短语"
           >
-            {showAddForm ? '✕' : '+'}
+            {showAddForm ? <LineIcon name="close" className="h-5 w-5" /> : '+'}
           </button>
 
           {/* 导出 / 导入按钮组 */}
@@ -302,7 +303,7 @@ export function SavedPhrasesDrawer() {
             <button
               onClick={handleExport}
               disabled={importing}
-              className="px-2.5 py-1 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="px-2.5 py-1 text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               title="导出为 JSON 文件"
             >
               导出
@@ -310,7 +311,7 @@ export function SavedPhrasesDrawer() {
             <button
               onClick={handleImportClick}
               disabled={importing}
-              className="px-2.5 py-1 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="px-2.5 py-1 text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               title="从 JSON 文件导入"
             >
               {importing ? '导入中…' : '导入'}
@@ -327,18 +328,18 @@ export function SavedPhrasesDrawer() {
 
           <button
             onClick={() => setShowSavedPhrases(false)}
-            className="p-2 text-gray-400 hover:text-gray-600 min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
+            className="p-2 text-slate-400 hover:text-slate-600 min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
             aria-label="关闭"
           >
-            ✕
+            <LineIcon name="close" className="h-5 w-5" />
           </button>
         </div>
 
         {/* 导入结果提示 */}
         {importToast && (
-          <div className="mx-3 mt-2 px-3 py-2 rounded-lg bg-green-50 border border-green-200 text-sm text-green-700 space-y-1">
+          <div className="mx-3 mt-2 px-3 py-2 rounded-xl bg-green-50 border border-green-200 text-sm text-green-700 space-y-1">
             <div className="flex items-start gap-2">
-              <span>✓</span>
+              <LineIcon name="check" className="h-4 w-4" />
               <span>
                 导入成功：新增 {importToast.added} 条
                 {importToast.skipped > 0 && `，跳过 ${importToast.skipped} 条（已存在）`}
@@ -346,22 +347,22 @@ export function SavedPhrasesDrawer() {
             </div>
             {importToast.missingPictogramCount > 0 && (
               <p className="text-amber-600 text-xs pl-5">
-                ⚠ {importToast.missingPictogramCount} 个图片 ID 在本机图库中不存在，相关表达的图片缩略图将无法显示
+                {importToast.missingPictogramCount} 个图片 ID 在本机图库中不存在，相关表达的图片缩略图将无法显示
               </p>
             )}
           </div>
         )}
         {importError && (
-          <div className="mx-3 mt-2 px-3 py-2 rounded-lg bg-red-50 border border-red-200 text-sm text-red-700 flex items-start gap-2">
-            <span>✕</span>
+          <div className="mx-3 mt-2 px-3 py-2 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700 flex items-start gap-2">
+            <LineIcon name="xmark" className="h-4 w-4" />
             <span>{importError}</span>
           </div>
         )}
 
         {/* 手动添加表单 */}
         {showAddForm && (
-          <div className="mx-3 mt-2 p-3 rounded-xl bg-blue-50 border border-blue-200 space-y-2">
-            <p className="text-sm font-medium text-blue-800">添加自定义短语</p>
+          <div className="mx-3 mt-2 p-3 rounded-2xl bg-white border border-slate-200 space-y-2 shadow-sm">
+            <p className="text-sm font-semibold text-slate-800">添加自定义短语</p>
             <input
               ref={addInputRef}
               type="text"
@@ -376,25 +377,25 @@ export function SavedPhrasesDrawer() {
               }}
               placeholder="输入短语文字，如：我需要休息一下"
               maxLength={200}
-              className="w-full px-3 py-2 rounded-lg border border-blue-200 bg-white text-base focus:outline-none focus:ring-2 focus:ring-blue-400 min-h-[44px]"
+              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-base focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 min-h-[44px]"
             />
             {addError && (
               <p className="text-xs text-red-600">{addError}</p>
             )}
-            <p className="text-xs text-blue-600">
-              💡 图片缩略图通过「选图片 → 生成句子 → 保存」流程自动关联
+            <p className="text-xs text-slate-500">
+              图片缩略图通过「选图片 → 生成句子 → 保存」流程自动关联
             </p>
             <div className="flex gap-2">
               <button
                 onClick={() => setShowAddForm(false)}
-                className="flex-1 py-2 rounded-lg bg-white text-gray-600 text-sm border border-gray-200 hover:bg-gray-50 transition-colors"
+                className="apple-press flex-1 py-2 rounded-full bg-slate-100 text-slate-700 text-sm font-semibold hover:bg-slate-200 transition-colors"
               >
                 取消
               </button>
               <button
                 onClick={handleAddPhrase}
                 disabled={!newSentence.trim()}
-                className="flex-1 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-40"
+                className="apple-press flex-1 py-2 rounded-full bg-slate-950 text-white text-sm font-semibold hover:bg-slate-800 transition-colors disabled:opacity-40"
               >
                 保存
               </button>
@@ -405,7 +406,7 @@ export function SavedPhrasesDrawer() {
         {/* List */}
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
           {phrases?.length === 0 && (
-            <p className="text-center text-gray-400 mt-8">
+            <p className="text-center text-slate-400 mt-8">
               还没有收藏的表达
             </p>
           )}
@@ -418,7 +419,7 @@ export function SavedPhrasesDrawer() {
             return (
               <div
                 key={phrase.id}
-                className="rounded-xl bg-amber-50 border border-amber-200 overflow-hidden"
+                className="rounded-2xl bg-white border border-slate-200 overflow-hidden shadow-sm"
               >
                 {/* 图片缩略图行（有图时显示） */}
                 {thumbs.length > 0 && (
@@ -428,9 +429,9 @@ export function SavedPhrasesDrawer() {
                         <img
                           src={resolveImageSrc(p.imageUrl, p.labels.zh[0], '#d97706')}
                           alt={p.labels.zh[0]}
-                          className="w-9 h-9 object-contain rounded-lg bg-amber-100 p-0.5"
+                          className="w-9 h-9 object-contain rounded-xl bg-slate-50 p-0.5"
                         />
-                        <span className="text-[10px] text-amber-700 max-w-[36px] truncate leading-none">
+                        <span className="text-[10px] text-slate-600 max-w-[36px] truncate leading-none">
                           {p.labels.zh[0]}
                         </span>
                       </div>
@@ -453,18 +454,18 @@ export function SavedPhrasesDrawer() {
                           if (e.key === 'Escape') cancelEditing()
                         }}
                         maxLength={200}
-                        className="w-full px-2 py-1.5 border border-amber-400 rounded-lg text-base bg-white focus:outline-none focus:ring-2 focus:ring-amber-400"
+                        className="w-full px-2 py-1.5 border border-amber-400 rounded-xl text-base bg-white focus:outline-none focus:ring-2 focus:ring-amber-400"
                       />
                       <div className="flex gap-1.5 justify-end">
                         <button
                           onClick={cancelEditing}
-                          className="px-2.5 py-1 text-xs rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200"
+                          className="px-2.5 py-1 text-xs rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200"
                         >
                           取消
                         </button>
                         <button
                           onClick={() => commitEdit(phrase.id)}
-                          className="px-2.5 py-1 text-xs rounded-lg bg-amber-500 text-white hover:bg-amber-600"
+                          className="px-2.5 py-1 text-xs rounded-xl bg-amber-500 text-white hover:bg-amber-600"
                         >
                           保存
                         </button>

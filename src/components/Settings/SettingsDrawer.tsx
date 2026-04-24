@@ -4,6 +4,7 @@ import { useAppStore } from '@/stores/app-store'
 import { useSettingsStore, type FontSize, type GridCols } from '@/stores/settings-store'
 import { AuthSettingsSection } from '@/components/Settings/AuthSettingsSection'
 import { ONBOARDING_STORAGE_KEY } from '@/components/Onboarding/OnboardingModal'
+import { LineIcon } from '@/components/ui/LineIcon'
 import { db } from '@/db'
 
 interface AIBackendStatus {
@@ -202,44 +203,58 @@ export function SettingsDrawer() {
 
   return (
     <div className="fixed inset-0 z-40 flex">
-      <div className="flex-1 bg-black/40" onClick={() => setShowSettings(false)} />
+      <div className="flex-1 bg-slate-950/45 backdrop-blur-[1px]" onClick={() => setShowSettings(false)} />
 
-      <div className="w-96 max-w-[90vw] bg-white shadow-xl flex flex-col">
-        <div className="flex items-center justify-between px-4 py-3 border-b">
-          <h2 className="text-lg font-bold text-gray-800">⚙ 设置</h2>
+      <div className="flex w-[28rem] max-w-[92vw] flex-col bg-slate-50 shadow-2xl">
+        <div className="border-b border-slate-200 bg-white px-4 py-3">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-bold text-slate-900">设置</h2>
+              <p className="mt-0.5 text-xs text-slate-500">账号、语音和显示偏好</p>
+            </div>
           <button
             onClick={() => setShowSettings(false)}
-            className="p-2 text-gray-400 hover:text-gray-600 min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
             aria-label="关闭"
           >
-            ✕
+            <LineIcon name="close" className="h-5 w-5" />
           </button>
+          </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 space-y-6">
+        <div className="flex-1 overflow-y-auto p-4 space-y-5">
           <AuthSettingsSection />
 
-          <section>
-
-            <div className="mt-3 rounded-xl border border-gray-200 bg-white p-3 space-y-1 text-sm">
-              <p className="font-medium text-gray-700">
-                {statusLoading
-                  ? '后端状态读取中…'
+          <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h3 className="text-base font-semibold text-slate-800">AI 生成</h3>
+                <p className="mt-1 text-sm leading-5 text-slate-500">检测后端模型配置，失败时仍可使用离线模板。</p>
+              </div>
+              <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${
+                statusLoading
+                  ? 'bg-slate-100 text-slate-500 ring-1 ring-slate-200'
                   : backendStatus?.configured
-                  ? '后端 AI 已配置'
-                  : '后端 AI 未配置'}
-              </p>
-              <p className="text-xs text-gray-500">
+                  ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200'
+                  : 'bg-amber-50 text-amber-700 ring-1 ring-amber-200'
+              }`}>
+                {statusLoading ? '检测中' : backendStatus?.configured ? '已配置' : '未配置'}
+              </span>
+            </div>
+
+            <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-1 text-sm">
+              <p className="text-xs font-medium uppercase text-slate-400">当前后端</p>
+              <p className="text-sm text-slate-600">
                 模型：{backendStatus?.model ?? '未设置'}
               </p>
-              <p className="text-xs text-gray-500 break-all">
+              <p className="break-all text-sm text-slate-600">
                 地址：{backendStatus?.baseUrl ?? '未设置'}
               </p>
             </div>
 
             {!backendStatus?.configured && !statusLoading && (
-              <p className="mt-2 text-xs text-amber-600">
-                ⚠ 未配置后端 AI 时，会自动退回离线模板句，接收模式中的 AI 优化也会停用。
+              <p className="mt-2 rounded-xl bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-700 ring-1 ring-amber-100">
+                未配置后端 AI 时，会自动退回离线模板句，接收模式中的 AI 优化也会停用。
               </p>
             )}
 
@@ -247,20 +262,20 @@ export function SettingsDrawer() {
               <button
                 onClick={handleTestConnection}
                 disabled={testStatus === 'testing'}
-                className={`w-full py-2.5 rounded-xl border text-base font-medium transition-colors min-h-[44px] flex items-center justify-center gap-2
+                className={`w-full py-2.5 rounded-xl border text-base font-semibold transition-colors min-h-[44px] flex items-center justify-center gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500
                   ${testStatus === 'testing'
-                    ? 'border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed'
+                    ? 'border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed'
                     : testStatus === 'ok'
-                    ? 'border-green-400 bg-green-50 text-green-700 hover:bg-green-100'
+                    ? 'border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
                     : testStatus === 'error'
-                    ? 'border-red-300 bg-red-50 text-red-600 hover:bg-red-100'
-                    : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                    ? 'border-rose-300 bg-rose-50 text-rose-600 hover:bg-rose-100'
+                    : 'border-slate-200 text-slate-700 hover:bg-slate-50'
                   }`}
               >
-                {testStatus === 'testing' && <span className="animate-spin text-base">⏳</span>}
-                {testStatus === 'ok' && <span>✓</span>}
-                {testStatus === 'error' && <span>✗</span>}
-                {testStatus === 'idle' && <span>🔗</span>}
+                {testStatus === 'testing' && <LineIcon name="loader" className="h-4 w-4 animate-spin" />}
+                {testStatus === 'ok' && <LineIcon name="check" className="h-4 w-4" />}
+                {testStatus === 'error' && <LineIcon name="xmark" className="h-4 w-4" />}
+                {testStatus === 'idle' && <LineIcon name="link" className="h-4 w-4" />}
                 <span>
                   {testStatus === 'testing' ? '连接测试中…'
                     : testStatus === 'ok' ? '连接成功'
@@ -270,10 +285,10 @@ export function SettingsDrawer() {
               </button>
 
               {testMessage && (
-                <p className={`text-xs px-2 py-1.5 rounded-lg ${
+                <p className={`rounded-xl px-3 py-2 text-xs leading-5 ${
                   testStatus === 'ok'
-                    ? 'bg-green-50 text-green-700'
-                    : 'bg-red-50 text-red-600'
+                    ? 'bg-emerald-50 text-emerald-700'
+                    : 'bg-rose-50 text-rose-600'
                 }`}>
                   {testMessage}
                 </p>
@@ -281,11 +296,11 @@ export function SettingsDrawer() {
             </div>
           </section>
 
-          <section>
-            <h3 className="text-base font-semibold text-gray-700 mb-3">语音播报</h3>
+          <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <h3 className="text-base font-semibold text-slate-800 mb-3">语音播报</h3>
 
             <label className="block mb-4">
-              <span className="text-sm text-gray-600">语速：{rate.toFixed(1)}</span>
+              <span className="text-sm font-medium text-slate-700">语速：{rate.toFixed(1)}</span>
               <input
                 type="range"
                 min="0.5"
@@ -293,17 +308,17 @@ export function SettingsDrawer() {
                 step="0.1"
                 value={rate}
                 onChange={(e) => setRate(Number(e.target.value))}
-                className="mt-1 w-full"
+                className="mt-2 w-full accent-blue-600"
               />
             </label>
 
             {canUseSpeechSynthesis && (
               <label className="block">
-                <span className="text-sm text-gray-600">语音</span>
+                <span className="text-sm font-medium text-slate-700">语音</span>
                 <select
                   value={voiceName}
                   onChange={(e) => setVoiceName(e.target.value)}
-                  className="mt-1 w-full px-3 py-2.5 border rounded-lg text-base min-h-[44px] focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+                  className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-base text-slate-900 min-h-[44px] focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500"
                 >
                   <option value="">自动选择最佳语音</option>
                   {availableVoices.map((voice) => (
@@ -313,7 +328,7 @@ export function SettingsDrawer() {
                   ))}
                 </select>
                 {availableVoices.length === 0 && (
-                  <p className="mt-1 text-xs text-gray-400">
+                  <p className="mt-1 text-xs text-slate-500">
                     暂未检测到可用语音，将自动使用系统默认语音
                   </p>
                 )}
@@ -323,20 +338,20 @@ export function SettingsDrawer() {
             {canUseSpeechSynthesis && (
               <button
                 onClick={handlePreviewTts}
-                className={`mt-3 w-full py-2.5 rounded-xl border text-base font-medium transition-colors min-h-[44px] flex items-center justify-center gap-2 ${
+                className={`mt-3 w-full py-2.5 rounded-xl border text-base font-semibold transition-colors min-h-[44px] flex items-center justify-center gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 ${
                   previewing
                     ? 'border-blue-400 bg-blue-50 text-blue-700'
-                    : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                    : 'border-slate-200 text-slate-700 hover:bg-slate-50'
                 }`}
               >
                 {previewing ? (
                   <>
-                    <span className="animate-pulse">🔊</span>
+                    <LineIcon name="sound" className="h-4 w-4 animate-pulse" />
                     <span>播放中，点击停止</span>
                   </>
                 ) : (
                   <>
-                    <span>🔊</span>
+                    <LineIcon name="sound" className="h-4 w-4" />
                     <span>试听当前语音效果</span>
                   </>
                 )}
@@ -344,64 +359,64 @@ export function SettingsDrawer() {
             )}
           </section>
 
-          <section>
-            <h3 className="text-base font-semibold text-gray-700 mb-3">显示</h3>
+          <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <h3 className="text-base font-semibold text-slate-800 mb-3">显示</h3>
 
             <div className="mb-4">
-              <p className="text-sm text-gray-600 mb-2">图片大小</p>
+              <p className="text-sm font-medium text-slate-700 mb-2">图片大小</p>
               <div className="flex gap-2">
                 {GRID_COLS_OPTIONS.map((option) => (
                   <button
                     key={option.value}
                     onClick={() => settings.setGridCols(option.value)}
-                    className={`flex-1 py-2.5 rounded-xl border-2 text-center transition-colors min-h-[48px]
+                    className={`flex-1 py-2.5 rounded-xl border text-center transition-colors min-h-[48px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500
                       ${settings.gridCols === option.value
-                        ? 'border-blue-500 bg-blue-50 text-blue-700 font-semibold'
-                        : 'border-gray-200 bg-white text-gray-600 hover:border-blue-300'
+                        ? 'border-blue-500 bg-blue-50 text-blue-700 font-semibold shadow-sm'
+                        : 'border-slate-200 bg-white text-slate-600 hover:border-blue-300 hover:bg-blue-50/40'
                       }`}
                   >
                     <span className="block text-base">{option.label}</span>
-                    <span className="block text-xs text-gray-400">{option.desc}</span>
+                    <span className="block text-xs text-slate-400">{option.desc}</span>
                   </button>
                 ))}
               </div>
             </div>
 
             <div className="mb-4">
-              <p className="text-sm text-gray-600 mb-2">字体大小</p>
+              <p className="text-sm font-medium text-slate-700 mb-2">字体大小</p>
               <div className="flex gap-2">
                 {FONT_SIZE_OPTIONS.map((option) => (
                   <button
                     key={option.value}
                     onClick={() => settings.setFontSize(option.value)}
-                    className={`flex-1 py-2.5 rounded-xl border-2 text-center transition-colors min-h-[48px]
+                    className={`flex-1 py-2.5 rounded-xl border text-center transition-colors min-h-[48px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500
                       ${settings.fontSize === option.value
-                        ? 'border-blue-500 bg-blue-50 text-blue-700 font-semibold'
-                        : 'border-gray-200 bg-white text-gray-600 hover:border-blue-300'
+                        ? 'border-blue-500 bg-blue-50 text-blue-700 font-semibold shadow-sm'
+                        : 'border-slate-200 bg-white text-slate-600 hover:border-blue-300 hover:bg-blue-50/40'
                       }`}
                   >
                     <span className="block text-base">{option.label}</span>
-                    <span className="block text-xs text-gray-400">{option.desc}</span>
+                    <span className="block text-xs text-slate-400">{option.desc}</span>
                   </button>
                 ))}
               </div>
             </div>
 
-            <label className="flex items-center gap-3 cursor-pointer">
+            <label className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-3">
+              <span className="text-base font-medium text-slate-700">高对比度模式</span>
               <input
                 type="checkbox"
                 checked={settings.highContrast}
                 onChange={(e) => settings.setHighContrast(e.target.checked)}
-                className="w-5 h-5"
+                className="h-5 w-5 accent-blue-600"
               />
-              <span className="text-base">高对比度模式</span>
             </label>
           </section>
 
           {allCategories && allCategories.length > 0 && (
-            <section>
-              <h3 className="text-base font-semibold text-gray-700 mb-1">分类管理</h3>
-              <p className="text-xs text-gray-400 mb-3">隐藏患者不常用的分类，保持界面简洁</p>
+            <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+              <h3 className="text-base font-semibold text-slate-800 mb-1">分类管理</h3>
+              <p className="text-xs text-slate-500 mb-3">隐藏患者不常用的分类，保持界面简洁</p>
               <div className="space-y-1">
                 {allCategories.map((category) => {
                   const isHidden = settings.hiddenCategoryIds.includes(category.id)
@@ -409,20 +424,20 @@ export function SettingsDrawer() {
                     <button
                       key={category.id}
                       onClick={() => settings.toggleCategoryVisibility(category.id)}
-                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border transition-colors min-h-[48px] text-left
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border transition-colors min-h-[48px] text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500
                         ${isHidden
-                          ? 'border-gray-200 bg-gray-50 text-gray-400'
-                          : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'
+                          ? 'border-slate-200 bg-slate-50 text-slate-400'
+                          : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
                         }`}
                       aria-pressed={!isHidden}
                       title={isHidden ? '点击显示此分类' : '点击隐藏此分类'}
                     >
                       <span className="text-xl w-7 text-center shrink-0">{category.icon}</span>
-                      <span className={`flex-1 text-base ${isHidden ? 'line-through text-gray-400' : ''}`}>
+                      <span className={`flex-1 text-base ${isHidden ? 'line-through text-slate-400' : ''}`}>
                         {category.name}
                       </span>
                       <span className="text-lg shrink-0" aria-hidden="true">
-                        {isHidden ? '🙈' : '👁'}
+                        <LineIcon name={isHidden ? 'eyeOff' : 'eye'} className="h-5 w-5" />
                       </span>
                     </button>
                   )
@@ -431,25 +446,25 @@ export function SettingsDrawer() {
             </section>
           )}
 
-          <section>
-            <h3 className="text-base font-semibold text-gray-700 mb-3">关于</h3>
+          <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <h3 className="text-base font-semibold text-slate-800 mb-3">关于</h3>
             <button
               onClick={() => {
                 localStorage.removeItem(ONBOARDING_STORAGE_KEY)
                 setShowSettings(false)
                 setShowOnboarding(true)
               }}
-              className="w-full py-2.5 rounded-xl border border-gray-200 text-gray-600 text-sm hover:bg-gray-50 transition-colors"
+              className="w-full py-2.5 rounded-xl border border-slate-200 text-slate-700 text-sm font-medium hover:bg-slate-50 transition-colors min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
             >
-              📖 重看使用引导
+              重看使用引导
             </button>
           </section>
         </div>
 
-        <div className="p-4 border-t">
+        <div className="border-t border-slate-200 bg-white p-4">
           <button
             onClick={handleSave}
-            className="w-full py-3 rounded-xl bg-blue-600 text-white text-lg font-medium hover:bg-blue-700 transition-colors min-h-[48px]"
+            className="w-full py-3 rounded-xl bg-blue-600 text-white text-lg font-semibold hover:bg-blue-700 transition-colors min-h-[48px] shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
           >
             保存设置
           </button>

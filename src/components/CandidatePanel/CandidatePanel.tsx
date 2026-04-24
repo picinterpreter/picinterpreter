@@ -14,6 +14,7 @@ import { useSettingsStore } from '@/stores/settings-store'
 import { useConversationStore } from '@/stores/conversation-store'
 import { useAI } from '@/hooks/use-ai'
 import { addSavedPhraseIfMissing } from '@/repositories/saved-phrases-repository'
+import { LineIcon } from '@/components/ui/LineIcon'
 
 type Phase = 'generating' | 'playing' | 'done' | 'error'
 
@@ -36,7 +37,7 @@ export function CandidatePanel() {
   const [playIndex, setPlayIndex] = useState(0)    // 当前播报到第几句（done 阶段表示「选中句」）
   const [saved, setSaved] = useState(false)
   const [ttsError, setTtsError] = useState(false)
-  const [generationError, setGenerationError] = useState<string | null>(null)
+  const [, setGenerationError] = useState<string | null>(null)
   const [isOfflineFallback, setIsOfflineFallback] = useState(false)
   const [isPlayingOne, setIsPlayingOne] = useState(false)  // 单句重播进行中
   const stoppedRef = useRef(false)
@@ -220,11 +221,11 @@ export function CandidatePanel() {
       role="region"
       aria-label="候选句播报面板"
       aria-live="polite"
-      className="px-4 py-4 bg-white border-t-2 border-green-500 shadow-[0_-4px_12px_rgba(0,0,0,0.1)]"
+      className="apple-panel mx-3 mb-3 rounded-[28px] px-4 py-4"
     >
       {/* 头部 */}
       <div className="flex items-center justify-between mb-3">
-        <h2 id="candidate-panel-title" className="text-lg font-bold text-gray-800">
+        <h2 id="candidate-panel-title" className="text-lg font-semibold text-slate-950">
           {phase === 'generating' && '正在生成…'}
           {phase === 'playing' && `播报中 ${playIndex + 1} / ${candidateSentences.length}`}
           {phase === 'done' && '播报完成'}
@@ -232,25 +233,23 @@ export function CandidatePanel() {
         </h2>
         <button
           onClick={handleBack}
-          className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-700 min-h-[44px]"
+          className="rounded-full px-3 py-1.5 text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-900 min-h-[44px]"
           aria-label="返回修改图片选择"
         >
-          ← 返回修改
+          返回修改
         </button>
       </div>
 
-      {/* 离线模式提示（仅模板句，提醒用户质量较低） */}
       {isOfflineFallback && (phase === 'playing' || phase === 'done') && (
-        <div className="mb-2 px-3 py-1.5 rounded-lg bg-gray-100 border border-gray-200 text-xs text-gray-500 flex items-center gap-1.5">
-          <span>📴</span>
-          <span>离线模式 — 正在使用本地模板句（质量较低），配置 API Key 可启用 AI 生成</span>
+        <div className="mb-2 flex justify-center" aria-label="离线模式">
+          <LineIcon name="sparkle" className="h-5 w-5 text-slate-400" />
         </div>
       )}
 
       {/* TTS 不可用提示（非阻断，仅提示） */}
       {ttsError && (phase === 'playing' || phase === 'done') && (
-        <div className="mb-3 px-3 py-2 rounded-lg bg-amber-50 border border-amber-200 text-sm text-amber-700">
-          ⚠ 语音播报不可用，请直接朗读句子
+        <div className="mb-3 px-3 py-2 rounded-2xl bg-amber-50 border border-amber-100 text-sm text-amber-700">
+          无法播报
         </div>
       )}
 
@@ -258,7 +257,7 @@ export function CandidatePanel() {
       {phase === 'generating' && (
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-14 rounded-xl bg-gray-100 animate-pulse" />
+            <div key={i} className="h-14 rounded-2xl bg-slate-100 animate-pulse" />
           ))}
         </div>
       )}
@@ -266,20 +265,20 @@ export function CandidatePanel() {
       {/* 生成失败 */}
       {phase === 'error' && (
         <div className="py-6 text-center space-y-3">
-          <p className="text-5xl">😔</p>
-          <p className="text-base text-gray-600">{generationError ?? '生成失败，请重试'}</p>
+          <LineIcon name="alert" className="mx-auto h-10 w-10 text-rose-500" />
+          <p className="text-base text-slate-600">生成失败</p>
           <div className="flex gap-3 justify-center flex-wrap">
             <button
               onClick={handleRetry}
-              className="px-6 py-2.5 rounded-xl bg-blue-600 text-white text-base font-medium hover:bg-blue-700 transition-colors min-h-[44px]"
+              className="apple-press px-6 py-2.5 rounded-full bg-slate-950 text-white text-base font-semibold hover:bg-slate-800 transition-colors min-h-[44px]"
             >
-              🔄 重试
+              重试
             </button>
             <button
               onClick={handleBack}
-              className="px-6 py-2.5 rounded-xl bg-gray-200 text-gray-700 text-base font-medium hover:bg-gray-300 transition-colors min-h-[44px]"
+              className="apple-press px-6 py-2.5 rounded-full bg-slate-100 text-slate-700 text-base font-semibold hover:bg-slate-200 transition-colors min-h-[44px]"
             >
-              ← 返回修改
+              返回修改
             </button>
           </div>
         </div>
@@ -299,24 +298,21 @@ export function CandidatePanel() {
                 disabled={isPlayingOne}
                 aria-label={`候选句 ${i + 1}：${sentence}${isActive ? '（正在播报）' : ''}`}
                 aria-pressed={isActive}
-                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl border-2 transition-all text-left active:scale-[0.99]
+                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-[22px] border transition-all text-left apple-press
                   disabled:cursor-not-allowed
                   ${isActive
-                    ? 'border-green-500 bg-green-50 shadow-md scale-[1.01]'
+                    ? 'border-slate-950 bg-white shadow-[0_10px_28px_rgba(15,23,42,0.12)]'
                     : isPast
-                      ? 'border-gray-200 bg-gray-50 opacity-60 hover:border-blue-300 hover:opacity-80'
-                      : 'border-gray-200 bg-white opacity-40 hover:border-blue-300 hover:opacity-70'
+                      ? 'border-slate-200 bg-white/70 opacity-70 hover:bg-white'
+                      : 'border-slate-200 bg-white/55 opacity-55 hover:bg-white'
                   }`}
               >
                 <span className="text-xl shrink-0" aria-hidden="true">
-                  {isActive ? '🔊' : isPast ? '✓' : '○'}
+                  {isActive ? <LineIcon name="sound" className="h-5 w-5" /> : isPast ? <LineIcon name="check" className="h-5 w-5" /> : '○'}
                 </span>
-                <span className={`text-xl flex-1 leading-snug ${isActive ? 'font-semibold text-gray-900' : 'text-gray-600'}`}>
+                <span className={`text-xl flex-1 leading-snug ${isActive ? 'font-semibold text-slate-950' : 'text-slate-600'}`}>
                   {sentence}
                 </span>
-                {!isActive && (
-                  <span className="text-xs text-gray-400 shrink-0" aria-hidden="true">点击</span>
-                )}
               </button>
             )
           })}
@@ -336,22 +332,20 @@ export function CandidatePanel() {
                 disabled={isPlayingOne}
                 aria-label={`候选句 ${i + 1}：${sentence}，点击重播`}
                 aria-pressed={isSelected && isPlayingOne}
-                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl border-2 transition-all text-left
-                  active:scale-[0.99] disabled:cursor-not-allowed
+                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-[22px] border transition-all text-left apple-press
+                  disabled:cursor-not-allowed
                   ${isSelected
-                    ? 'border-blue-400 bg-blue-50 shadow-sm'
-                    : 'border-gray-200 bg-gray-50 hover:border-blue-300 hover:bg-blue-50/50'
+                    ? 'border-slate-950 bg-white shadow-[0_8px_24px_rgba(15,23,42,0.10)]'
+                    : 'border-slate-200 bg-white/70 hover:bg-white'
                   }`}
               >
                 <span className="text-xl shrink-0" aria-hidden="true">
-                  {isSelected && isPlayingOne ? '🔊' : isSelected ? '◉' : '○'}
+                  {isSelected && isPlayingOne ? <LineIcon name="sound" className="h-5 w-5" /> : isSelected ? '◉' : '○'}
                 </span>
-                <span className={`text-xl flex-1 leading-snug ${isSelected ? 'font-semibold text-gray-900' : 'text-gray-600'}`}>
+                <span className={`text-xl flex-1 leading-snug ${isSelected ? 'font-semibold text-slate-950' : 'text-slate-600'}`}>
                   {sentence}
                 </span>
-                <span className="text-xs text-gray-400 shrink-0" aria-hidden="true">
-                  {isSelected && isPlayingOne ? '播报中' : '点击重播'}
-                </span>
+                {isSelected && isPlayingOne && <LineIcon name="sound" className="h-4 w-4 shrink-0 text-slate-400" />}
               </button>
             )
           })}
@@ -363,9 +357,9 @@ export function CandidatePanel() {
         {phase === 'playing' && (
           <button
             onClick={handleStop}
-            className="flex-1 py-3 rounded-xl bg-red-500 text-white text-base font-medium hover:bg-red-600 transition-colors min-h-[48px]"
+            className="apple-press flex-1 py-3 rounded-full bg-rose-600 text-white text-base font-semibold hover:bg-rose-700 transition-colors min-h-[48px]"
           >
-            ⏹ 停止播报
+            停止播报
           </button>
         )}
 
@@ -373,26 +367,26 @@ export function CandidatePanel() {
           <>
             <button
               onClick={handleReplay}
-              className="py-3 px-5 rounded-xl bg-blue-100 text-blue-700 text-base font-medium hover:bg-blue-200 transition-colors min-h-[48px]"
+              className="apple-press py-3 px-5 rounded-full bg-slate-100 text-slate-800 text-base font-semibold hover:bg-slate-200 transition-colors min-h-[48px]"
             >
-              🔁 全部重播
+              全部重播
             </button>
             <button
               onClick={handleSaveFavorite}
               disabled={saved}
-              className={`py-3 px-5 rounded-xl text-base font-medium transition-colors min-h-[48px]
+              className={`apple-press py-3 px-5 rounded-full text-base font-semibold transition-colors min-h-[48px]
                 ${saved
-                  ? 'bg-amber-100 text-amber-400 cursor-default'
-                  : 'bg-amber-100 text-amber-700 hover:bg-amber-200'
+                  ? 'bg-slate-100 text-slate-400 cursor-default'
+                  : 'bg-slate-100 text-slate-800 hover:bg-slate-200'
                 }`}
             >
-              {saved ? '✓ 已收藏' : '⭐ 收藏此句'}
+              {saved ? '已收藏' : '收藏此句'}
             </button>
             <button
               onClick={handleDone}
-              className="flex-1 py-3 rounded-xl bg-green-600 text-white text-base font-medium hover:bg-green-700 transition-colors min-h-[48px]"
+              className="apple-press flex-1 py-3 rounded-full bg-slate-950 text-white text-base font-semibold hover:bg-slate-800 transition-colors min-h-[48px]"
             >
-              ✓ 完成
+              完成
             </button>
           </>
         )}

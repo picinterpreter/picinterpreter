@@ -15,6 +15,7 @@
 import { useState, useCallback, useRef } from 'react'
 import { LEXICON, type LexiconEntry } from '@/data/lexicon'
 import { searchPictogram, type ArasaacResult } from '@/utils/arasaac-provider'
+import { LineIcon } from '@/components/ui/LineIcon'
 
 interface ImportRow {
   entry: LexiconEntry
@@ -48,18 +49,18 @@ function buildPictogramEntry(row: ImportRow) {
 }
 
 const STATUS_STYLE: Record<ImportRow['status'], string> = {
-  pending: 'text-gray-400',
+  pending: 'text-slate-400',
   searching: 'text-blue-500 animate-pulse',
   found: 'text-green-600',
   not_found: 'text-yellow-600',
   error: 'text-red-600',
 }
-const STATUS_ICON: Record<ImportRow['status'], string> = {
-  pending: '⏳',
-  searching: '🔍',
-  found: '✓',
-  not_found: '✗',
-  error: '!',
+const STATUS_LABEL: Record<ImportRow['status'], string> = {
+  pending: '等待',
+  searching: '搜索中',
+  found: '找到',
+  not_found: '未找到',
+  error: '错误',
 }
 
 export function ImportToolPage() {
@@ -129,14 +130,14 @@ export function ImportToolPage() {
   const progress = Math.round((doneCount / rows.length) * 100)
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#f5f5f7] text-slate-950">
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 bg-indigo-700 text-white">
+      <header className="flex items-center justify-between px-4 py-3 bg-white/85 text-slate-950 shadow-[0_1px_0_rgba(15,23,42,0.08)] backdrop-blur-xl">
         <div>
           <h1 className="text-lg font-bold">图语家 · ARASAAC 导入工具</h1>
-          <p className="text-xs text-indigo-200">从 ARASAAC API 批量下载图片元数据</p>
+          <p className="text-xs text-slate-500">从 ARASAAC API 批量下载图片元数据</p>
         </div>
-        <a href="/" className="text-sm text-indigo-200 hover:text-white underline">
+        <a href="/" className="text-sm text-slate-500 hover:text-slate-950 underline">
           返回主界面
         </a>
       </header>
@@ -144,11 +145,11 @@ export function ImportToolPage() {
       <div className="max-w-3xl mx-auto p-4 space-y-4">
 
         {/* Controls */}
-        <section className="bg-white rounded-2xl border border-gray-200 p-4 space-y-3">
+        <section className="apple-panel rounded-[28px] p-4 space-y-3">
           <div className="flex items-center justify-between flex-wrap gap-3">
             <div>
-              <p className="font-semibold text-gray-700">词条数量：{LEXICON.length} 个</p>
-              <p className="text-sm text-gray-500">
+              <p className="font-semibold text-slate-700">词条数量：{LEXICON.length} 个</p>
+              <p className="text-sm text-slate-500">
                 搜索策略：中文库优先，未找到时用英文 fallback
               </p>
             </div>
@@ -156,14 +157,14 @@ export function ImportToolPage() {
               {!running ? (
                 <button
                   onClick={startImport}
-                  className="px-5 py-2 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition-colors"
+                  className="px-5 py-2 bg-slate-950 text-white rounded-full font-semibold hover:bg-slate-800 transition-colors"
                 >
                   {done ? '重新导入' : '开始导入'}
                 </button>
               ) : (
                 <button
                   onClick={stopImport}
-                  className="px-5 py-2 bg-red-500 text-white rounded-xl font-medium hover:bg-red-600 transition-colors"
+                  className="px-5 py-2 bg-rose-600 text-white rounded-full font-semibold hover:bg-rose-700 transition-colors"
                 >
                   停止
                 </button>
@@ -171,7 +172,7 @@ export function ImportToolPage() {
               {done && (
                 <button
                   onClick={exportJson}
-                  className="px-5 py-2 bg-green-600 text-white rounded-xl font-medium hover:bg-green-700 transition-colors"
+                  className="px-5 py-2 bg-slate-950 text-white rounded-full font-semibold hover:bg-slate-800 transition-colors"
                 >
                   导出 JSON
                 </button>
@@ -182,7 +183,7 @@ export function ImportToolPage() {
           {/* Progress bar */}
           {(running || done) && (
             <div className="space-y-1">
-              <div className="flex justify-between text-sm text-gray-500">
+              <div className="flex justify-between text-sm text-slate-500">
                 <span>{doneCount} / {rows.length}</span>
                 <span>{progress}%</span>
               </div>
@@ -194,8 +195,8 @@ export function ImportToolPage() {
               </div>
               {done && (
                 <div className="flex gap-4 text-sm pt-1">
-                  <span className="text-green-600">✓ 找到 {foundCount}</span>
-                  <span className="text-yellow-600">✗ 未找到 {notFoundCount}</span>
+                  <span className="text-green-600">找到 {foundCount}</span>
+                  <span className="text-yellow-600">未找到 {notFoundCount}</span>
                   {errorCount > 0 && <span className="text-red-600">! 错误 {errorCount}</span>}
                 </div>
               )}
@@ -218,8 +219,8 @@ export function ImportToolPage() {
         )}
 
         {/* Results table */}
-        <section className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-          <div className="px-4 py-2 bg-gray-50 border-b border-gray-200 text-sm font-medium text-gray-600 grid grid-cols-[2fr_1fr_1fr_3fr] gap-2">
+        <section className="apple-panel rounded-[28px] overflow-hidden">
+          <div className="px-4 py-2 bg-slate-50 border-b border-slate-200 text-sm font-medium text-slate-600 grid grid-cols-[2fr_1fr_1fr_3fr] gap-2">
             <span>词条</span>
             <span>分类</span>
             <span>状态</span>
@@ -229,12 +230,17 @@ export function ImportToolPage() {
             {rows.map((row, i) => (
               <div key={i} className="px-4 py-2 grid grid-cols-[2fr_1fr_1fr_3fr] gap-2 items-center text-sm">
                 <div>
-                  <span className="font-medium text-gray-800">{row.entry.zh}</span>
-                  <span className="text-gray-400 ml-2 text-xs">{row.entry.en}</span>
+                  <span className="font-medium text-slate-900">{row.entry.zh}</span>
+                  <span className="text-slate-400 ml-2 text-xs">{row.entry.en}</span>
                 </div>
-                <span className="text-gray-500 text-xs">{row.entry.category}</span>
+                <span className="text-slate-500 text-xs">{row.entry.category}</span>
                 <span className={`font-medium ${STATUS_STYLE[row.status]}`}>
-                  {STATUS_ICON[row.status]} {row.status === 'searching' ? '搜索中' : ''}
+                  <span className="inline-flex items-center gap-1.5">
+                    {row.status === 'searching' && <LineIcon name="magnifier" className="h-3.5 w-3.5 animate-pulse" />}
+                    {row.status === 'found' && <LineIcon name="check" className="h-3.5 w-3.5" />}
+                    {row.status === 'not_found' && <LineIcon name="xmark" className="h-3.5 w-3.5" />}
+                    {STATUS_LABEL[row.status]}
+                  </span>
                 </span>
                 <div className="flex items-center gap-2">
                   {row.result && (
@@ -245,7 +251,7 @@ export function ImportToolPage() {
                         className="w-10 h-10 object-contain rounded border border-gray-100"
                         loading="lazy"
                       />
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-slate-400">
                         ID:{row.result.pictogramId}
                         {row.result.searchedLocale === 'en' && ' (en)'}
                       </span>

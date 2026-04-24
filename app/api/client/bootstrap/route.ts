@@ -38,17 +38,13 @@ export async function POST(request: Request) {
     const existingDeviceId = cookieStore.get(DEVICE_COOKIE_NAME)?.value
     const result = await bootstrapClientIdentity(body, existingDeviceId)
     const response = NextResponse.json(result)
-    if (result.deviceId) {
-      response.cookies.set(DEVICE_COOKIE_NAME, result.deviceId, {
-        httpOnly: true,
-        sameSite: 'lax',
-        secure: process.env.NODE_ENV === 'production',
-        path: '/',
-        maxAge: 60 * 60 * 24 * 365,
-      })
-    } else {
-      response.cookies.delete(DEVICE_COOKIE_NAME)
-    }
+    response.cookies.set(DEVICE_COOKIE_NAME, result.deviceId, {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+      maxAge: 60 * 60 * 24 * 365,
+    })
     return response
   } catch (error) {
     console.warn('POST /api/client/bootstrap fallback to local-only mode:', error)

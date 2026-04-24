@@ -5,10 +5,9 @@
  * 关闭后写入该标志，不再自动显示。
  * 可通过 SettingsDrawer 中的"重看引导"按钮重置标志并再次显示。
  *
- * 三个步骤：
+ * 两个步骤：
  *   1. 欢迎 — 介绍图语家是什么
  *   2. 使用流程 — 3 步可视化说明
- *   3. AI 配置提示 — 引导配置 API Key，或先用离线模式
  */
 
 import { useEffect, useState } from 'react'
@@ -30,7 +29,6 @@ interface Step {
 export function OnboardingModal() {
   const [visible, setVisible] = useState(false)
   const [step, setStep] = useState(0)
-  const setShowSettings = useAppStore((s) => s.setShowSettings)
   const showOnboarding = useAppStore((s) => s.showOnboarding)
   const setShowOnboarding = useAppStore((s) => s.setShowOnboarding)
 
@@ -53,11 +51,6 @@ export function OnboardingModal() {
     localStorage.setItem(STORAGE_KEY, '1')
     setVisible(false)
     setShowOnboarding(false)
-  }
-
-  function handleOpenSettings() {
-    handleFinish()
-    setShowSettings(true)
   }
 
   if (!visible) return null
@@ -138,39 +131,6 @@ export function OnboardingModal() {
         </div>
       ),
     },
-    {
-      id: 2,
-      content: (
-        <div className="flex flex-col items-center text-center gap-5">
-          <LineIcon name="settings" className="h-10 w-10 text-slate-900" />
-          <h2 className="text-xl font-bold text-gray-900">配置 AI（可选）</h2>
-          <div className="w-full space-y-3">
-            <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-left">
-              <p className="font-semibold text-amber-800 mb-1">离线模式（默认）</p>
-            </div>
-            <div className="p-4 rounded-xl bg-green-50 border border-green-200 text-left">
-              <p className="font-semibold text-green-800 mb-1">AI 模式（推荐）</p>
-            </div>
-          </div>
-          <div className="flex flex-col gap-2 w-full mt-1">
-            <button
-              onClick={handleOpenSettings}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 text-base font-semibold text-white transition-colors hover:bg-blue-700"
-            >
-              <LineIcon name="settings" className="h-5 w-5" />
-              现在去配置 API Key
-            </button>
-            <button
-              onClick={handleFinish}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-gray-100 py-2.5 text-base font-medium text-gray-600 transition-colors hover:bg-gray-200"
-            >
-              <LineIcon name="check" className="h-5 w-5" />
-              先用离线模式，以后再说
-            </button>
-          </div>
-        </div>
-      ),
-    },
   ]
 
   const currentStep = steps[step]
@@ -207,10 +167,28 @@ export function OnboardingModal() {
           {currentStep.content}
         </div>
 
-        {/* 底部导航（最后一步的导航按钮由内容区自己提供） */}
-        {!isLast && (
-          <div className="px-6 pb-6 pt-2 flex gap-3">
-            {step > 0 && (
+        <div className="px-6 pb-6 pt-2 flex gap-3">
+          {!isLast ? (
+            <>
+              {step > 0 && (
+                <button
+                  onClick={() => setStep((s) => s - 1)}
+                  className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gray-100 py-3 font-medium text-gray-600 transition-colors hover:bg-gray-200"
+                >
+                  <LineIcon name="arrowLeft" className="h-5 w-5" />
+                  上一步
+                </button>
+              )}
+              <button
+                onClick={() => setStep((s) => s + 1)}
+                className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 font-semibold text-white transition-colors hover:bg-blue-700"
+              >
+                下一步
+                <LineIcon name="arrowRight" className="h-5 w-5" />
+              </button>
+            </>
+          ) : (
+            <>
               <button
                 onClick={() => setStep((s) => s - 1)}
                 className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gray-100 py-3 font-medium text-gray-600 transition-colors hover:bg-gray-200"
@@ -218,16 +196,16 @@ export function OnboardingModal() {
                 <LineIcon name="arrowLeft" className="h-5 w-5" />
                 上一步
               </button>
-            )}
-            <button
-              onClick={() => setStep((s) => s + 1)}
-              className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 font-semibold text-white transition-colors hover:bg-blue-700"
-            >
-              下一步
-              <LineIcon name="arrowRight" className="h-5 w-5" />
-            </button>
-          </div>
-        )}
+              <button
+                onClick={handleFinish}
+                className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 font-semibold text-white transition-colors hover:bg-blue-700"
+              >
+                <LineIcon name="check" className="h-5 w-5" />
+                完成
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   )

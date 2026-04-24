@@ -8,7 +8,8 @@ export const metadata: Metadata = {
   description: '失语症患者辅助沟通 AAC 工具',
   manifest: '/manifest.json',
   icons: {
-    icon: '/favicon.svg',
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
     apple: '/icons/icon-192.png',
   },
 }

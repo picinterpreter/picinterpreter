@@ -43,14 +43,14 @@ function SortableItem({ pictogram, index, onRemove }: {
     <div
       ref={setNodeRef}
       style={style}
-      className="relative flex flex-col items-center gap-0.5 p-2 rounded-2xl bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_18px_rgba(15,23,42,0.08)] min-w-[72px] select-none"
+      className="relative flex min-w-[5.25rem] flex-col items-center gap-0.5 rounded-[22px] bg-white p-2 shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_18px_rgba(15,23,42,0.08)] select-none"
       {...attributes}
       {...listeners}
     >
       <img
         src={resolveImageSrc(pictogram.imageUrl, pictogram.labels.zh[0], '#2563EB')}
         alt={pictogram.labels.zh[0]}
-        className="w-12 h-12 object-contain pointer-events-none"
+        className="h-14 w-14 object-contain pointer-events-none"
       />
       <span className="text-sm font-semibold text-slate-800">
         {pictogram.labels.zh[0]}
@@ -94,8 +94,8 @@ export function SelectionTray() {
   if (selectedPictograms.length === 0) {
     return (
       <>
-        <div className="px-4 py-4 bg-white/70 border-t border-slate-200 text-center text-slate-400 backdrop-blur-xl" aria-label="选择图片">
-          <LineIcon name="message" className="mx-auto h-7 w-7" />
+        <div className="flex h-24 items-center justify-center border-b border-slate-200 bg-white/85 text-slate-300 backdrop-blur-xl" aria-label="图片序列">
+          <LineIcon name="message" className="h-9 w-9" />
         </div>
         <SuggestionStrip />
       </>
@@ -104,8 +104,8 @@ export function SelectionTray() {
 
   return (
     <>
-      <div className="px-4 py-3 bg-white/75 border-t border-slate-200 backdrop-blur-xl">
-        <div className="flex items-center gap-3">
+      <div className="border-b border-slate-200 bg-white/85 px-3 py-3 backdrop-blur-xl">
+        <div className="flex items-stretch gap-3">
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
@@ -115,7 +115,7 @@ export function SelectionTray() {
               items={selectedPictograms.map((_, i) => `sel-${i}`)}
               strategy={horizontalListSortingStrategy}
             >
-              <div className="flex gap-2 overflow-x-auto flex-1 py-1.5">
+              <div className="flex min-h-[5.75rem] flex-1 gap-2 overflow-x-auto py-1.5">
                 {selectedPictograms.map((p, i) => (
                   <SortableItem
                     key={`${p.id}-${i}`}
@@ -128,28 +128,24 @@ export function SelectionTray() {
             </SortableContext>
           </DndContext>
 
-          <div className="flex flex-col gap-2 shrink-0">
+          <div className="flex w-24 shrink-0 flex-col gap-2 sm:w-32">
             <button
               onClick={clearSelection}
-              className="apple-press px-3 py-2 rounded-full bg-slate-100 text-slate-600 text-sm font-semibold hover:bg-slate-200 transition-colors min-h-[44px]"
+              className="apple-press flex flex-1 items-center justify-center gap-1.5 rounded-[22px] bg-slate-100 px-3 py-2 text-base font-semibold text-slate-600 transition-colors hover:bg-slate-200"
             >
+              <LineIcon name="trash" className="h-5 w-5" />
               清空
             </button>
             <button
               onClick={() => setShowCandidatePanel(true)}
               disabled={isGenerating}
-              className="apple-press px-4 py-2.5 rounded-full bg-slate-950 text-white text-base font-semibold hover:bg-slate-800 transition-colors disabled:opacity-45 min-h-[44px] shadow-sm"
+              className="apple-press flex flex-[1.4] items-center justify-center gap-1.5 rounded-[22px] bg-slate-950 px-3 py-2.5 text-base font-semibold text-white shadow-sm transition-colors hover:bg-slate-800 disabled:opacity-45"
             >
-              {isGenerating ? '生成中...' : '生成句子'}
+              <LineIcon name={isGenerating ? 'loader' : 'sound'} className={`h-5 w-5 ${isGenerating ? 'animate-spin' : ''}`} />
+              {isGenerating ? '生成中' : '说'}
             </button>
           </div>
         </div>
-
-        {/* 实时图片序列 */}
-        <p className="mt-1.5 flex items-center gap-1.5 text-sm text-slate-400 truncate" aria-label="已选图片">
-          <LineIcon name="message" className="h-4 w-4 shrink-0" />
-          <span className="truncate">{selectedPictograms.map((p) => p.labels.zh[0]).join('')}…</span>
-        </p>
       </div>
 
       {/* 下一词建议 */}

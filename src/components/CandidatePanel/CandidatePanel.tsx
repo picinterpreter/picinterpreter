@@ -233,9 +233,10 @@ export function CandidatePanel() {
         </h2>
         <button
           onClick={handleBack}
-          className="rounded-full px-3 py-1.5 text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-900 min-h-[44px]"
+          className="flex min-h-[44px] items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-900"
           aria-label="返回修改图片选择"
         >
+          <LineIcon name="arrowLeft" className="h-4 w-4" />
           返回修改
         </button>
       </div>
@@ -270,14 +271,16 @@ export function CandidatePanel() {
           <div className="flex gap-3 justify-center flex-wrap">
             <button
               onClick={handleRetry}
-              className="apple-press px-6 py-2.5 rounded-full bg-slate-950 text-white text-base font-semibold hover:bg-slate-800 transition-colors min-h-[44px]"
+              className="apple-press flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-2.5 text-base font-semibold text-white transition-colors hover:bg-slate-800"
             >
+              <LineIcon name="refresh" className="h-5 w-5" />
               重试
             </button>
             <button
               onClick={handleBack}
-              className="apple-press px-6 py-2.5 rounded-full bg-slate-100 text-slate-700 text-base font-semibold hover:bg-slate-200 transition-colors min-h-[44px]"
+              className="apple-press flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-slate-100 px-6 py-2.5 text-base font-semibold text-slate-700 transition-colors hover:bg-slate-200"
             >
+              <LineIcon name="arrowLeft" className="h-5 w-5" />
               返回修改
             </button>
           </div>
@@ -308,7 +311,7 @@ export function CandidatePanel() {
                   }`}
               >
                 <span className="text-xl shrink-0" aria-hidden="true">
-                  {isActive ? <LineIcon name="sound" className="h-5 w-5" /> : isPast ? <LineIcon name="check" className="h-5 w-5" /> : '○'}
+                  {isActive ? <LineIcon name="sound" className="h-5 w-5" /> : isPast ? <LineIcon name="check" className="h-5 w-5" /> : <LineIcon name="play" className="h-5 w-5" />}
                 </span>
                 <span className={`text-xl flex-1 leading-snug ${isActive ? 'font-semibold text-slate-950' : 'text-slate-600'}`}>
                   {sentence}
@@ -340,7 +343,7 @@ export function CandidatePanel() {
                   }`}
               >
                 <span className="text-xl shrink-0" aria-hidden="true">
-                  {isSelected && isPlayingOne ? <LineIcon name="sound" className="h-5 w-5" /> : isSelected ? '◉' : '○'}
+                  {isSelected && isPlayingOne ? <LineIcon name="sound" className="h-5 w-5" /> : isSelected ? <LineIcon name="check" className="h-5 w-5" /> : <LineIcon name="play" className="h-5 w-5" />}
                 </span>
                 <span className={`text-xl flex-1 leading-snug ${isSelected ? 'font-semibold text-slate-950' : 'text-slate-600'}`}>
                   {sentence}
@@ -357,8 +360,9 @@ export function CandidatePanel() {
         {phase === 'playing' && (
           <button
             onClick={handleStop}
-            className="apple-press flex-1 py-3 rounded-full bg-rose-600 text-white text-base font-semibold hover:bg-rose-700 transition-colors min-h-[48px]"
+            className="apple-press flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-full bg-rose-600 py-3 text-base font-semibold text-white transition-colors hover:bg-rose-700"
           >
+            <LineIcon name="stop" className="h-5 w-5" />
             停止播报
           </button>
         )}
@@ -367,25 +371,28 @@ export function CandidatePanel() {
           <>
             <button
               onClick={handleReplay}
-              className="apple-press py-3 px-5 rounded-full bg-slate-100 text-slate-800 text-base font-semibold hover:bg-slate-200 transition-colors min-h-[48px]"
+              className="apple-press flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-slate-100 px-5 py-3 text-base font-semibold text-slate-800 transition-colors hover:bg-slate-200"
             >
+              <LineIcon name="refresh" className="h-5 w-5" />
               全部重播
             </button>
             <button
               onClick={handleSaveFavorite}
               disabled={saved}
-              className={`apple-press py-3 px-5 rounded-full text-base font-semibold transition-colors min-h-[48px]
+              className={`apple-press flex min-h-[48px] items-center justify-center gap-2 rounded-full px-5 py-3 text-base font-semibold transition-colors
                 ${saved
                   ? 'bg-slate-100 text-slate-400 cursor-default'
                   : 'bg-slate-100 text-slate-800 hover:bg-slate-200'
                 }`}
             >
+              <LineIcon name={saved ? 'check' : 'star'} className="h-5 w-5" />
               {saved ? '已收藏' : '收藏此句'}
             </button>
             <button
               onClick={handleDone}
-              className="apple-press flex-1 py-3 rounded-full bg-slate-950 text-white text-base font-semibold hover:bg-slate-800 transition-colors min-h-[48px]"
+              className="apple-press flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-full bg-slate-950 py-3 text-base font-semibold text-white transition-colors hover:bg-slate-800"
             >
+              <LineIcon name="check" className="h-5 w-5" />
               完成
             </button>
           </>

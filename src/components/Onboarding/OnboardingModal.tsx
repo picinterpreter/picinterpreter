@@ -155,14 +155,16 @@ export function OnboardingModal() {
           <div className="flex flex-col gap-2 w-full mt-1">
             <button
               onClick={handleOpenSettings}
-              className="w-full py-3 rounded-xl bg-blue-600 text-white font-semibold text-base hover:bg-blue-700 transition-colors"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 text-base font-semibold text-white transition-colors hover:bg-blue-700"
             >
+              <LineIcon name="settings" className="h-5 w-5" />
               现在去配置 API Key
             </button>
             <button
               onClick={handleFinish}
-              className="w-full py-2.5 rounded-xl bg-gray-100 text-gray-600 font-medium text-base hover:bg-gray-200 transition-colors"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-gray-100 py-2.5 text-base font-medium text-gray-600 transition-colors hover:bg-gray-200"
             >
+              <LineIcon name="check" className="h-5 w-5" />
               先用离线模式，以后再说
             </button>
           </div>
@@ -211,16 +213,18 @@ export function OnboardingModal() {
             {step > 0 && (
               <button
                 onClick={() => setStep((s) => s - 1)}
-                className="flex-1 py-3 rounded-xl bg-gray-100 text-gray-600 font-medium hover:bg-gray-200 transition-colors"
+                className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gray-100 py-3 font-medium text-gray-600 transition-colors hover:bg-gray-200"
               >
-                ← 上一步
+                <LineIcon name="arrowLeft" className="h-5 w-5" />
+                上一步
               </button>
             )}
             <button
               onClick={() => setStep((s) => s + 1)}
-              className="flex-1 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors"
+              className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 font-semibold text-white transition-colors hover:bg-blue-700"
             >
-              下一步 →
+              下一步
+              <LineIcon name="arrowRight" className="h-5 w-5" />
             </button>
           </div>
         )}

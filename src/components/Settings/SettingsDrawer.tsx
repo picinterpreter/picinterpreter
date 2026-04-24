@@ -448,14 +448,15 @@ export function SettingsDrawer() {
 
           <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
             <h3 className="text-base font-semibold text-slate-800 mb-3">关于</h3>
-            <button
-              onClick={() => {
-                localStorage.removeItem(ONBOARDING_STORAGE_KEY)
-                setShowSettings(false)
-                setShowOnboarding(true)
-              }}
-              className="w-full py-2.5 rounded-xl border border-slate-200 text-slate-700 text-sm font-medium hover:bg-slate-50 transition-colors min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+              <button
+                onClick={() => {
+                  localStorage.removeItem(ONBOARDING_STORAGE_KEY)
+                  setShowSettings(false)
+                  setShowOnboarding(true)
+                }}
+              className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl border border-slate-200 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
             >
+              <LineIcon name="refresh" className="h-4 w-4" />
               重看使用引导
             </button>
           </section>
@@ -464,8 +465,9 @@ export function SettingsDrawer() {
         <div className="border-t border-slate-200 bg-white p-4">
           <button
             onClick={handleSave}
-            className="w-full py-3 rounded-xl bg-blue-600 text-white text-lg font-semibold hover:bg-blue-700 transition-colors min-h-[48px] shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+            className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 text-lg font-semibold text-white shadow-sm transition-colors hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
           >
+            <LineIcon name="save" className="h-5 w-5" />
             保存设置
           </button>
         </div>

@@ -321,8 +321,9 @@ export function ReceiverPanel() {
             <button
               type="submit"
               disabled={!inputText.trim() || isListening}
-              className="px-5 py-3 bg-slate-950 text-white rounded-2xl font-medium disabled:opacity-40 hover:bg-slate-800 transition-colors min-h-[44px]"
+              className="flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-slate-950 px-5 py-3 font-medium text-white transition-colors hover:bg-slate-800 disabled:opacity-40"
             >
+              <LineIcon name="arrowRight" className="h-5 w-5" />
               转换
             </button>
           </form>
@@ -351,8 +352,8 @@ export function ReceiverPanel() {
                 }`}
             >
               {isListening
-                ? <><span className="h-2.5 w-2.5 rounded-full bg-rose-500 animate-pulse" /> 停止</>
-                : <><LineIcon name="sound" className="h-5 w-5" /> 录音</>
+                ? <><LineIcon name="stop" className="h-5 w-5" /> 停止</>
+                : <><LineIcon name="mic" className="h-5 w-5" /> 录音</>
               }
             </button>
           ) : (
@@ -414,8 +415,9 @@ export function ReceiverPanel() {
             </div>
             <button
               onClick={handleReset}
-              className="text-sm text-slate-400 hover:text-gray-600 px-3 py-2 rounded-xl shrink-0 min-h-[44px]"
+              className="flex min-h-[44px] shrink-0 items-center gap-1.5 rounded-xl px-3 py-2 text-sm text-slate-400 hover:text-gray-600"
             >
+              <LineIcon name="refresh" className="h-4 w-4" />
               重新输入
             </button>
           </div>
@@ -483,7 +485,7 @@ export function ReceiverPanel() {
                       className="w-11 h-11 rounded-xl flex items-center justify-center text-slate-400 hover:text-gray-600 hover:bg-slate-100 disabled:opacity-30 transition-colors"
                       aria-label="向前移动"
                     >
-                      ←
+                      <LineIcon name="arrowLeft" className="h-5 w-5" />
                     </button>
                     <button
                       onClick={() => handleMoveRight(index)}
@@ -491,14 +493,14 @@ export function ReceiverPanel() {
                       className="w-11 h-11 rounded-xl flex items-center justify-center text-slate-400 hover:text-gray-600 hover:bg-slate-100 disabled:opacity-30 transition-colors"
                       aria-label="向后移动"
                     >
-                      →
+                      <LineIcon name="arrowRight" className="h-5 w-5" />
                     </button>
                     <button
                       onClick={() => handleDelete(item.id)}
                       className="w-11 h-11 rounded-xl flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 transition-colors"
                       aria-label={`删除「${item.token}」`}
                     >
-                      ×
+                      <LineIcon name="trash" className="h-5 w-5" />
                     </button>
                   </div>
                 </div>
@@ -510,8 +512,9 @@ export function ReceiverPanel() {
           <button
             onClick={() => setShowDisplay(true)}
             disabled={matchedCount === 0}
-            className="apple-press w-full py-3.5 rounded-full bg-slate-950 text-white text-lg font-semibold hover:bg-slate-800 disabled:opacity-40 transition-colors min-h-[48px] shadow-sm"
+            className="apple-press flex min-h-[48px] w-full items-center justify-center gap-2 rounded-full bg-slate-950 py-3.5 text-lg font-semibold text-white shadow-sm transition-colors hover:bg-slate-800 disabled:opacity-40"
           >
+            <LineIcon name="eye" className="h-5 w-5" />
             展示给患者
           </button>
         </div>

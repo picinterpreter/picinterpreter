@@ -137,7 +137,8 @@ export function ImportToolPage() {
           <h1 className="text-lg font-bold">图语家 · ARASAAC 导入工具</h1>
           <p className="text-xs text-slate-500">从 ARASAAC API 批量下载图片元数据</p>
         </div>
-        <a href="/" className="text-sm text-slate-500 hover:text-slate-950 underline">
+        <a href="/" className="flex min-h-[44px] items-center gap-1.5 rounded-xl px-2 text-sm text-slate-500 hover:text-slate-950">
+          <LineIcon name="arrowLeft" className="h-4 w-4" />
           返回主界面
         </a>
       </header>
@@ -157,23 +158,26 @@ export function ImportToolPage() {
               {!running ? (
                 <button
                   onClick={startImport}
-                  className="px-5 py-2 bg-slate-950 text-white rounded-full font-semibold hover:bg-slate-800 transition-colors"
+                  className="flex items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-2 font-semibold text-white transition-colors hover:bg-slate-800"
                 >
+                  <LineIcon name={done ? 'refresh' : 'download'} className="h-5 w-5" />
                   {done ? '重新导入' : '开始导入'}
                 </button>
               ) : (
                 <button
                   onClick={stopImport}
-                  className="px-5 py-2 bg-rose-600 text-white rounded-full font-semibold hover:bg-rose-700 transition-colors"
+                  className="flex items-center justify-center gap-2 rounded-full bg-rose-600 px-5 py-2 font-semibold text-white transition-colors hover:bg-rose-700"
                 >
+                  <LineIcon name="stop" className="h-5 w-5" />
                   停止
                 </button>
               )}
               {done && (
                 <button
                   onClick={exportJson}
-                  className="px-5 py-2 bg-slate-950 text-white rounded-full font-semibold hover:bg-slate-800 transition-colors"
+                  className="flex items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-2 font-semibold text-white transition-colors hover:bg-slate-800"
                 >
+                  <LineIcon name="download" className="h-5 w-5" />
                   导出 JSON
                 </button>
               )}

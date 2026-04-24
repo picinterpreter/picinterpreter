@@ -15,9 +15,6 @@ export function CategoryTabs() {
 
   const activeCategoryId = useAppStore((s) => s.activeCategoryId)
   const setActiveCategory = useAppStore((s) => s.setActiveCategory)
-  const setShowSavedPhrases = useAppStore((s) => s.setShowSavedPhrases)
-  const setShowCategoryLinks = useAppStore((s) => s.setShowCategoryLinks)
-
   const scrollRef = useRef<HTMLDivElement>(null)
   const [showRightFade, setShowRightFade] = useState(true)
   const [showLeftFade, setShowLeftFade] = useState(false)
@@ -95,21 +92,6 @@ export function CategoryTabs() {
             <span>{cat.name}</span>
           </button>
         ))}
-        <button
-          onClick={() => setShowCategoryLinks(true)}
-          className="apple-press flex items-center justify-center px-3 py-2.5 rounded-full text-base font-semibold whitespace-nowrap bg-white/80 text-slate-700 shadow-[inset_0_0_0_1px_rgba(15,23,42,0.08)] hover:bg-white transition-colors min-h-[48px] min-w-[48px] flex-shrink-0"
-          title="管理分类链接"
-          aria-label="管理分类链接"
-        >
-          <LineIcon name="link" className="h-5 w-5" />
-        </button>
-        <button
-          onClick={() => setShowSavedPhrases(true)}
-          className="apple-press flex items-center gap-1.5 px-4 py-2.5 rounded-full text-base font-semibold whitespace-nowrap bg-white/80 text-slate-700 shadow-[inset_0_0_0_1px_rgba(15,23,42,0.08)] hover:bg-white transition-colors min-h-[48px] ml-auto flex-shrink-0"
-        >
-          <LineIcon name="star" className="h-5 w-5" />
-          <span>常用语</span>
-        </button>
       </nav>
     </div>
   )

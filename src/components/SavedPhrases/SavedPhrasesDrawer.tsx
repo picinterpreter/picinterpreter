@@ -295,7 +295,7 @@ export function SavedPhrasesDrawer() {
             aria-label="手动添加短语"
             title="手动添加短语"
           >
-            {showAddForm ? <LineIcon name="close" className="h-5 w-5" /> : '+'}
+            <LineIcon name={showAddForm ? 'close' : 'plus'} className="h-5 w-5" />
           </button>
 
           {/* 导出 / 导入按钮组 */}
@@ -303,17 +303,19 @@ export function SavedPhrasesDrawer() {
             <button
               onClick={handleExport}
               disabled={importing}
-              className="px-2.5 py-1 text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="flex min-h-[44px] items-center gap-1 rounded-xl px-2.5 py-1 text-sm text-slate-600 transition-colors hover:bg-blue-50 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-40"
               title="导出为 JSON 文件"
             >
+              <LineIcon name="download" className="h-4 w-4" />
               导出
             </button>
             <button
               onClick={handleImportClick}
               disabled={importing}
-              className="px-2.5 py-1 text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="flex min-h-[44px] items-center gap-1 rounded-xl px-2.5 py-1 text-sm text-slate-600 transition-colors hover:bg-blue-50 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-40"
               title="从 JSON 文件导入"
             >
+              <LineIcon name={importing ? 'loader' : 'upload'} className={`h-4 w-4 ${importing ? 'animate-spin' : ''}`} />
               {importing ? '导入中…' : '导入'}
             </button>
             {/* 隐藏的文件选择器 */}
@@ -388,15 +390,17 @@ export function SavedPhrasesDrawer() {
             <div className="flex gap-2">
               <button
                 onClick={() => setShowAddForm(false)}
-                className="apple-press flex-1 py-2 rounded-full bg-slate-100 text-slate-700 text-sm font-semibold hover:bg-slate-200 transition-colors"
+                className="apple-press flex flex-1 items-center justify-center gap-1.5 rounded-full bg-slate-100 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-200"
               >
+                <LineIcon name="close" className="h-4 w-4" />
                 取消
               </button>
               <button
                 onClick={handleAddPhrase}
                 disabled={!newSentence.trim()}
-                className="apple-press flex-1 py-2 rounded-full bg-slate-950 text-white text-sm font-semibold hover:bg-slate-800 transition-colors disabled:opacity-40"
+                className="apple-press flex flex-1 items-center justify-center gap-1.5 rounded-full bg-slate-950 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-800 disabled:opacity-40"
               >
+                <LineIcon name="save" className="h-4 w-4" />
                 保存
               </button>
             </div>
@@ -459,14 +463,16 @@ export function SavedPhrasesDrawer() {
                       <div className="flex gap-1.5 justify-end">
                         <button
                           onClick={cancelEditing}
-                          className="px-2.5 py-1 text-xs rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200"
+                          className="flex min-h-[36px] items-center gap-1 rounded-xl bg-slate-100 px-2.5 py-1 text-xs text-slate-600 hover:bg-slate-200"
                         >
+                          <LineIcon name="close" className="h-3.5 w-3.5" />
                           取消
                         </button>
                         <button
                           onClick={() => commitEdit(phrase.id)}
-                          className="px-2.5 py-1 text-xs rounded-xl bg-amber-500 text-white hover:bg-amber-600"
+                          className="flex min-h-[36px] items-center gap-1 rounded-xl bg-amber-500 px-2.5 py-1 text-xs text-white hover:bg-amber-600"
                         >
+                          <LineIcon name="save" className="h-3.5 w-3.5" />
                           保存
                         </button>
                       </div>
@@ -487,14 +493,14 @@ export function SavedPhrasesDrawer() {
                         aria-label={`重命名：${phrase.sentence}`}
                         title="重命名"
                       >
-                        ✏️
+                        <LineIcon name="edit" className="h-5 w-5" />
                       </button>
                       <button
                         onClick={() => handleDelete(phrase.id)}
                         className="p-1 text-gray-300 hover:text-red-500 shrink-0 min-h-[44px] min-w-[44px] flex items-center justify-center"
                         aria-label="删除"
                       >
-                        🗑
+                        <LineIcon name="trash" className="h-5 w-5" />
                       </button>
                     </div>
                   )}

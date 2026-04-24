@@ -27,8 +27,11 @@ export default function App() {
   const setShowSettings = useAppStore((s) => s.setShowSettings)
   const setShowHistory = useAppStore((s) => s.setShowHistory)
   const setShowEmergency = useAppStore((s) => s.setShowEmergency)
+  const setShowSavedPhrases = useAppStore((s) => s.setShowSavedPhrases)
+  const setShowCategoryLinks = useAppStore((s) => s.setShowCategoryLinks)
   const activeMode = useAppStore((s) => s.activeMode)
   const setActiveMode = useAppStore((s) => s.setActiveMode)
+  const setActiveCategory = useAppStore((s) => s.setActiveCategory)
   const highContrast = useSettingsStore((s) => s.highContrast)
   const fontSize = useSettingsStore((s) => s.fontSize)
 
@@ -117,22 +120,54 @@ export default function App() {
       </div>
 
       {activeMode === 'express' ? (
-        <>
-          {/* 常用语一键播报条（有收藏时显示） */}
-          <QuickAccessBar />
-
-          {/* Category Tabs */}
-          <CategoryTabs />
-
-          {/* Pictogram Grid */}
-          <PictogramGrid />
-
-          {/* Selection Tray */}
+        <div className="flex min-h-0 flex-1 flex-col">
+          {/* 图片序列预览栏 */}
           <SelectionTray />
 
-          {/* Candidate Panel */}
+          <div className="flex min-h-0 flex-1">
+            <aside className="flex w-[4.75rem] shrink-0 flex-col gap-3 border-r border-slate-200 bg-white/75 px-2 py-3 backdrop-blur-xl sm:w-24">
+              <button
+                onClick={() => setActiveCategory('quickchat')}
+                className="apple-press flex min-h-[68px] flex-col items-center justify-center gap-1 rounded-[24px] bg-slate-950 text-white shadow-sm"
+                aria-label="首页"
+              >
+                <LineIcon name="message" className="h-7 w-7" />
+                <span className="text-sm font-semibold">首页</span>
+              </button>
+              <button
+                onClick={() => setActiveCategory('recent')}
+                className="apple-press flex min-h-[68px] flex-col items-center justify-center gap-1 rounded-[24px] bg-white text-slate-800 shadow-[inset_0_0_0_1px_rgba(15,23,42,0.08)]"
+                aria-label="最近"
+              >
+                <LineIcon name="clock" className="h-7 w-7" />
+                <span className="text-sm font-semibold">最近</span>
+              </button>
+              <button
+                onClick={() => setShowSavedPhrases(true)}
+                className="apple-press flex min-h-[68px] flex-col items-center justify-center gap-1 rounded-[24px] bg-white text-slate-800 shadow-[inset_0_0_0_1px_rgba(15,23,42,0.08)]"
+                aria-label="常用语"
+              >
+                <LineIcon name="star" className="h-7 w-7" />
+                <span className="text-sm font-semibold">常用</span>
+              </button>
+              <button
+                onClick={() => setShowCategoryLinks(true)}
+                className="apple-press mt-auto flex min-h-[60px] items-center justify-center rounded-[22px] bg-white text-slate-500 shadow-[inset_0_0_0_1px_rgba(15,23,42,0.08)]"
+                aria-label="分类链接"
+              >
+                <LineIcon name="link" className="h-6 w-6" />
+              </button>
+            </aside>
+
+            <main className="flex min-w-0 flex-1 flex-col">
+              <QuickAccessBar />
+              <CategoryTabs />
+              <PictogramGrid />
+            </main>
+          </div>
+
           <CandidatePanel />
-        </>
+        </div>
       ) : (
         /* 接收端流程 */
         <ReceiverPanel />

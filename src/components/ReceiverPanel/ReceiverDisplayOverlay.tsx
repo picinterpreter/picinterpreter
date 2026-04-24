@@ -117,10 +117,11 @@ export function ReceiverDisplayOverlay({ items, inputText, onDone, onBack }: Pro
       <div className="flex items-center justify-between px-4 py-3 bg-white/10 backdrop-blur-xl">
         <button
           onClick={onBack}
-          className="apple-press text-white/70 hover:text-white text-sm font-medium px-3 py-2 rounded-full min-h-[44px] hover:bg-white/10"
+          className="apple-press flex min-h-[44px] items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium text-white/70 hover:bg-white/10 hover:text-white"
           aria-label="返回修改图片"
         >
-          ← 返回修改
+          <LineIcon name="arrowLeft" className="h-4 w-4" />
+          返回修改
         </button>
 
         <div className="flex items-center gap-2">
@@ -135,9 +136,10 @@ export function ReceiverDisplayOverlay({ items, inputText, onDone, onBack }: Pro
         <button
           onClick={speakText}
           disabled={isSpeaking}
-          className="apple-press text-white/70 hover:text-white text-sm font-medium px-3 py-2 rounded-full min-h-[44px] disabled:opacity-40 hover:bg-white/10"
+          className="apple-press flex min-h-[44px] items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium text-white/70 hover:bg-white/10 hover:text-white disabled:opacity-40"
           aria-label="重播语音"
         >
+          <LineIcon name="refresh" className="h-4 w-4" />
           重播
         </button>
       </div>
@@ -174,8 +176,9 @@ export function ReceiverDisplayOverlay({ items, inputText, onDone, onBack }: Pro
       <div className="p-4">
         <button
           onClick={handleDone}
-          className="apple-press w-full py-4 rounded-full bg-white text-slate-950 text-xl font-semibold hover:bg-slate-100 transition-colors shadow-lg min-h-[56px]"
+          className="apple-press flex min-h-[56px] w-full items-center justify-center gap-2 rounded-full bg-white py-4 text-xl font-semibold text-slate-950 shadow-lg transition-colors hover:bg-slate-100"
         >
+          <LineIcon name="check" className="h-6 w-6" />
           完成
         </button>
       </div>

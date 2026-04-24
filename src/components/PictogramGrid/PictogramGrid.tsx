@@ -1,10 +1,8 @@
-import { useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '@/db'
 import { useAppStore } from '@/stores/app-store'
 import { useSettingsStore, type GridCols } from '@/stores/settings-store'
 import { generatePlaceholderSvg, resolveImageSrc } from '@/utils/generate-placeholder-svg'
-import { useDebounce } from '@/hooks/use-debounce'
 import { LineIcon } from '@/components/ui/LineIcon'
 import type { PictogramEntry } from '@/types'
 
@@ -103,22 +101,7 @@ export function PictogramGrid() {
   const addPictogram = useAppStore((s) => s.addPictogram)
   const gridCols = useSettingsStore((s) => s.gridCols)
 
-  const [searchQuery, setSearchQuery] = useState('')
-  // 防抖：250 ms 后才触发 Dexie 查询，避免每次按键都扫描全库
-  const debouncedQuery = useDebounce(searchQuery, 250)
-
   const pictograms = useLiveQuery(async (): Promise<PictogramWithSource[]> => {
-    const q = debouncedQuery.trim()
-
-    // 搜索模式：跨所有分类搜索（不显示来源）
-    if (q) {
-      const items = await db.pictograms.filter((p) =>
-        p.labels.zh.some((l) => l.includes(q)) ||
-        p.synonyms.some((s) => s.includes(q)),
-      ).toArray()
-      return items.map((p) => ({ ...p, sourceName: null }))
-    }
-
     // 最近使用：按上次使用时间倒序
     if (activeCategoryId === 'recent') {
       const used = await db.pictograms.filter((p) => (p.lastUsedAt ?? 0) > 0).toArray()
@@ -144,7 +127,7 @@ export function PictogramGrid() {
     }
 
     return result
-  }, [activeCategoryId, debouncedQuery])
+  }, [activeCategoryId])
 
   function handleSelect(p: PictogramEntry) {
     addPictogram(p)
@@ -155,36 +138,9 @@ export function PictogramGrid() {
   }
 
   const color = CATEGORY_COLORS[activeCategoryId] ?? '#4A90D9'
-  const isSearching = debouncedQuery.trim().length > 0
-  // 当前结果中是否有来自链接分类的图片
-  const hasLinkedItems = pictograms?.some((p) => p.sourceName !== null) ?? false
 
   return (
     <div className="flex-1 overflow-y-auto flex flex-col min-h-0">
-      {/* 搜索栏 */}
-      <div className="sticky top-0 bg-white z-10 px-4 pt-3 pb-2.5 border-b border-slate-100 shadow-sm">
-        <div className="relative">
-          <LineIcon name="magnifier" className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400 pointer-events-none" />
-          <input
-            type="search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="搜索"
-            className="w-full pl-9 pr-10 py-3 rounded-xl border border-slate-200 bg-slate-50 text-base text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-colors"
-          />
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 min-w-[32px] min-h-[32px] flex items-center justify-center rounded-full hover:bg-slate-100"
-              aria-label="清除搜索"
-            >
-              <LineIcon name="close" className="h-4 w-4" />
-            </button>
-          )}
-        </div>
-        {!isSearching && hasLinkedItems && <div className="mt-1.5 h-1 w-8 rounded-full bg-blue-500" aria-hidden="true" />}
-      </div>
-
       {/* 图片网格 */}
       <div className="p-4">
         <div className={`grid ${GRID_CLASS[gridCols]} gap-3`}>
@@ -224,19 +180,13 @@ export function PictogramGrid() {
         </div>
 
         {/* 空状态 */}
-        {pictograms?.length === 0 && isSearching && (
-          <div className="text-center text-slate-400 mt-12 space-y-2">
-            <LineIcon name="magnifier" className="mx-auto h-10 w-10" />
-            <p className="text-lg">未找到</p>
-          </div>
-        )}
-        {pictograms?.length === 0 && !isSearching && activeCategoryId === 'recent' && (
+        {pictograms?.length === 0 && activeCategoryId === 'recent' && (
           <div className="text-center text-slate-400 mt-12 space-y-2">
             <LineIcon name="clock" className="mx-auto h-10 w-10" />
             <p className="text-lg">暂无</p>
           </div>
         )}
-        {pictograms?.length === 0 && !isSearching && activeCategoryId !== 'recent' && (
+        {pictograms?.length === 0 && activeCategoryId !== 'recent' && (
           <div className="text-center text-slate-400 text-lg mt-12">
             暂无
           </div>

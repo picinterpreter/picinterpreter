@@ -194,7 +194,7 @@ function ExpressionCard({ expr, onPlay }: { expr: Expression; onPlay: PlayFn }) 
           aria-label="删除此记录"
           title="删除"
         >
-          🗑
+          <LineIcon name="trash" className="h-4 w-4" />
         </button>
       </div>
     </div>
@@ -272,17 +272,19 @@ export function ConversationHistoryDrawer() {
               <>
                 <button
                   onClick={handleExport}
-                  className="text-xs text-slate-600 hover:text-blue-600 px-2 py-1.5 rounded-xl transition-colors min-h-[44px]"
+                  className="flex min-h-[44px] items-center gap-1 rounded-xl px-2 py-1.5 text-xs text-slate-600 transition-colors hover:text-blue-600"
                   aria-label="导出对话记录"
                   title="下载为文本文件"
                 >
+                  <LineIcon name="download" className="h-4 w-4" />
                   导出
                 </button>
                 <button
                   onClick={handleClearAll}
-                  className="text-xs text-slate-600 hover:text-red-500 px-2 py-1.5 rounded-xl transition-colors min-h-[44px]"
+                  className="flex min-h-[44px] items-center gap-1 rounded-xl px-2 py-1.5 text-xs text-slate-600 transition-colors hover:text-red-500"
                   aria-label="清空全部记录"
                 >
+                  <LineIcon name="trash" className="h-4 w-4" />
                   清空
                 </button>
               </>

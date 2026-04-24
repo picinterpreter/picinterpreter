@@ -151,8 +151,9 @@ export function MatcherDemoPage() {
             <button
               type="submit"
               disabled={loading || !input.trim()}
-              className="px-5 py-2 bg-slate-950 text-white rounded-full font-semibold disabled:opacity-40 hover:bg-slate-800 transition-colors"
+              className="flex items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-2 font-semibold text-white transition-colors hover:bg-slate-800 disabled:opacity-40"
             >
+              <LineIcon name={loading ? 'loader' : 'sparkle'} className={`h-5 w-5 ${loading ? 'animate-spin' : ''}`} />
               {loading ? '分析中…' : '分析'}
             </button>
           </form>

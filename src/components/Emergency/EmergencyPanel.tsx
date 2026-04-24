@@ -243,11 +243,12 @@ export function EmergencyPanel() {
           <button
             onClick={() => setTtsFailureText(null)}
             className="
-              apple-press mt-2 px-6 py-3 rounded-full
-              bg-white text-black font-bold text-xl
+              apple-press mt-2 flex items-center justify-center gap-2 rounded-full
+              bg-white px-6 py-3 text-xl font-bold text-black
               active:bg-gray-200 transition-colors
             "
           >
+            <LineIcon name="close" className="h-6 w-6" />
             关闭
           </button>
         </div>

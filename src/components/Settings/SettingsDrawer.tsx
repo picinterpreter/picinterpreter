@@ -376,7 +376,6 @@ export function SettingsDrawer() {
                       }`}
                   >
                     <span className="block text-base">{option.label}</span>
-                    <span className="block text-xs text-slate-400">{option.desc}</span>
                   </button>
                 ))}
               </div>
@@ -396,7 +395,6 @@ export function SettingsDrawer() {
                       }`}
                   >
                     <span className="block text-base">{option.label}</span>
-                    <span className="block text-xs text-slate-400">{option.desc}</span>
                   </button>
                 ))}
               </div>

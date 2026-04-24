@@ -8,9 +8,9 @@ import type { PictogramEntry } from '@/types'
 
 // Tailwind 类必须是完整字符串，不可动态拼接
 const GRID_CLASS: Record<GridCols, string> = {
-  2: 'grid-cols-2 sm:grid-cols-3',
-  3: 'grid-cols-3 sm:grid-cols-4 md:grid-cols-5',
-  4: 'grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8',
+  2: 'grid-cols-[repeat(auto-fill,minmax(150px,1fr))]',
+  3: 'grid-cols-[repeat(auto-fill,minmax(126px,1fr))]',
+  4: 'grid-cols-[repeat(auto-fill,minmax(104px,1fr))]',
 }
 
 const IMG_CLASS: Record<GridCols, string> = {
@@ -176,8 +176,8 @@ export function PictogramGrid() {
   return (
     <div className={`flex-1 overflow-y-auto flex flex-col min-h-0 ${gridTone}`}>
       {/* 图片网格 */}
-      <div className="p-4">
-        <div className={`grid ${GRID_CLASS[gridCols]} gap-3`}>
+      <div className="p-3 sm:p-4 lg:p-5">
+        <div className={`grid ${GRID_CLASS[gridCols]} gap-3 lg:gap-4`}>
           {pictograms?.map((p) => (
             <button
               key={p.id}

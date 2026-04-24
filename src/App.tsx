@@ -11,7 +11,6 @@ import { SettingsDrawer } from '@/components/Settings/SettingsDrawer'
 import { CategoryLinksDrawer } from '@/components/CategoryLinks/CategoryLinksDrawer'
 import { ReceiverPanel } from '@/components/ReceiverPanel/ReceiverPanel'
 import { ConversationHistoryDrawer } from '@/components/ConversationHistory/ConversationHistoryDrawer'
-import { QuickAccessBar } from '@/components/QuickAccess/QuickAccessBar'
 import { EmergencyPanel } from '@/components/Emergency/EmergencyPanel'
 import { UpdateBanner } from '@/components/UpdateBanner/UpdateBanner'
 import { OnboardingModal } from '@/components/Onboarding/OnboardingModal'
@@ -121,7 +120,6 @@ export default function App() {
           <SelectionTray />
 
           <main className="flex min-h-0 min-w-0 flex-1 flex-col">
-            <QuickAccessBar />
             <CategoryTabs />
             <PictogramGrid />
           </main>

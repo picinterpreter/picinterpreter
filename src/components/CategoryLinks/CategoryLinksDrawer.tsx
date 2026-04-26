@@ -3,8 +3,8 @@
  *
  * 功能：
  *   - 选择当前要编辑的分类
- *   - 为该分类添加 / 移除链接分类
- *   - 链接分类的图片会自动出现在被链接分类的图片网格里
+ *   - 为该分类添加 / 移除子文件夹
+ *   - 子文件夹会出现在该分类图片网格里，点击后进入下一层
  */
 
 import { useEffect, useState } from 'react'
@@ -20,9 +20,9 @@ export function CategoryLinksDrawer() {
   const setShowCategoryLinks = useAppStore((s) => s.setShowCategoryLinks)
   const activeCategoryId = useAppStore((s) => s.activeCategoryId)
 
-  // 默认编辑当前激活的分类（排除虚拟分类 recent）
+  // 默认编辑当前激活的分类（排除虚拟分类 root/recent）
   const [editingId, setEditingId] = useState<string>(() =>
-    activeCategoryId === 'recent' ? '' : activeCategoryId,
+    activeCategoryId === 'root' || activeCategoryId === 'recent' ? '' : activeCategoryId,
   )
   const [saving, setSaving] = useState(false)
   const [cycleWarning, setCycleWarning] = useState<string | null>(null)
@@ -119,8 +119,8 @@ export function CategoryLinksDrawer() {
           <div className="px-3 py-2.5 rounded-2xl bg-white border border-slate-200 text-sm text-slate-600 space-y-1 shadow-sm">
             <p className="font-medium">什么是分类链接？</p>
             <p className="text-xs text-blue-600">
-              为分类 A 链接分类 B，浏览 A 时自动显示 B 的所有图片。
-              更新 B 后，A 里的内容也会实时更新，无需重复维护。
+              为分类 A 添加分类 B，浏览 A 时会看到 B 文件夹。
+              更新 B 后，文件夹里的图片也会实时更新。
             </p>
           </div>
 

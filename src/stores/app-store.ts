@@ -4,8 +4,10 @@ import type { PictogramEntry } from '@/types'
 interface AppState {
   /** 当前主界面模式：express = 患者表达，receive = 接收/理解他人话语 */
   activeMode: 'express' | 'receive'
-  /** 当前选中的分类 ID */
+  /** 当前选中的分类 ID；root = 文件夹首页 */
   activeCategoryId: string
+  /** 分类浏览路径，用于返回上一层 */
+  categoryPath: string[]
   /** 暂存区：已选图片序列 */
   selectedPictograms: PictogramEntry[]
   /** 候选句列表 */
@@ -37,6 +39,9 @@ interface AppState {
 
   // Actions
   setActiveCategory: (id: string) => void
+  openCategory: (id: string) => void
+  goBackCategory: () => void
+  goRootCategory: () => void
   addPictogram: (p: PictogramEntry) => void
   removePictogram: (index: number) => void
   reorderPictograms: (from: number, to: number) => void
@@ -59,7 +64,8 @@ interface AppState {
 
 export const useAppStore = create<AppState>((set) => ({
   activeMode: 'express',
-  activeCategoryId: 'quickchat',
+  activeCategoryId: 'root',
+  categoryPath: [],
   selectedPictograms: [],
   candidateSentences: [],
   isGenerating: false,
@@ -75,7 +81,23 @@ export const useAppStore = create<AppState>((set) => ({
   showEmergency: false,
   showOnboarding: false,
 
-  setActiveCategory: (id) => set({ activeCategoryId: id }),
+  setActiveCategory: (id) => set({ activeCategoryId: id, categoryPath: [] }),
+  openCategory: (id) =>
+    set((state) => ({
+      activeCategoryId: id,
+      categoryPath: state.activeCategoryId === id
+        ? state.categoryPath
+        : [...state.categoryPath, state.activeCategoryId],
+    })),
+  goBackCategory: () =>
+    set((state) => {
+      const nextPath = state.categoryPath.slice(0, -1)
+      return {
+        activeCategoryId: state.categoryPath.at(-1) ?? 'root',
+        categoryPath: nextPath,
+      }
+    }),
+  goRootCategory: () => set({ activeCategoryId: 'root', categoryPath: [] }),
 
   addPictogram: (p) =>
     set((state) => ({

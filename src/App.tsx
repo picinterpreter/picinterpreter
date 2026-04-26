@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { useAppStore } from '@/stores/app-store'
 import { useSettingsStore, type FontSize } from '@/stores/settings-store'
-import { CategoryTabs } from '@/components/CategoryTabs/CategoryTabs'
 import { PictogramGrid } from '@/components/PictogramGrid/PictogramGrid'
 import { SelectionTray } from '@/components/SelectionTray/SelectionTray'
 import { CandidatePanel } from '@/components/CandidatePanel/CandidatePanel'
@@ -38,7 +37,7 @@ export default function App() {
   }, [fontSize])
 
   return (
-    <div className={`h-screen flex flex-col bg-[#f5f5f7] overflow-hidden text-slate-950 ${highContrast ? 'hc' : ''}`}>
+    <div className={`flex h-dvh flex-col overflow-hidden bg-[#f5f5f7] text-slate-950 ${highContrast ? 'hc' : ''}`}>
       {/* Header */}
       <header className="flex items-center gap-2 bg-white/85 px-3 py-2 text-slate-950 shadow-[0_1px_0_rgba(15,23,42,0.08)] backdrop-blur-xl sm:px-4">
         <div className="hidden min-w-0 shrink-0 items-center gap-2 sm:flex">
@@ -121,7 +120,6 @@ export default function App() {
           <SelectionTray />
 
           <main className="flex min-h-0 min-w-0 flex-1 flex-col">
-            <CategoryTabs />
             <PictogramGrid />
           </main>
 

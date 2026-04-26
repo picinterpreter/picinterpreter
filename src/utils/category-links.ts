@@ -3,12 +3,10 @@
  *
  * 职责：
  *   - wouldCreateCycle()：在写入链接前检查是否会形成环
- *   - buildAncestorSet()：递归收集一个分类所有祖先（被哪些分类链接到它）
  *
- * 设计：链接视作有向图 sourceId → targetId（source 浏览时会看到 target 的图片）。
- * 要防止 targetId → … → sourceId 的反向路径，否则 resolveLinkedPictograms
- * 虽然有 visited 保护不会死循环，但会让"浏览 A 看到 B 的图片，浏览 B 看到 A 的图片"
- * 变成用户无法理解的递归状态。
+ * 设计：链接视作有向图 sourceId → targetId（source 浏览时会看到 target 文件夹）。
+ * 要防止 targetId → … → sourceId 的反向路径，否则会让"浏览 A 看到 B 文件夹，
+ * 浏览 B 看到 A 文件夹"变成用户无法理解的递归状态。
  */
 
 import type { Category } from '@/types'

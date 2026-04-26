@@ -1,3 +1,4 @@
+原仓库地址： https://github.com/lightcoloror/PicInterpreter
 # 图语家
 
 图语家是一个面向失语症患者和照护者的图片辅助沟通应用。用户可以通过点选图片表达需求，由系统生成候选句子并朗读出来；也支持把照护者输入的文字或语音反向转换为图片序列，帮助患者理解。
@@ -35,6 +36,7 @@ DATABASE_URL=mysql://root:password@127.0.0.1:3306/picinterpreter
 AI_API_KEY=
 AI_BASE_URL=https://api.openai.com/v1
 AI_MODEL=gpt-4o-mini
+OPENSYMBOLS_SECRET=
 NEXT_PUBLIC_ENABLE_SERVICE_WORKER=false
 ```
 
@@ -42,6 +44,7 @@ NEXT_PUBLIC_ENABLE_SERVICE_WORKER=false
 - `AI_API_KEY`：服务端调用上游 LLM 的密钥，必填。
 - `AI_BASE_URL`：OpenAI-compatible 接口地址，默认 `https://api.openai.com/v1`。
 - `AI_MODEL`：默认模型名，默认 `gpt-4o-mini`。
+- `OPENSYMBOLS_SECRET`：可选。配置后，运行时缺图补图会在 ARASAAC 未命中时继续查询 OpenSymbols。该值只在服务端读取。
 - `NEXT_PUBLIC_ENABLE_SERVICE_WORKER`：是否启用前端 Service Worker，默认 `false`。仅在显式设置为 `true` 时启用。
 
 其中 `NEXT_PUBLIC_ENABLE_SERVICE_WORKER` 会在构建时注入前端，其余变量仅在 Next.js 服务端读取。
@@ -74,6 +77,7 @@ npm run dev
 - `GET /api/ai/health`：读取后端 AI 配置状态。
 - `POST /api/ai/sentences`：生成候选句。
 - `POST /api/ai/resegment`：AI 辅助重分词。
+- `POST /api/pictograms/search`：运行时缺图补图；服务端查询专用 AAC 图库，前端写入本地 IndexedDB。
 - `POST /api/client/bootstrap`：注册/恢复匿名设备身份，并设置 HttpOnly 设备 Cookie。
 - `POST /api/sync/push`：把本地 `expressions` / `saved_phrases` 变更推送到服务端 MySQL。
 - `GET /api/sync/pull`：按增量游标拉取服务端变更并回放到本地 Dexie。

@@ -26,8 +26,21 @@ export interface PictogramEntry {
   synonyms: string[]
   disambiguationHints: Record<string, string>
   emotionTag?: string
+  source?: PictogramSource
   usageCount: number
   lastUsedAt?: number
+}
+
+export interface PictogramSource {
+  provider: 'arasaac' | 'opensymbols'
+  name: string
+  originalId: string
+  license: string
+  licenseUrl?: string | null
+  author?: string | null
+  authorUrl?: string | null
+  sourceUrl?: string | null
+  repoKey?: string | null
 }
 
 // ===== 表达相关 =====

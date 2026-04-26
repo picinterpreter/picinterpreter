@@ -4,6 +4,7 @@ import { parseResegmentResponse } from '@/utils/ai-resegment'
 import type { NLGRequest, NLGResponse } from '@/types'
 
 const AI_UPSTREAM_TIMEOUT_MS = 15_000
+const MAX_RESEGMENT_TOKENS = 12
 
 interface ChatCompletionResponse {
   choices?: Array<{
@@ -154,6 +155,12 @@ export async function resegmentText(
 ): Promise<string[] | null> {
   const vocabulary = await getPictogramVocabularyHint(400).catch(() => '')
   if (!vocabulary) return null
+  const vocabularySet = new Set(
+    vocabulary
+      .split('、')
+      .map((token) => token.trim())
+      .filter((token) => token.length > 0),
+  )
 
   const systemPrompt =
     `你是一个辅助失语症患者的图片词库专家。\n` +
@@ -162,8 +169,10 @@ export async function resegmentText(
     `1. 分析给定的中文句子\n` +
     `2. 将句子中的语义成分一一映射到图库词汇\n` +
     `3. 对于图库中没有的词，用意思最接近的图库词替代\n` +
-    `4. 以 JSON 数组输出，每个元素是一个图库词，如：["吃饭","睡觉","开心"]\n` +
-    `5. 只输出 JSON 数组，不要有任何其他文字`
+    `4. 只输出当前句子需要的词，不要输出完整词库\n` +
+    `5. 最多输出 ${MAX_RESEGMENT_TOKENS} 个词\n` +
+    `6. 以 JSON 数组输出，每个元素必须是上方图库词汇中的一个词，如：["吃饭","睡觉","开心"]\n` +
+    `7. 只输出 JSON 数组，不要有任何其他文字`
 
   const userPrompt =
     req.unmatchedTokens.length > 0
@@ -184,7 +193,11 @@ export async function resegmentText(
     )
 
     const raw = data.choices?.[0]?.message?.content ?? ''
-    return parseResegmentResponse(raw)
+    const parsed = parseResegmentResponse(raw)
+    if (!parsed || parsed.length > MAX_RESEGMENT_TOKENS) return null
+
+    const tokens = parsed.filter((token) => vocabularySet.has(token))
+    return tokens.length > 0 ? tokens : null
   } catch {
     return null
   }

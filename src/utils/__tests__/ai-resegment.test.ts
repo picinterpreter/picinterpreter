@@ -81,6 +81,16 @@ describe('parseResegmentResponse', () => {
     expect(parseResegmentResponse(raw)).toEqual(['吃饭', '喝水'])
   })
 
+  it('截断的 JSON 数组返回 null，不降级成单个词', () => {
+    const raw = '["我","你","好","不","有","谢谢","帮忙","不要","和","想","去","来"'
+    expect(parseResegmentResponse(raw)).toBeNull()
+  })
+
+  it('损坏的 JSON 数组返回 null，不降级成语法文本', () => {
+    const raw = '["吃饭", "睡觉",]'
+    expect(parseResegmentResponse(raw)).toBeNull()
+  })
+
   it('词语保留中文', () => {
     const result = parseResegmentResponse('["头晕", "发烧", "吃药"]')
     expect(result).toEqual(['头晕', '发烧', '吃药'])

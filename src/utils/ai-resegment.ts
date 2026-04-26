@@ -69,6 +69,9 @@ export async function aiResegment(params: AiResegmentParams): Promise<string[] |
 export function parseResegmentResponse(raw: string): string[] | null {
   if (!raw || raw.trim().length === 0) return null
 
+  const trimmedRaw = raw.trim()
+  const looksLikeJsonArray = /^(?:```(?:json)?\s*)?\[/.test(trimmedRaw)
+
   // 优先尝试提取 JSON 数组（可能被 markdown 代码块包裹）
   const jsonMatch = raw.match(/[[][\s\S]*?]/)
   if (jsonMatch) {
@@ -87,6 +90,9 @@ export function parseResegmentResponse(raw: string): string[] | null {
       // JSON 解析失败（格式错误），才降级到行分割
     }
   }
+
+  // 如果模型返回的是截断或损坏的 JSON 数组，不要把整行数组文本当成词语。
+  if (looksLikeJsonArray) return null
 
   // 降级：按换行分割，过滤掉明显的 JSON 结构符号行，最多 30 个词
   const SKIP_RE = /^(?:\[|\]|\{|\}|,|"|\s)*$/

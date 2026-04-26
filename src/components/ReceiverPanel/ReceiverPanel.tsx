@@ -16,9 +16,10 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { matchTextToImages } from '@/utils/text-to-image-matcher'
 import { aiResegment } from '@/utils/ai-resegment'
 import { resolveImageSrc } from '@/utils/generate-placeholder-svg'
+import { searchAndStoreMissingPictograms } from '@/utils/runtime-pictogram-search'
 import { db } from '@/db'
 import type { PictogramEntry } from '@/types'
-import type { MatchedToken } from '@/utils/text-to-image-matcher'
+import type { MatchedToken, TextToImageMatchResult } from '@/utils/text-to-image-matcher'
 import { ReceiverDisplayOverlay, type DisplayItem } from './ReceiverDisplayOverlay'
 import { LineIcon } from '@/components/ui/LineIcon'
 
@@ -26,10 +27,10 @@ import { LineIcon } from '@/components/ui/LineIcon'
 
 /**
  * 阶段流转：
- *   idle → matching → (ai-refining?) → review
+ *   idle → matching → (ai-refining?) → (image-searching?) → review
  *   ai-refining 仅在匹配率 < 0.6 或存在未匹配词时触发。
  */
-type Phase = 'idle' | 'matching' | 'ai-refining' | 'review'
+type Phase = 'idle' | 'matching' | 'ai-refining' | 'image-searching' | 'review'
 
 /**
  * 'manual' = 用户手动通过「换图」选取的图片，区别于自动匹配的几种类型。
@@ -87,9 +88,9 @@ export function ReceiverPanel() {
   const [inputText, setInputText] = useState('')
   const [items, setItems] = useState<EditableItem[]>([])
 
-  // AbortController ref：在组件卸载 / 重置时取消正在进行的 AI fetch 请求
-  const aiAbortRef = useRef<AbortController | null>(null)
-  useEffect(() => () => { aiAbortRef.current?.abort() }, [])
+  // AbortController ref：在组件卸载 / 重置时取消正在进行的 AI/补图请求
+  const pendingRequestRef = useRef<AbortController | null>(null)
+  useEffect(() => () => { pendingRequestRef.current?.abort() }, [])
 
   // 匹配世代计数器：每次 doMatch 调用自增，用于防止旧请求完成后覆盖新状态
   const matchGenRef = useRef(0)
@@ -147,12 +148,18 @@ export function ReceiverPanel() {
   }, [swapItemId, debouncedSwapQuery])
 
   // ── 文本匹配 ─────────────────────────────────────────────────────────── //
+  function getUnmatchedTokens(result: TextToImageMatchResult): string[] {
+    return result.matches
+      .filter((m) => m.pictogram === null)
+      .map((m) => m.token)
+  }
+
   async function doMatch(text: string) {
     const trimmed = text.trim()
     if (!trimmed) return
 
-    // 取消上一次未完成的 AI 请求（快速重复提交、重置等）
-    aiAbortRef.current?.abort()
+    // 取消上一次未完成的 AI / 补图请求（快速重复提交、重置等）
+    pendingRequestRef.current?.abort()
 
     // 世代令牌：本次调用结束前若世代已更新，说明有新的 doMatch 或 reset 发生
     const gen = ++matchGenRef.current
@@ -174,16 +181,14 @@ export function ReceiverPanel() {
       }
 
       // Step 2: 若匹配率低或有未匹配词，且 AI 已配置，触发 AI 辅助重分词
-      const unmatchedTokens = result.matches
-        .filter((m) => m.pictogram === null)
-        .map((m) => m.token)
+      const unmatchedTokens = getUnmatchedTokens(result)
       const needsAiFallback = result.matchRate < 0.6 || unmatchedTokens.length > 0
 
       if (needsAiFallback) {
         setPhase('ai-refining')
 
         const ctrl = new AbortController()
-        aiAbortRef.current = ctrl
+        pendingRequestRef.current = ctrl
 
         const aiTokens = await aiResegment({
           text: trimmed,
@@ -200,6 +205,27 @@ export function ReceiverPanel() {
           if (matchGenRef.current !== gen) return
           if (aiResult.matchRate >= result.matchRate) {
             result = aiResult
+          }
+        }
+      }
+
+      const stillUnmatchedTokens = getUnmatchedTokens(result)
+      if (stillUnmatchedTokens.length > 0) {
+        setPhase('image-searching')
+
+        const ctrl = new AbortController()
+        pendingRequestRef.current = ctrl
+
+        const addedPictograms = await searchAndStoreMissingPictograms(stillUnmatchedTokens, ctrl.signal)
+        if (ctrl.signal.aborted || matchGenRef.current !== gen) return
+
+        if (addedPictograms.length > 0) {
+          const repairedResult = await matchTextToImages(trimmed, {
+            preSegmented: result.segmentation.segments,
+          })
+          if (matchGenRef.current !== gen) return
+          if (repairedResult.matchRate >= result.matchRate) {
+            result = repairedResult
           }
         }
       }
@@ -264,7 +290,7 @@ export function ReceiverPanel() {
   }
 
   function handleReset() {
-    aiAbortRef.current?.abort()
+    pendingRequestRef.current?.abort()
     matchGenRef.current++ // 使任何正在进行的 doMatch 放弃提交状态
     setPhase('idle')
     setItems([])
@@ -400,6 +426,16 @@ export function ReceiverPanel() {
           <div className="text-center space-y-3">
             <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto" />
             <LineIcon name="sparkle" className="mx-auto h-5 w-5 text-slate-400" />
+          </div>
+        </div>
+      )}
+
+      {/* ── 专用 AAC 图库补图 ─────────────────────────────────────────── */}
+      {phase === 'image-searching' && (
+        <div className="flex-1 flex items-center justify-center p-8">
+          <div className="text-center space-y-3">
+            <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="text-gray-500">补图中</p>
           </div>
         </div>
       )}

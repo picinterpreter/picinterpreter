@@ -190,6 +190,10 @@ npm run deploy:aliyun -- \
 
 数据库初始化逻辑见 [src/db/index.ts](src/db/index.ts#L1)。
 
+## License
+
+本项目采用 GNU General Public License v3.0 or later（`GPL-3.0-or-later`）发布。详见 [LICENSE](LICENSE)。
+
 ## 调试与工具页
 
 - `http://localhost:3001/debug`：图片匹配验证工具

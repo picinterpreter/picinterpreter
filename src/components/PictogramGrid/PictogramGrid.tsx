@@ -20,6 +20,9 @@ const IMG_CLASS: Record<GridCols, string> = {
   4: 'w-12 h-12',
 }
 
+const ROOT_TILE_HEIGHT_CLASS = 'h-[136px] sm:h-[150px]'
+const ROOT_MEDIA_SLOT_CLASS = 'size-[76px] sm:size-20'
+
 const CATEGORY_COLORS: Record<string, string> = {
   quickchat: '#1d4ed8',
   actions:   '#16a34a',
@@ -136,6 +139,7 @@ export function PictogramGrid() {
   const title = isRoot ? '首页' : activeCategoryId === 'recent' ? '最近' : activeCategory?.name ?? '未找到'
   const showHierarchyControls = !isRoot
   const canGoBack = categoryPath.length > 0
+  const useCompactFolderTiles = activeCategoryId === 'quickchat'
 
   return (
     <div className={`flex flex-1 flex-col min-h-0 ${gridTone}`}>
@@ -174,8 +178,8 @@ export function PictogramGrid() {
                   color="#d97706"
                   cardTone="bg-yellow-100 border-yellow-200 text-yellow-950"
                   gridCols={gridCols}
-                  imageClassName="w-28 h-28 sm:w-32 sm:h-32"
-                  minHeightClassName="min-h-[160px] sm:min-h-[176px]"
+                  imageClassName={ROOT_MEDIA_SLOT_CLASS}
+                  minHeightClassName={ROOT_TILE_HEIGHT_CLASS}
                   labelClassName="text-xl sm:text-2xl"
                   onSelect={() => handleSelect(p)}
                 />
@@ -183,8 +187,9 @@ export function PictogramGrid() {
 
               {isRoot && (
                 <ActionTile
-                  icon={<LineIcon name="star" className="h-12 w-12 sm:h-14 sm:w-14" />}
+                  icon={<LineIcon name="star" className="size-12 sm:size-14" />}
                   label="常用"
+                  minHeightClassName={ROOT_TILE_HEIGHT_CLASS}
                   onClick={() => setShowSavedPhrases(true)}
                 />
               )}
@@ -195,6 +200,8 @@ export function PictogramGrid() {
                     <FolderTile
                       key={cat.id}
                       category={cat}
+                      minHeightClassName={useCompactFolderTiles ? ROOT_TILE_HEIGHT_CLASS : undefined}
+                      isCompactTile={useCompactFolderTiles}
                       onOpen={() => openCategory(cat.id)}
                     />
                   ))}
@@ -216,6 +223,8 @@ export function PictogramGrid() {
                 <FolderTile
                   key={cat.id}
                   category={cat}
+                  minHeightClassName={ROOT_TILE_HEIGHT_CLASS}
+                  isCompactTile
                   onOpen={() => openCategory(cat.id)}
                 />
               ))}
@@ -327,20 +336,34 @@ function PictogramTile({
 function FolderTile({
   category,
   icon,
+  minHeightClassName = 'min-h-[124px]',
+  isCompactTile = false,
   onOpen,
 }: {
   category: Category
   icon?: ReactNode
+  minHeightClassName?: string
+  isCompactTile?: boolean
   onOpen: () => void
 }) {
+  const layoutClassName = isCompactTile
+    ? 'justify-center gap-1.5 rounded-[22px] border-2 p-3'
+    : 'justify-end rounded-[18px] border px-3 pb-3 pt-6'
+  const iconClassName = isCompactTile
+    ? `flex ${ROOT_MEDIA_SLOT_CLASS} items-center justify-center text-[48px] leading-none sm:text-[54px]`
+    : 'flex min-h-[72px] items-center justify-center text-5xl leading-none sm:text-6xl'
+  const folderTabClassName = isCompactTile
+    ? 'rounded-br-[14px] rounded-tl-[22px] rounded-tr-[14px]'
+    : 'rounded-br-[14px] rounded-tl-[18px] rounded-tr-[14px]'
+
   return (
     <button
       onClick={onOpen}
-      className="apple-press group relative flex min-h-[124px] flex-col items-center justify-end rounded-[18px] border border-sky-200 bg-sky-100 px-3 pb-3 pt-6 text-sky-950 shadow-[0_2px_4px_rgba(15,23,42,0.08),0_10px_22px_rgba(15,23,42,0.10)] transition-all hover:bg-sky-50 hover:shadow-[0_3px_8px_rgba(15,23,42,0.10),0_16px_30px_rgba(15,23,42,0.12)]"
+      className={`apple-press group relative flex flex-col items-center border-sky-200 bg-sky-100 text-sky-950 shadow-[0_2px_4px_rgba(15,23,42,0.08),0_10px_22px_rgba(15,23,42,0.10)] transition-all hover:bg-sky-50 hover:shadow-[0_3px_8px_rgba(15,23,42,0.10),0_16px_30px_rgba(15,23,42,0.12)] ${layoutClassName} ${minHeightClassName}`}
       aria-label={`打开${category.name}`}
     >
-      <span className="absolute left-0 top-0 h-5 w-[48%] rounded-br-[14px] rounded-tl-[18px] rounded-tr-[14px] bg-sky-200 transition-colors group-hover:bg-sky-100" aria-hidden="true" />
-      <span className="flex min-h-[72px] items-center justify-center text-5xl leading-none sm:text-6xl">
+      <span className={`absolute left-0 top-0 h-5 w-[48%] bg-sky-200 transition-colors group-hover:bg-sky-100 ${folderTabClassName}`} aria-hidden="true" />
+      <span className={iconClassName}>
         {icon ?? category.icon}
       </span>
       <span className="mt-1 max-w-full truncate text-center text-base font-bold leading-tight text-slate-900">
@@ -353,19 +376,23 @@ function FolderTile({
 function ActionTile({
   icon,
   label,
+  minHeightClassName = 'min-h-[150px] sm:min-h-[166px]',
   onClick,
 }: {
   icon: ReactNode
   label: string
+  minHeightClassName?: string
   onClick: () => void
 }) {
   return (
     <button
       onClick={onClick}
-      className="apple-press flex min-h-[150px] flex-col items-center justify-center gap-2 rounded-[22px] border-2 border-emerald-200 bg-emerald-100 p-3 text-emerald-950 shadow-[0_2px_4px_rgba(15,23,42,0.08),0_10px_22px_rgba(15,23,42,0.10)] transition-all hover:bg-emerald-50 hover:shadow-[0_3px_8px_rgba(15,23,42,0.10),0_16px_30px_rgba(15,23,42,0.12)] sm:min-h-[166px]"
+      className={`apple-press flex flex-col items-center justify-center gap-1.5 rounded-[22px] border-2 border-emerald-200 bg-emerald-100 p-3 text-emerald-950 shadow-[0_2px_4px_rgba(15,23,42,0.08),0_10px_22px_rgba(15,23,42,0.10)] transition-all hover:bg-emerald-50 hover:shadow-[0_3px_8px_rgba(15,23,42,0.10),0_16px_30px_rgba(15,23,42,0.12)] ${minHeightClassName}`}
       aria-label={label}
     >
-      {icon}
+      <span className={`flex ${ROOT_MEDIA_SLOT_CLASS} items-center justify-center`}>
+        {icon}
+      </span>
       <span className="text-center text-xl font-bold leading-tight text-slate-900 sm:text-2xl">
         {label}
       </span>

@@ -1,35 +1,38 @@
-原仓库地址： https://github.com/lightcoloror/PicInterpreter
-# 图语家
+[中文版](README_cn.md)
 
-图语家是一个面向失语症患者和照护者的图片辅助沟通应用。用户可以通过点选图片表达需求，由系统生成候选句子并朗读出来；也支持把照护者输入的文字或语音反向转换为图片序列，帮助患者理解。
+Original repository: https://github.com/lightcoloror/PicInterpreter
 
-项目当前采用 `Next.js + React 19 + TypeScript` 构建，使用 `Dexie` 管理本地 `IndexedDB` 数据。AI 相关请求统一通过 Next.js 后端 `app/api` 转发，前端不再保存任何 API Key 或 Token。
+# Tuyujia
 
-## 核心功能
+Tuyujia is a picture-based assisted communication app for people with aphasia and their caregivers. Users can express needs by selecting pictures, then the system generates candidate sentences and reads them aloud. It also supports converting caregiver-entered text or speech back into picture sequences to help patients understand.
 
-- 表达模式：按分类浏览图片卡片，拼接表达内容，生成候选句子并语音播报。
-- 接收模式：输入文字或语音，自动匹配为图片序列，支持删改、换图、排序和全屏展示。
-- AI 句子生成：默认可离线使用模板生成；配置后端 AI 环境变量后可切换到在线模型。
-- 语音能力：浏览器原生 TTS 播报，支持试听与语速、语音人配置。
-- 语音输入：支持浏览器 Web Speech API。
-- 本地数据持久化：分类、图片、表达记录、收藏短语和文本转图片结果保存在浏览器本地。
-- 首次使用引导、紧急求助面板、常用语快捷栏、对话历史、分类可见性和高对比度设置。
-- 调试工具页：内置图片匹配验证页和 ARASAAC 导入工具页。
+The project currently uses `Next.js + React 19 + TypeScript`, with `Dexie` for local `IndexedDB` data. AI requests are routed through the Next.js backend under `app/api`, so the frontend no longer stores any API keys or tokens.
 
-## 运行环境
+## Core Features
 
-- Node.js 18+，当前项目在 `Node 24` 环境下开发。
+- Expression mode: browse picture cards by category, compose an expression, generate candidate sentences, and play them aloud.
+- Receiver mode: enter text or speech and automatically match it to a picture sequence, with support for deletion, replacement, sorting, and fullscreen display.
+- AI sentence generation: template-based generation works offline by default; online models can be enabled by configuring backend AI environment variables.
+- Speech output: browser-native TTS, with voice preview, speech rate, and voice selection settings.
+- Speech input: browser Web Speech API support.
+- Local data persistence: categories, pictures, expression records, saved phrases, and text-to-picture results are stored locally in the browser.
+- First-use guide, emergency help panel, quick common phrases, conversation history, category visibility settings, and high-contrast mode.
+- Debug tools: built-in picture matching validation page and ARASAAC import tool.
+
+## Requirements
+
+- Node.js 18+. The project is currently developed with `Node 24`.
 - npm
 
-安装依赖：
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-## 环境变量
+## Environment Variables
 
-复制 `.env.example` 为 `.env.local`，按需填写：
+Copy `.env.example` to `.env.local` and fill in the values you need:
 
 ```env
 DATABASE_URL=mysql://root:password@127.0.0.1:3306/picinterpreter
@@ -40,66 +43,66 @@ OPENSYMBOLS_SECRET=
 NEXT_PUBLIC_ENABLE_SERVICE_WORKER=false
 ```
 
-- `DATABASE_URL`：MySQL 连接串，供 Prisma 7 驱动适配器使用。
-- `AI_API_KEY`：服务端调用上游 LLM 的密钥，必填。
-- `AI_BASE_URL`：OpenAI-compatible 接口地址，默认 `https://api.openai.com/v1`。
-- `AI_MODEL`：默认模型名，默认 `gpt-4o-mini`。
-- `OPENSYMBOLS_SECRET`：可选。配置后，运行时缺图补图会在 ARASAAC 未命中时继续查询 OpenSymbols。该值只在服务端读取。
-- `NEXT_PUBLIC_ENABLE_SERVICE_WORKER`：是否启用前端 Service Worker，默认 `false`。仅在显式设置为 `true` 时启用。
+- `DATABASE_URL`: MySQL connection string used by the Prisma driver adapter.
+- `AI_API_KEY`: required server-side API key for the upstream LLM.
+- `AI_BASE_URL`: OpenAI-compatible API endpoint. Defaults to `https://api.openai.com/v1`.
+- `AI_MODEL`: default model name. Defaults to `gpt-4o-mini`.
+- `OPENSYMBOLS_SECRET`: optional. When configured, runtime missing-image backfill will query OpenSymbols after ARASAAC misses. This value is only read on the server.
+- `NEXT_PUBLIC_ENABLE_SERVICE_WORKER`: whether to enable the frontend Service Worker. Defaults to `false` and is only enabled when explicitly set to `true`.
 
-其中 `NEXT_PUBLIC_ENABLE_SERVICE_WORKER` 会在构建时注入前端，其余变量仅在 Next.js 服务端读取。
+`NEXT_PUBLIC_ENABLE_SERVICE_WORKER` is injected into the frontend at build time. All other variables are read only by the Next.js server.
 
-建议按下面的约定使用：
+Recommended conventions:
 
-- 本地开发：使用 `.env.local`。
-- 仓库示例：保留 `.env.example`，不要提交真实密钥。
-- CI 构建：只有在构建阶段确实需要时，才由 GitHub Actions 临时写入 `.env.production`。
-- 生产运行：优先通过 `systemd`、`pm2` 或容器平台直接注入环境变量，不依赖服务器上的环境文件。
+- Local development: use `.env.local`.
+- Repository example: keep `.env.example`, and do not commit real secrets.
+- CI builds: write `.env.production` from GitHub Actions only when the build phase truly needs it.
+- Production runtime: prefer injecting environment variables directly through `systemd`, `pm2`, or your container platform instead of relying on environment files on the server.
 
-原因：
+Why:
 
-- 这个项目本地开发约定已经是 `.env.local`。
-- Next.js 在 `production` 环境下会优先读取 `process.env`，然后读取 `.env.production.local`、`.env.local`、`.env.production`、`.env`。这意味着如果服务器上同时存在 `.env.local` 和 `.env.production`，前者会覆盖后者。
-- 因此不建议在服务器长期保留 `.env.local`，否则很容易出现“CI 传了 `.env.production`，但运行时实际没生效”的问题。
+- Local development in this project already uses `.env.local`.
+- In `production`, Next.js reads `process.env` first, then `.env.production.local`, `.env.local`, `.env.production`, and `.env`. If both `.env.local` and `.env.production` exist on the server, `.env.local` can override `.env.production`.
+- For that reason, keeping `.env.local` on the server long-term is not recommended. It can easily lead to a situation where CI uploaded `.env.production`, but the runtime values do not actually take effect.
 
-## 本地开发
+## Local Development
 
 ```bash
 npm run dev
 ```
 
-默认端口：`http://localhost:3001`
+Default port: `http://localhost:3001`
 
-## AI 后端接口
+## AI Backend API
 
-当前由 Next.js Route Handlers 提供：
+The current API is implemented with Next.js Route Handlers:
 
-- `GET /api/ai/health`：读取后端 AI 配置状态。
-- `POST /api/ai/sentences`：生成候选句。
-- `POST /api/ai/resegment`：AI 辅助重分词。
-- `POST /api/pictograms/search`：运行时缺图补图；服务端查询专用 AAC 图库，前端写入本地 IndexedDB。
-- `POST /api/client/bootstrap`：注册/恢复匿名设备身份，并设置 HttpOnly 设备 Cookie。
-- `POST /api/sync/push`：把本地 `expressions` / `saved_phrases` 变更推送到服务端 MySQL。
-- `GET /api/sync/pull`：按增量游标拉取服务端变更并回放到本地 Dexie。
+- `GET /api/ai/health`: read the backend AI configuration status.
+- `POST /api/ai/sentences`: generate candidate sentences.
+- `POST /api/ai/resegment`: AI-assisted word resegmentation.
+- `POST /api/pictograms/search`: runtime missing-image backfill; the server queries specialized AAC picture libraries and the frontend writes results into local IndexedDB.
+- `POST /api/client/bootstrap`: register or restore an anonymous device identity and set an HttpOnly device cookie.
+- `POST /api/sync/push`: push local `expressions` / `saved_phrases` changes to server-side MySQL.
+- `GET /api/sync/pull`: pull server-side changes by incremental cursor and replay them into local Dexie.
 
-前端只调用这些内部接口；实际的 `API Key`、`Base URL`、`Model` 均由服务端环境变量控制。
+The frontend only calls these internal endpoints. The actual `API Key`, `Base URL`, and `Model` are controlled by server-side environment variables.
 
-## MySQL 同步架构
+## MySQL Sync Architecture
 
-- 前端继续用 `Dexie` 作为本地主存储，保证离线体验。
-- 服务端通过 `Prisma 6 + mysql` 连接 MySQL 8。
-- 当前已上云的数据仅包括 `expressions` 与 `saved_phrases`。
-- 首次打开会自动 bootstrap 一个匿名设备身份；未来接入正式登录后，可把匿名用户数据合并到账号用户。
-- 本地新增了 `syncOutbox` / `syncState` 两张 Dexie 表，用于后台同步与增量游标管理。
+- The frontend continues to use `Dexie` as the local primary store to preserve the offline experience.
+- The server connects to MySQL 8 through `Prisma 6 + mysql`.
+- The cloud-synced data currently includes only `expressions` and `saved_phrases`.
+- On first open, the app automatically bootstraps an anonymous device identity. After formal login is added in the future, anonymous user data can be merged into an account user.
+- The local Dexie database now includes `syncOutbox` and `syncState` tables for background sync and incremental cursor management.
 
-首次初始化数据库可用：
+To initialize the database for the first time:
 
 ```bash
 npm run prisma:generate
 npm run prisma:push
 ```
 
-## 常用命令
+## Common Commands
 
 ```bash
 npm run dev
@@ -114,51 +117,51 @@ npm run test:watch
 npm run test:coverage
 ```
 
-## 生产部署（参考 firstEnglishBook 自动化流程）
+## Production Deployment
 
-项目已提供一套和 `firstEnglishBook` 类似的自动化部署链路：
+The project includes an automated deployment flow similar to `firstEnglishBook`:
 
-- GitHub Actions 在 `main` 分支变更后自动构建。
-- 构建产物使用 Next.js `standalone` 输出，适合直接部署到云服务器。
-- Actions 通过 SSH 把部署包上传到阿里云服务器，并执行远程重启命令。
+- GitHub Actions automatically builds after changes land on the `main` branch.
+- Build artifacts use Next.js `standalone` output, which is suitable for direct deployment to a cloud server.
+- Actions uploads the deployment package to the Alibaba Cloud server over SSH and runs the remote restart command.
 
-### 1. GitHub Actions 配置
+### 1. GitHub Actions Configuration
 
-工作流文件：`.github/workflows/deploy-aliyun.yml`
+Workflow file: `.github/workflows/deploy-aliyun.yml`
 
-需要在 GitHub 仓库的 `production` Environment 中配置：
+Configure the following in the GitHub repository's `production` Environment:
 
-- Secret `DEPLOY_SSH_PRIVATE_KEY`：部署用私钥。
-- Secret `DEPLOY_KNOWN_HOSTS`：目标服务器的 `known_hosts` 内容。
-- Secret `DEPLOY_ENV_FILE`：可选。写入 CI 的 `.env.production`，用于构建期需要的环境变量。若暂时不希望启用 Service Worker，请在其中加入 `NEXT_PUBLIC_ENABLE_SERVICE_WORKER=false`。
-- Variable `DEPLOY_HOST`：服务器地址，例如 `root@1.2.3.4`。
-- Variable `DEPLOY_PATH`：部署目录，例如 `/opt/picinterpreter`。
-- Variable `DEPLOY_PORT`：可选，默认 `22`。
-- Variable `DEPLOY_RESTART_CMD`：可选，默认 `systemctl restart picinterpreter`。
-- Variable `DEPLOY_START_CMD`：可选。首发部署或重启失败时的兜底启动命令。
+- Secret `DEPLOY_SSH_PRIVATE_KEY`: private key used for deployment.
+- Secret `DEPLOY_KNOWN_HOSTS`: `known_hosts` content for the target server.
+- Secret `DEPLOY_ENV_FILE`: optional. Written to CI as `.env.production` for environment variables needed at build time. If you do not want to enable the Service Worker yet, include `NEXT_PUBLIC_ENABLE_SERVICE_WORKER=false`.
+- Variable `DEPLOY_HOST`: server address, for example `root@1.2.3.4`.
+- Variable `DEPLOY_PATH`: deployment directory, for example `/opt/picinterpreter`.
+- Variable `DEPLOY_PORT`: optional, defaults to `22`.
+- Variable `DEPLOY_RESTART_CMD`: optional, defaults to `systemctl restart picinterpreter`.
+- Variable `DEPLOY_START_CMD`: optional fallback start command for first-time deployment or restart failure.
 
-### 2. 服务器要求
+### 2. Server Requirements
 
-- Node.js 20+。
-- 目标目录具备写权限。
-- 远程服务建议通过 `systemd` 或 `pm2` 托管。
+- Node.js 20+.
+- Write permission for the target directory.
+- The remote service should preferably be managed by `systemd` or `pm2`.
 
-部署脚本会上传这些产物：
+The deployment script uploads these artifacts:
 
-- `server.js` 与 `node_modules`（来自 `.next/standalone`）
+- `server.js` and `node_modules` from `.next/standalone`
 - `.next/static`
 - `public`
-- `.env.production`（如果 CI 工作区中存在）
+- `.env.production`, if it exists in the CI workspace
 
-生产环境建议这样分层：
+Recommended production environment layering:
 
-- 首选：在 `systemd`/`pm2`/容器平台中直接配置 `AI_API_KEY`、`AI_BASE_URL`、`AI_MODEL`。
-- 次选：如果确实需要随部署包下发，再使用 `.env.production`。
-- 避免：在服务器手工放置 `.env.local`。
+- Preferred: configure `AI_API_KEY`, `AI_BASE_URL`, and `AI_MODEL` directly in `systemd`, `pm2`, or your container platform.
+- Secondary option: use `.env.production` if the deployment package truly needs to ship it.
+- Avoid: manually placing `.env.local` on the server.
 
-### 3. 手动部署
+### 3. Manual Deployment
 
-也可以在本地直接执行：
+You can also deploy directly from your local machine:
 
 ```bash
 npm run deploy:aliyun -- \
@@ -167,7 +170,7 @@ npm run deploy:aliyun -- \
   --restart "systemctl restart picinterpreter"
 ```
 
-首发部署如果远程服务还没创建，可以附带启动命令，例如：
+For an initial deployment where the remote service does not exist yet, include a start command:
 
 ```bash
 npm run deploy:aliyun -- \
@@ -177,53 +180,53 @@ npm run deploy:aliyun -- \
   --start "pm2 start server.js --name picinterpreter --update-env"
 ```
 
-如果你的生产环境依赖 `AI_API_KEY`、`AI_BASE_URL`、`AI_MODEL`，建议优先通过 `systemd`/`pm2` 的环境配置注入，而不是只依赖构建期变量。只有在构建期或打包部署链路明确需要时，再额外提供 `.env.production`。
+If your production environment depends on `AI_API_KEY`, `AI_BASE_URL`, and `AI_MODEL`, prefer injecting them through the environment configuration of `systemd` or `pm2` instead of relying only on build-time variables. Provide `.env.production` only when the build or packaging flow explicitly needs it.
 
-当前仓库默认关闭 Service Worker，部署后会主动清理旧的 `tuyujia-*` 缓存和已注册的 Service Worker，避免浏览器继续使用旧版本静态资源。以后如果需要重新启用，只需在生产环境中把 `NEXT_PUBLIC_ENABLE_SERVICE_WORKER=true` 后重新部署即可。
+The repository disables the Service Worker by default. After deployment, it proactively clears old `tuyujia-*` caches and registered Service Workers so browsers do not keep using stale static assets. To re-enable it later, set `NEXT_PUBLIC_ENABLE_SERVICE_WORKER=true` in production and redeploy.
 
-## 数据与存储
+## Data and Storage
 
-- 种子数据位于 [public/seed/categories.json](public/seed/categories.json) 和 [public/seed/pictograms.json](public/seed/pictograms.json)。
-- 首次加载或种子版本升级时，前端会将种子数据导入本地 `IndexedDB`。
-- 用户自己的表达记录、收藏短语和部分设置不会因种子重导而清空。
-- 首次使用引导状态和部分 UI 配置保存在 `localStorage`。
+- Seed data is located at [public/seed/categories.json](public/seed/categories.json) and [public/seed/pictograms.json](public/seed/pictograms.json).
+- On first load or seed version upgrades, the frontend imports seed data into local `IndexedDB`.
+- User-owned expression records, saved phrases, and some settings are not cleared when seeds are re-imported.
+- The first-use guide state and some UI preferences are stored in `localStorage`.
 
-数据库初始化逻辑见 [src/db/index.ts](src/db/index.ts#L1)。
+Database initialization logic: [src/db/index.ts](src/db/index.ts#L1).
 
 ## License
 
-本项目采用 GNU General Public License v3.0 or later（`GPL-3.0-or-later`）发布。详见 [LICENSE](LICENSE)。
+This project is released under the GNU General Public License v3.0 or later (`GPL-3.0-or-later`). See [LICENSE](LICENSE).
 
-## 调试与工具页
+## Debug and Tools Pages
 
-- `http://localhost:3001/debug`：图片匹配验证工具
-- `http://localhost:3001/import`：ARASAAC 批量导入工具
+- `http://localhost:3001/debug`: picture matching validation tool
+- `http://localhost:3001/import`: ARASAAC batch import tool
 
-其中导入工具会根据词库搜索 ARASAAC 图片并导出新的 `pictograms.json`，便于更新种子数据。
+The import tool searches ARASAAC pictures based on the vocabulary list and exports a new `pictograms.json`, making it easier to update seed data.
 
-## 项目结构
+## Project Structure
 
 ```text
 app/
-  api/               Next.js 后端接口
+  api/               Next.js backend APIs
 src/
-  components/        UI 组件与页面片段
-  hooks/             AI、语音、PWA 等自定义 Hook
-  providers/         NLG / TTS 提供者适配层
-  server/            服务端 AI 配置与调用封装
-  stores/            Zustand 状态管理
-  db/                Dexie 数据库与种子导入
-  utils/             文本匹配、重分词、占位图等工具函数
-  data/              词库数据
+  components/        UI components and page sections
+  hooks/             Custom hooks for AI, speech, PWA, and more
+  providers/         NLG / TTS provider adapters
+  server/            Server-side AI configuration and call wrappers
+  stores/            Zustand state management
+  db/                Dexie database and seed import
+  utils/             Text matching, resegmentation, placeholders, and other utilities
+  data/              Vocabulary data
 public/
-  seed/              分类与图片种子数据
-  manifest.json      PWA 清单
+  seed/              Category and picture seed data
+  manifest.json      PWA manifest
   sw.js              Service Worker
 scripts/
-  *.py               图片与种子数据整理脚本
+  *.py               Picture and seed data processing scripts
 ```
 
-## 技术栈
+## Tech Stack
 
 - React 19
 - TypeScript
@@ -233,11 +236,11 @@ scripts/
 - Dexie
 - Vitest
 
-## 当前状态
+## Current Status
 
-这是一个以移动端触控体验为优先的原型项目，已经具备完整的本地表达流程、接收流程和可选 AI 能力。当前版本已将 AI 请求收口到 Next.js 后端，后续如果继续演进，优先方向通常会是：
+This is a prototype project with a mobile-first touch experience. It already includes a complete local expression flow, receiver flow, and optional AI features. AI requests are now centralized through the Next.js backend. If the project continues to evolve, the likely priorities are:
 
-- 更完整的无障碍与大字体优化
-- 更稳定的图片词库与审核流程
-- 更清晰的部署方式与生产环境配置
-- 更系统的端到端测试
+- More complete accessibility and large-text optimization
+- A more stable picture vocabulary and review workflow
+- Clearer deployment and production environment configuration
+- More systematic end-to-end tests

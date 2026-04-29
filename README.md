@@ -150,7 +150,7 @@ For larger changes, please open or comment on an issue first so we can align on 
 - **Offline sentence generation**: template-based generation works without an AI key.
 - **Optional online AI**: server-side API routes can call OpenAI-compatible models for better sentence generation and resegmentation.
 - **Speech output**: browser-native TTS with voice preview, speech rate, and voice selection settings.
-- **Speech input**: browser Web Speech API support, especially relevant for iOS/Safari.
+- **Speech input**: browser Web Speech API support where available, with text input as the reliable fallback.
 - **Local-first persistence**: categories, pictograms, expression records, saved phrases, settings, and sync state are stored locally in IndexedDB via Dexie.
 - **Optional cloud sync**: selected local records can sync to MySQL through a server-side API and outbox pattern.
 - **Debug tools**: pictogram matching validator at `/debug`, ARASAAC import tool at `/import`.

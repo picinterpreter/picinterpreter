@@ -150,7 +150,7 @@ npm run dev
 - **离线句子生成**：没有 AI Key 时使用模板生成候选句。
 - **可选在线 AI**：通过服务端 API 路由调用 OpenAI-compatible 模型，用于更高质量的句子生成和重分词。
 - **语音播报**：浏览器原生 TTS，支持试听、语速和语音选择。
-- **语音输入**：支持浏览器 Web Speech API，尤其适合 iOS/Safari 路径。
+- **语音输入**：在浏览器支持时使用 Web Speech API，稳定兜底仍然是文字输入。
 - **本地优先持久化**：分类、图片、表达记录、收藏短语、设置和同步状态保存在 IndexedDB（Dexie）。
 - **可选云同步**：部分本地记录可通过服务端 API 和 outbox 模式同步到 MySQL。
 - **调试工具**：`/debug` 图片匹配验证页，`/import` ARASAAC 导入工具页。

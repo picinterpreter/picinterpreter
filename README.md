@@ -2,26 +2,203 @@
 
 Original repository: https://github.com/lightcoloror/PicInterpreter
 
-# Tuyujia
+# PicInterpreter / Tuyujia
 
-Tuyujia is a picture-based assisted communication app for people with aphasia and their caregivers. Users can express needs by selecting pictures, then the system generates candidate sentences and reads them aloud. It also supports converting caregiver-entered text or speech back into picture sequences to help patients understand.
+![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)
+![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
+![Issues](https://img.shields.io/github/issues/picinterpreter/picinterpreter)
 
-The project currently uses `Next.js + React 19 + TypeScript`, with `Dexie` for local `IndexedDB` data. AI requests are routed through the Next.js backend under `app/api`, so the frontend no longer stores any API keys or tokens.
+PicInterpreter, also known as Tuyujia, is an open-source AAC (Augmentative and Alternative Communication) app for people with aphasia and their caregivers.
+
+It supports two communication directions:
+
+- **Patient to caregiver**: the patient taps pictograms, the app generates candidate sentences, then reads them aloud.
+- **Caregiver to patient**: the caregiver speaks or types, the app converts the message into a pictogram sequence the patient can understand.
+
+The goal is simple but demanding: **basic bidirectional communication should still work without network access**.
+
+---
+
+## Screenshots
+
+Screenshots are coming soon.
+
+Run the app locally to see the current interface:
+
+```bash
+npm install
+npm run dev
+# Open http://localhost:3001
+```
+
+Want to contribute screenshots or a short demo GIF? Add files under `docs/screenshots/` and open a PR.
+
+---
+
+## Why This Project Matters
+
+Aphasia can take away a person's ability to speak, read, write, or reliably understand spoken language after stroke, brain injury, or neurological disease. Many patients can still think clearly, but cannot easily turn thoughts into words or decode what others say.
+
+PicInterpreter uses pictograms as a bridge:
+
+```text
+Caregiver speech/text -> pictogram sequence -> patient understands
+Patient pictograms -> candidate sentences -> caregiver hears
+```
+
+This is not just a picture picker. The hard part is turning real-life Chinese speech into pictogram sequences that are stable, understandable, and correctable.
+
+---
+
+## The Hard Part
+
+The central challenge is: how do we reliably convert real-life Chinese speech, dialect, messy word order, omissions, and caregiver corrections into pictogram sequences a person with aphasia can actually understand?
+
+The system also needs to use context: the current scene, recent conversation, personal habits, caregiver corrections, and common expressions. At the same time, the core bidirectional communication flow must still work without network access.
+
+That makes PicInterpreter an offline-first AAC communication system, not just an image library:
+
+- Caregiver speech may be colloquial Mandarin, Cantonese, dialectal, incomplete, or out of order.
+- The patient should see a clear, ordered, correctable pictogram sequence, not raw text.
+- AI can polish, repair, and suggest, but it must not become a hard dependency.
+- Every caregiver correction should gradually improve personal and family communication rules.
+
+---
+
+## Product Principles
+
+These principles guide technical and UX decisions:
+
+- **Offline-first**: core bidirectional communication must work without network access.
+- **AI assists, does not control**: AI may polish sentences, repair failed matching, or suggest alternatives, but deterministic local flows remain the baseline.
+- **Caregivers correct receiver output**: patients should not be asked to repair pictogram sequences; caregivers review and correct what they said.
+- **Corrections should make the app smarter**: corrections should eventually improve matching for the account or family workspace.
+- **Patient-facing UI is icon-first**: patient-side controls should use large touch targets, clear pictograms, high contrast, and minimal text.
+- **Pictograms are communication assets**: each pictogram needs meaning, labels, source, license, privacy status, and linguistic metadata.
+- **Private pictures are allowed but controlled**: caregivers should decide whether a picture syncs, exports, or stays local-only.
+
+---
+
+## Quick Start
+
+No database and no AI key are required to run the core UI locally.
+
+```bash
+npm install
+npm run dev
+# Open http://localhost:3001
+```
+
+What works without setup:
+
+- local pictogram browsing
+- patient expression flow
+- receiver text-to-pictogram flow
+- offline template sentence generation
+- browser-native speech output where supported
+
+Optional features need extra setup:
+
+- online sentence generation and resegmentation require `AI_API_KEY`
+- cloud sync requires `DATABASE_URL`
+- runtime missing-image search may require server-side library credentials
+
+Full offline behavior is being hardened and tracked in [#32](https://github.com/picinterpreter/picinterpreter/issues/32).
+
+---
+
+## Current Priorities
+
+1. **Offline acceptance baseline**: prove that core bidirectional communication works without network access ([#32](https://github.com/picinterpreter/picinterpreter/issues/32)).
+2. **Receiver-side persistence and correction loop**: speech/text results should be saved, then caregiver corrections should update the same record ([#26](https://github.com/picinterpreter/picinterpreter/issues/26)).
+3. **Text-to-pictogram matching quality**: improve phrase protection, synonym coverage, dialect normalization, and unmatched-word recovery ([#8](https://github.com/picinterpreter/picinterpreter/issues/8), [#15](https://github.com/picinterpreter/picinterpreter/issues/15), [#19](https://github.com/picinterpreter/picinterpreter/issues/19)).
+4. **Structured pictogram library**: source/license/privacy metadata, linguistic attributes, reusable picture sets, and imports from CBoard/OpenBoard/OBF ([#11](https://github.com/picinterpreter/picinterpreter/issues/11), [#30](https://github.com/picinterpreter/picinterpreter/issues/30)).
+5. **LLM context payload**: conversation history should preserve direction, text, pictogram sequence, and correction history for future model use ([#31](https://github.com/picinterpreter/picinterpreter/issues/31)).
+6. **Accessibility and icon-first patient controls** ([#6](https://github.com/picinterpreter/picinterpreter/issues/6)).
+7. **E2E and real-device validation** ([#33](https://github.com/picinterpreter/picinterpreter/issues/33)).
+
+---
+
+## How to Contribute
+
+You do not need to work on AI to contribute. Useful work spans UI, accessibility, pictogram data, offline behavior, tests, Chinese NLP, and backend sync.
+
+For larger changes, please open or comment on an issue first so we can align on product direction before implementation.
+
+### Good Entry Points
+
+- [#16 — Voice waveform visualization during speech input](https://github.com/picinterpreter/picinterpreter/issues/16)
+- [#33 — Playwright / E2E / real-device acceptance testing](https://github.com/picinterpreter/picinterpreter/issues/33)
+
+### Contribution Areas
+
+| Area | Good places to start |
+| --- | --- |
+| Text matching / NLP | [#8](https://github.com/picinterpreter/picinterpreter/issues/8), [#15](https://github.com/picinterpreter/picinterpreter/issues/15), [#19](https://github.com/picinterpreter/picinterpreter/issues/19) |
+| Receiver flow | [#26](https://github.com/picinterpreter/picinterpreter/issues/26) |
+| Accessibility | [#6](https://github.com/picinterpreter/picinterpreter/issues/6) |
+| Pictogram data and imports | [#11](https://github.com/picinterpreter/picinterpreter/issues/11), [#30](https://github.com/picinterpreter/picinterpreter/issues/30) |
+| Testing | [#33](https://github.com/picinterpreter/picinterpreter/issues/33) |
+| Backend / sync | [#27](https://github.com/picinterpreter/picinterpreter/issues/27), [#31](https://github.com/picinterpreter/picinterpreter/issues/31) |
+
+---
 
 ## Core Features
 
-- Expression mode: browse picture cards by category, compose an expression, generate candidate sentences, and play them aloud.
-- Receiver mode: enter text or speech and automatically match it to a picture sequence, with support for deletion, replacement, sorting, and fullscreen display.
-- AI sentence generation: template-based generation works offline by default; online models can be enabled by configuring backend AI environment variables.
-- Speech output: browser-native TTS, with voice preview, speech rate, and voice selection settings.
-- Speech input: browser Web Speech API support.
-- Local data persistence: categories, pictures, expression records, saved phrases, and text-to-picture results are stored locally in the browser.
-- First-use guide, emergency help panel, quick common phrases, conversation history, category visibility settings, and high-contrast mode.
-- Debug tools: built-in picture matching validation page and ARASAAC import tool.
+- **Expression mode**: browse pictogram cards by category, compose an expression, generate candidate sentences, and play them aloud.
+- **Receiver mode**: enter text or speech and match it to a pictogram sequence, with deletion, replacement, reordering, and fullscreen patient display.
+- **Offline sentence generation**: template-based generation works without an AI key.
+- **Optional online AI**: server-side API routes can call OpenAI-compatible models for better sentence generation and resegmentation.
+- **Speech output**: browser-native TTS with voice preview, speech rate, and voice selection settings.
+- **Speech input**: browser Web Speech API support, especially relevant for iOS/Safari.
+- **Local-first persistence**: categories, pictograms, expression records, saved phrases, settings, and sync state are stored locally in IndexedDB via Dexie.
+- **Optional cloud sync**: selected local records can sync to MySQL through a server-side API and outbox pattern.
+- **Debug tools**: pictogram matching validator at `/debug`, ARASAAC import tool at `/import`.
+
+---
+
+## Architecture Overview
+
+The app is designed as local-first software. Dexie/IndexedDB is the primary store. Server APIs, MySQL sync, and AI calls are optional enhancements.
+
+```text
+Expression flow
+  Category browser -> Pictogram selection -> Sentence generation -> TTS output
+
+Receiver flow
+  Voice/text input -> Normalization -> Tokenization -> Pictogram matching
+  -> Caregiver review/correction -> Fullscreen patient display
+
+Data architecture
+  Dexie / IndexedDB        primary local store
+  Next.js API routes       optional AI, sync, image-search backend
+  MySQL + Prisma           optional cloud sync
+  LLM providers            optional repair, polishing, resegmentation
+```
+
+Architecture and product references:
+
+- [Product requirements](docs/prd.md)
+- [Architecture and technology decisions draft](https://github.com/picinterpreter/picinterpreter/pull/34)
+
+---
+
+## Tech Stack
+
+- Next.js 15
+- React 19
+- TypeScript 6
+- Tailwind CSS 4
+- Zustand
+- Dexie / IndexedDB
+- Prisma 6 + MySQL
+- Vitest
+
+---
 
 ## Requirements
 
-- Node.js 18+. The project is currently developed with `Node 24`.
+- Node.js 18+; current development has been tested with Node 24
 - npm
 
 Install dependencies:
@@ -30,9 +207,11 @@ Install dependencies:
 npm install
 ```
 
+---
+
 ## Environment Variables
 
-Copy `.env.example` to `.env.local` and fill in the values you need:
+Copy `.env.example` to `.env.local` and fill in only what you need:
 
 ```env
 DATABASE_URL=mysql://root:password@127.0.0.1:3306/picinterpreter
@@ -43,204 +222,130 @@ OPENSYMBOLS_SECRET=
 NEXT_PUBLIC_ENABLE_SERVICE_WORKER=false
 ```
 
-- `DATABASE_URL`: MySQL connection string used by the Prisma driver adapter.
-- `AI_API_KEY`: required server-side API key for the upstream LLM.
-- `AI_BASE_URL`: OpenAI-compatible API endpoint. Defaults to `https://api.openai.com/v1`.
-- `AI_MODEL`: default model name. Defaults to `gpt-4o-mini`.
-- `OPENSYMBOLS_SECRET`: optional. When configured, runtime missing-image backfill will query OpenSymbols after ARASAAC misses. This value is only read on the server.
-- `NEXT_PUBLIC_ENABLE_SERVICE_WORKER`: whether to enable the frontend Service Worker. Defaults to `false` and is only enabled when explicitly set to `true`.
+| Variable | Required | Description |
+| --- | --- | --- |
+| `DATABASE_URL` | Optional | MySQL connection string. Omit it for local-only development. |
+| `AI_API_KEY` | Optional | Server-side LLM API key. Without it, sentence generation falls back to templates. |
+| `AI_BASE_URL` | Optional | OpenAI-compatible endpoint. Defaults to `https://api.openai.com/v1`. |
+| `AI_MODEL` | Optional | Model name. Defaults to `gpt-4o-mini`. |
+| `OPENSYMBOLS_SECRET` | Optional | Enables OpenSymbols fallback when ARASAAC has no result. Server-only. |
+| `NEXT_PUBLIC_ENABLE_SERVICE_WORKER` | Optional | Enables the frontend Service Worker. Defaults to `false` in development to avoid stale cache issues. |
 
-`NEXT_PUBLIC_ENABLE_SERVICE_WORKER` is injected into the frontend at build time. All other variables are read only by the Next.js server.
+`NEXT_PUBLIC_ENABLE_SERVICE_WORKER` is injected into the frontend at build time. All other variables are server-side only.
 
 Recommended conventions:
 
 - Local development: use `.env.local`.
-- Repository example: keep `.env.example`, and do not commit real secrets.
-- CI builds: write `.env.production` from GitHub Actions only when the build phase truly needs it.
-- Production runtime: prefer injecting environment variables directly through `systemd`, `pm2`, or your container platform instead of relying on environment files on the server.
+- CI: write `.env.production` only when the build phase needs it.
+- Production runtime: prefer injecting environment variables through `systemd`, `pm2`, or your container platform.
+- Avoid keeping `.env.local` on production servers, because it can silently override production-specific values.
 
-Why:
-
-- Local development in this project already uses `.env.local`.
-- In `production`, Next.js reads `process.env` first, then `.env.production.local`, `.env.local`, `.env.production`, and `.env`. If both `.env.local` and `.env.production` exist on the server, `.env.local` can override `.env.production`.
-- For that reason, keeping `.env.local` on the server long-term is not recommended. It can easily lead to a situation where CI uploaded `.env.production`, but the runtime values do not actually take effect.
-
-## Local Development
-
-```bash
-npm run dev
-```
-
-Default port: `http://localhost:3001`
-
-## AI Backend API
-
-The current API is implemented with Next.js Route Handlers:
-
-- `GET /api/ai/health`: read the backend AI configuration status.
-- `POST /api/ai/sentences`: generate candidate sentences.
-- `POST /api/ai/resegment`: AI-assisted word resegmentation.
-- `POST /api/pictograms/search`: runtime missing-image backfill; the server queries specialized AAC picture libraries and the frontend writes results into local IndexedDB.
-- `POST /api/client/bootstrap`: register or restore an anonymous device identity and set an HttpOnly device cookie.
-- `POST /api/sync/push`: push local `expressions` / `saved_phrases` changes to server-side MySQL.
-- `GET /api/sync/pull`: pull server-side changes by incremental cursor and replay them into local Dexie.
-
-The frontend only calls these internal endpoints. The actual `API Key`, `Base URL`, and `Model` are controlled by server-side environment variables.
-
-## MySQL Sync Architecture
-
-- The frontend continues to use `Dexie` as the local primary store to preserve the offline experience.
-- The server connects to MySQL 8 through `Prisma 6 + mysql`.
-- The cloud-synced data currently includes only `expressions` and `saved_phrases`.
-- On first open, the app automatically bootstraps an anonymous device identity. After formal login is added in the future, anonymous user data can be merged into an account user.
-- The local Dexie database now includes `syncOutbox` and `syncState` tables for background sync and incremental cursor management.
-
-To initialize the database for the first time:
-
-```bash
-npm run prisma:generate
-npm run prisma:push
-```
+---
 
 ## Common Commands
 
 ```bash
-npm run dev
-npm run build
-npm run start
-npm run prisma:generate
-npm run prisma:push
-npm run deploy:aliyun -- --host root@1.2.3.4 --path /opt/picinterpreter
-npm run lint
-npm run test
-npm run test:watch
-npm run test:coverage
+npm run dev              # Start dev server at http://localhost:3001
+npm run build            # Production build
+npm run start            # Start production build locally
+npm run lint             # ESLint
+npm run test             # Vitest, run once
+npm run test:watch       # Vitest watch mode
+npm run test:coverage    # Vitest coverage report
+npm run prisma:generate  # Generate Prisma client
+npm run prisma:push      # Push schema to MySQL
 ```
 
-## Production Deployment
+---
 
-The project includes an automated deployment flow similar to `firstEnglishBook`:
+## Backend API
 
-- GitHub Actions automatically builds after changes land on the `main` branch.
-- Build artifacts use Next.js `standalone` output, which is suitable for direct deployment to a cloud server.
-- Actions uploads the deployment package to the Alibaba Cloud server over SSH and runs the remote restart command.
+Implemented with Next.js Route Handlers:
 
-### 1. GitHub Actions Configuration
+| Endpoint | Method | Description |
+| --- | --- | --- |
+| `/api/ai/health` | GET | Read backend AI configuration status |
+| `/api/ai/sentences` | POST | Generate candidate sentences |
+| `/api/ai/resegment` | POST | AI-assisted word resegmentation |
+| `/api/pictograms/search` | POST | Runtime missing-image backfill through AAC picture libraries |
+| `/api/client/bootstrap` | POST | Register or restore anonymous device identity |
+| `/api/sync/push` | POST | Push local expression/phrase changes to MySQL |
+| `/api/sync/pull` | GET | Pull server changes by incremental cursor |
 
-Workflow file: `.github/workflows/deploy-aliyun.yml`
+The frontend only calls internal endpoints. Provider API keys stay on the server.
 
-Configure the following in the GitHub repository's `production` Environment:
-
-- Secret `DEPLOY_SSH_PRIVATE_KEY`: private key used for deployment.
-- Secret `DEPLOY_KNOWN_HOSTS`: `known_hosts` content for the target server.
-- Secret `DEPLOY_ENV_FILE`: optional. Written to CI as `.env.production` for environment variables needed at build time. If you do not want to enable the Service Worker yet, include `NEXT_PUBLIC_ENABLE_SERVICE_WORKER=false`.
-- Variable `DEPLOY_HOST`: server address, for example `root@1.2.3.4`.
-- Variable `DEPLOY_PATH`: deployment directory, for example `/opt/picinterpreter`.
-- Variable `DEPLOY_PORT`: optional, defaults to `22`.
-- Variable `DEPLOY_RESTART_CMD`: optional, defaults to `systemctl restart picinterpreter`.
-- Variable `DEPLOY_START_CMD`: optional fallback start command for first-time deployment or restart failure.
-
-### 2. Server Requirements
-
-- Node.js 20+.
-- Write permission for the target directory.
-- The remote service should preferably be managed by `systemd` or `pm2`.
-
-The deployment script uploads these artifacts:
-
-- `server.js` and `node_modules` from `.next/standalone`
-- `.next/static`
-- `public`
-- `.env.production`, if it exists in the CI workspace
-
-Recommended production environment layering:
-
-- Preferred: configure `AI_API_KEY`, `AI_BASE_URL`, and `AI_MODEL` directly in `systemd`, `pm2`, or your container platform.
-- Secondary option: use `.env.production` if the deployment package truly needs to ship it.
-- Avoid: manually placing `.env.local` on the server.
-
-### 3. Manual Deployment
-
-You can also deploy directly from your local machine:
-
-```bash
-npm run deploy:aliyun -- \
-  --host root@1.2.3.4 \
-  --path /opt/picinterpreter \
-  --restart "systemctl restart picinterpreter"
-```
-
-For an initial deployment where the remote service does not exist yet, include a start command:
-
-```bash
-npm run deploy:aliyun -- \
-  --host root@1.2.3.4 \
-  --path /opt/picinterpreter \
-  --restart "systemctl restart picinterpreter" \
-  --start "pm2 start server.js --name picinterpreter --update-env"
-```
-
-If your production environment depends on `AI_API_KEY`, `AI_BASE_URL`, and `AI_MODEL`, prefer injecting them through the environment configuration of `systemd` or `pm2` instead of relying only on build-time variables. Provide `.env.production` only when the build or packaging flow explicitly needs it.
-
-The repository disables the Service Worker by default. After deployment, it proactively clears old `tuyujia-*` caches and registered Service Workers so browsers do not keep using stale static assets. To re-enable it later, set `NEXT_PUBLIC_ENABLE_SERVICE_WORKER=true` in production and redeploy.
+---
 
 ## Data and Storage
 
-- Seed data is located at [public/seed/categories.json](public/seed/categories.json) and [public/seed/pictograms.json](public/seed/pictograms.json).
-- On first load or seed version upgrades, the frontend imports seed data into local `IndexedDB`.
-- User-owned expression records, saved phrases, and some settings are not cleared when seeds are re-imported.
-- The first-use guide state and some UI preferences are stored in `localStorage`.
+- Seed data: [`public/seed/categories.json`](public/seed/categories.json) and [`public/seed/pictograms.json`](public/seed/pictograms.json)
+- First load and seed upgrades import seed data into IndexedDB
+- User expression records, saved phrases, and settings should survive seed re-imports
+- First-use guide state and some UI preferences are stored in `localStorage`
+- Database initialization: [`src/db/index.ts`](src/db/index.ts)
 
-Database initialization logic: [src/db/index.ts](src/db/index.ts#L1).
+---
 
-## License
+## Optional MySQL Sync
 
-This project is released under the GNU General Public License v3.0 or later (`GPL-3.0-or-later`). See [LICENSE](LICENSE).
+- Dexie remains the local primary store.
+- MySQL 8 via Prisma is used for optional cross-device sync.
+- Current synced data includes expressions and saved phrases.
+- The local database includes outbox/state tables for background sync and incremental cursors.
+- First open bootstraps an anonymous device identity; future account support can merge anonymous data into a user or family workspace.
 
-## Debug and Tools Pages
+First-time database setup:
 
-- `http://localhost:3001/debug`: picture matching validation tool
+```bash
+npm run prisma:generate
+npm run prisma:push
+```
+
+---
+
+## Debug Tools
+
+- `http://localhost:3001/debug`: pictogram matching validator
 - `http://localhost:3001/import`: ARASAAC batch import tool
 
-The import tool searches ARASAAC pictures based on the vocabulary list and exports a new `pictograms.json`, making it easier to update seed data.
+---
 
 ## Project Structure
 
 ```text
 app/
-  api/               Next.js backend APIs
+  api/               Next.js backend API routes
 src/
   components/        UI components and page sections
-  hooks/             Custom hooks for AI, speech, PWA, and more
+  hooks/             AI, speech, PWA, sync, and other hooks
   providers/         NLG / TTS provider adapters
-  server/            Server-side AI configuration and call wrappers
+  server/            Server-side AI config and call wrappers
   stores/            Zustand state management
-  db/                Dexie database and seed import
-  utils/             Text matching, resegmentation, placeholders, and other utilities
-  data/              Vocabulary data
+  db/                Dexie schema, migrations, and seed import
+  utils/             Text matching, resegmentation, placeholders, and helpers
+  data/              Vocabulary and lexicon data
 public/
-  seed/              Category and picture seed data
+  seed/              Category and pictogram seed JSON
   manifest.json      PWA manifest
   sw.js              Service Worker
 scripts/
-  *.py               Picture and seed data processing scripts
+  *.py               Pictogram and seed data processing scripts
+docs/
+  *.md               Product, architecture, and research notes
 ```
 
-## Tech Stack
+---
 
-- React 19
-- TypeScript
-- Next.js
-- Tailwind CSS 4
-- Zustand
-- Dexie
-- Vitest
+## Production Deployment
 
-## Current Status
+The repository includes a GitHub Actions deployment workflow and a manual deployment script for server-based deployments.
 
-This is a prototype project with a mobile-first touch experience. It already includes a complete local expression flow, receiver flow, and optional AI features. AI requests are now centralized through the Next.js backend. If the project continues to evolve, the likely priorities are:
+For most contributors, deployment setup is not required. You can work on the product locally with `npm run dev`.
 
-- More complete accessibility and large-text optimization
-- A more stable picture vocabulary and review workflow
-- Clearer deployment and production environment configuration
-- More systematic end-to-end tests
+Production deployments should inject secrets through the hosting platform, `systemd`, `pm2`, or container environment configuration. Avoid committing or uploading real API keys.
+
+---
+
+## License
+
+GNU General Public License v3.0 or later (`GPL-3.0-or-later`). See [LICENSE](LICENSE).

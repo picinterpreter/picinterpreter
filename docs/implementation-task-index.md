@@ -113,8 +113,8 @@ Core bidirectional communication must still work after the app has loaded succes
 
 | Order | Issue | Purpose | Depends on |
 |-------|-------|---------|------------|
-| 1 | [#67 Offline degradation status for caregiver side](https://github.com/picinterpreter/picinterpreter/issues/67) | Show caregiver-side offline / degraded feature status | #32 |
-| 2 | [#68 Offline MVP behavior validation](https://github.com/picinterpreter/picinterpreter/issues/68) | Validate app shell, local library, expression flow, receiver manual input, and local history offline | #32 |
+| 1 | [#66 Offline degradation status for caregiver side](https://github.com/picinterpreter/picinterpreter/issues/66) | Show caregiver-side offline / degraded feature status | #32 |
+| 2 | [#65 Offline MVP behavior validation](https://github.com/picinterpreter/picinterpreter/issues/65) | Validate app shell, local library, expression flow, receiver manual input, and local history offline | #32 |
 
 **Notes**
 
@@ -137,8 +137,8 @@ The MVP needs both automated regression checks and real-device acceptance checks
 
 | Order | Issue | Purpose | Depends on |
 |-------|-------|---------|------------|
-| 1 | [#65 Playwright MVP expression and receiver flows](https://github.com/picinterpreter/picinterpreter/issues/65) | Automate core expression and receiver flows without real AI/network/microphone dependencies | Stable MVP selectors |
-| 2 | [#66 Real-device MVP acceptance checklist](https://github.com/picinterpreter/picinterpreter/issues/66) | Document manual phone/tablet checks for touch, TTS, fullscreen, orientation, offline, and errors | None |
+| 1 | [#68 Playwright MVP expression and receiver flows](https://github.com/picinterpreter/picinterpreter/issues/68) | Automate core expression and receiver flows without real AI/network/microphone dependencies | Stable MVP selectors |
+| 2 | [#67 Real-device MVP acceptance checklist](https://github.com/picinterpreter/picinterpreter/issues/67) | Document manual phone/tablet checks for touch, TTS, fullscreen, orientation, offline, and errors | None |
 
 **Notes**
 
@@ -155,8 +155,8 @@ These are smaller or well-bounded tasks that contributors can pick up after read
 |-------|-----------------------------|
 | [#16 Voice waveform visualisation during speech input](https://github.com/picinterpreter/picinterpreter/issues/16) | UI-focused and already labeled `good first issue` |
 | [#36 Auto-play generated expression candidates after inactivity](https://github.com/picinterpreter/picinterpreter/issues/36) | Clear interaction change with limited scope |
-| [#66 Real-device MVP acceptance checklist](https://github.com/picinterpreter/picinterpreter/issues/66) | Documentation-first task, useful for non-code contributors |
-| [#67 Offline degradation status for caregiver side](https://github.com/picinterpreter/picinterpreter/issues/67) | Focused UI task tied to a confirmed product rule |
+| [#67 Real-device MVP acceptance checklist](https://github.com/picinterpreter/picinterpreter/issues/67) | Documentation-first task, useful for non-code contributors |
+| [#66 Offline degradation status for caregiver side](https://github.com/picinterpreter/picinterpreter/issues/66) | Focused UI task tied to a confirmed product rule |
 
 ---
 
@@ -167,6 +167,5 @@ These are smaller or well-bounded tasks that contributors can pick up after read
 | [#35 Dexie migration strategy](https://github.com/picinterpreter/picinterpreter/issues/35) | #57, #58, #59 |
 | [#26 Receiver record lifecycle](https://github.com/picinterpreter/picinterpreter/issues/26) | #60, #61, #62 |
 | [#19 Missing pictogram workflow](https://github.com/picinterpreter/picinterpreter/issues/19) | #63, #64 |
-| [#33 E2E and real-device verification](https://github.com/picinterpreter/picinterpreter/issues/33) | #65, #66 |
-| [#32 Offline-first MVP validation](https://github.com/picinterpreter/picinterpreter/issues/32) | #67, #68 |
-
+| [#33 E2E and real-device verification](https://github.com/picinterpreter/picinterpreter/issues/33) | #67, #68 |
+| [#32 Offline-first MVP validation](https://github.com/picinterpreter/picinterpreter/issues/32) | #65, #66 |

@@ -37,8 +37,8 @@ Receiver mode should preserve both the final picture sequence shown to the patie
 | 1 | [#57 Dexie v5 receiver persistence schema](https://github.com/picinterpreter/picinterpreter/issues/57) | Add local schema fields/tables needed by receiver records, corrections, missing tokens, and privacy scope | #35 |
 | 2 | [#59 Prisma ExpressionRecord receiver fields](https://github.com/picinterpreter/picinterpreter/issues/59) | Add server-side fields for synced confirmed expression records | #35 |
 | 3 | [#60 Receiver active draft and confirm flow](https://github.com/picinterpreter/picinterpreter/issues/60) | Create one active receiver draft per session and confirm it after fullscreen display | #57, #59 |
-| 4 | [#61 ReceiverCorrection event logging](https://github.com/picinterpreter/picinterpreter/issues/61) | Log caregiver edits such as replace/remove/reorder/merge/rewrite | #57, #60 |
-| 5 | [#62 Include receive turns in conversation context](https://github.com/picinterpreter/picinterpreter/issues/62) | Include confirmed receive turns in history and LLM context | #57, #59, #60 |
+| 4 | [#64 ReceiverCorrection event logging](https://github.com/picinterpreter/picinterpreter/issues/64) | Log caregiver edits such as replace/remove/reorder/merge/rewrite | #57, #60 |
+| 5 | [#63 Include receive turns in conversation context](https://github.com/picinterpreter/picinterpreter/issues/63) | Include confirmed receive turns in history and LLM context | #57, #59, #60 |
 
 **Notes**
 
@@ -88,8 +88,8 @@ When the system cannot match a token to a picture, the gap should become a maint
 
 | Order | Issue | Purpose | Depends on |
 |-------|-------|---------|------------|
-| 1 | [#63 Record missing pictogram tokens from receiver pipeline](https://github.com/picinterpreter/picinterpreter/issues/63) | Write unresolved receiver tokens into `MissingTokenRecord` | #57 |
-| 2 | [#64 Caregiver missing pictogram maintenance queue](https://github.com/picinterpreter/picinterpreter/issues/64) | Let caregivers review, ignore, or resolve missing tokens | #63 |
+| 1 | [#62 Record missing pictogram tokens from receiver pipeline](https://github.com/picinterpreter/picinterpreter/issues/62) | Write unresolved receiver tokens into `MissingTokenRecord` | #57 |
+| 2 | [#61 Caregiver missing pictogram maintenance queue](https://github.com/picinterpreter/picinterpreter/issues/61) | Let caregivers review, ignore, or resolve missing tokens | #62 |
 
 **Notes**
 
@@ -165,7 +165,7 @@ These are smaller or well-bounded tasks that contributors can pick up after read
 | Parent issue | Split task issues |
 |--------------|------------------|
 | [#35 Dexie migration strategy](https://github.com/picinterpreter/picinterpreter/issues/35) | #57, #58, #59 |
-| [#26 Receiver record lifecycle](https://github.com/picinterpreter/picinterpreter/issues/26) | #60, #61, #62 |
-| [#19 Missing pictogram workflow](https://github.com/picinterpreter/picinterpreter/issues/19) | #63, #64 |
+| [#26 Receiver record lifecycle](https://github.com/picinterpreter/picinterpreter/issues/26) | #60, #63, #64 |
+| [#19 Missing pictogram workflow](https://github.com/picinterpreter/picinterpreter/issues/19) | #61, #62 |
 | [#33 E2E and real-device verification](https://github.com/picinterpreter/picinterpreter/issues/33) | #67, #68 |
 | [#32 Offline-first MVP validation](https://github.com/picinterpreter/picinterpreter/issues/32) | #65, #66 |

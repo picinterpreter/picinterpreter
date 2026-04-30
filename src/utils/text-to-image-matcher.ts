@@ -21,7 +21,7 @@ export interface MatchedToken {
   /** 匹配到的图片条目，null = 未匹配 */
   pictogram: PictogramEntry | null
   /** 匹配方式 */
-  matchType: 'exact' | 'synonym' | 'lexicon-synonym' | 'partial' | 'none'
+  matchType: 'exact' | 'synonym' | 'lexicon' | 'partial' | 'missing'
 }
 
 export interface TextToImageMatchResult {
@@ -53,7 +53,7 @@ export interface MatchTextOptions {
  * 2. 用 token 匹配 pictogram.synonyms
  * 3. 用 lexicon 查找同义词，再匹配 pictogram.labels.zh
  * 4. 包含匹配：token 包含某个 label（label ≥ 2 字），取最长匹配
- * 5. 都没有 → matchType = 'none'
+ * 5. 都没有 → matchType = 'missing'
  *
  * 当 `options.preSegmented` 存在时，跳过分词步骤直接使用该词列表。
  */
@@ -74,7 +74,7 @@ export async function matchTextToImages(
 
   for (const token of segmentation.segments) {
     let matched: PictogramEntry | null = null
-    let matchType: MatchedToken['matchType'] = 'none'
+    let matchType: MatchedToken['matchType'] = 'missing'
 
     // Strategy 1: 精确匹配 labels.zh
     matched = allPictograms.find((p) =>
@@ -102,7 +102,7 @@ export async function matchTextToImages(
           p.labels.zh.some((label) => label === entry.zh),
         ) ?? null
         if (matched) {
-          matchType = 'lexicon-synonym'
+          matchType = 'lexicon'
         }
       }
     }

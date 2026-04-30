@@ -64,21 +64,21 @@ const EXAMPLE_PHRASES = [
 ]
 
 const MATCH_TYPE_BADGE: Record<ItemMatchType, string> = {
-  exact:             'bg-green-100 text-green-700',
-  synonym:           'bg-blue-100 text-blue-700',
-  'lexicon-synonym': 'bg-yellow-100 text-yellow-700',
-  partial:           'bg-orange-100 text-orange-700',
-  manual:            'bg-purple-100 text-purple-700',
-  none:              'bg-slate-100 text-slate-400',
+  exact:    'bg-green-100 text-green-700',
+  synonym:  'bg-blue-100 text-blue-700',
+  lexicon:  'bg-yellow-100 text-yellow-700',
+  partial:  'bg-orange-100 text-orange-700',
+  manual:   'bg-purple-100 text-purple-700',
+  missing:  'bg-slate-100 text-slate-400',
 }
 
 const MATCH_TYPE_LABEL: Record<ItemMatchType, string> = {
-  exact:             '精确',
-  synonym:           '同义词',
-  'lexicon-synonym': '词库',
-  partial:           '包含',
-  manual:            '手动选图',
-  none:              '未匹配',
+  exact:    '精确',
+  synonym:  '同义词',
+  lexicon:  '词库',
+  partial:  '包含',
+  manual:   '手动选图',
+  missing:  '未匹配',
 }
 
 // ─── 主组件 ──────────────────────────────────────────────────────────────── //

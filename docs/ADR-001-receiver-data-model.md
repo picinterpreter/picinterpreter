@@ -38,6 +38,15 @@ Receiver mode reuses the existing `Expression` record with `direction: 'receive'
 
 Each user edit in receiver mode generates a `ReceiverCorrection` record. This table is **Dexie-only** (never synced to MySQL in MVP).
 
+**MVP identity fields — `patientId` and `workspaceId`:**
+
+| Field | MVP value | Notes |
+|-------|-----------|-------|
+| `patientId` | Stable UUID generated at bootstrap, stored in `localStorage` | Separate from `deviceId`; represents the person being communicated with |
+| `workspaceId` | Stable UUID generated at bootstrap, stored in `localStorage` | **Not equal to `userId`.** A workspace is a care context (individual or family unit). One workspace will eventually hold multiple users. Generate a default UUID on first open; do not reuse `userId`. |
+
+This separation matters for the family-promotion model: when ≥3 *users* in the same *workspace* make the same correction, it can be promoted — which requires workspace ≠ user.
+
 ```typescript
 export type ReceiverCorrectionAction =
   | 'replace_pictogram'
@@ -80,14 +89,38 @@ export interface ReceiverCorrection {
 
 ### 4. PictogramSequenceItem
 
-```typescript
-export type MatchType = 'exact' | 'synonym' | 'fuzzy' | 'ai' | 'manual' | 'missing'
+The unified `PictogramMatchType` enum covers all pipeline stages. It extends the runtime `MatchedToken.matchType` vocabulary with AI, manual, and online-backfill values:
 
+```typescript
+export type PictogramMatchType =
+  | 'exact'          // exact label match in local library
+  | 'synonym'        // matched via pictogram.synonyms
+  | 'lexicon'        // matched via lexicon synonym → primary label  (was 'lexicon-synonym')
+  | 'partial'        // token contains a label substring (was 'partial')
+  | 'online'         // found via ARASAAC / GlobalSymbols backfill
+  | 'ai'             // match produced after LLM resegment
+  | 'manual'         // caregiver manually swapped the pictogram
+  | 'missing'        // no pictogram found (was 'none')
+```
+
+**Mapping from `MatchedToken.matchType` → `PictogramMatchType`:**
+
+| `MatchedToken.matchType` | `PictogramMatchType` |
+|--------------------------|----------------------|
+| `'exact'` | `'exact'` |
+| `'synonym'` | `'synonym'` |
+| `'lexicon-synonym'` | `'lexicon'` |
+| `'partial'` | `'partial'` |
+| `'none'` | `'missing'` |
+
+Post-backfill matches (tokens that resolved only after `searchAndStoreMissingPictograms`) are assigned `'online'`. Post-AI matches (tokens that resolved only after `aiResegment`) are assigned `'ai'`. Caregiver swaps set `'manual'`.
+
+```typescript
 export interface PictogramSequenceItem {
   pictogramId: string | null        // null = unresolved token
   label: string                     // display label shown under the pictogram
   source: 'local_dict' | 'arasaac' | 'opensymbols' | 'ai' | 'user'
-  matchType: MatchType
+  matchType: PictogramMatchType
   confidence: number                // 0–1
   originalToken: string             // the raw text segment that produced this item
   role?: string | null              // grammatical role hint (noun, verb, …)

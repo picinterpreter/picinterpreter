@@ -26,9 +26,12 @@ import { LineIcon } from '@/components/ui/LineIcon'
 // ─── 类型 ────────────────────────────────────────────────────────────────── //
 
 /**
- * 阶段流转：
- *   idle → matching → (ai-refining?) → (image-searching?) → review
- *   ai-refining 仅在匹配率 < 0.6 或存在未匹配词时触发。
+ * 阶段流转（按管线顺序）：
+ *   idle → matching → (image-searching?) → (ai-refining?) → (image-searching?) → review
+ *
+ *   正式管线：本地匹配 → 在线补图 → 重新匹配 → AI resegment（仍未命中或低置信度时）
+ *            → 再次本地匹配 → 再次在线补图 → review
+ *   image-searching 在管线中可能出现两次（补图优先，AI 重分词后再次补图）。
  */
 type Phase = 'idle' | 'matching' | 'ai-refining' | 'image-searching' | 'review'
 
@@ -168,10 +171,8 @@ export function ReceiverPanel() {
     setMatchError(null)
 
     try {
-      // Step 1: 规则式分词 + 图片匹配
+      // Step 1: 规则式分词 + 本地图库匹配
       let result = await matchTextToImages(trimmed)
-
-      // 检查世代：是否已被新请求或 reset 取代
       if (matchGenRef.current !== gen) return
 
       if (result.matches.length === 0) {
@@ -180,43 +181,16 @@ export function ReceiverPanel() {
         return
       }
 
-      // Step 2: 若匹配率低或有未匹配词，且 AI 已配置，触发 AI 辅助重分词
-      const unmatchedTokens = getUnmatchedTokens(result)
-      const needsAiFallback = result.matchRate < 0.6 || unmatchedTokens.length > 0
-
-      if (needsAiFallback) {
-        setPhase('ai-refining')
-
-        const ctrl = new AbortController()
-        pendingRequestRef.current = ctrl
-
-        const aiTokens = await aiResegment({
-          text: trimmed,
-          unmatchedTokens,
-          signal: ctrl.signal,
-        })
-
-        // 双重检查：AbortController（取消 fetch）+ 世代计数器（取消状态提交）
-        if (ctrl.signal.aborted || matchGenRef.current !== gen) return
-
-        // 若 AI 返回有效词列表，重新匹配；结果更差则沿用规则式结果
-        if (aiTokens && aiTokens.length > 0) {
-          const aiResult = await matchTextToImages(trimmed, { preSegmented: aiTokens })
-          if (matchGenRef.current !== gen) return
-          if (aiResult.matchRate >= result.matchRate) {
-            result = aiResult
-          }
-        }
-      }
-
-      const stillUnmatchedTokens = getUnmatchedTokens(result)
-      if (stillUnmatchedTokens.length > 0) {
+      // Step 2: 对未命中词先在线补图，再重新匹配
+      const unmatchedAfterLocal = getUnmatchedTokens(result)
+      if (unmatchedAfterLocal.length > 0) {
         setPhase('image-searching')
 
         const ctrl = new AbortController()
         pendingRequestRef.current = ctrl
 
-        const addedPictograms = await searchAndStoreMissingPictograms(stillUnmatchedTokens, ctrl.signal)
+        const addedPictograms = await searchAndStoreMissingPictograms(unmatchedAfterLocal, ctrl.signal)
+        // 双重检查：AbortController（取消 fetch）+ 世代计数器（取消状态提交）
         if (ctrl.signal.aborted || matchGenRef.current !== gen) return
 
         if (addedPictograms.length > 0) {
@@ -226,6 +200,55 @@ export function ReceiverPanel() {
           if (matchGenRef.current !== gen) return
           if (repairedResult.matchRate >= result.matchRate) {
             result = repairedResult
+          }
+        }
+      }
+
+      // Step 3: 补图后仍有未命中词、或整体匹配率偏低 → AI 辅助重分词
+      const unmatchedAfterBackfill = getUnmatchedTokens(result)
+      const needsAiRefine = unmatchedAfterBackfill.length > 0 || result.matchRate < 0.6
+
+      if (needsAiRefine) {
+        setPhase('ai-refining')
+
+        const ctrl = new AbortController()
+        pendingRequestRef.current = ctrl
+
+        const aiTokens = await aiResegment({
+          text: trimmed,
+          unmatchedTokens: unmatchedAfterBackfill,
+          signal: ctrl.signal,
+        })
+        if (ctrl.signal.aborted || matchGenRef.current !== gen) return
+
+        if (aiTokens && aiTokens.length > 0) {
+          const aiResult = await matchTextToImages(trimmed, { preSegmented: aiTokens })
+          if (matchGenRef.current !== gen) return
+
+          if (aiResult.matchRate >= result.matchRate) {
+            result = aiResult
+
+            // Step 4: AI 重分词后再次在线补图
+            const unmatchedAfterAi = getUnmatchedTokens(result)
+            if (unmatchedAfterAi.length > 0) {
+              setPhase('image-searching')
+
+              const ctrl2 = new AbortController()
+              pendingRequestRef.current = ctrl2
+
+              const morePictograms = await searchAndStoreMissingPictograms(unmatchedAfterAi, ctrl2.signal)
+              if (ctrl2.signal.aborted || matchGenRef.current !== gen) return
+
+              if (morePictograms.length > 0) {
+                const finalResult = await matchTextToImages(trimmed, {
+                  preSegmented: result.segmentation.segments,
+                })
+                if (matchGenRef.current !== gen) return
+                if (finalResult.matchRate >= result.matchRate) {
+                  result = finalResult
+                }
+              }
+            }
           }
         }
       }

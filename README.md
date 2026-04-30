@@ -202,6 +202,7 @@ This project is released under the GNU General Public License v3.0 or later (`GP
 **Current decisions:**
 
 - [Decision Index](docs/decision-index.md) — confirmed decisions and open design questions, linked to tracking issues
+- [Implementation Task Index](docs/implementation-task-index.md) — implementation sequence for split MVP issues
 - [ADR-001: Receiver Data Model](docs/ADR-001-receiver-data-model.md) — receiver mode schema, two-phase write, sync design
 
 **Research / background** (informational; may be superseded by decisions above):

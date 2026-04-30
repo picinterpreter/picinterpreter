@@ -199,6 +199,7 @@ npm run deploy:aliyun -- \
 **当前决策：**
 
 - [决策索引](docs/decision-index.md) — 已确认决策和待定设计问题，附关联 issue 链接
+- [实现任务索引](docs/implementation-task-index.md) — 已拆分 MVP issue 的实现顺序导航
 - [ADR-001：接收端数据模型](docs/ADR-001-receiver-data-model.md) — 接收模式数据结构、两阶段写入、同步设计
 
 **研究 / 背景文档**（仅供参考，以上决策文件为准）：

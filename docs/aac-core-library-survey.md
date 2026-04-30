@@ -198,6 +198,81 @@ For MVP, use this path:
 5. Add a fixture sheet: common caregiver utterance -> ideal pictogram sequence -> required board/source.
 6. After field testing, expand to 500-800 pictograms.
 
+## Supplement: Additional Symbol Libraries
+
+The original survey lists ARASAAC and OpenSymbols. Two more open libraries are directly relevant for Tuyujia.
+
+| Library | Format | License | Why It Matters |
+|---|---|---|---|
+| Mulberry Symbols | SVG | CC BY-SA 2.0 UK | 3,500+ symbols explicitly designed for **adult** AAC users with language difficulties. Most ARASAAC sets target children; Mulberry fills the adult gap. Hosted on GitHub; easy to bundle or serve as static assets. |
+| Sclera Symbols | PNG | CC BY-NC | 4,700+ high-contrast white-on-black pictograms. Better visibility for users with low vision or cognitive fatigue. Available via Global Symbols API and OpenSymbols search. |
+
+**Implication for Tuyujia:** ARASAAC remains the primary source (more pictograms, multilingual keywords). Mulberry and Sclera are useful secondary sources for concepts ARASAAC depicts less clearly for adult contexts (body parts, medical procedures, social situations). The per-pictogram `source` field already supports storing these alongside ARASAAC entries.
+
+## Supplement: Mandarin Chinese Core Vocabulary Research
+
+Two peer-reviewed studies provide a research-backed word list rather than guessing at Chinese vocabulary coverage.
+
+| Study | Key Finding | Tuyujia Implication |
+|---|---|---|
+| Liu & Sloane — *Developing a Core Vocabulary for a Mandarin Chinese AAC System Using Word Frequency Data* (ResearchGate) | Corpus-derived frequency list supplemented with semantic completeness and user-expectation criteria. | Use the frequency-ranked list as a checklist when selecting the 300–500 MVP pictograms. |
+| *Core vocabulary for AAC practice from Mandarin Chinese-speaking Taiwanese without disabilities* (Augmentative and Alternative Communication, 2023) | 100 core words achieve 66.7% coverage of spontaneous speech samples across 7 age groups. Top words are mostly function words and high-frequency verbs/nouns. | 100-word core gives a measurable target: if Tuyujia's pictogram library covers these 100 items, it covers two-thirds of what patients actually say. |
+
+**Implication for Tuyujia:** The 2023 study's 100-word core list should be used as the acceptance criterion for the "Define core-vocabulary source schema" task (#32). A library that does not cover these 100 words is incomplete regardless of total count.
+
+## Supplement: Aphasia-Specific Communication Resources
+
+The original survey treats Tuyujia as a generic AAC product. Tuyujia's specific user group (post-stroke aphasia patients) has well-studied needs.
+
+### Widgit Health — Bedside Messages
+
+Research by Dr. Bronwyn Hemsley (speech pathologist, Australia) identified the **26 most critical phrases** patients need to communicate when they cannot speak in a hospital setting. These phrases are supported by Widgit symbols and available free in 30 languages.
+
+The 26 phrases cluster into:
+- Pain and comfort ("I'm in pain", "I'm uncomfortable", "I'm cold/hot")
+- Basic needs ("I need the toilet", "I'm thirsty", "I'm hungry")
+- Contact ("Please call my family", "Please call the nurse")
+- Emotional state ("I'm scared", "I'm confused")
+- Yes/No confirmation
+
+**Implication for Tuyujia:** This list should be cross-referenced against Tuyujia's "Quick Expressions / 快速表达" and "Emergency / 求助" categories. Any of these 26 phrases not covered by Tuyujia's MVP library is a gap to fill before field testing.
+
+### Lingraphica SmallTalk ICU
+
+A free app specifically for non-speaking hospital patients. It includes picture-based vocabulary for:
+- Communicating needs and feelings to ICU medical staff
+- Pain scale (Wong-Baker Faces)
+- Common hospital requests
+
+No Chinese language version is publicly confirmed, but the vocabulary structure is a direct reference for Tuyujia's "身体医疗" and "求助" groups.
+
+### Visual Scene Displays (VSD) — Research Paradigm
+
+VSDs are an AAC interface pattern with strong research support for aphasia. Instead of a grid of isolated symbols, VSDs show a photograph of a real scene (e.g., a kitchen) with embedded hotspots that play words or phrases when tapped.
+
+Research summary (Augmentative and Alternative Communication, 2015):
+- VSDs are particularly effective for patients with severe aphasia who struggle to retrieve words from abstract symbol grids.
+- Patients communicate more successfully when symbols are anchored to familiar scenes.
+
+**Implication for Tuyujia:** VSDs are out of scope for MVP (which uses a symbol-sequence model). However, Phase 2 should evaluate whether personalised VSDs (using caregiver photos) would improve communication success rates for patients with severe aphasia. This would require the Board model (issue #30) to support photo-backed scene boards.
+
+### PRC-Saltillo — Communication Journey: Aphasia (Mandarin)
+
+As of 2025, PRC-Saltillo's "Communication Journey: Aphasia" vocabulary set is available in Mandarin (spoken) and Simplified Chinese (written), part of the Bruce Baker AAC Globalization Initiative. This is the closest commercially validated Mandarin aphasia vocabulary set.
+
+**Implication for Tuyujia:** Review the public vocabulary structure of this set as a competitive reference. It represents what a commercial team considered sufficient coverage for Mandarin-speaking aphasia patients.
+
+## Supplement: Global Symbols API
+
+The original survey mentions Global Symbols only as a search aggregator. It also provides a structured API.
+
+Global Symbols hosts multiple symbol sets (including Mulberry, Sclera, ARASAAC, and others) with:
+- Multi-language keyword labels per symbol
+- REST API for symbol search and retrieval
+- Per-symbol license metadata
+
+**Implication for Tuyujia:** Global Symbols is a viable third backfill source (alongside ARASAAC API and OpenSymbols). For tokens that ARASAAC and OpenSymbols cannot resolve, Global Symbols may return a result from Mulberry or another set. The `PictogramSource` field already supports per-symbol source attribution, so this is plug-in compatible with the existing architecture.
+
 ## Sources
 
 - Open Board Format: https://www.openboardformat.org/
@@ -211,3 +286,12 @@ For MVP, use this path:
 - TouchChat / WordPower: https://touchchatapp.com/
 - LAMP Words for Life: https://aacapps.com/lamp/
 - Avaz AAC: https://www.avazapp.com/
+- Mulberry Symbols: https://mulberrysymbols.org/ · https://github.com/mulberrysymbols/mulberry-symbols
+- Sclera Symbols: https://www.sclera.be/en/picto/copyright · https://globalsymbols.com/symbolsets/sclera
+- Global Symbols API: https://globalsymbols.com/about
+- Widgit Health Bedside Messages: https://widgit-health.com/downloads/bedside-messages.htm
+- Lingraphica SmallTalk ICU: https://lingraphica.com/smalltalk-aphasia-apps/
+- Liu & Sloane — Mandarin Chinese AAC core vocabulary: https://www.researchgate.net/publication/220155841_Developing_a_Core_Vocabulary_for_a_Mandarin_Chinese_AAC_System_Using_Word_Frequency_Data
+- 2023 Taiwanese core vocabulary study: https://pubmed.ncbi.nlm.nih.gov/37083492/
+- Visual Scene Displays for aphasia (2015): https://pubmed.ncbi.nlm.nih.gov/26044911/
+- PRC-Saltillo Communication Journey Aphasia: https://www.prc-saltillo.com/articles/Aphasia-Diagnosis-Vocabulary

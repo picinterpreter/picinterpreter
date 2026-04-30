@@ -39,6 +39,24 @@ Current technical direction:
 
 We are looking for frontend, backend, NLP, accessibility, testing, documentation, and community contributors.
 
+协作方式：
+
+How we collaborate:
+
+- 大任务会尽量拆成 1 到 3 小时可以完成的小 issue。
+- `good first issue` 适合第一次贡献；`help wanted` 适合更完整但边界清楚的任务。
+- 重要架构决策会记录在 issue、ADR 和 decision index 里。
+- 我们会尽量提供及时、具体、友好的 Code Review。
+- 项目目前没有资金来源，主要依靠志愿协作推进；目前也在和一些独立开发者、昆山杜克大学的学生、天工开物开源基金会的老师交流与协作。
+- 持续贡献者可以在项目文档、发布记录和未来社区页面中被感谢和展示；我们也可以帮助整理其具体贡献，方便写进作品集或简历。
+
+- We split large work into small issues, ideally completable in 1–3 hours.
+- `good first issue` is for first-time contributors; `help wanted` is for larger but well-scoped tasks.
+- Important architecture decisions are recorded in issues, ADRs, and the decision index.
+- We aim to provide timely, specific, and friendly code review.
+- The project currently has no funding source. Collaboration is mainly volunteer-based, with exchanges among independent developers, students from Duke Kunshan University, and teachers/mentors from the Tiangong Kaiwu Open Source Foundation.
+- Sustained contributors can be credited in project docs, release notes, and future community pages; we can also help document their concrete contributions for portfolios or resumes.
+
 项目地址：  
 https://github.com/picinterpreter/picinterpreter
 

@@ -536,6 +536,56 @@ PicInterpreter will try to build in public: important problems live in issues, k
 
 This helps future contributors understand why decisions were made, not just what the final code looks like.
 
+### 7. 主动去开发者和专业人士所在的地方
+
+### 7. Meet Contributors Where They Are
+
+我们不会只在仓库里等待别人发现项目。接下来会主动把图语家介绍给更可能关心这个问题的人：
+
+We will not only wait for people to discover the repository. We will actively introduce PicInterpreter to communities where people are more likely to care about this problem:
+
+- GitHub / Gitee / 开源社区：寻找有开源贡献习惯、熟悉相关技术栈的开发者。
+- 掘金、V2EX、知乎、开源中国、开发者微信群：发布更适合技术社区阅读的招募帖。
+- 高校计算机、软件工程、康复工程、医学信息学相关社团或课程：把项目作为真实世界实践项目。
+- 公益技术、无障碍、AAC、康复相关社区：寻找同时理解技术和用户场景的人。
+- 技术博主、开源维护者和现有贡献者的人脉网络：通过信任关系让更多合适的人知道项目。
+
+- GitHub / Gitee / open source communities: find developers who already contribute to open source and know the relevant stack.
+- Juejin, V2EX, Zhihu, OSChina, and developer chat groups: publish versions written for technical communities.
+- university communities in computer science, software engineering, rehabilitation engineering, and medical informatics: position the project as a real-world practice opportunity.
+- tech-for-good, accessibility, AAC, and rehabilitation communities: find people who understand both technology and user context.
+- technical bloggers, open source maintainers, and existing contributor networks: spread the project through trusted relationships.
+
+如果你愿意帮忙转发，也非常欢迎把这篇文章发给你认识的开发者、高校社团、康复治疗师、无障碍社群或公益技术组织。
+
+If you are willing to help spread the word, please share this post with developers, university tech clubs, rehabilitation professionals, accessibility communities, or tech-for-good groups you know.
+
+### 8. 避免志愿协作里的几个坑
+
+### 8. What We Want to Avoid in Volunteer Collaboration
+
+我们不希望把“公益开源”变成“免费劳动力”。所以图语家会尽量避免：
+
+We do not want “open source for good” to become “free labor.” PicInterpreter will try to avoid:
+
+- 画饼：不承诺还没有资金来源的回报，不用未来商业化诱导参与。
+- 甲方心态：贡献者是共建者，不是外包团队。
+- 需求模糊：重要需求尽量写成 issue，并给出背景、验收标准和决策依据。
+- 朝令夕改：需求变化时说明原因，保留讨论记录。
+- 石沉大海：issue 和 PR 会尽量及时回应，尤其是首次贡献。
+- 只盯资深开发者：学生、初级开发者、设计师、测试、运营、真实用户反馈都很重要。
+
+- empty promises: we will not promise compensation or future commercialization returns that do not exist.
+- client-vendor mindset: contributors are co-builders, not an unpaid outsourcing team.
+- vague requirements: important work should be written as issues with context, acceptance criteria, and decision rationale.
+- sudden unexplained changes: when requirements change, we should explain why and preserve discussion history.
+- no-response contributions: issues and PRs should receive timely responses, especially first contributions.
+- only chasing senior developers: students, junior developers, designers, testers, community operators, and real user feedback all matter.
+
+一个人能帮一小时，也值得被认真对待。一个小 PR、一条真实使用反馈、一次转发，都可能让项目往前走一步。
+
+Someone who can help for one hour still deserves to be taken seriously. A small PR, one real-world feedback note, or one share can move the project forward.
+
 ---
 
 ## 新贡献者可以从哪里开始
@@ -560,9 +610,13 @@ If you want to participate but do not know where to begin, you can start here:
 
 3. Start from `good first issue` or documentation-related issues.
 
-4. 如果你不会写代码，也可以：
+4. 如果你还不确定是否适合，可以先只做一个最小承诺：花 15 分钟看 README、留一个问题、试跑一次、或帮忙转发给一个可能感兴趣的人。
 
-4. If you do not write code, you can still help by:
+4. If you are not sure whether you are a fit, start with a minimal commitment: spend 15 minutes reading the README, leave one question, try running the app once, or share it with one person who may care.
+
+5. 如果你不会写代码，也可以：
+
+5. If you do not write code, you can still help by:
 
 - 试用页面
 - 记录看不懂的地方
@@ -578,9 +632,9 @@ If you want to participate but do not know where to begin, you can start here:
 - reviewing whether pictograms are understandable for patients
 - writing tutorials or outreach content
 
-5. 如果你是照护者或康复相关从业者，最有价值的贡献是提供真实场景：
+6. 如果你是照护者或康复相关从业者，最有价值的贡献是提供真实场景：
 
-5. If you are a caregiver or rehabilitation professional, the most valuable contribution is real-world context:
+6. If you are a caregiver or rehabilitation professional, the most valuable contribution is real-world context:
 
 - 患者最常表达什么？
 - 家属最常问什么？

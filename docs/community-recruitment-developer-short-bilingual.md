@@ -49,6 +49,8 @@ How we collaborate:
 - 我们会尽量提供及时、具体、友好的 Code Review。
 - 项目目前没有资金来源，主要依靠志愿协作推进；目前也在和一些独立开发者、昆山杜克大学的学生、天工开物开源基金会的老师交流与协作。
 - 持续贡献者可以在项目文档、发布记录和未来社区页面中被感谢和展示；我们也可以帮助整理其具体贡献，方便写进作品集或简历。
+- 如果你还不确定是否适合，可以先做一个 15 分钟的最小尝试：读 README、提一个问题、认领一个小 issue，或帮忙转发给一个可能感兴趣的人。
+- 我们会避免把志愿者当成免费劳动力：不画饼、不强求长期绑定，需求变化会尽量解释原因并保留讨论记录。
 
 - We split large work into small issues, ideally completable in 1–3 hours.
 - `good first issue` is for first-time contributors; `help wanted` is for larger but well-scoped tasks.
@@ -56,6 +58,8 @@ How we collaborate:
 - We aim to provide timely, specific, and friendly code review.
 - The project currently has no funding source. Collaboration is mainly volunteer-based, with exchanges among independent developers, students from Duke Kunshan University, and teachers/mentors from the Tiangong Kaiwu Open Source Foundation.
 - Sustained contributors can be credited in project docs, release notes, and future community pages; we can also help document their concrete contributions for portfolios or resumes.
+- If you are not sure whether you are a fit, start with a 15-minute trial: read the README, ask one question, claim a small issue, or share the project with one person who may care.
+- We will avoid treating volunteers as free labor: no empty promises, no forced long-term commitment, and requirement changes should be explained with discussion history preserved.
 
 项目地址：  
 https://github.com/picinterpreter/picinterpreter

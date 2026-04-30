@@ -418,6 +418,176 @@ Open source is not only about code. Helping more people discover, understand, an
 
 ---
 
+## 我们会怎样协作
+
+## How We Work Together
+
+我们知道，很多开源贡献者没有办法长期投入，也不一定能一次承担一个大模块。所以图语家会尽量把协作方式设计得清晰、轻量、可持续。
+
+We know that many open source contributors cannot commit long-term or take on a large module all at once. PicInterpreter will try to make collaboration clear, lightweight, and sustainable.
+
+### 1. 把公益价值讲清楚
+
+### 1. Make the Impact Visible
+
+图语家的每一项改动，都应该尽量连接到真实沟通问题：让一个患者更容易表达，让一个家属更容易理解，让一个家庭在没有网络时仍然能沟通。
+
+Every change in PicInterpreter should connect back to a real communication problem: helping a patient express themselves, helping a caregiver understand, or helping a family keep communicating even without network access.
+
+我们会持续把用户故事、真实场景、核心痛点写进 README、issue 和文档里，让贡献者知道自己的代码、设计、测试和反馈为什么重要。
+
+We will continue documenting user stories, real scenarios, and core pain points in the README, issues, and docs, so contributors can see why their code, design, tests, and feedback matter.
+
+### 2. 降低参与门槛
+
+### 2. Lower the Barrier to Contribution
+
+我们会尽量完善：
+
+We will keep improving:
+
+- README：快速说明项目是什么、为谁解决什么问题。
+- CONTRIBUTING：说明如何本地运行、如何提交 PR、如何参与讨论。
+- 开发环境说明：尽量让新人少花时间在配置环境上。
+- 代码结构说明：让开发者知道从哪个目录开始看。
+- issue 模板和 PR 模板：让协作更清楚。
+
+- README: quickly explaining what the project is and who it serves.
+- CONTRIBUTING: explaining how to run locally, submit PRs, and join discussions.
+- development setup docs: reducing time spent on environment setup.
+- code structure docs: helping developers know where to start.
+- issue and PR templates: making collaboration clearer.
+
+目标不是让新人一次读完所有文档，而是让他们能在 10 分钟内知道：这个项目值不值得参与、怎么跑起来、从哪里开始。
+
+The goal is not to make newcomers read everything at once. The goal is to help them understand within 10 minutes what the project is, how to run it, and where to start.
+
+### 3. 把任务拆小
+
+### 3. Break Work into Small Tasks
+
+我们会尽量把大需求拆成 1 到 3 小时内可以完成的小任务，并使用清晰标签：
+
+We will try to split large requirements into small tasks that can be completed in 1–3 hours, using clear labels:
+
+- `good first issue`：适合第一次贡献的小任务，例如文档、样式、简单 bug。
+- `help wanted`：需要外部开发者协助的功能或模块。
+- `architecture`：需要架构讨论或设计判断的任务。
+- `accessibility`：无障碍和患者侧体验相关任务。
+- `data`：图库、词表、样本集、导入导出相关任务。
+
+- `good first issue`: small tasks suitable for first-time contributors, such as docs, UI polish, or simple bugs.
+- `help wanted`: features or modules where external help is welcome.
+- `architecture`: tasks that need design or architectural discussion.
+- `accessibility`: accessibility and patient-facing experience work.
+- `data`: pictogram libraries, vocabulary, fixtures, import/export work.
+
+我们希望先让人“顺手帮一个小忙”，而不是一开始就要求长期绑定。
+
+We want people to be able to “help with one small thing” first, instead of asking for long-term commitment from the beginning.
+
+### 4. 提供高质量反馈
+
+### 4. Provide High-quality Feedback
+
+很多开发者参与开源，不只是为了完成一个任务，也希望获得技术成长。我们会尽量提供认真、具体、友好的 Code Review。
+
+Many developers join open source not only to finish tasks, but also to grow technically. We will try to provide thoughtful, specific, and friendly code review.
+
+好的 PR，即使只是修一个错别字、补一条测试、改一个说明，也应该得到及时回复和正向反馈。
+
+Good PRs, even if they only fix a typo, add a test, or improve a sentence, should receive timely response and positive feedback.
+
+### 5. 让贡献被看见
+
+### 5. Make Contributions Visible
+
+图语家目前没有资金来源，也不能提供金钱报酬。项目主要依靠志愿协作推进，目前也在和一些独立开发者、昆山杜克大学的学生、天工开物开源基金会的老师交流与协作。
+
+PicInterpreter currently has no funding source and cannot provide financial compensation. The project is mainly driven by volunteer collaboration, with ongoing exchanges and collaboration with independent developers, students from Duke Kunshan University, and teachers/mentors from the Tiangong Kaiwu Open Source Foundation.
+
+我们会尽量提供其他形式的价值：
+
+We will try to provide other forms of value:
+
+- 在项目主页、贡献者列表或发布记录中感谢核心贡献者。
+- 帮助贡献者把项目经历写进简历或作品集。
+- 为持续贡献者保留清晰的公开贡献记录；如有合适机会，可以协助说明其贡献内容。
+- 让贡献者参与技术决策和产品讨论，而不只是接任务。
+
+- Thank core contributors on the project homepage, contributor list, or release notes.
+- Help contributors describe their work in resumes or portfolios.
+- Keep clear public contribution records for sustained contributors; when appropriate, help explain the substance of their contributions.
+- Invite contributors into technical and product discussions, not just task execution.
+
+我们希望贡献者在帮助项目的同时，也能获得成长、作品、连接和真实影响力。
+
+We hope contributors can gain growth, portfolio value, connections, and real-world impact while helping the project.
+
+### 6. 透明地 Build in Public
+
+### 6. Build in Public
+
+图语家的开发过程会尽量公开：重要问题放在 issue，关键决策写进 ADR 或 decision index，PR 讨论保留上下文。
+
+PicInterpreter will try to build in public: important problems live in issues, key decisions are recorded in ADRs or the decision index, and PR discussions preserve context.
+
+这样后来的人可以理解我们为什么这样做，而不是只能看到最后的代码结果。
+
+This helps future contributors understand why decisions were made, not just what the final code looks like.
+
+### 7. 主动去开发者和专业人士所在的地方
+
+### 7. Meet Contributors Where They Are
+
+我们不会只在仓库里等待别人发现项目。接下来会主动把图语家介绍给更可能关心这个问题的人：
+
+We will not only wait for people to discover the repository. We will actively introduce PicInterpreter to communities where people are more likely to care about this problem:
+
+- GitHub / Gitee / 开源社区：寻找有开源贡献习惯、熟悉相关技术栈的开发者。
+- 掘金、V2EX、知乎、开源中国、开发者微信群：发布更适合技术社区阅读的招募帖。
+- 高校计算机、软件工程、康复工程、医学信息学相关社团或课程：把项目作为真实世界实践项目。
+- 公益技术、无障碍、AAC、康复相关社区：寻找同时理解技术和用户场景的人。
+- 技术博主、开源维护者和现有贡献者的人脉网络：通过信任关系让更多合适的人知道项目。
+
+- GitHub / Gitee / open source communities: find developers who already contribute to open source and know the relevant stack.
+- Juejin, V2EX, Zhihu, OSChina, and developer chat groups: publish versions written for technical communities.
+- university communities in computer science, software engineering, rehabilitation engineering, and medical informatics: position the project as a real-world practice opportunity.
+- tech-for-good, accessibility, AAC, and rehabilitation communities: find people who understand both technology and user context.
+- technical bloggers, open source maintainers, and existing contributor networks: spread the project through trusted relationships.
+
+如果你愿意帮忙转发，也非常欢迎把这篇文章发给你认识的开发者、高校社团、康复治疗师、无障碍社群或公益技术组织。
+
+If you are willing to help spread the word, please share this post with developers, university tech clubs, rehabilitation professionals, accessibility communities, or tech-for-good groups you know.
+
+### 8. 避免志愿协作里的几个坑
+
+### 8. What We Want to Avoid in Volunteer Collaboration
+
+我们不希望把“公益开源”变成“免费劳动力”。所以图语家会尽量避免：
+
+We do not want “open source for good” to become “free labor.” PicInterpreter will try to avoid:
+
+- 画饼：不承诺还没有资金来源的回报，不用未来商业化诱导参与。
+- 甲方心态：贡献者是共建者，不是外包团队。
+- 需求模糊：重要需求尽量写成 issue，并给出背景、验收标准和决策依据。
+- 朝令夕改：需求变化时说明原因，保留讨论记录。
+- 石沉大海：issue 和 PR 会尽量及时回应，尤其是首次贡献。
+- 只盯资深开发者：学生、初级开发者、设计师、测试、运营、真实用户反馈都很重要。
+
+- empty promises: we will not promise compensation or future commercialization returns that do not exist.
+- client-vendor mindset: contributors are co-builders, not an unpaid outsourcing team.
+- vague requirements: important work should be written as issues with context, acceptance criteria, and decision rationale.
+- sudden unexplained changes: when requirements change, we should explain why and preserve discussion history.
+- no-response contributions: issues and PRs should receive timely responses, especially first contributions.
+- only chasing senior developers: students, junior developers, designers, testers, community operators, and real user feedback all matter.
+
+一个人能帮一小时，也值得被认真对待。一个小 PR、一条真实使用反馈、一次转发，都可能让项目往前走一步。
+
+Someone who can help for one hour still deserves to be taken seriously. A small PR, one real-world feedback note, or one share can move the project forward.
+
+---
+
 ## 新贡献者可以从哪里开始
 
 ## Where New Contributors Can Start
@@ -440,9 +610,13 @@ If you want to participate but do not know where to begin, you can start here:
 
 3. Start from `good first issue` or documentation-related issues.
 
-4. 如果你不会写代码，也可以：
+4. 如果你还不确定是否适合，可以先只做一个最小承诺：花 15 分钟看 README、留一个问题、试跑一次、或帮忙转发给一个可能感兴趣的人。
 
-4. If you do not write code, you can still help by:
+4. If you are not sure whether you are a fit, start with a minimal commitment: spend 15 minutes reading the README, leave one question, try running the app once, or share it with one person who may care.
+
+5. 如果你不会写代码，也可以：
+
+5. If you do not write code, you can still help by:
 
 - 试用页面
 - 记录看不懂的地方
@@ -458,9 +632,9 @@ If you want to participate but do not know where to begin, you can start here:
 - reviewing whether pictograms are understandable for patients
 - writing tutorials or outreach content
 
-5. 如果你是照护者或康复相关从业者，最有价值的贡献是提供真实场景：
+6. 如果你是照护者或康复相关从业者，最有价值的贡献是提供真实场景：
 
-5. If you are a caregiver or rehabilitation professional, the most valuable contribution is real-world context:
+6. If you are a caregiver or rehabilitation professional, the most valuable contribution is real-world context:
 
 - 患者最常表达什么？
 - 家属最常问什么？

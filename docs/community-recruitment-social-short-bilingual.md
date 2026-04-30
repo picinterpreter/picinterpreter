@@ -44,6 +44,14 @@ The project is now open source. We are looking for:
 - product, design, testing, community, and content contributors
 - code, documentation, testing, real-world feedback, and sharing the project all count as contributions.
 
+我们会尽量把任务拆成 1 到 3 小时可以完成的小任务，也欢迎不会写代码的朋友提供真实场景、试用反馈、传播和社群连接。
+
+We will try to break tasks into small pieces that can be done in 1–3 hours. We also welcome non-code contributions such as real-world scenarios, testing feedback, outreach, and community connections.
+
+如果你认识开发者、高校技术社团、康复治疗师、无障碍社群或公益技术组织，也欢迎帮忙转发给他们。
+
+If you know developers, university tech clubs, rehabilitation professionals, accessibility communities, or tech-for-good groups, please help share it with them.
+
 GitHub：  
 https://github.com/picinterpreter/picinterpreter
 

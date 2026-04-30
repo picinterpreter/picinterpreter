@@ -11,7 +11,7 @@
 - 接收模式：输入文字或语音，自动匹配为图片序列，支持删改、换图、排序和全屏展示。
 - AI 句子生成：默认可离线使用模板生成；配置后端 AI 环境变量后可切换到在线模型。
 - 语音能力：浏览器原生 TTS 播报，支持试听与语速、语音人配置。
-- 语音输入：支持浏览器 Web Speech API。
+- 语音输入：支持 Web Speech API；在不支持的环境下以文字输入作为可靠的兜底。
 - 本地数据持久化：分类、图片、表达记录、收藏短语和文本转图片结果保存在浏览器本地。
 - 首次使用引导、紧急求助面板、常用语快捷栏、对话历史、分类可见性和高对比度设置。
 - 调试工具页：内置图片匹配验证页和 ARASAAC 导入工具页。
@@ -40,8 +40,8 @@ OPENSYMBOLS_SECRET=
 NEXT_PUBLIC_ENABLE_SERVICE_WORKER=false
 ```
 
-- `DATABASE_URL`：MySQL 连接串，供 Prisma 7 驱动适配器使用。
-- `AI_API_KEY`：服务端调用上游 LLM 的密钥，必填。
+- `DATABASE_URL`：MySQL 连接串，供 Prisma 6 驱动适配器使用。
+- `AI_API_KEY`：可选。配置后启用在线 LLM 句子生成；不配置时使用离线模板兜底。
 - `AI_BASE_URL`：OpenAI-compatible 接口地址，默认 `https://api.openai.com/v1`。
 - `AI_MODEL`：默认模型名，默认 `gpt-4o-mini`。
 - `OPENSYMBOLS_SECRET`：可选。配置后，运行时缺图补图会在 ARASAAC 未命中时继续查询 OpenSymbols。该值只在服务端读取。
@@ -193,6 +193,17 @@ npm run deploy:aliyun -- \
 ## License
 
 本项目采用 GNU General Public License v3.0 or later（`GPL-3.0-or-later`）发布。详见 [LICENSE](LICENSE)。
+
+## 架构与决策
+
+**当前决策：**
+
+- [决策索引](docs/decision-index.md) — 已确认决策和待定设计问题，附关联 issue 链接
+- [ADR-001：接收端数据模型](docs/ADR-001-receiver-data-model.md) — 接收模式数据结构、两阶段写入、同步设计
+
+**研究 / 背景文档**（仅供参考，以上决策文件为准）：
+
+- [产品需求文档](docs/prd.md)
 
 ## 调试与工具页
 

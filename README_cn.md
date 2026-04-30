@@ -40,8 +40,8 @@ OPENSYMBOLS_SECRET=
 NEXT_PUBLIC_ENABLE_SERVICE_WORKER=false
 ```
 
-- `DATABASE_URL`：MySQL 连接串，供 Prisma 7 驱动适配器使用。
-- `AI_API_KEY`：服务端调用上游 LLM 的密钥，必填。
+- `DATABASE_URL`：MySQL 连接串，供 Prisma 6 驱动适配器使用。
+- `AI_API_KEY`：可选。配置后启用在线 LLM 句子生成；不配置时使用离线模板兜底。
 - `AI_BASE_URL`：OpenAI-compatible 接口地址，默认 `https://api.openai.com/v1`。
 - `AI_MODEL`：默认模型名，默认 `gpt-4o-mini`。
 - `OPENSYMBOLS_SECRET`：可选。配置后，运行时缺图补图会在 ARASAAC 未命中时继续查询 OpenSymbols。该值只在服务端读取。

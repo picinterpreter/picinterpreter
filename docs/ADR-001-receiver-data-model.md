@@ -2,7 +2,7 @@
 
 **Status:** Accepted  
 **Date:** 2026-04-30  
-**Issue:** [#26 — Receiver persistence](https://github.com/lightcoloror/PicInterpreter/issues/26)
+**Issue:** [#26 — Receiver persistence](https://github.com/picinterpreter/picinterpreter/issues/26)
 
 ---
 
@@ -113,7 +113,11 @@ export type PictogramMatchType =
 | `'partial'` | `'partial'` |
 | `'none'` | `'missing'` |
 
-Post-backfill matches (tokens that resolved only after `searchAndStoreMissingPictograms`) are assigned `'online'`. Post-AI matches (tokens that resolved only after `aiResegment`) are assigned `'ai'`. Caregiver swaps set `'manual'`.
+**`matchTextToImages()` returns only the five base types** (`exact`, `synonym`, `lexicon`, `partial`, `missing`). The pipeline layer is responsible for promoting match types after each stage:
+
+- Tokens resolved by `searchAndStoreMissingPictograms` → re-match → annotated `'online'` by the pipeline
+- Tokens resolved after `aiResegment` → re-match → annotated `'ai'` by the pipeline
+- Tokens replaced by caregiver → annotated `'manual'` at write time
 
 ```typescript
 export interface PictogramSequenceItem {
@@ -166,9 +170,10 @@ export interface MissingTokenRecord {
 
 ## Consequences
 
-- `Expression` type gains `pictogramSequence` and `patientId` fields (backwards-compatible; both nullable).
-- `Dexie` schema needs `version(5)` to add `receiverCorrections` and `missingTokens` tables, and indexes on `Expression`.
-- No server-side schema changes required for MVP receiver mode.
+- `Expression` type gains `pictogramSequence`, `patientId`, and `recordStatus` fields (backwards-compatible; all nullable).
+- `Dexie` schema needs `version(5)` to add `receiverCorrections` and `missingTokens` tables, new Expression fields, and `scope` on `PictogramEntry`.
+- **Server-side schema is also required** for confirmed receiver expressions. Because confirmed receive records enter `syncOutbox` and sync to MySQL, `ExpressionRecord` in Prisma must also receive the new columns (`pictogramSequence`, `patientId`, `recordStatus`). `serializeExpressionRecord()` must be updated to include them. Without this, the new fields are present in Dexie but silently stripped during sync, breaking multi-device history.
+  - `receiverCorrections` and `missingTokens` are Dexie-only and do **not** need Prisma changes.
 - Correction data accumulates locally and can feed a future cross-device learning feature once privacy design is finalised.
 
 ---

@@ -197,6 +197,13 @@ Database initialization logic: [src/db/index.ts](src/db/index.ts#L1).
 
 This project is released under the GNU General Public License v3.0 or later (`GPL-3.0-or-later`). See [LICENSE](LICENSE).
 
+## Architecture and Decisions
+
+Current decisions and open questions:
+
+- [Decision Index](docs/decision-index.md) — confirmed decisions and open design questions, linked to tracking issues
+- [ADR-001: Receiver Data Model](docs/ADR-001-receiver-data-model.md) — receiver mode schema, two-phase write, sync design
+
 ## Debug and Tools Pages
 
 - `http://localhost:3001/debug`: picture matching validation tool

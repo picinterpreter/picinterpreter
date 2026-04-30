@@ -194,6 +194,13 @@ npm run deploy:aliyun -- \
 
 本项目采用 GNU General Public License v3.0 or later（`GPL-3.0-or-later`）发布。详见 [LICENSE](LICENSE)。
 
+## 架构与决策
+
+当前确认的决策与待解决问题：
+
+- [决策索引](docs/decision-index.md) — 已确认决策和待定设计问题，附关联 issue 链接
+- [ADR-001：接收端数据模型](docs/ADR-001-receiver-data-model.md) — 接收模式数据结构、两阶段写入、同步设计
+
 ## 调试与工具页
 
 - `http://localhost:3001/debug`：图片匹配验证工具

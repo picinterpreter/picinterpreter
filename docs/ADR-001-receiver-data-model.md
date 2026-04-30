@@ -32,7 +32,23 @@ Receiver mode reuses the existing `Expression` record with `direction: 'receive'
 | Draft | Immediately after text → pictogram match | Expression with `pictogramSequence`, `status: 'draft'` |
 | Confirmed | After caregiver taps "show to patient" / fullscreen displayed | Draft overwritten with `status: 'confirmed'` |
 
-**Only confirmed records enter syncOutbox.** Draft records are local-only and may be discarded if the user abandons the flow. The draft → confirmed overwrite is the one valid mutation on an existing record before sync; all other post-sync updates use the normal upsert path.
+**Two-layer data principle:**
+
+| Layer | What it contains | Who sees it |
+|-------|-----------------|-------------|
+| User-visible history | Only `confirmed` records (shown to patient / saved by caregiver) | Patients, caregivers in conversation history |
+| Maintenance / learning logs | Drafts, initial match sequences, correction events, missing-token events | System internals; future review tools |
+
+"Whether to show to the user" and "whether to save / sync" are separate decisions and must not be conflated.
+
+**For MVP:**
+
+- Draft records are **not shown** in normal conversation history.
+- Draft records are **retained locally** (not discarded on abandon) so they can contribute to future learning and debugging.
+- Draft records do **not** enter `syncOutbox` in MVP — this is a privacy and scope decision, not a statement that drafts have no value.
+- `ReceiverCorrection` and `missingTokens` records are likewise retained locally and kept out of sync for now; the sync decision will be revisited once the privacy design is finalised.
+
+The draft → confirmed overwrite is the one valid mutation on an existing record before sync; all other post-sync updates use the normal upsert path.
 
 ### 3. ReceiverCorrection table
 
@@ -162,9 +178,9 @@ export interface MissingTokenRecord {
 | Table | Synced? | Reason |
 |-------|---------|--------|
 | `expressions` (confirmed, direction=receive) | Yes | Same path as express-mode expressions |
-| `expressions` (draft) | No | Never enter syncOutbox until confirmed |
-| `receiverCorrections` | No (MVP) | Workspace-local learning data; privacy-sensitive; deferred to post-MVP |
-| `missingTokens` | No (MVP) | Caregiver-device-specific gap tracking |
+| `expressions` (draft) | No (MVP) | Not shown in user history; retained locally for debugging / learning. Sync deferred until privacy design is finalised. |
+| `receiverCorrections` | No (MVP) | Workspace-local learning data; privacy-sensitive; retained locally. Sync deferred to post-MVP. |
+| `missingTokens` | No (MVP) | Caregiver-device-specific gap tracking; retained locally. |
 
 ---
 

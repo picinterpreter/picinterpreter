@@ -11,7 +11,7 @@ Last updated: 2026-04-30
 
 | Topic | Decision summary | Issue |
 |-------|-----------------|-------|
-| Receiver records | Two-phase write (draft on match, confirmed after fullscreen display); draft never enters syncOutbox | [#26](https://github.com/picinterpreter/picinterpreter/issues/26) |
+| Receiver records | Two-phase write (draft on match, confirmed after fullscreen display). Two-layer principle: **user history shows only confirmed records**; draft/correction/missing-token logs are retained locally for debugging and future learning. "Show to user" and "sync to server" are independent decisions. Draft records do not sync in MVP. | [#26](https://github.com/picinterpreter/picinterpreter/issues/26) |
 | Text pipeline | local match first → online image backfill for unmatched tokens → LLM resegment only if backfill also fails → re-match → re-backfill → caregiver correction / missing-token maintenance → correction write-back; no jieba WASM in MVP | [#8](https://github.com/picinterpreter/picinterpreter/issues/8) |
 | Account & sync | Anonymous device identity bootstrapped on first open; `baseVersion`/`serverVersion`/`conflicted` sync protocol; expressions + saved_phrases synced to MySQL; private pictograms never synced | [#27](https://github.com/picinterpreter/picinterpreter/issues/27) |
 | Missing pictogram | Runtime backfill: ARASAAC first, OpenSymbols fallback (requires `OPENSYMBOLS_SECRET`); `missingTokens` Dexie table tracks unresolved gaps; caregiver review queue in future | [#19](https://github.com/picinterpreter/picinterpreter/issues/19) |

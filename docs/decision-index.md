@@ -18,6 +18,8 @@ This file is an index, not the full decision record. Each row summarizes:
 
 The linked issue body or ADR is the source of truth. When a decision changes, update the issue body / ADR first, then update this index summary.
 
+For implementation sequencing, see [Implementation Task Index](implementation-task-index.md).
+
 ---
 
 ## Confirmed Decisions
@@ -42,10 +44,10 @@ The linked issue body or ADR is the source of truth. When a decision changes, up
 
 | Topic | What needs building | Issue |
 |-------|--------------------|----|
-| Dexie v5 schema | Add `receiverCorrections` table, `missingTokens` table; add to Expression: `pictogramSequence`, `patientId`, `recordStatus ('draft'\|'confirmed')`; add `scope` to PictogramEntry; bootstrap stable `patientId` + `workspaceId` in localStorage | [#35](https://github.com/picinterpreter/picinterpreter/issues/35) |
-| Prisma schema update | Add `pictogramSequence`, `patientId`, `recordStatus` columns to `ExpressionRecord`; update `serializeExpressionRecord()` to include them | [#35](https://github.com/picinterpreter/picinterpreter/issues/35) |
-| Receiver persistence | Write ReceiverCorrection records on user edits; two-phase draft → confirm flow | [#26](https://github.com/picinterpreter/picinterpreter/issues/26) |
-| Missing token table | MissingTokenRecord status machine (`new → suggested → resolved \| ignored`), caregiver review UI | [#19](https://github.com/picinterpreter/picinterpreter/issues/19) |
+| Dexie v5 schema | Add `receiverCorrections` table, `missingTokens` table; add to Expression: `pictogramSequence`, `patientId`, `recordStatus ('draft'\|'confirmed')`; add `scope` to PictogramEntry; bootstrap stable `patientId` + `workspaceId` in localStorage | [#35](https://github.com/picinterpreter/picinterpreter/issues/35), [#57](https://github.com/picinterpreter/picinterpreter/issues/57) |
+| Prisma schema update | Add `pictogramSequence`, `patientId`, `recordStatus` columns to `ExpressionRecord`; update `serializeExpressionRecord()` to include them | [#35](https://github.com/picinterpreter/picinterpreter/issues/35), [#59](https://github.com/picinterpreter/picinterpreter/issues/59) |
+| Receiver persistence | Write ReceiverCorrection records on user edits; two-phase draft → confirm flow | [#26](https://github.com/picinterpreter/picinterpreter/issues/26), [#60](https://github.com/picinterpreter/picinterpreter/issues/60), [#61](https://github.com/picinterpreter/picinterpreter/issues/61), [#62](https://github.com/picinterpreter/picinterpreter/issues/62) |
+| Missing token table | MissingTokenRecord status machine (`new → suggested → resolved \| ignored`), caregiver review UI | [#19](https://github.com/picinterpreter/picinterpreter/issues/19), [#63](https://github.com/picinterpreter/picinterpreter/issues/63), [#64](https://github.com/picinterpreter/picinterpreter/issues/64) |
 | Core vocabulary fixture set | Select and verify ~500–800 ARASAAC pictograms for seed; update import tool output | [#32](https://github.com/picinterpreter/picinterpreter/issues/32) |
 
 ---

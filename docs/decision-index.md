@@ -12,7 +12,7 @@ Last updated: 2026-04-30
 | Topic | Decision summary | Issue |
 |-------|-----------------|-------|
 | Receiver records | Two-phase write (draft on match, confirmed after fullscreen display); draft never enters syncOutbox | [#26](https://github.com/lightcoloror/PicInterpreter/issues/26) |
-| Text pipeline | 9-layer hybrid: layers 1–5 client/offline (normalize → dialect → phrase-protect → Intl.Segmenter → local dict), layers 6–7 server/online (ARASAAC search → AI fallback); no jieba WASM in MVP | [#8](https://github.com/lightcoloror/PicInterpreter/issues/8) |
+| Text pipeline | local match first → online image backfill for unmatched tokens → LLM resegment only if backfill also fails → re-match → re-backfill → caregiver correction / missing-token maintenance → correction write-back; no jieba WASM in MVP | [#8](https://github.com/lightcoloror/PicInterpreter/issues/8) |
 | Account & sync | Anonymous device identity bootstrapped on first open; `baseVersion`/`serverVersion`/`conflicted` sync protocol; expressions + saved_phrases synced to MySQL; private pictograms never synced | [#27](https://github.com/lightcoloror/PicInterpreter/issues/27) |
 | Missing pictogram | Runtime backfill: ARASAAC first, OpenSymbols fallback; missingTokens Dexie table tracks unresolved gaps; caregiver review queue in future | [#19](https://github.com/lightcoloror/PicInterpreter/issues/19) |
 | Patient UI | Caregiver and patient share the same app; no separate "patient mode" binary; high-contrast and large-text settings control accessibility | [#6](https://github.com/lightcoloror/PicInterpreter/issues/6) |
@@ -41,5 +41,5 @@ Last updated: 2026-04-30
 | Topic | What's still open | Issue |
 |-------|------------------|----|
 | Core vocabulary content | Which specific concepts/words to include; validation with caregivers | [#32](https://github.com/lightcoloror/PicInterpreter/issues/32) |
-| Board / PictureSet schema | Direction confirmed (Board = navigation page with ButtonButton[]; PictureSet = reusable pictogramIds[]; introduced with OBF import); detailed field spec and import flow still open | [#30](https://github.com/lightcoloror/PicInterpreter/issues/30) |
+| Board / PictureSet schema | **Direction confirmed:** Board = navigation page with ButtonButton[]; PictureSet = reusable pictogramIds[]; introduced with OBF import. **Schema details open:** field spec, OBF import flow, and UI affordance still to be designed | [#30](https://github.com/lightcoloror/PicInterpreter/issues/30) |
 | Pipeline sufficiency threshold | When to stop at local dict vs. always call server; confidence cutoff value | [#8](https://github.com/lightcoloror/PicInterpreter/issues/8) |

@@ -14,7 +14,7 @@ The project currently uses `Next.js + React 19 + TypeScript`, with `Dexie` for l
 - Receiver mode: enter text or speech and automatically match it to a picture sequence, with support for deletion, replacement, sorting, and fullscreen display.
 - AI sentence generation: template-based generation works offline by default; online models can be enabled by configuring backend AI environment variables.
 - Speech output: browser-native TTS, with voice preview, speech rate, and voice selection settings.
-- Speech input: browser Web Speech API support.
+- Speech input: Web Speech API where available, with text input as the reliable fallback.
 - Local data persistence: categories, pictures, expression records, saved phrases, and text-to-picture results are stored locally in the browser.
 - First-use guide, emergency help panel, quick common phrases, conversation history, category visibility settings, and high-contrast mode.
 - Debug tools: built-in picture matching validation page and ARASAAC import tool.
@@ -199,10 +199,14 @@ This project is released under the GNU General Public License v3.0 or later (`GP
 
 ## Architecture and Decisions
 
-Current decisions and open questions:
+**Current decisions:**
 
 - [Decision Index](docs/decision-index.md) — confirmed decisions and open design questions, linked to tracking issues
 - [ADR-001: Receiver Data Model](docs/ADR-001-receiver-data-model.md) — receiver mode schema, two-phase write, sync design
+
+**Research / background** (informational; may be superseded by decisions above):
+
+- [Product Requirements](docs/prd.md)
 
 ## Debug and Tools Pages
 

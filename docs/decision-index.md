@@ -7,12 +7,25 @@ Last updated: 2026-04-30
 
 ---
 
+## How to read this file
+
+This file is an index, not the full decision record. Each row summarizes:
+
+- **Decision** — what is currently agreed.
+- **Rationale** — why this direction was chosen.
+- **Evidence** — where the supporting discussion, code reference, or research lives.
+- **Scope** — where the decision applies and what is still out of scope.
+
+The linked issue body or ADR is the source of truth. When a decision changes, update the issue body / ADR first, then update this index summary.
+
+---
+
 ## Confirmed Decisions
 
 | Topic | Decision summary | Issue |
 |-------|-----------------|-------|
 | Receiver records | Two-phase write (draft on match, confirmed after fullscreen display). Two-layer principle: **user history shows only confirmed records**; draft/correction/missing-token logs are retained locally for debugging and future learning. "Show to user" and "sync to server" are independent decisions. Draft records do not sync in MVP. | [#26](https://github.com/picinterpreter/picinterpreter/issues/26) |
-| Text pipeline | local match first → online image backfill for unmatched tokens → LLM resegment only if backfill also fails → re-match → re-backfill → caregiver correction / missing-token maintenance → correction write-back; no jieba WASM in MVP | [#8](https://github.com/picinterpreter/picinterpreter/issues/8) |
+| Text pipeline | local match first → online image backfill for unmatched tokens → LLM resegment only if tokens remain unmatched after backfill **or post-backfill confidence is still low** → re-match → re-backfill → caregiver correction / missing-token maintenance → correction write-back; no jieba WASM in MVP | [#8](https://github.com/picinterpreter/picinterpreter/issues/8) |
 | Account & sync | Anonymous device identity bootstrapped on first open; `baseVersion`/`serverVersion`/`conflicted` sync protocol; expressions + saved_phrases synced to MySQL; private pictograms never synced | [#27](https://github.com/picinterpreter/picinterpreter/issues/27) |
 | Missing pictogram | Runtime backfill: ARASAAC first, OpenSymbols fallback (requires `OPENSYMBOLS_SECRET`); `missingTokens` Dexie table tracks unresolved gaps; caregiver review queue in future | [#19](https://github.com/picinterpreter/picinterpreter/issues/19) |
 | Patient UI | Patient-facing UI is icon-first: 44px+ touch targets, ≤3 core steps, no text-only controls, no technical errors exposed to patient; caregiver and patient share the same app binary | [#6](https://github.com/picinterpreter/picinterpreter/issues/6) |
@@ -42,5 +55,5 @@ Last updated: 2026-04-30
 | Topic | What's still open | Issue |
 |-------|------------------|----|
 | Core vocabulary content | Which specific concepts/words to include; validation with caregivers | [#32](https://github.com/picinterpreter/picinterpreter/issues/32) |
-| Board / PictureSet schema | **Direction confirmed:** Board = navigation page with ButtonButton[]; PictureSet = reusable pictogramIds[]; introduced with OBF import. **Schema details open:** field spec, OBF import flow, and UI affordance still to be designed | [#30](https://github.com/picinterpreter/picinterpreter/issues/30) |
-| Pipeline sufficiency threshold | When to stop at local dict vs. always call server; confidence cutoff value | [#8](https://github.com/picinterpreter/picinterpreter/issues/8) |
+| Board / PictureSet schema | **Direction confirmed:** Board = navigation page with Button[]; PictureSet = reusable pictogramIds[]; introduced with OBF import. **Schema details open:** field spec, OBF import flow, and UI affordance still to be designed | [#30](https://github.com/picinterpreter/picinterpreter/issues/30) |
+| Pipeline sufficiency threshold | Exact confidence cutoff value for post-backfill low-confidence AI fallback; needs fixture data and real receiver samples | [#8](https://github.com/picinterpreter/picinterpreter/issues/8) |

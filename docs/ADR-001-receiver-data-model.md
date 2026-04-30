@@ -129,7 +129,14 @@ export type PictogramMatchType =
 | `'partial'` | `'partial'` |
 | `'none'` | `'missing'` |
 
-**`matchTextToImages()` returns only the five base types** (`exact`, `synonym`, `lexicon`, `partial`, `missing`). The pipeline layer is responsible for promoting match types after each stage:
+**Decision / Rationale / Evidence / Scope**
+
+- **Decision:** `PictogramMatchType` is the canonical stored vocabulary for `pictogramSequence`.
+- **Rationale:** runtime matching, online backfill, AI resegmentation, and caregiver correction must all use one shared vocabulary before data is written.
+- **Evidence:** current runtime `MatchedToken.matchType` still returns base matcher values (`exact`, `synonym`, `lexicon-synonym`, `partial`, `none`), while receiver persistence needs additional provenance values (`online`, `ai`, `manual`).
+- **Scope:** this ADR defines the canonical stored values and mapping. A follow-up implementation PR should update runtime code or add an explicit mapper before writing `pictogramSequence`.
+
+`matchTextToImages()` currently returns runtime base types: `exact`, `synonym`, `lexicon-synonym`, `partial`, and `none`. These must be mapped to canonical `PictogramMatchType` values before writing `pictogramSequence`. The pipeline layer is responsible for promoting match types after each stage:
 
 - Tokens resolved by `searchAndStoreMissingPictograms` → re-match → annotated `'online'` by the pipeline
 - Tokens resolved after `aiResegment` → re-match → annotated `'ai'` by the pipeline

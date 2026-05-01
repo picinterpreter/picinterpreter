@@ -135,7 +135,62 @@ The expected sequence is a **testing target**, not a fixed UI prescription. Care
 | Family/social | 54, 67-72 |
 | Local CBoard category coverage | food, drinks, body, people, emotions, hygiene, actions, places, time, transport, toys, technology |
 
-## Source Notes
+## Engineering Test Notes
+
+These notes map selected samples to the matching pipeline rules they verify. The JSON fixture `fixtures/receiver-samples.json` contains the corresponding machine-executable assertions (`expectedTokens`, `matchType`, `minMatchRate`, `preSegmented`).
+
+### Rule 1 — Function words allowed to be `missing`; must not disrupt core token matching
+
+The following tokens have no pictogram and will return `matchType: missing`. This is expected. The test passes as long as the surrounding content tokens still match correctly.
+
+| Token | Applies to samples | Why missing |
+|---|---|---|
+| `吗` | 1, 3, 6, 7, 11, 13, 16, 17, 21, 24, 25, 26, 35, 37, 41, 49–54, 55–60 | Question particle, no pictogram |
+| `还是` | 2, 10, 18, 20, 22, 47, 60 | Binary choice connector, no pictogram |
+| `先` / `再` | 5, 14, 36, 65, 66 | Sequence adverbs, no pictogram |
+| `很` / `太` / `一点` | 7, 9, 41 | Degree modifiers, no pictogram |
+| `了` | 3, 66 | Aspect particle, no pictogram |
+
+**Pass criterion:** `matchRate` of the content words (excluding function words) ≥ 0.8, even if overall `matchRate` is lower.
+
+### Rule 2 — `不要` triggers NEGATION_PREFIXES guard in Strategy 4
+
+Samples #79 (`不要动，等一下`) and any token starting with `不` that is ≥ 3 characters must **not** be matched via Strategy 4 (partial/contains matching). The guard prevents semantic inversion errors such as `不开心` → `开心`.
+
+| Sample | Token | Correct path | Must NOT happen |
+|---|---|---|---|
+| #56 | `不是` | `missing` or `lexicon` | Strategy 4 partial → `是` |
+| #79 | `不要动` (if unsplit) | `missing` (no lexicon entry) | Strategy 4 partial → `要` |
+| JSON D3 | `不开心` | `lexicon → 伤心` | Strategy 4 partial → `开心` |
+| JSON F4 | `不要` (split) | `exact → 不要` | n/a (already exact) |
+
+**Pass criterion:** No token starting with `不` / `没` / `别` / `勿` / `莫` / `未` should have `matchType: partial`.
+
+### Rule 3 — Confirmation/repair loop sentences allow low `matchRate`
+
+Sample #57 (`我理解对了吗？`) and similar meta-sentences will have many `missing` tokens because abstract cognitive words (`理解`, `吗`) have no pictograms. This is expected and **not a failure**.
+
+| Sample | Expected `matchRate` | Rationale |
+|---|---|---|
+| #57 我理解对了吗？ | ~0.35–0.4 | `理解`、`了`、`吗` missing; only `我` + `对`(→有 via lexicon) match |
+| #55 是这个吗？ | ~0.3 | `是`(→有)、`这个` missing; 吗 missing |
+| #60 你要这个还是那个？ | ~0.4 | `这个`、`还是`、`那个` missing |
+
+**Pass criterion:** System does not throw; `matches` array is returned with `matchType: missing` for unrecognised tokens; overall `matchRate` may be as low as 0.2 without indicating a bug.
+
+### Rule 4 — Pain intensity words `missing` must not corrupt the `痛` match
+
+Sample #22 (`痛是一点点还是很痛？`) exercises the pain intensity vocabulary gap. The token `痛` **must** be matched as `exact` with `labelZh: 痛`. Degree modifiers (`一点点`, `很痛`) must be `missing` — they must not be mismatched to other pictograms.
+
+| Token | Expected | Must NOT |
+|---|---|---|
+| `痛` | `exact → 痛` | match `头晕` or any non-pain pictogram |
+| `一点点` | `missing` | partial-match a 2-char label unrelated to pain |
+| `很痛` | `missing` (2-char token, Strategy 4 requires ≥ 3) | partial-match `痛` label (1-char, filtered by Strategy 4) |
+
+**Pass criterion:** `matches.find(m => m.token === '痛').matchType === 'exact'` and `matches.find(m => m.token === '一点点').matchType === 'missing'`.
+
+
 
 - `WIDGIT_BEDSIDE`: Widgit Bedside Messages are based on research into messages people may need when unable to speak in bedside / hospital contexts.
 - `ASTERICS_HOSPITAL`: AsTeRICS AAC Data includes `Communication in hospital`, `Quick Core`, and `Global-Core Communicator ARASAAC` examples.

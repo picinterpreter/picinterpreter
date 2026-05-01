@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ReceiverSample",
+  "description": "图语家接收端测试样本格式（Issue #55）。evidence / testFocus / _* 字段为扩展注释字段，不影响测试运行。",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id", "inputText", "expectedTokens"],
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "样本唯一标识，如 A1、C6"
+      },
+      "inputText": {
+        "type": "string",
+        "description": "输入文本（患者/家属原始话语）"
+      },
+      "description": {
+        "type": "string",
+        "description": "样本设计说明"
+      },
+      "evidence": {
+        "type": "array",
+        "description": "按证据来源标注（扩展字段，不参与测试断言）",
+        "items": {
+          "type": "object",
+          "required": ["source"],
+          "properties": {
+            "source": {
+              "type": "string",
+              "enum": [
+                "SCA",
+                "Widgit-26",
+                "Lingraphica-ICU",
+                "AsTeRICS-Hospital",
+                "AsTeRICS-QC24",
+                "LAMP",
+                "2023-Mandarin",
+                "Aphasia-Best-Practice"
+              ],
+              "description": "来源标识：SCA=失语症支持对话原则, Widgit-26=Hemsley 26 critical phrases, Lingraphica-ICU=ICU 沟通板, AsTeRICS-Hospital=医院沟通板, AsTeRICS-QC24=Quick Core 24, LAMP=LAMP Words for Life, 2023-Mandarin=台湾普通话核心词研究, Aphasia-Best-Practice=失语症临床最佳实践"
+            },
+            "note": {
+              "type": "string",
+              "description": "该来源对此样本的具体支持说明"
+            }
+          }
+        }
+      },
+      "testFocus": {
+        "type": "string",
+        "description": "本条样本主要验证的匹配机制（扩展字段）"
+      },
+      "preSegmented": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "（扩展字段）当存在时，测试运行器应调用 matchTextToImages(inputText, { preSegmented }) 跳过自动分词，用于 Strategy 4 partial 路径的确定性测试"
+      },
+      "expectedTokens": {
+        "type": "array",
+        "description": "每个分词 token 的预期匹配类型和标签",
+        "items": {
+          "type": "object",
+          "required": ["token", "matchType"],
+          "properties": {
+            "token": {
+              "type": "string",
+              "description": "分词后的单个 token"
+            },
+            "matchType": {
+              "enum": ["exact", "synonym", "lexicon", "partial", "online", "ai", "missing"],
+              "description": "预期匹配方式"
+            },
+            "labelZh": {
+              "type": ["string", "null"],
+              "description": "命中图片的中文标签；missing 时为 null"
+            }
+          }
+        }
+      },
+      "minMatchRate": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "description": "最低期望匹配率（0-1），测试断言阈值"
+      }
+    }
+  }
+}

@@ -1,0 +1,663 @@
+[
+  {
+    "id": "A1",
+    "inputText": "喝水",
+    "description": "单词直接表达需求（SCA 极短句式）。「喝水」是种子库精确标签，期望 matchRate=1.0。",
+    "evidence": [
+      { "source": "SCA", "note": "失语症患者常以单词代替完整句表达需求" },
+      { "source": "Widgit-26", "note": "Hemsley 26 critical phrases: I'm thirsty / I need a drink" },
+      { "source": "AsTeRICS-Hospital", "note": "Need_to_drink grid 核心词" }
+    ],
+    "testFocus": "单 token 精确匹配基线",
+    "expectedTokens": [
+      { "token": "喝水", "matchType": "exact", "labelZh": "喝水" }
+    ],
+    "minMatchRate": 1.0
+  },
+  {
+    "id": "A2",
+    "inputText": "我渴",
+    "description": "2 字极短句（我 + 状态词）。两词均在种子库，期望 matchRate=1.0。",
+    "evidence": [
+      { "source": "SCA", "note": "2 字短句是失语症患者真实表达常态" },
+      { "source": "Lingraphica-ICU", "note": "ICU 需求板块：thirsty 状态表达" },
+      { "source": "2023-Mandarin", "note": "「渴」在台湾普通话核心词频研究 100 词内" }
+    ],
+    "testFocus": "2 token 全精确匹配",
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "渴", "matchType": "exact", "labelZh": "渴" }
+    ],
+    "minMatchRate": 1.0
+  },
+  {
+    "id": "A3",
+    "inputText": "去厕所",
+    "description": "2 字动宾结构（动词 + 地点）。两词均在种子库，期望 matchRate=1.0。",
+    "evidence": [
+      { "source": "SCA", "note": "动宾极短句式：行为 + 目标地点" },
+      { "source": "Widgit-26", "note": "Hemsley 26: I need the toilet — 最高优先级基本需求" },
+      { "source": "AsTeRICS-Hospital", "note": "Need_for_toilet grid" }
+    ],
+    "testFocus": "动宾极短句精确匹配",
+    "expectedTokens": [
+      { "token": "去", "matchType": "exact", "labelZh": "去" },
+      { "token": "厕所", "matchType": "exact", "labelZh": "厕所" }
+    ],
+    "minMatchRate": 1.0
+  },
+  {
+    "id": "A4",
+    "inputText": "我痛",
+    "description": "2 字极短症状句（主语 + 痛感词）。两词均在种子库，期望 matchRate=1.0。",
+    "evidence": [
+      { "source": "SCA", "note": "失语症患者高频症状表达：主语 + 核心症状词" },
+      { "source": "Widgit-26", "note": "Hemsley 26: I'm in pain / I'm uncomfortable" },
+      { "source": "AsTeRICS-Hospital", "note": "Unwell grid 核心痛感词" }
+    ],
+    "testFocus": "核心症状词精确匹配",
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "痛", "matchType": "exact", "labelZh": "痛" }
+    ],
+    "minMatchRate": 1.0
+  },
+  {
+    "id": "A5",
+    "inputText": "不要",
+    "description": "单词快速拒绝。「不要」是种子库精确标签，否定词不拆分，期望 matchRate=1.0。",
+    "evidence": [
+      { "source": "SCA", "note": "快速拒绝/停止是 AAC 最基础需求之一" },
+      { "source": "AsTeRICS-QC24", "note": "Quick Core 24 根板：「not」位于 24 词之列" },
+      { "source": "LAMP", "note": "否定词需稳定放置，患者应能一触即达" }
+    ],
+    "testFocus": "否定复合词精确匹配（不拆成两词）",
+    "expectedTokens": [
+      { "token": "不要", "matchType": "exact", "labelZh": "不要" }
+    ],
+    "minMatchRate": 1.0
+  },
+  {
+    "id": "A6",
+    "inputText": "帮忙",
+    "description": "单词求助。「帮忙」是种子库精确标签，期望 matchRate=1.0。",
+    "evidence": [
+      { "source": "SCA", "note": "单词求助是 AAC 紧急沟通核心" },
+      { "source": "Widgit-26", "note": "Hemsley 26: Please call the nurse / Please call my family" },
+      { "source": "Lingraphica-ICU", "note": "ICU 板块顶层 help 按钮" }
+    ],
+    "testFocus": "求助词精确匹配",
+    "expectedTokens": [
+      { "token": "帮忙", "matchType": "exact", "labelZh": "帮忙" }
+    ],
+    "minMatchRate": 1.0
+  },
+  {
+    "id": "B1",
+    "inputText": "我想喝水",
+    "description": "基本需求句（主 + 情态动词 + 动词 + 宾语）。全词在种子库，期望 matchRate ≥ 0.9。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "Need_to_drink grid 完整表达模式" },
+      { "source": "2023-Mandarin", "note": "「我」「想」「喝」均在 Mandarin 100 核心词内" },
+      { "source": "Lingraphica-ICU", "note": "ICU 饮水需求表达参考" }
+    ],
+    "testFocus": "基本需求句全精确匹配基线（Issue #56 ≥2 条基本需求要求）",
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "想", "matchType": "exact", "labelZh": "想" },
+      { "token": "喝水", "matchType": "exact", "labelZh": "喝水" }
+    ],
+    "_segmentationNote": "分词器可能产生 [我,想,喝水] 或 [我,想,喝,水]；两种路径均可精确命中",
+    "minMatchRate": 0.9
+  },
+  {
+    "id": "B2",
+    "inputText": "我要去厕所",
+    "description": "基本需求句含「要」（想的口语同义词）。验证 lexicon 路径：要→想。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "Need_for_toilet grid 表达模式" },
+      { "source": "Widgit-26", "note": "Hemsley 26: I need the toilet" },
+      { "source": "SCA", "note": "「要」是失语症患者高频口语替代词" }
+    ],
+    "testFocus": "lexicon 路径：「要」→词库同义词→「想」图片（Issue #56 ≥2 条 lexicon 路径要求）",
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "要", "matchType": "lexicon", "labelZh": "想" },
+      { "token": "去", "matchType": "exact", "labelZh": "去" },
+      { "token": "厕所", "matchType": "exact", "labelZh": "厕所" }
+    ],
+    "minMatchRate": 0.75
+  },
+  {
+    "id": "B3",
+    "inputText": "我饿了想吃饭",
+    "description": "基本需求句含语气助词「了」和复合词「吃饭」。「了」应为 missing；测试分词器对「饿了」的处理。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "Need_to_eat grid 场景" },
+      { "source": "SCA", "note": "含语气助词是真实话语常见模式" }
+    ],
+    "testFocus": "语气助词「了」missing；分词挑战（Issue #56 ≥2 条含 missing token）",
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "饿", "matchType": "exact", "labelZh": "饿" },
+      { "token": "了", "matchType": "missing", "labelZh": null },
+      { "token": "想", "matchType": "exact", "labelZh": "想" },
+      { "token": "吃", "matchType": "exact", "labelZh": "吃" },
+      { "token": "饭", "matchType": "missing", "labelZh": null }
+    ],
+    "_segmentationNote": "Intl.Segmenter 多数产生 [我,饿,了,想,吃,饭]；饭 在种子库无独立标签，missing",
+    "minMatchRate": 0.6
+  },
+  {
+    "id": "B4",
+    "inputText": "我想睡觉",
+    "description": "基本需求句（需要休息）。三词均在种子库，期望 matchRate=1.0。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "基本需求：rest / sleep 场景" },
+      { "source": "Lingraphica-ICU", "note": "ICU 常见需求：need to sleep" },
+      { "source": "2023-Mandarin", "note": "「睡觉」是台湾普通话核心词高频词" }
+    ],
+    "testFocus": "基本需求全精确匹配（Issue #56 ≥2 条基本需求要求）",
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "想", "matchType": "exact", "labelZh": "想" },
+      { "token": "睡觉", "matchType": "exact", "labelZh": "睡觉" }
+    ],
+    "minMatchRate": 1.0
+  },
+  {
+    "id": "B5",
+    "inputText": "帮我叫护士",
+    "description": "求助 + 人物词。「帮」通过 lexicon 路径命中「帮忙」；「叫」「护士」精确匹配。",
+    "evidence": [
+      { "source": "Widgit-26", "note": "Hemsley 26: Please call the nurse — 高优先级医院求助" },
+      { "source": "AsTeRICS-Hospital", "note": "Nurse grid / call for help 场景" },
+      { "source": "SCA", "note": "帮忙 + 人物词是 SCA 求助句式" }
+    ],
+    "testFocus": "lexicon 路径：「帮」→「帮忙」（Issue #56 lexicon 路径测试）",
+    "expectedTokens": [
+      { "token": "帮", "matchType": "lexicon", "labelZh": "帮忙" },
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "叫", "matchType": "exact", "labelZh": "叫" },
+      { "token": "护士", "matchType": "exact", "labelZh": "护士" }
+    ],
+    "minMatchRate": 1.0
+  },
+  {
+    "id": "C1",
+    "inputText": "我头很痛",
+    "description": "症状句含程度副词「很」。「头」「痛」精确命中；「很」为 missing。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "Unwell / pain location grid" },
+      { "source": "Widgit-26", "note": "Hemsley 26: I'm in pain (location modifier)" }
+    ],
+    "testFocus": "症状双词精确匹配 + 程度副词 missing（Issue #56 ≥2 条医疗/症状场景）",
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "头", "matchType": "exact", "labelZh": "头" },
+      { "token": "很", "matchType": "missing", "labelZh": null },
+      { "token": "痛", "matchType": "exact", "labelZh": "痛" }
+    ],
+    "minMatchRate": 0.7
+  },
+  {
+    "id": "C2",
+    "inputText": "肚子疼",
+    "description": "腹痛短句。「肚子」精确命中；「疼」走 lexicon 路径（疼是「痛」同义词）。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "Unwell / stomach pain grid" },
+      { "source": "SCA", "note": "「肚子疼」是患者高频症状短句" }
+    ],
+    "testFocus": "同义词 lexicon 路径：「疼」→词库→「痛」图片",
+    "expectedTokens": [
+      { "token": "肚子", "matchType": "exact", "labelZh": "肚子" },
+      { "token": "疼", "matchType": "lexicon", "labelZh": "痛" }
+    ],
+    "_segmentationNote": "若分词器产生 [肚子疼] 整体 token，则 Strategy 4 partial 命中「肚子」；两路径均合法",
+    "minMatchRate": 1.0
+  },
+  {
+    "id": "C3",
+    "inputText": "我发烧了",
+    "description": "症状句含语气助词「了」。「发烧」精确命中；「了」为 missing。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "Something_is_wrong / fever grid" },
+      { "source": "Lingraphica-ICU", "note": "ICU 症状：fever 是高优先级症状" }
+    ],
+    "testFocus": "症状词精确匹配 + 语气助词 missing",
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "发烧", "matchType": "exact", "labelZh": "发烧" },
+      { "token": "了", "matchType": "missing", "labelZh": null }
+    ],
+    "minMatchRate": 0.6
+  },
+  {
+    "id": "C4",
+    "inputText": "我头晕",
+    "description": "症状句（头晕是脑卒中后遗症高频症状）。两词均在种子库，期望 matchRate=1.0。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "Unwell / dizzy grid" },
+      { "source": "Aphasia-Best-Practice", "note": "脑卒中患者最常见主诉症状之一" }
+    ],
+    "testFocus": "症状精确匹配（Issue #56 医疗场景）",
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "头晕", "matchType": "exact", "labelZh": "头晕" }
+    ],
+    "minMatchRate": 1.0
+  },
+  {
+    "id": "C5",
+    "inputText": "我咳嗽",
+    "description": "症状句（咳嗽是常见肺部症状）。两词均在种子库，期望 matchRate=1.0。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "Something_is_wrong / cough grid" }
+    ],
+    "testFocus": "症状精确匹配（Issue #56 医疗场景）",
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "咳嗽", "matchType": "exact", "labelZh": "咳嗽" }
+    ],
+    "minMatchRate": 1.0
+  },
+  {
+    "id": "C6",
+    "inputText": "我胸口疼",
+    "description": "胸痛症状句。「胸口」精确命中；「疼」走 lexicon 路径。也可测 partial 路径（若分词器产生「胸口疼」整体 token）。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "Something_is_wrong / chest pain — 高优先级急症场景" },
+      { "source": "Lingraphica-ICU", "note": "ICU 胸部症状表达" }
+    ],
+    "testFocus": "exact + lexicon 混合，或 partial 路径（Issue #56 exact+partial 混合要求）",
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "胸口", "matchType": "exact", "labelZh": "胸口" },
+      { "token": "疼", "matchType": "lexicon", "labelZh": "痛" }
+    ],
+    "_altPath": "若分词器产生 [我, 胸口疼]，则 胸口疼 → Strategy 4 partial → 胸口",
+    "minMatchRate": 1.0
+  },
+  {
+    "id": "C7",
+    "inputText": "我呼吸困难",
+    "description": "呼吸症状句（4 字复合词）。「呼吸困难」是种子库精确标签（4 字整体），期望 matchRate ≥ 0.8。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "Something_is_wrong / breathing difficulty grid" },
+      { "source": "Lingraphica-ICU", "note": "ICU 呼吸困难是最紧急症状之一" }
+    ],
+    "testFocus": "4 字复合词整体精确匹配（分词器是否保持「呼吸困难」不拆分）",
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "呼吸困难", "matchType": "exact", "labelZh": "呼吸困难" }
+    ],
+    "_segmentationNote": "若分词器将「呼吸困难」拆开（呼吸/困难），则 matchRate 降至 0.33；此处验证分词器对医学复合词的处理",
+    "minMatchRate": 0.8
+  },
+  {
+    "id": "C8",
+    "inputText": "我感觉恶心",
+    "description": "症状句含认知动词「感觉」。「恶心」精确命中；「感觉」为 missing（功能词，无对应图片）。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "Unwell / nausea grid" },
+      { "source": "SCA", "note": "「感觉」是患者描述主观症状的高频前缀词" }
+    ],
+    "testFocus": "症状词精确匹配 + 认知动词 missing（Issue #56 ≥2 条 missing token）",
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "感觉", "matchType": "missing", "labelZh": null },
+      { "token": "恶心", "matchType": "exact", "labelZh": "恶心" }
+    ],
+    "minMatchRate": 0.6
+  },
+  {
+    "id": "D1",
+    "inputText": "我很害怕",
+    "description": "情绪句含程度副词「很」。「害怕」精确命中；「很」为 missing。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "Well-being / scared grid" },
+      { "source": "Widgit-26", "note": "Hemsley 26: I'm scared / I'm confused" },
+      { "source": "SCA", "note": "情绪表达是 SCA 训练核心场景" }
+    ],
+    "testFocus": "情绪词精确匹配（Issue #56 ≥1 条情绪场景）",
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "很", "matchType": "missing", "labelZh": null },
+      { "token": "害怕", "matchType": "exact", "labelZh": "害怕" }
+    ],
+    "minMatchRate": 0.6
+  },
+  {
+    "id": "D2",
+    "inputText": "我很难受",
+    "description": "情绪/不适句。「难受」在词库中是「痛」的同义词，走 lexicon 路径命中「痛」图片；验证「难受」有 lexicon 覆盖。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "Well-being / uncomfortable grid" },
+      { "source": "SCA", "note": "「难受」是失语症患者描述综合不适的高频词" }
+    ],
+    "testFocus": "lexicon 路径：「难受」→词库同义词→「痛」图片（Issue #56 lexicon 路径）",
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "很", "matchType": "missing", "labelZh": null },
+      { "token": "难受", "matchType": "lexicon", "labelZh": "痛" }
+    ],
+    "_lexiconNote": "词库 lexicon.ts 中 痛.synonyms 包含「难受」，故路径为 难受→痛，而非→伤心",
+    "minMatchRate": 0.6
+  },
+  {
+    "id": "D3",
+    "inputText": "我不开心",
+    "description": "否定情绪句。关键测试：「不开心」作为整体 token 时，NEGATION_PREFIXES 守护规则必须阻止 Strategy 4 将「开心」匹配出来；正确路径是 lexicon→「伤心」。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "Emotions / unhappy grid" },
+      { "source": "SCA", "note": "否定情绪表达是 SCA 高优先级场景" }
+    ],
+    "testFocus": "NEGATION_PREFIXES 守护规则验证（Issue #56 ≥1 条否定句要求）",
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "不开心", "matchType": "lexicon", "labelZh": "伤心" }
+    ],
+    "_negationGuard": "若分词器产生 [我,不开心]：「不开心」启动 Strategy 3 lexicon → 伤心（词库 伤心.synonyms 含「不开心」），Strategy 4 因 NEGATION_PREFIXES 被跳过，确保不会错误匹配为「开心」",
+    "_altPath": "若分词器产生 [我,不,开心]：三词均 exact 匹配，否定守护规则无需触发，minMatchRate=1.0",
+    "_pendingValidation": "需在 /debug 页面验证 Intl.Segmenter 对「不开心」的切分方式",
+    "minMatchRate": 0.6
+  },
+  {
+    "id": "E1",
+    "inputText": "我想吃饭谢谢",
+    "description": "多词组合（需求 + 礼貌词）。「饭」无独立图片标签（种子库只有「吃晚饭/早饭/午饭」），预期为 missing；其余词精确命中。",
+    "evidence": [
+      { "source": "AsTeRICS-QC24", "note": "Quick Core 24 多词组合原则：I + want + eat + (fringe word)" },
+      { "source": "SCA", "note": "礼貌词「谢谢」在 AAC 中属高频核心词" }
+    ],
+    "testFocus": "多 token 精确匹配 + 1 个 missing（饭无图）",
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "想", "matchType": "exact", "labelZh": "想" },
+      { "token": "吃", "matchType": "exact", "labelZh": "吃" },
+      { "token": "饭", "matchType": "missing", "labelZh": null },
+      { "token": "谢谢", "matchType": "exact", "labelZh": "谢谢" }
+    ],
+    "_segmentationNote": "分词器也可能产生 [我,想,吃饭,谢谢]；「吃饭」→ lexicon 同义词→「吃」，matchRate=1.0",
+    "minMatchRate": 0.75
+  },
+  {
+    "id": "E2",
+    "inputText": "今天我很开心",
+    "description": "时间词 + 情绪词组合。「今天」「我」「开心」精确命中；「很」为 missing（程度副词无图）。",
+    "evidence": [
+      { "source": "AsTeRICS-QC24", "note": "Quick Core 24 时间词 + 情绪词组合模式" },
+      { "source": "SCA", "note": "时间定向 + 情绪表达是 SCA 日常对话训练场景" }
+    ],
+    "testFocus": "时间词 + 情绪词精确匹配 + 程度副词 missing",
+    "expectedTokens": [
+      { "token": "今天", "matchType": "exact", "labelZh": "今天" },
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "很", "matchType": "missing", "labelZh": null },
+      { "token": "开心", "matchType": "exact", "labelZh": "开心" }
+    ],
+    "minMatchRate": 0.7
+  },
+  {
+    "id": "E3",
+    "inputText": "我头痛不舒服想吃药",
+    "description": "长多症状句（头痛 + 不舒服 + 吃药）。「头痛」走 lexicon 路径；「不」「舒服」需验证；「药」精确命中。期望 matchRate ≥ 0.75。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "多症状并发场景：pain + unwell + medication request" },
+      { "source": "Lingraphica-ICU", "note": "ICU 多症状自述场景" }
+    ],
+    "testFocus": "长句多 token 覆盖（Issue #56 exact+partial 混合场景）",
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "头痛", "matchType": "lexicon", "labelZh": "痛" },
+      { "token": "不", "matchType": "exact", "labelZh": "不" },
+      { "token": "舒服", "matchType": "missing", "labelZh": null },
+      { "token": "想", "matchType": "exact", "labelZh": "想" },
+      { "token": "吃", "matchType": "exact", "labelZh": "吃" },
+      { "token": "药", "matchType": "exact", "labelZh": "药" }
+    ],
+    "_lexiconNote": "词库 痛.synonyms 含「头痛」，故 头痛 → lexicon → 痛",
+    "_segmentationNote": "分词器也可能产生 [头,痛] 或 [头,痛,不舒服] 等，matchRate 可能更高",
+    "minMatchRate": 0.75
+  },
+  {
+    "id": "E4",
+    "inputText": "妈妈我肚子饿了",
+    "description": "家人称呼 + 症状句。「妈妈」在词库有条目但种子库无图，为 missing；「了」为 missing；其余精确命中。",
+    "evidence": [
+      { "source": "SCA", "note": "称呼家人 + 需求是失语症日常交流高频模式" },
+      { "source": "AsTeRICS-Hospital", "note": "Need_to_eat 场景的家庭版本" }
+    ],
+    "testFocus": "人名/称呼词 missing（Issue #56 ≥2 条含 missing token）",
+    "expectedTokens": [
+      { "token": "妈妈", "matchType": "missing", "labelZh": null },
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "肚子", "matchType": "exact", "labelZh": "肚子" },
+      { "token": "饿", "matchType": "exact", "labelZh": "饿" },
+      { "token": "了", "matchType": "missing", "labelZh": null }
+    ],
+    "_missingNote": "妈妈：词库有条目（zh: 妈妈），但种子库 pictograms.json 无对应标签 → missing；此处验证种子库覆盖缺口",
+    "_pendingValidation": "需在 /debug 验证 妈妈 是否已加入种子库",
+    "minMatchRate": 0.5
+  },
+  {
+    "id": "E5",
+    "inputText": "今天早上我发烧了还咳嗽",
+    "description": "时间词 + 两症状（发烧、咳嗽）。「了」「还」为 missing；测试多 token 覆盖能力。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "多症状并发场景：fever + cough" },
+      { "source": "SCA", "note": "时间定向 + 多症状描述是临床沟通真实场景" }
+    ],
+    "testFocus": "时间词 + 双症状词精确匹配 + 虚词 missing（Issue #56 多 token 覆盖）",
+    "expectedTokens": [
+      { "token": "今天", "matchType": "exact", "labelZh": "今天" },
+      { "token": "早上", "matchType": "exact", "labelZh": "早上" },
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "发烧", "matchType": "exact", "labelZh": "发烧" },
+      { "token": "了", "matchType": "missing", "labelZh": null },
+      { "token": "还", "matchType": "missing", "labelZh": null },
+      { "token": "咳嗽", "matchType": "exact", "labelZh": "咳嗽" }
+    ],
+    "minMatchRate": 0.65
+  },
+  {
+    "id": "E6",
+    "inputText": "帮我叫医生来",
+    "description": "求助 + 人物 + 动作。「帮」走 lexicon 路径；「叫」「医生」「来」精确命中。期望 matchRate=1.0。",
+    "evidence": [
+      { "source": "Widgit-26", "note": "Hemsley 26: Please call the doctor" },
+      { "source": "SCA", "note": "求助 + 人物 + 到来动词是 SCA 医院场景句式" },
+      { "source": "AsTeRICS-Hospital", "note": "Doctor / nurse call grid" }
+    ],
+    "testFocus": "lexicon 路径「帮→帮忙」+ 多词精确匹配（Issue #56 matchRate ≥ 0.8 基线）",
+    "expectedTokens": [
+      { "token": "帮", "matchType": "lexicon", "labelZh": "帮忙" },
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "叫", "matchType": "exact", "labelZh": "叫" },
+      { "token": "医生", "matchType": "exact", "labelZh": "医生" },
+      { "token": "来", "matchType": "exact", "labelZh": "来" }
+    ],
+    "minMatchRate": 1.0
+  },
+  {
+    "id": "E7",
+    "inputText": "我需要休息一下",
+    "description": "「需要」走 lexicon 路径（是「想」的同义词）；「休息」精确命中；「一下」为 missing（轻声量词无图）。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "Need_for_rest / 基本需求 grid" },
+      { "source": "SCA", "note": "「一下」是真实话语中常见的缓和词，无 AAC 图片" }
+    ],
+    "testFocus": "lexicon 路径「需要→想」+ missing「一下」（Issue #56 missing token 验证）",
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "需要", "matchType": "lexicon", "labelZh": "想" },
+      { "token": "休息", "matchType": "exact", "labelZh": "休息" },
+      { "token": "一下", "matchType": "missing", "labelZh": null }
+    ],
+    "_lexiconNote": "词库 想.synonyms 含「需要」，故 需要 → lexicon → 想",
+    "minMatchRate": 0.7
+  },
+  {
+    "id": "P1",
+    "inputText": "我肚子疼",
+    "description": "partial 路径专项测试。使用 preSegmented 强制产生「肚子疼」整体 token，验证 Strategy 4 包含匹配：「肚子疼」(3字) 包含「肚子」(2字) → partial。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "Unwell / stomach pain grid" },
+      { "source": "SCA", "note": "「肚子疼」是失语症患者常见单块表达方式" }
+    ],
+    "testFocus": "Strategy 4 包含匹配（exact + partial 混合；Issue #56 ≥3 条 exact+partial 要求）",
+    "preSegmented": ["我", "肚子疼"],
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "肚子疼", "matchType": "partial", "labelZh": "肚子" }
+    ],
+    "_partialNote": "Strategy 4：token「肚子疼」长度3，非否定前缀，包含 label「肚子」(2字) → partial 命中",
+    "minMatchRate": 1.0
+  },
+  {
+    "id": "P2",
+    "inputText": "我胸口疼痛",
+    "description": "partial 路径专项测试。「胸口疼痛」(4字) 包含「胸口」(2字) → partial。同时测试 exact 和 partial 在同一样本中共存。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "Something_is_wrong / chest pain — 高优先级急症" },
+      { "source": "Lingraphica-ICU", "note": "ICU 胸部症状最高优先级" }
+    ],
+    "testFocus": "Strategy 4 包含匹配（exact + partial 混合；Issue #56 ≥3 条 exact+partial 要求）",
+    "preSegmented": ["我", "胸口疼痛"],
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "胸口疼痛", "matchType": "partial", "labelZh": "胸口" }
+    ],
+    "_partialNote": "Strategy 4：token「胸口疼痛」长度4，非否定前缀，包含 label「胸口」(2字) → partial 命中",
+    "minMatchRate": 1.0
+  },
+  {
+    "id": "P3",
+    "inputText": "今天头晕眼花",
+    "description": "partial 路径专项测试。「头晕眼花」(4字) 包含「头晕」(2字) → partial；「今天」精确命中。验证 exact + partial 混合。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "Unwell / dizzy grid — 脑卒中常见症状" },
+      { "source": "SCA", "note": "「头晕眼花」是患者自述头晕的常见成语表达" }
+    ],
+    "testFocus": "Strategy 4 包含匹配（exact + partial 混合；Issue #56 ≥3 条 exact+partial 要求）",
+    "preSegmented": ["今天", "头晕眼花"],
+    "expectedTokens": [
+      { "token": "今天", "matchType": "exact", "labelZh": "今天" },
+      { "token": "头晕眼花", "matchType": "partial", "labelZh": "头晕" }
+    ],
+    "_partialNote": "Strategy 4：token「头晕眼花」长度4，非否定前缀，包含 label「头晕」(2字) → partial 命中",
+    "minMatchRate": 1.0
+  },
+  {
+    "id": "F1",
+    "inputText": "你要去厕所吗",
+    "description": "家属提问句（第二人称 + 是否询问）。「你」精确；「要」走 lexicon→想；「去」「厕所」精确；「吗」为 missing（疑问助词无图）。借鉴自 Codex PR #72 sample #11。",
+    "evidence": [
+      { "source": "Lingraphica-ICU", "note": "ICU 护理沟通中家属/护士常用的基本需求确认句" },
+      { "source": "SCA", "note": "SCA 原则：是/否问题是让患者参与沟通的核心工具" },
+      { "source": "AsTeRICS-Hospital", "note": "Need_for_toilet grid 家属视角提问模式" }
+    ],
+    "testFocus": "家属提问句：第二人称「你」exact + lexicon 路径「要→想」+ 疑问词 missing",
+    "expectedTokens": [
+      { "token": "你", "matchType": "exact", "labelZh": "你" },
+      { "token": "要", "matchType": "lexicon", "labelZh": "想" },
+      { "token": "去", "matchType": "exact", "labelZh": "去" },
+      { "token": "厕所", "matchType": "exact", "labelZh": "厕所" },
+      { "token": "吗", "matchType": "missing", "labelZh": null }
+    ],
+    "minMatchRate": 0.75
+  },
+  {
+    "id": "F2",
+    "inputText": "头痛还是肚子痛",
+    "description": "二选一疼痛确认句。「还是」为 missing（连接词无图）；两侧症状词均需命中。验证连接词不干扰双侧症状匹配。借鉴自 Codex PR #72 sample #18。",
+    "evidence": [
+      { "source": "SCA", "note": "SCA 原则：二选一是失语症患者最容易参与的沟通格式" },
+      { "source": "Lingraphica-ICU", "note": "疼痛部位确认是 ICU 最高频沟通需求之一" },
+      { "source": "AsTeRICS-Hospital", "note": "体部位 + 疼痛 grid 组合场景" }
+    ],
+    "testFocus": "连接词「还是」missing + 双侧症状词独立命中（lexicon 路径「头痛→痛」+ partial 路径「肚子痛→肚子」）",
+    "preSegmented": ["头痛", "还是", "肚子痛"],
+    "expectedTokens": [
+      { "token": "头痛", "matchType": "lexicon", "labelZh": "痛" },
+      { "token": "还是", "matchType": "missing", "labelZh": null },
+      { "token": "肚子痛", "matchType": "partial", "labelZh": "肚子" }
+    ],
+    "_lexiconNote": "词库 痛.synonyms 含「头痛」→ lexicon 命中；「肚子痛」→ Strategy 4 含「肚子」(2字) → partial",
+    "minMatchRate": 0.6
+  },
+  {
+    "id": "F3",
+    "inputText": "先喝水再吃药",
+    "description": "顺序指令句。「先」「再」为 missing（序列副词无图）；「喝水」「吃药」走对应路径命中。借鉴自 Codex PR #72 sample #5。",
+    "evidence": [
+      { "source": "AsTeRICS-Hospital", "note": "医嘱顺序场景：先…再… 结构" },
+      { "source": "SCA", "note": "顺序副词「先/再」是患者/家属日常嘱托高频词，但无 AAC 图片" }
+    ],
+    "testFocus": "序列副词「先」「再」missing；「喝水」exact + 「吃药」lexicon→药",
+    "expectedTokens": [
+      { "token": "先", "matchType": "missing", "labelZh": null },
+      { "token": "喝水", "matchType": "exact", "labelZh": "喝水" },
+      { "token": "再", "matchType": "missing", "labelZh": null },
+      { "token": "吃药", "matchType": "lexicon", "labelZh": "药" }
+    ],
+    "_lexiconNote": "词库 药.synonyms 含「吃药」→ findEntry(吃药) → 药 entry → 命中药图片",
+    "_segmentationNote": "若分词器产生 [先,喝水,再,吃,药]，则 吃+药 各 exact，matchRate=3/5=0.6",
+    "minMatchRate": 0.45
+  },
+  {
+    "id": "F4",
+    "inputText": "不要动等一下",
+    "description": "安全/紧急指令句。「不要」精确命中；「动」为 missing（词库无此运动词）；「等一下」精确命中。借鉴自 Codex PR #72 sample #79。",
+    "evidence": [
+      { "source": "Widgit-26", "note": "Hemsley 26 critical phrases: Don't move / Stop / Wait" },
+      { "source": "SCA", "note": "「不要动」是护理安全场景高频指令" }
+    ],
+    "testFocus": "安全指令：「不要」exact + 「动」missing + 「等一下」exact；验证短 missing 词夹在两个命中词之间不影响已命中词",
+    "expectedTokens": [
+      { "token": "不要", "matchType": "exact", "labelZh": "不要" },
+      { "token": "动", "matchType": "missing", "labelZh": null },
+      { "token": "等一下", "matchType": "exact", "labelZh": "等一下" }
+    ],
+    "_segmentationNote": "若分词器产生 [不要动, 等一下]：「不要动」因 NEGATION_PREFIXES 跳过 Strategy 4，其余策略也无命中 → missing；「等一下」exact",
+    "minMatchRate": 0.6
+  },
+  {
+    "id": "F5",
+    "inputText": "我理解对了吗",
+    "description": "确认/修复回环句（SCA 核心场景）。「我」精确；「理解」为 missing（抽象认知词无图）；「对」走 lexicon→有；「了」「吗」均 missing。测试低匹配率场景。借鉴自 Codex PR #72 sample #57。",
+    "evidence": [
+      { "source": "SCA", "note": "SCA 原则：家属/治疗师确认理解是 AAC 沟通循环的必要环节" },
+      { "source": "Aphasia-Best-Practice", "note": "repair loop（修复回环）是失语症沟通最重要的功能策略之一" }
+    ],
+    "testFocus": "确认回环低覆盖场景：「理解」「了」「吗」均 missing；「对」→ lexicon→有；验证低 matchRate 不崩溃",
+    "expectedTokens": [
+      { "token": "我", "matchType": "exact", "labelZh": "我" },
+      { "token": "理解", "matchType": "missing", "labelZh": null },
+      { "token": "对", "matchType": "lexicon", "labelZh": "有" },
+      { "token": "了", "matchType": "missing", "labelZh": null },
+      { "token": "吗", "matchType": "missing", "labelZh": null }
+    ],
+    "_lexiconNote": "词库 有.synonyms 含「对」(后覆盖 好.synonyms 中同名词条) → findEntry(对) → 有 entry",
+    "minMatchRate": 0.35
+  },
+  {
+    "id": "F6",
+    "inputText": "痛一点点还是很痛",
+    "description": "疼痛程度二选一。「痛」精确命中；「一点点」「还是」「很痛」均 missing（程度词和连接词无图）。验证低覆盖场景并暴露痛感程度词汇缺口。借鉴自 Codex PR #72 sample #22。",
+    "evidence": [
+      { "source": "Lingraphica-ICU", "note": "ICU 疼痛评估：轻度/重度程度询问" },
+      { "source": "Widgit-26", "note": "Hemsley 26: pain intensity scale 沟通需求" }
+    ],
+    "testFocus": "疼痛程度词汇缺口暴露：仅「痛」命中，程度/连接词全为 missing（matchRate=0.25）",
+    "preSegmented": ["痛", "一点点", "还是", "很痛"],
+    "expectedTokens": [
+      { "token": "痛", "matchType": "exact", "labelZh": "痛" },
+      { "token": "一点点", "matchType": "missing", "labelZh": null },
+      { "token": "还是", "matchType": "missing", "labelZh": null },
+      { "token": "很痛", "matchType": "missing", "labelZh": null }
+    ],
+    "_gapNote": "「一点点」「还是」「很痛」三词均不在种子库，暴露疼痛程度量化词汇缺口；可作为扩充词库的优先候选",
+    "minMatchRate": 0.2
+  }
+]

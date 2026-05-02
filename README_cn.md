@@ -15,6 +15,7 @@
 
 图语家欢迎代码、文档、测试、设计、无障碍、AAC、康复专业和真实照护场景反馈等各种形式的贡献。
 
+- [参与图语家](docs/get-involved.md)
 - [双语社区招募完整版](docs/community-recruitment-full-bilingual.md)
 - [一般自媒体短版](docs/community-recruitment-social-short-bilingual.md)
 - [开发者社区短版](docs/community-recruitment-developer-short-bilingual.md)

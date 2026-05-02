@@ -52,6 +52,10 @@ We will try to break tasks into small pieces that can be done in 1–3 hours. We
 
 If you know developers, university tech clubs, rehabilitation professionals, accessibility communities, or tech-for-good groups, please help share it with them.
 
+在线演示：https://aac.pairlab.cn/
+
+Live demo: https://aac.pairlab.cn/
+
 GitHub：  
 https://github.com/picinterpreter/picinterpreter
 

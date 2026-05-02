@@ -36,3 +36,7 @@ __pycache__/
 
 
 .next-dev
+
+# Local-only docs (not for public repo)
+docs/community-outreach-materials.md
+docs/aac-reference/

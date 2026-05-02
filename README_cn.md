@@ -5,6 +5,15 @@
 
 项目当前采用 `Next.js + React 19 + TypeScript` 构建，使用 `Dexie` 管理本地 `IndexedDB` 数据。AI 相关请求统一通过 Next.js 后端 `app/api` 转发，前端不再保存任何 API Key 或 Token。
 
+## 加入社区
+
+图语家欢迎代码、文档、测试、设计、无障碍、AAC、康复专业和真实照护场景反馈等各种形式的贡献。
+
+- [双语社区招募完整版](docs/community-recruitment-full-bilingual.md)
+- [一般自媒体短版](docs/community-recruitment-social-short-bilingual.md)
+- [开发者社区短版](docs/community-recruitment-developer-short-bilingual.md)
+- [Good first issues](https://github.com/picinterpreter/picinterpreter/issues?q=is%3Aissue%20is%3Aopen%20label%3A%22good%20first%20issue%22)
+
 ## 核心功能
 
 - 表达模式：按分类浏览图片卡片，拼接表达内容，生成候选句子并语音播报。

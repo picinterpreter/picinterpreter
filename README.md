@@ -8,6 +8,15 @@ Tuyujia is a picture-based assisted communication app for people with aphasia an
 
 The project currently uses `Next.js + React 19 + TypeScript`, with `Dexie` for local `IndexedDB` data. AI requests are routed through the Next.js backend under `app/api`, so the frontend no longer stores any API keys or tokens.
 
+## Join the Community
+
+PicInterpreter welcomes code, documentation, testing, design, accessibility, AAC, rehabilitation, and real-world caregiver feedback.
+
+- [Bilingual community recruitment post](docs/community-recruitment-full-bilingual.md)
+- [Short version for social platforms](docs/community-recruitment-social-short-bilingual.md)
+- [Short version for developer communities](docs/community-recruitment-developer-short-bilingual.md)
+- [Good first issues](https://github.com/picinterpreter/picinterpreter/issues?q=is%3Aissue%20is%3Aopen%20label%3A%22good%20first%20issue%22)
+
 ## Core Features
 
 - Expression mode: browse picture cards by category, compose an expression, generate candidate sentences, and play them aloud.

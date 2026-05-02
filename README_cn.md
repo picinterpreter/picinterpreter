@@ -5,6 +5,10 @@
 
 图语家是一个面向失语症患者和照护者的图片辅助沟通应用。用户可以通过点选图片表达需求，由系统生成候选句子并朗读出来；也支持把照护者输入的文字或语音反向转换为图片序列，帮助患者理解。
 
+| 表达模式——患者选图组句 | 接收模式——家属输入转图片序列 |
+|:---:|:---:|
+| ![表达模式](public/screenshots/express-mode.jpg) | ![接收模式](public/screenshots/receiver-mode.jpg) |
+
 项目当前采用 `Next.js + React 19 + TypeScript` 构建，使用 `Dexie` 管理本地 `IndexedDB` 数据。AI 相关请求统一通过 Next.js 后端 `app/api` 转发，前端不再保存任何 API Key 或 Token。
 
 ## 加入社区

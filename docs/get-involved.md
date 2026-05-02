@@ -108,7 +108,7 @@
 查看当前任务：
 
 - [`docs/implementation-task-index.md`](implementation-task-index.md)
-- GitHub issue 标签：`good first issue`、`help wanted`、`ready-to-implement`
+- GitHub issue 标签：`good first issue`、`help wanted`、`status: ready-to-implement`
 
 ### 如果你不会写代码
 
@@ -165,6 +165,10 @@
 - 患者侧界面应图标优先、步骤少、错误提示简单。
 - 核心沟通能力应尽量离线可用。
 - 小 PR 优先，清晰沟通优先。
+
+## 在线演示
+
+无需注册，打开即可体验核心沟通流程：**[aac.pairlab.cn](https://aac.pairlab.cn/)**
 
 ## 常用入口
 

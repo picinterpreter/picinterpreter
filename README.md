@@ -4,6 +4,8 @@ Original repository: https://github.com/lightcoloror/PicInterpreter
 
 # Tuyujia
 
+**[🔗 Live Demo → aac.pairlab.cn](https://aac.pairlab.cn/)**
+
 Tuyujia is a picture-based assisted communication app for people with aphasia and their caregivers. Users can express needs by selecting pictures, then the system generates candidate sentences and reads them aloud. It also supports converting caregiver-entered text or speech back into picture sequences to help patients understand.
 
 The project currently uses `Next.js + React 19 + TypeScript`, with `Dexie` for local `IndexedDB` data. AI requests are routed through the Next.js backend under `app/api`, so the frontend no longer stores any API keys or tokens.

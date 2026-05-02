@@ -61,6 +61,10 @@ How we collaborate:
 - If you are not sure whether you are a fit, start with a 15-minute trial: read the README, ask one question, claim a small issue, or share the project with one person who may care.
 - We will avoid treating volunteers as free labor: no empty promises, no forced long-term commitment, and requirement changes should be explained with discussion history preserved.
 
+在线演示：https://aac.pairlab.cn/
+
+Live demo: https://aac.pairlab.cn/
+
 项目地址：  
 https://github.com/picinterpreter/picinterpreter
 

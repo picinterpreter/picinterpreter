@@ -15,19 +15,19 @@ import { generatePlaceholderSvg } from '@/utils/generate-placeholder-svg'
 import { LineIcon } from '@/components/ui/LineIcon'
 
 const MATCH_TYPE_STYLE: Record<MatchedToken['matchType'], string> = {
-  exact:             'bg-green-100 text-green-800',
-  synonym:           'bg-blue-100 text-blue-800',
-  'lexicon-synonym': 'bg-yellow-100 text-yellow-800',
-  partial:           'bg-orange-100 text-orange-800',
-  none:              'bg-slate-100 text-slate-500',
+  exact:    'bg-green-100 text-green-800',
+  synonym:  'bg-blue-100 text-blue-800',
+  lexicon:  'bg-yellow-100 text-yellow-800',
+  partial:  'bg-orange-100 text-orange-800',
+  missing:  'bg-slate-100 text-slate-500',
 }
 
 const MATCH_TYPE_LABEL: Record<MatchedToken['matchType'], string> = {
-  exact:             '精确',
-  synonym:           '同义词',
-  'lexicon-synonym': '词库',
-  partial:           '包含',
-  none:              '未匹配',
+  exact:    '精确',
+  synonym:  '同义词',
+  lexicon:  '词库',
+  partial:  '包含',
+  missing:  '未匹配',
 }
 
 const EXAMPLE_SENTENCES = [

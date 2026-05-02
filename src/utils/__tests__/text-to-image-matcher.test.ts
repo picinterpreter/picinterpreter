@@ -80,19 +80,19 @@ describe('matchTextToImages', () => {
     expect(m.pictogram?.labels.zh[0]).toBe('吃饭')
   })
 
-  it('lexicon-synonym match via findEntry', async () => {
+  it('lexicon match via findEntry', async () => {
     // 词库：马桶 → 厕所；图库只有 "厕所"
     mockToArray.mockResolvedValue([makePictogram('厕所')])
     const result = await matchTextToImages('马桶')
     const m = result.matches[0]
-    expect(m.matchType).toBe('lexicon-synonym')
+    expect(m.matchType).toBe('lexicon')
     expect(m.pictogram?.labels.zh[0]).toBe('厕所')
   })
 
-  it('returns matchType "none" for unmatched tokens', async () => {
+  it('returns matchType "missing" for unmatched tokens', async () => {
     mockToArray.mockResolvedValue([makePictogram('吃')])
     const result = await matchTextToImages('外星人')
-    expect(result.matches.some((m) => m.matchType === 'none')).toBe(true)
+    expect(result.matches.some((m) => m.matchType === 'missing')).toBe(true)
   })
 
   it('matchRate is 0 when nothing matches', async () => {
@@ -138,7 +138,7 @@ describe('matchTextToImages', () => {
     expect(m.pictogram?.labels.zh[0]).toBe('吃')
   })
 
-  it('exact match takes precedence over lexicon-synonym match', async () => {
+  it('exact match takes precedence over lexicon match', async () => {
     // 词库：马桶 → 厕所；图库有精确的 "马桶" 也有 "厕所"
     // 注意：这里 mock findEntry 里 "马桶"→"厕所" 是我们设定的，
     // 但精确匹配优先，所以找到 "马桶" label 后就直接返回
@@ -194,7 +194,7 @@ describe('matchTextToImages', () => {
     // 验证 matchType 的类型安全性：所有返回值都在合法集合内
     mockToArray.mockResolvedValue([makePictogram('胸口'), makePictogram('肚子')])
     const result = await matchTextToImages('我胸口疼肚子也疼')
-    const valid: string[] = ['exact', 'synonym', 'lexicon-synonym', 'partial', 'none']
+    const valid: string[] = ['exact', 'synonym', 'lexicon', 'partial', 'missing']
     for (const m of result.matches) {
       expect(valid).toContain(m.matchType)
     }

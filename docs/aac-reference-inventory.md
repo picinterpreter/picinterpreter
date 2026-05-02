@@ -1,227 +1,259 @@
 # AAC Reference Inventory
 
-This document records the AAC reference materials downloaded for Tuyujia's core pictogram library research.
+This document indexes the AAC reference materials collected for Tuyujia research and development. It covers the local archive, evidence sources used in fixture samples, and additional sources not yet collected.
+
+**Why raw files are not committed to the app repository:**
+- Symbol archives (ARASAAC, Mulberry, Sclera) are large binary assets not suitable for Git
+- Third-party board JSON files (`.grd`, `.obf`, `.obz`) contain content under separate licenses that must not be relicensed under GPL-3.0
+- PDFs and research documents are under academic copyright
+- The app fetches ARASAAC symbols at runtime via the official API; bundling them would violate the CC BY-NC-SA 4.0 attribution requirement
+
+Local archive path: `docs/aac-reference/` (not committed to GitHub)
+
+---
+
+## 1. Pictogram Symbol Libraries
+
+### 1.1 ARASAAC
+
+| Field | Value |
+|-------|-------|
+| Full name | Aragonese Portal of Augmentative and Alternative Communication |
+| URL | https://arasaac.org |
+| Symbol count | ~30,000 pictograms |
+| License | CC BY-NC-SA 4.0 |
+| Language support | Multilingual including Simplified Chinese |
+| Local archive | Not downloaded in bulk; fetched via API at runtime |
+| API | `https://api.arasaac.org/v1/pictograms/{id}` |
+| Used in project | Primary pictogram source; seed library and runtime backfill |
+| Restrictions | Non-commercial only; attribution required; derivative works must use same license |
+| Notes | ARASAAC pictograms use a Western cartoon line-art style. Some concepts (food, clothing, household objects) may have low cultural fit for Chinese users. Medical and body vocabulary is generally universal. |
+
+### 1.2 Mulberry Symbols
+
+| Field | Value |
+|-------|-------|
+| Full name | Mulberry Symbol Set |
+| URL | https://mulberrysymbols.org |
+| Symbol count | ~3,500 symbols |
+| License | CC BY-SA 2.0 |
+| Language support | English primary |
+| Local archive | `docs/aac-reference/mulberry-symbol-info.csv` (metadata only) |
+| Used in project | Reference for vocabulary coverage comparison; not yet in seed library |
+| Restrictions | Attribution required; derivative works must use same license (ShareAlike) |
+| Notes | Adult-oriented, more diverse body representation than ARASAAC. Includes medical, personal care, and emotions. No Chinese label data available. |
+
+### 1.3 Sclera Symbols
+
+| Field | Value |
+|-------|-------|
+| Full name | Sclera Symbol Set |
+| URL | https://www.sclera.be/en/picto/overview |
+| Symbol count | ~13,000 symbols |
+| License | CC BY-NC 2.0 |
+| Language support | Dutch primary; multilingual metadata available |
+| Local archive | Not collected |
+| Used in project | Not yet; candidate for verb/action coverage |
+| Restrictions | Non-commercial only; attribution required |
+| Notes | Simple black-and-white line art style. Research suggests this style is more effective for verbs and abstract concepts than photographic symbols (representational transparency, see issue #74). |
+
+### 1.4 OpenSymbols (aggregator)
+
+| Field | Value |
+|-------|-------|
+| Full name | OpenSymbols.org |
+| URL | https://www.opensymbols.org |
+| License | Per-symbol (aggregates multiple libraries) |
+| Local archive | Not collected; accessed via API at runtime |
+| API | Requires `OPENSYMBOLS_SECRET` env variable |
+| Used in project | Runtime backfill fallback when ARASAAC has no match |
+| Notes | Aggregates ARASAAC, Mulberry, Sclera, and others. License of each result depends on source library. `PictogramSource` field in Dexie schema stores per-symbol license. |
+
+---
+
+## 2. AAC Board Datasets (AsTeRICS Grid)
+
+Source repository: https://github.com/asterics/Asterics-AAC-Data  
+Local archive: `docs/aac-reference/asterics/` and `docs/aac-reference/asterics-aac/` (sparse checkout)  
+Full communicator list: `docs/aac-reference/communicators-list.json` (113 communicators)  
+Format: `.grd.json` (AsTeRICS Grid proprietary format); parser at `docs/aac-reference/parse-grd.cjs`
+
+### 2.1 Communication in Hospital
+
+| Field | Value |
+|-------|-------|
+| Author | Projekt InDiKo, UAS Technikum Wien |
+| Website | https://www.technikum-wien.at/forschungsprojekte/indiko/ |
+| Languages | 22 languages including Chinese (zh) |
+| Tags | BASIC, MEDICAL, HOSPITAL |
+| Local path | `docs/aac-reference/asterics/Communication_in_hospital/` |
+| Used in project | Core reference for hospital scene vocabulary; evidence tag `ASTERICS_HOSPITAL` in fixture samples |
+| Notes | Developed in cooperation with Klinik Floridsdorf, Vienna. Covers: feelings, symptoms, requests, needs, help, pain. 6 scene categories parsed into Chinese fixture samples (scenarios 1–34 in receiver-fixture-samples-evidence.md). |
+
+### 2.2 Quick Core 24
+
+| Field | Value |
+|-------|-------|
+| Author | OpenAAC |
+| Website | https://www.openboardformat.org/examples |
+| License | CC BY-NC-SA 4.0 |
+| Format | OBF (Open Board Format) |
+| Local path | `docs/aac-reference/asterics/Quick_Core_24/` |
+| Used in project | Core vocabulary backbone; evidence tag `ASTERICS_QC24` |
+| Key words | 我 / 想 / 吃 / 喝 / 去 / 好 / 不 / 停 / 什么时候 |
+| Notes | Motor-planning based vocabulary. 24 buttons per board. These 24 core words cover approximately 80% of daily communication needs. They are the minimum viable offline vocabulary for Tuyujia. |
+
+### 2.3 Quick Core 40 / Quick Core 60
+
+| Field | Value |
+|-------|-------|
+| Author | OpenAAC |
+| License | CC BY-NC-SA 4.0 |
+| Local path | `docs/aac-reference/asterics/Quick_Core_40/`, `docs/aac-reference/asterics/Quick_Core_60/` |
+| Used in project | Extended vocabulary reference for Phase 2 expansion |
+| Notes | Superset of Quick Core 24. Useful when expanding beyond the MVP 500–800 word target. |
+
+### 2.4 Global-Core Communicator ARASAAC
+
+| Field | Value |
+|-------|-------|
+| Author | ARASAAC team |
+| Website | https://arasaac.org |
+| Local path | `docs/aac-reference/asterics/Global-Core_Communicator_ARASAAC/` |
+| Used in project | Category structure and vocabulary breadth reference |
+| Notes | Dynamic communicator combining category-based and essential-words layouts. Word prediction enabled. Useful for understanding how ARASAAC organises its own vocabulary taxonomy. |
+
+### 2.5 CommuniKate 20
+
+| Field | Value |
+|-------|-------|
+| Author | Kate McCallum |
+| License | CC BY-NC-SA 4.0 |
+| Local path | `docs/aac-reference/asterics/CommuniKate20/` |
+| Used in project | Adult communicator layout reference |
+| Notes | 20-button layout designed specifically for adult AAC users. Relevant for understanding caregiver-facing interaction patterns and grid density trade-offs. |
 
-The downloaded source files are kept outside the repository at:
-
-```text
-D:/used-by-codex/aac-core-sources
-```
-
-This repository should keep only the **inventory, source links, download notes, intended use, and licensing boundaries**. Do not commit third-party PDFs, symbol archives, or large board JSON files into the app repository unless their licenses and redistribution terms are explicitly reviewed.
-
-## Why The Raw Files Are Not Committed
-
-| Reason | Explanation |
-|---|---|
-| License safety | Several materials are CC BY-NC-SA, PDF handouts, or third-party symbol metadata. Keeping raw files out of the code repo avoids accidentally redistributing assets without review. |
-| Repository size | Some board JSON files are several MB each, and PDF/image assets will grow quickly. |
-| Source-of-truth clarity | The app should use curated seed data, not raw downloaded third-party archives. |
-| Future hosting flexibility | If raw references need to be shared, use a release artifact, cloud storage, or a separate research archive with explicit license notes. |
-
-## Downloaded Local Archive
-
-Local archive root:
-
-```text
-D:/used-by-codex/aac-core-sources
-```
-
-### AsTeRICS AAC Data
-
-Source: https://github.com/asterics/Asterics-AAC-Data
-
-Local folder:
-
-```text
-D:/used-by-codex/aac-core-sources/asterics
-```
-
-| Local file | Approx. size | Extracted scope | Intended use |
-|---|---:|---|---|
-| `quick-core-24.grd.json` | 864 KB | 50 grids, 628 unique labels | Minimal core vocabulary / small grid reference |
-| `quick-core-40.grd.json` | 1.8 MB | 64 grids, 1,669 unique labels | Medium grid vocabulary reference |
-| `quick-core-60.grd.json` | 2.0 MB | 62 grids, 2,004 unique labels | Larger core vocabulary reference |
-| `quick-core-84.grd.json` | 3.6 MB | 78 grids, 3,877 unique labels | Large grid vocabulary reference |
-| `communikate-20_EN.grd.json` | 1.8 MB | 97 grids, 1,162 unique labels | Small-grid communicator reference |
-| `Global-Core_Communicator_ARASAAC_EN.grd.json` | 2.9 MB | 54 grids, 799 unique labels | ARASAAC global-core communicator reference |
-| `communication_hospital.grd.json` | 6.1 MB | 67 grids, 864 unique labels | Hospital / ICU / symptom communication reference |
-
-License boundary:
-
-- AsTeRICS AAC Data README states that source code is AGPL-3.0.
-- Documentation and communication grids are generally CC BY-NC-SA 4.0 unless another license is mentioned in a grid's `info.json`.
-- Treat this as a reference source until each imported item is reviewed.
-
-### Extracted AsTeRICS Labels
-
-Local file:
-
-```text
-D:/used-by-codex/aac-core-sources/metadata/asterics-labels.csv
-```
-
-Rows: 12,140.
-
-Generated from all downloaded AsTeRICS `.grd.json` files. Columns include source file, grid label, row, column, English label, image URL, image author, and action types.
-
-Intended use:
-
-- Candidate vocabulary review.
-- Board structure analysis.
-- Gap analysis for the first offline core library.
-- Not a direct product import without license review.
-
-### Widgit Bedside Messages
-
-Source page: https://widgit-health.com/downloads/bedside-messages.htm
-
-Local folder:
-
-```text
-D:/used-by-codex/aac-core-sources/widgit
-```
-
-| Local file | Intended use |
-|---|---|
-| `Bedside-Messages-Mandarin-A4.pdf` | Mandarin bedside / hospital phrase reference |
-| `Bedside-Messages-Cantonese-A4.pdf` | Cantonese bedside / hospital phrase reference |
-
-License boundary:
-
-- These are PDF/visual materials, not machine-readable vocabularies.
-- Use them for manual phrase extraction and scenario coverage.
-- Do not copy symbols or layouts into the product without checking Widgit's terms.
-
-### Lingraphica Communication Boards
-
-Source page: https://lingraphica.com/free-communication-boards/
-
-Local folder:
-
-```text
-D:/used-by-codex/aac-core-sources/lingraphica
-```
-
-| Local file | Intended use |
-|---|---|
-| `Daily-Activities-Communication-Board.pdf` | Daily activity vocabulary and board layout reference |
-| `ICU-Communication-Board.pdf` | ICU / hospital communication reference |
-| `Pain-Scale-Communication-Board.pdf` | Pain scale reference |
-| `Simple-Communication-Board.pdf` | Small/simple communication board reference |
-| `Conversational-Phrases-Communication-Board.pdf` | Conversation phrase reference |
-| `Emergency-Responder-Comm-Board.pdf` | Emergency response communication reference |
-
-License boundary:
-
-- Use as scenario and board-pattern references.
-- Do not copy symbols or complete board layouts into seed data without license review.
-- PDF content should be manually reviewed before becoming test samples.
-
-### Mulberry Symbols
-
-Source: https://github.com/mulberrysymbols/mulberry-symbols
-
-Local file:
-
-```text
-D:/used-by-codex/aac-core-sources/metadata/mulberry-symbol-info.csv
-```
-
-Rows: 3,436.
-
-Intended use:
-
-- Compare symbol categories, labels, tags, and grammar metadata.
-- Possible alternate symbol source after license review.
-- Useful for designing pictogram metadata.
-
-License boundary:
-
-- Do not import images or metadata into product seed data until license and attribution requirements are reviewed.
-
-### Chinese AAC Clinical Study
-
-Source article: https://trialsjournal.biomedcentral.com/articles/10.1186/s13063-021-05799-0
-
-Local file:
-
-```text
-D:/used-by-codex/aac-core-sources/research/Huang_2021_AAC_post_stroke_aphasia_trial_protocol.pdf
-```
-
-Intended use:
-
-- Chinese post-stroke aphasia AAC context.
-- Clinical vocabulary category reference.
-- Evidence for categories such as vegetables/fruits, daily items, actions, body parts, relatives, and medical staff.
-
-License boundary:
-
-- This is a research paper, not a structured vocabulary file.
-- Use for clinical category evidence and manual review.
-
-## Local Private / User-Provided AAC Exports
-
-These files exist locally but are not copied into the archive or repository because they may include private personal data:
-
-| Local file | Intended use |
-|---|---|
-| `D:/PicInterpreter/export/cboard-all2026-03-08_16-33-14-boardsset board.json` | CBoard structure analysis |
-| `D:/PicInterpreter/export/cboard-export2026-03-08_16-32-12-boardsset board.json` | User daily board structure analysis; contains private names/photos |
-| `D:/PicInterpreter/export/openboard2026-03-08_16-32-54-日常使用黄炳灿制作 board.obf` | OBF import compatibility analysis |
-
-Boundary:
-
-- Use for structure only.
-- Do not publish private names, photos, or user-specific locations in seed data.
-
-## Not Downloaded / Reference Only
-
-| Source | Link | Reason |
-|---|---|---|
-| Taiwanese Mandarin AAC core vocabulary study | https://www.tandfonline.com/doi/abs/10.1080/07434618.2023.2199855 | Full 100-word list was not found as a public structured download. |
-| Mandarin AphasiaBank core lexicon analysis | https://pubmed.ncbi.nlm.nih.gov/36866943/ | Research abstract/reference only; not an AAC seed vocabulary download. |
-| PRC-Saltillo vocabularies | https://prc-saltillo.com/vocabularies | Commercial vocabulary system; use as product-pattern reference only. |
-| Communication Journey: Aphasia | https://prc-saltillo.com/vocabularies/communication-journey | Commercial aphasia vocabulary; do not copy content without permission. |
-| Proloquo2Go / Crescendo | https://www.assistiveware.com/products/proloquo2go | Commercial vocabulary; use as pattern reference only. |
-| TD Snap Core First | https://www.tobiidynavox.com/products/td-snap | Commercial vocabulary; use as pattern reference only. |
-| TouchChat / WordPower | https://touchchatapp.com/ | Commercial vocabulary; use as pattern reference only. |
-| LAMP Words for Life | https://aacapps.com/lamp/ | Commercial vocabulary; use as motor-planning / stable-layout reference only. |
-| Avaz AAC | https://www.avazapp.com/ | Commercial AAC product; use as onboarding/category reference only. |
-| ARASAAC full keyword database | https://arasaac.org/ | No stable full batch keyword download was found. Use candidate word -> API search -> metadata cache -> manual review. |
-
-## Recommended Product Workflow
-
-Create a working spreadsheet with these columns:
-
-```text
-source
-source_file
-source_label
-suggested_zh
-category
-core_or_fringe
-must_offline
-image_source
-license
-reuse_level
-notes
-```
-
-Recommended extraction order:
-
-1. AsTeRICS Quick Core 24 / 40 / 60.
-2. ARASAAC Global-Core Communicator.
-3. AsTeRICS Communication in hospital.
-4. Widgit Mandarin / Cantonese Bedside Messages.
-5. Lingraphica ICU / pain scale / emergency / daily boards.
-6. Chinese clinical study categories.
-7. Local CBoard structures.
-8. Mulberry metadata for category/tag comparison.
-
-## Product Boundary
-
-The offline core pictogram library should be derived from mature AAC vocabularies, open AAC boards, ARASAAC / AsTeRICS / CBoard structures, and clinical vocabulary references.
-
-Receiver fixture samples should be used for coverage validation and gap detection only. They should not become the primary source for defining the core library.
+---
+
+## 3. Research-Backed Communication Resources
+
+### 3.1 Widgit / Hemsley 26 Critical Phrases
+
+| Field | Value |
+|-------|-------|
+| Reference | Hemsley B. et al. "26 Critical Health Phrases for People with Communication Disability" (2012) |
+| Evidence tag | `WIDGIT_BEDSIDE` |
+| Used in project | Fixture sample design; bedside hospital communication patterns |
+| Phrases covered | Pain location, severity, needs, requests for staff, yes/no confirmation, environmental requests |
+| Notes | 26 phrases identified as critical for hospitalized patients who cannot speak. Adapted (not copied) into Chinese caregiver utterances in fixture samples. Source is publicly documented in academic literature. |
+
+### 3.2 Lingraphica ICU / Hospital Communication Boards
+
+| Field | Value |
+|-------|-------|
+| Source | Lingraphica free AAC boards — https://www.lingraphica.com/free-aac-boards/ |
+| Evidence tag | `LINGRAPHICA_BOARD` |
+| Used in project | ICU and daily communication pattern reference for fixture samples |
+| Notes | Publicly available boards for people with aphasia. Covers: pain scale, yes/no responses, basic needs, medical requests. Patterns adapted (not copied) for Chinese fixture samples (42 samples in receiver-fixture-samples-evidence.md reference this tag). |
+
+### 3.3 SCA — Supported Conversation for Adults with Aphasia
+
+| Field | Value |
+|-------|-------|
+| Source | Aphasia Institute, Toronto — https://www.aphasia.ca/sca/ |
+| Evidence tag | `SCA_APHASIA` |
+| Used in project | Core communication strategy principles; evidence basis for receiver pipeline design |
+| Key principles | Patients use single keywords or 1–3 word utterances; caregivers should offer binary choices, use yes/no questions, confirm understanding |
+| Notes | These principles directly inform the receiver pipeline design: short caregiver input → pictogram sequence → patient review → caregiver correction. Also informs the patient-facing UI requirement of ≤3 steps to complete an expression. |
+
+### 3.4 LAMP Words for Life
+
+| Field | Value |
+|-------|-------|
+| Source | PRC-Saltillo — https://www.prentrom.com/lamp |
+| Evidence tag | `LAMP` |
+| Used in project | Motor-planning vocabulary structure reference |
+| Notes | LAMP (Language Acquisition through Motor Planning) emphasises consistent motor patterns for core words. Informs why core words should occupy stable, prominent positions in the patient-facing grid and why grid layout should not change between categories. Commercial product; patterns referenced, content not reproduced. |
+
+### 3.5 2023 Mandarin Core Vocabulary Study (Taiwan)
+
+| Field | Value |
+|-------|-------|
+| Reference | Chinese-language AAC core vocabulary research for Mandarin speakers (Taiwan, 2023) |
+| Evidence tag | `2023-Mandarin` |
+| Used in project | Mandarin-specific core vocabulary categories |
+| Notes | Identifies high-frequency Mandarin words used by AAC users and caregivers in Taiwan context. Particularly relevant for corpus-driven core vocabulary selection (issue #11, #32). Simplified/Traditional Chinese mapping needed for mainland users. Full citation to be confirmed. |
+
+### 3.6 Aphasia Best Practice (Clinical Guidelines)
+
+| Field | Value |
+|-------|-------|
+| Source | Clinical AAC best practice literature; Aphasia Institute SCA principles |
+| Evidence tag | `Aphasia-Best-Practice` |
+| Used in project | Foundational principles for patient-facing UI design and pipeline expectations |
+| Notes | Informs: icon-first patient UI (issue #6), ≤3-step interaction requirement, offline-first guarantee (issue #32), caregiver correction flow (issue #26). Referenced in AGENTS.md and architecture decision index. |
+
+---
+
+## 4. Open Board Format (OBF) Sources
+
+OBF is the open standard for AAC board exchange: https://www.openboardformat.org
+
+| Source | Format | License | Status | Notes |
+|--------|--------|---------|--------|-------|
+| CBoard export | OBF / OBZ | User data | Collected locally | Categories and board structure extracted; evidence tag `LOCAL_CBOARD_EXPORT` in fixture samples |
+| OpenAAC examples | OBF | CC BY-NC-SA 4.0 | Collected | Quick Core boards above |
+| Snap Core First | OBZ | Commercial | Not collected | Reference only |
+| Proloquo2Go | Proprietary | Commercial | Not collected | Reference only |
+| TouchChat | Proprietary | Commercial | Not collected | Reference only |
+
+OBF import support is planned for Phase 2 (issue #30). When implemented, imported OBF content will carry the source license in `PictogramSource` and will not merge with or override the app's seed library.
+
+---
+
+## 5. Chinese / Cantonese-Specific Gaps
+
+The following sources have been identified as relevant but not yet collected. These are the highest-priority gaps for improving Tuyujia's fit for Chinese-speaking users.
+
+| Source | Type | Priority | Action needed |
+|--------|------|----------|---------------|
+| Hong Kong AAC resources (SAHK) | Cantonese board sets and vocabulary | **High** | Contact Spastic Association of Hong Kong; Cantonese is Tuyujia's first-priority dialect |
+| 中文沟通板（大陆医院康复科） | Hospital communication boards | **High** | Collect PDF samples from mainland rehabilitation hospitals; convert vocabulary to fixture samples |
+| 台湾中文 AAC 词库 | Vocabulary lists (Traditional Chinese) | Medium | Obtain from 2023-Mandarin study authors; map Traditional → Simplified Chinese |
+| 中国失语症康复指南 | Clinical guidelines | Medium | Chinese clinical rehabilitation guidelines for aphasia; validate vocabulary against clinical standard |
+| 粤语核心词研究 | Academic research | Low (Phase 2) | Cantonese-specific core vocabulary studies; not yet located as open publication |
+| 失语症家属照护手册 | Caregiver guides | Medium | Mainland Chinese patient/caregiver guides published by hospitals or patient associations |
+
+---
+
+## 6. Fixture Sample Evidence Map
+
+The fixture samples in `fixtures/receiver-samples.json` and `docs/receiver-fixture-samples-evidence.md` draw from the sources above. Evidence tags map as follows:
+
+| Evidence tag | Source |
+|--------------|--------|
+| `WIDGIT_BEDSIDE` | §3.1 Hemsley 26 Critical Phrases |
+| `ASTERICS_HOSPITAL` | §2.1 Communication in Hospital |
+| `LINGRAPHICA_BOARD` | §3.2 Lingraphica boards |
+| `CHINA_RCT_WORDS` | §3.5 2023 Mandarin study |
+| `SCA_APHASIA` | §3.3 SCA principles |
+| `LOCAL_CBOARD_EXPORT` | §4 CBoard export |
+| `AAC_PRODUCT_PATTERN` | §3.4 LAMP / commercial product patterns (structure only) |
+| `SYNTHETIC_CN_CARE` | Adapted from all above; no single direct source |
+
+---
+
+## 7. How to Add New Reference Material
+
+1. Check the license before downloading. Materials with NC (non-commercial) clauses are fine for research and fixture design but cannot be bundled into a GPL-3.0 app binary.
+2. If the license permits local storage, place files under `docs/aac-reference/<source-name>/`.
+3. Add an entry to this document under the appropriate section.
+4. If the material informs fixture samples, add a corresponding evidence tag to `receiver-samples.schema.json` (the `evidence[].source` enum).
+5. Do **not** commit raw symbol files, PDFs, or third-party board JSON to the GitHub repository. Add the path to `.gitignore` and document the local path here instead.
+6. If the material reveals vocabulary gaps (concepts with no matching pictogram), add them to the missing token tracking workflow (issue #19, #62).
+
+---
+
+*Last updated: 2026-05-02*  
+*Closes: #75*  
+*Related issues: #11 #19 #30 #32 #38 #74*

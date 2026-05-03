@@ -1,6 +1,6 @@
 # 图语家符号匹配研究
 
-更新时间：2026-05-02
+更新时间：2026-05-02（初稿）；2026-05-02（补充架构澄清、中文消歧工具、Phase 1/2 方案）
 
 ## 1. 研究目标
 
@@ -574,6 +574,200 @@ OpenAAC 的 embedding 检索不是没价值，而是更适合：
 
 对 `开心 -> 开心果` 这类问题，最有效的长期方案不是换模型，而是建立明确的匹配层级与回归测试。
 
+## 10. 补充研究：图语家系统架构澄清（2026-05-02）
+
+本节记录对图语家实际架构的进一步理解，以及由此得出的修订建议。
+
+### 10.1 两端架构与共享图库
+
+图语家有两个使用场景，共用同一个图符库：
+
+```
+表达端（患者主动表达）：
+  患者点词卡 → 预设词语 → 预设图符（一对一查表，运行时无歧义）
+  但预设阶段：看护者搜「开心」→ 系统返回「开心果」图符 → 词卡配错图
+
+接收端（他人信息传达给患者）：
+  他人自然语言输入 → NLP 抽词 → 词语 → 图符匹配（运行时有歧义）
+```
+
+**关键发现**：歧义问题影响两端，但触发时机不同——
+
+- 表达端：发生在**预设配置阶段**（看护者手动搜图时选错）
+- 接收端：发生在**运行时自动匹配阶段**（NLP 抽词后查图时误命中）
+
+两端用同一套图符搜索系统，所以修一处即全解决。
+
+### 10.2 问题根因的精确定位
+
+`开心 -> 开心果` 的根因不是搜索算法不够智能，而是**图符元数据有缺口**：
+
+| 问题 | 根因 |
+|---|---|
+| 「高兴/笑脸」图符搜「开心」搜不到 | 该图符没有把「开心」列为 alias/keyword |
+| 「开心果」图符被「开心」误命中 | 该图符 label 包含「开心」，且没有 negativeHints |
+| 两者分数接近 | 现有打分层没有区分 exact label 和 contains |
+
+**最高性价比的修法是元数据修复，不是换算法：**
+
+```json
+// 修复前（开心果图符）
+{ "label": "开心果" }
+
+// 修复后
+{
+  "label": "开心果",
+  "aliases": ["pistachio", "坚果"],
+  "negativeHints": ["开心", "高兴", "情绪", "心情", "感受"]
+}
+
+// 修复前（高兴图符）
+{ "label": "高兴" }
+
+// 修复后
+{
+  "label": "高兴",
+  "aliases": ["开心", "快乐", "愉快", "喜悦"],
+  "category": "emotion",
+  "negativeHints": ["果", "坚果", "零食", "食物"]
+}
+```
+
+元数据修复完成后，第 6.3 节的打分模型会自动产生正确排序：
+- 「高兴」图符（alias="开心"）→ exact alias +90，命中前排
+- 「开心果」图符 → negativeHint 命中扣 -40，排出前排
+
+### 10.3 接收端 NLP 抽词的架构建议
+
+接收端的自然语言输入会经过 NLP 提取关键词，再进行图符匹配。建议在 NLP 抽词阶段就把原句上下文透传给图符匹配层，而不是只传孤立词语：
+
+```
+输入：「我今天很开心」
+↓
+NLP 抽词：[开心]，上下文词：[很, 今天, 我]
+↓
+图符匹配：query="开心"，contextWords=["很","今天","我"]
+↓
+打分：若 contextWords 与 disambiguationHints=["很","感觉","今天","我"] 有交集 → 加分
+```
+
+上下文透传可以让「开心」在「我今天很开心」的语境中自动命中情感类图符，而不是依赖 negativeHints 排除。
+
+---
+
+## 11. 补充开源工具：中文语义消歧层
+
+本节记录除第 7 节已有方案外，额外调研到的开源工具，专门用于解决「开心 → 开心果」类子串歧义。
+
+### 11.1 OpenHowNet（义原级语义分类）
+
+- **仓库**：`github.com/thunlp/OpenHowNet`
+- **安装**：`pip install OpenHowNet`
+- **适用层**：预处理 / 图符元数据标注
+
+HowNet（知网）是中文最权威的词义本体，每个词标注「义原」（语义最小单位）。可用于离线预处理，给图符元数据自动打语义类别标签：
+
+```python
+import OpenHowNet
+hownet_dict = OpenHowNet.HowNetDict()
+
+# 「开心」的义原 → happy|高兴 → FEELING 类
+# 「开心果」的义原 → nut|坚果 → FOOD/PLANT 类
+```
+
+对图语家的价值：
+- 在图符元数据里写入 `semanticCategory`（如 `emotion` / `food` / `animal`）
+- 搜索时先做类别过滤，再做字符串匹配
+- 「开心果」图符的 `semanticCategory=food`，搜情感词时直接排除
+
+**局限**：需要 Python 服务端，适合离线预处理图符元数据，不适合前端实时推理。
+
+### 11.2 THUOCL 分类词表（前端可用）
+
+- **官网**：`thuocl.thunlp.org`
+- **下载**：纯 txt 词表，无需安装
+- **适用层**：前端图符匹配层
+
+清华大学开放中文词库，按语义类别整理的高频词表：
+
+| 词表 | 词条数 | 用途 |
+|---|---|---|
+| THUOCL_FOOD.txt | 8,974 | 食物类黑名单（防情感词匹配到食物图符） |
+| THUOCL_ANIMAL.txt | 17,287 | 动物类 |
+| THUOCL_MEDICINE.txt | 18,749 | 医药类 |
+
+对图语家的价值：
+- 把 `THUOCL_FOOD.txt` 打包进前端 bundle（约 200KB）
+- 搜索时若输入词**不在**食物词表里，对 `category=food` 的图符降权
+- 前端纯客户端运行，不依赖服务端
+
+```typescript
+const FOOD_WORDS = new Set(/* THUOCL_FOOD.txt */)
+
+function scoreBonus(inputWord: string, pictogram: Pictogram): number {
+  const isFood = FOOD_WORDS.has(inputWord)
+  if (!isFood && pictogram.category === 'food') return -30  // 降权
+  return 0
+}
+```
+
+### 11.3 NTUSD 中文情感词典（前端可用）
+
+- **仓库**：`github.com/ntunlplab/NTUSD`
+- **适用层**：前端图符匹配层
+
+台湾大学中文正负向情感词典，约 11,086 词，可作为「情感词 allowlist」：
+
+```typescript
+const EMOTION_WORDS = new Set(/* NTUSD 正向词 + 负向词 */)
+
+function getSearchCategory(word: string): string {
+  if (EMOTION_WORDS.has(word)) return 'emotion'  // 开心、难过、害怕
+  if (FOOD_WORDS.has(word)) return 'food'         // 开心果、苹果
+  return 'general'
+}
+```
+
+结合 THUOCL_FOOD 和 NTUSD，可以覆盖绝大多数高风险歧义词的类别路由，无需 AI 推理。
+
+### 11.4 BM25S（改善候选排名）
+
+- **仓库**：`github.com/xhluca/bm25s`
+- **安装**：`pip install bm25s`
+- **适用层**：服务端图符索引层（可选）
+
+BM25 是信息检索标准算法，考虑词频（TF）和逆文档频率（IDF）。相比简单的 `includes/startsWith`：
+- 精确命中「开心」标签的图符 IDF 高，排名靠前
+- 「开心果」因为是更长的复合词，在「开心」查询下 IDF 优势体现在精确匹配而非子串匹配
+
+适合用作服务端预索引，把 BM25 分数叠加进第 6.3 节的打分模型。
+
+### 11.5 各方案对比汇总
+
+| 方案 | 运行环境 | 实现成本 | 解决的核心问题 |
+|---|---|---|---|
+| 图符元数据修复（negativeHints/alias） | 前端 | 极低（内容工作） | 直接修复已知歧义词对 |
+| THUOCL 分类词表 | 前端 | 低（词表打包） | 批量覆盖食物/动物类误匹配 |
+| NTUSD 情感词典 | 前端 | 低（词表打包） | 情感词优先情感类图符 |
+| jieba 自定义词典 | 前端/服务端 | 低 | 防止「开心果」被切成「开心+果」 |
+| OpenHowNet 义原分类 | 服务端（离线） | 中（预处理脚本） | 图符元数据自动打语义类别 |
+| BM25S | 服务端 | 中 | 改善排名质量 |
+| Chinese-CLIP + 向量数据库 | 服务端（GPU 可选） | 高 | 同义词召回、语义近邻匹配 |
+
+**Phase 1 推荐组合**（纯前端，无需服务端）：
+```
+元数据修复 + THUOCL + NTUSD + jieba 自定义词典
+```
+
+**Phase 2 推荐组合**（有服务端时）：
+```
+Phase 1 方案 + OpenHowNet 预处理标注 + Chinese-CLIP 语义兜底
+```
+
+Chinese-CLIP 的价值是解决「同义词召回」（用户输入「高兴」找不到只标注了「开心」的图符），而不是「子串歧义消解」。两者是不同问题。
+
+---
+
 ## 10. 参考资料
 
 ### 官方 / 项目文档
@@ -590,6 +784,11 @@ OpenAAC 的 embedding 检索不是没价值，而是更适合：
 - Supabase pgvector + OpenAI embeddings: https://supabase.com/blog/openai-embeddings-postgres-vector
 - spaCy PhraseMatcher: https://spacy.io/api/phrasematcher
 - spaCy EntityRuler: https://spacy.io/api/entityruler
+- OpenHowNet: https://github.com/thunlp/OpenHowNet
+- THUOCL 清华大学开放中文词库: http://thuocl.thunlp.org/
+- NTUSD 中文情感词典: https://github.com/ntunlplab/NTUSD
+- BM25S: https://github.com/xhluca/bm25s
+- Chinese-CLIP: https://github.com/OFA-Sys/Chinese-CLIP
 
 ### 本次重点检查文件
 

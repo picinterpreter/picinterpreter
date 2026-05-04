@@ -7,7 +7,8 @@
 
 | 表达模式——患者选图组句 | 接收模式——家属输入转图片序列 |
 |:---:|:---:|
-| ![表达模式](public/screenshots/express-mode.jpg) | ![接收模式](public/screenshots/receiver-mode.jpg) |
+| ![表达模式首页](public/screenshots/express-mode.jpg) | ![接收模式结果页](public/screenshots/receiver-mode.jpg) |
+| ![表达模式候选句选择页](public/screenshots/bfdecd98e16466862fde7a5852dc2e2c.jpg) | ![接收模式全屏播放页](public/screenshots/149fcab0078ec231d7e5ba9f2b72afb6.jpg) |
 
 项目当前采用 `Next.js + React 19 + TypeScript` 构建，使用 `Dexie` 管理本地 `IndexedDB` 数据。AI 相关请求统一通过 Next.js 后端 `app/api` 转发，前端不再保存任何 API Key 或 Token。
 

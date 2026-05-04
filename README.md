@@ -10,7 +10,8 @@ Tuyujia is a picture-based assisted communication app for people with aphasia an
 
 | Express mode — patient selects pictograms | Receiver mode — caregiver input → pictogram sequence |
 |:---:|:---:|
-| ![Express mode](public/screenshots/express-mode.jpg) | ![Receiver mode](public/screenshots/receiver-mode.jpg) |
+| ![Express mode home screen](public/screenshots/express-mode.jpg) | ![Receiver mode result screen](public/screenshots/receiver-mode.jpg) |
+| ![Express mode sentence selection screen](public/screenshots/bfdecd98e16466862fde7a5852dc2e2c.jpg) | ![Receiver mode fullscreen playback screen](public/screenshots/149fcab0078ec231d7e5ba9f2b72afb6.jpg) |
 
 The project currently uses `Next.js + React 19 + TypeScript`, with `Dexie` for local `IndexedDB` data. AI requests are routed through the Next.js backend under `app/api`, so the frontend no longer stores any API keys or tokens.
 

@@ -64,6 +64,11 @@ For each input sentence, run this loop for at most 5 attempts:
      3. `chineseKeywords` exact match
      4. only then consider another same-meaning token
    - Do not choose a keyword match if a Chinese-name exact match exists for the same token. For example, `检查` should use a record named `检查`, not a record named `修改` that merely has `检查` as a keyword.
+   - A word-surface match is not enough. Check whether the ARASAAC picture meaning fits the sentence context. If the exact token points to the wrong sense, rewrite to a better token or mark the concept missing.
+     - Locative `上` ("on top of") should use `上面`; do not use `上` when that record means "go upstairs".
+     - General choosing should use `挑选`; avoid `选择` when the selected record depicts a narrow clothing/appliance context.
+     - Weather/body temperature context must not use a food-temperature picture only because the label says `冷的`.
+     - Benefactive `给你` ("for you / help you") should become `帮助 + 你` or `协助 + 你`; use `给` only when something is actually being handed/given.
 3. If every token is fully hit, stop and output the sequence.
 4. If any token is missing, rewrite the whole sentence into a different but meaning-equivalent expression that is easier to picture.
    - Preserve the same communicative intent.
@@ -86,8 +91,8 @@ Use these patterns when helpful:
 - If `扶` is missing and the sentence has a clear helper and receiver, prefer preserving the relation as `我 + 帮助 + 你`.
 - If the sentence contains a person relation, do not drop it just to shorten the sequence. `我`, `你`, and `我们` are valid pictogram tokens.
 - If the sentence says "give/take something to someone", preserve `我/你 + 拿/给` and location tokens such as `在` and `上` when they are present.
-- If `温水` is missing, prefer `水` and omit temperature if changing it to `热` would distort the meaning. Do not turn warm water into hot water.
-- If `冷` is missing, try `冷的` before dropping the concept. Keep the practical response (`大衣 + 穿衣服`) and preserve `我 + 给 + 你` when the caregiver is helping the patient dress.
+- If `温水` is missing, prefer `水` for the sequence and list `温水` as a missing concept. Do not turn warm water into hot water, and do not silently pretend the temperature has been expressed.
+- If weather `冷 / 天冷` is missing, do not use the food-related `冷的` picture. Keep the practical response (`大衣 + 穿衣服`) and list `天冷` or `冷` as missing. Preserve `我 + 帮助 + 你` when the caregiver is helping the patient dress.
 - If a yes/no question is addressed to the patient, preserve `你` and `想` when possible.
 - For phone/social intent, preserve order as `你 + 想 + 打电话 + 妈妈` when the sentence asks whether the patient wants to call mother.
 - For emergency or medical meaning, do not over-simplify away the key risk word.
@@ -95,8 +100,11 @@ Use these patterns when helpful:
 - For "morning", if `早上` is missing, `上午` is a good same-day replacement.
 - For `复查`, use `检查` only when the care intent is "go to the hospital for a check/review"; keep `我们 + 去 + 医院 + 检查` in that order.
 - For `量体温`, either keep `量体温` when it is a keyword hit or use the exact-name token `测体温`; preserve `你 + 发烧 + 我 + 给 + 你`.
+- For benefactive medical care such as `我给你量体温`, use `我 + 帮助/协助 + 你 + 测体温`; do not use `给` because it wrongly suggests handing an object.
 - For device charging, prefer `我 + 帮助 + 你 + 手机 + 电池 + 充电`, and choose the exact `手机` record instead of a generic phone keyword match when available.
-- For location phrases like "on the bedside table", keep `object + 在 + place + 上` when all four tokens are available.
+- For location phrases like "on the bedside table", keep `object + 在 + place + 上面`; use `上面` for spatial position, not `上`.
+- If a sentence is a yes/no question and no better grammatical pictogram exists, add `问号` at the end of the sequence for the caregiver review/patient display.
+- If `准备` creates a vague picture in a near-future routine sentence, rewrite to the concrete next action, e.g. `晚上九点我们睡觉`.
 
 ## Matching Output
 

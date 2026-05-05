@@ -1,141 +1,145 @@
 ---
 name: arasaac-pictogram-sequence
-description: Convert Chinese caregiver sentences into aphasia-friendly AAC pictogram sequences by using the calling agent's own intelligence to segment, rewrite, and verify against data/arasaac-pictograms.json. Use when a user asks to turn text into ARASAAC pictures, debug text-to-picture matching, find missing pictograms, or iteratively rewrite a sentence until all picture tokens are found.
+description: Convert Chinese caregiver sentences into aphasia-friendly ARASAAC pictogram sequences without word segmentation. Use the bundled search and detail scripts to find candidate pictograms from data/arasaac-pictograms-slim.json, inspect chosen ids, and iteratively verify whether each picture fits the sentence meaning.
 ---
 
 # ARASAAC Pictogram Sequence
 
 ## Purpose
 
-Turn one Chinese caregiver sentence into a picture sequence that a person with aphasia can understand. Use your own language understanding for segmentation and rewriting. Do not call bundled scripts; this skill intentionally has no scripts.
+Turn a Chinese caregiver sentence into an AAC picture sequence for aphasia communication.
+
+This version must not cut, segment, tokenize, or mechanically split the sentence. Understand the sentence first, then decide which visual concepts should be represented.
 
 ## Required Data
 
-Use the project file:
+Use these project files:
 
 ```text
+data/arasaac-pictograms-slim.json
 data/arasaac-pictograms.json
 ```
 
-The JSON shape is:
+The slim file is used for search. The full file is used by the detail script when available.
 
-```ts
-{
-  metadata: {...},
-  records: Array<{
-    id: number
-    chineseName: string
-    englishName: string
-    displayNameZhFallback: string
-    imageUrl300: string
-    imageUrl500: string
-    arasaacUrlZh: string
-    chineseKeywords: string[]
-    englishKeywords: string[]
-    categoriesZh: string[]
-    tagsZh: string[]
-  }>
-}
+## Bundled Scripts
+
+Run scripts from the project root.
+
+Search pictograms:
+
+```bash
+node .codex/skills/arasaac-pictogram-sequence/scripts/search-pictograms.mjs --name '太阳|阳台|日出'
+node .codex/skills/arasaac-pictogram-sequence/scripts/search-pictograms.mjs --tag 'health|hospital'
+node .codex/skills/arasaac-pictogram-sequence/scripts/search-pictograms.mjs --category 'food|drink'
 ```
 
-Search only this JSON export for matching pictograms. CSV is not the runtime source.
+Parameters are optional and can be combined:
+
+- `--name`: regex over `chineseName`, `englishName`, and `chineseKeywords`
+- `--tag`: regex over `tagsEn`
+- `--category`: regex over `categoriesEn`
+
+Chinese fullwidth `｜` is accepted as regex `|`. Output shape:
+
+```ts
+Array<{
+  id: string
+  name: string
+  tag: string
+  category: string
+}>
+```
+
+Get pictogram detail:
+
+```bash
+node .codex/skills/arasaac-pictogram-sequence/scripts/get-pictogram-detail.mjs --id 2239
+```
+
+Output includes id, names, image URLs, ARASAAC URL, categories, tags, keywords, and a short metadata description.
 
 ## Workflow
 
-For each input sentence, run this loop for at most 5 attempts:
+For each sentence, run this loop for at most 5 attempts:
 
-1. Segment the current sentence into short AAC picture tokens.
-   - Prefer concrete nouns, concrete actions, visible states, places, body parts, time, and important quantities.
-   - Preserve important relationship tokens when they are present and match the JSON, especially `我`, `你`, `我们`, `给`, `在`, `上`, `然后`, and `想`.
-   - Preserve action order. Put movement/action tokens before their destination when the sentence means "go to X", e.g. `去 + 医院`.
-   - Remove only truly low-value particles and long explanation words.
-   - Keep the original meaning, not just related meaning.
-   - Use short Chinese tokens.
-2. Search `data/arasaac-pictograms.json` for every token.
-   - A token is a full hit if it exactly equals any of:
-     - `chineseName`
-     - `displayNameZhFallback`
-     - any item in `chineseKeywords`
-   - If there is no exact hit, try a clear same-meaning token that appears in those fields.
-   - Do not count vague tag/category matches as full hits.
-   - When several records match the same token, choose the picture in this order:
-     1. `chineseName` exact match
-     2. `displayNameZhFallback` exact match
-     3. `chineseKeywords` exact match
-     4. only then consider another same-meaning token
-   - Do not choose a keyword match if a Chinese-name exact match exists for the same token. For example, `检查` should use a record named `检查`, not a record named `修改` that merely has `检查` as a keyword.
-   - A word-surface match is not enough. Check whether the ARASAAC picture meaning fits the sentence context. If the exact token points to the wrong sense, rewrite to a better token or mark the concept missing.
-     - Locative `上` ("on top of") should use `上面`; do not use `上` when that record means "go upstairs".
-     - General choosing should use `挑选`; avoid `选择` when the selected record depicts a narrow clothing/appliance context.
-     - Weather/body temperature context must not use a food-temperature picture only because the label says `冷的`.
-     - Benefactive `给你` ("for you / help you") should become `帮助 + 你` or `协助 + 你`; use `给` only when something is actually being handed/given.
-3. If every token is fully hit, stop and output the sequence.
-4. If any token is missing, rewrite the whole sentence into a different but meaning-equivalent expression that is easier to picture.
-   - Preserve the same communicative intent.
-   - Replace missing abstract/status words with concrete visual equivalents when possible.
-   - It is allowed to adjust word order or simplify the sentence if patient understanding improves.
-   - Do not silently drop important meaning only to make all tokens match.
-5. Segment the rewritten sentence and search again.
+1. Read the whole sentence and state the communicative intent in your own mind.
+   - Do not segment the sentence.
+   - Do not produce a token list by cutting the sentence.
+   - Decide the few concrete picture concepts needed for the patient to understand the message.
+2. Search for candidate pictures using the search script.
+   - Choose search queries yourself from the sentence meaning.
+   - Search by `name` for concrete objects, people, actions, places, time words, symptoms, and body parts.
+   - Search by `tag` or `category` when the sentence implies a domain but the exact Chinese name may vary, such as medical care, food, drink, bathroom, clothing, sleep, weather, or household objects.
+   - Run multiple searches when needed. Prefer narrow regexes first, then broader alternatives.
+3. Draft a pictogram sequence from the candidate ids.
+   - The sequence is a designed answer, not the result of word segmentation.
+   - Prefer fewer, clearer pictures.
+   - Preserve important actors, receivers, actions, objects, places, sequence order, urgency, and yes/no question intent.
+4. Verify every chosen id with the detail script.
+   - Read the detail output and check whether the picture meaning fits the sentence context.
+   - Use name, keywords, category, tag, and image URL as evidence.
+   - If the detail suggests the wrong sense, remove it and return to step 2 with better searches.
+5. Iterate until the sequence is suitable or no better candidate can be found.
+   - Do not stop after the first draft if `missingConcepts` is non-empty.
+   - If the current wording does not map cleanly to pictures, rewrite the sentence in a semantically equivalent way and search again from that new phrasing.
+   - Keep looping through search → draft → detail check → revise until the missing idea is reduced as far as the data allows.
+   - Never invent an ARASAAC id.
+   - Never keep a picture only because a word surface matches.
+   - If a meaning cannot be represented faithfully, list it in `missingConcepts`.
 
-After 5 attempts, if full coverage is still impossible, output the best attempt and explicitly list missing concepts.
+## Search Strategy
 
-## Rewriting Rules
+- Search concrete meanings, not grammatical fragments.
+- For abstract caregiver intent, search for the visible action or practical outcome.
+- For benefactive care, avoid a `give` picture unless something is physically handed over. Prefer help/care/action pictures when they fit.
+- For location meaning like "on the table", prefer a place/object plus a spatial relation picture that actually means "on top", not an unrelated same-character sense.
+- For medical and emergency sentences, keep the risk or symptom if a suitable picture exists.
+- For yes/no questions, keep the patient/addressee and desire/action meaning when possible; add a question-mark pictogram only if it improves clarity.
+- For time/order, represent only clinically or practically important order, such as first/then, morning/night, medicine timing, or appointment timing.
+- If the first search route leaves gaps, do not treat that as the end of the task. Re-express the same meaning with a different but faithful wording, then search the pictogram data again.
 
-Use these patterns when helpful:
+## Output
 
-- `没喝完 / 剩下 / 还有一点` can become `少量` or `一点` when the intended meaning is remaining food/drink.
-- `热热 / 热一下 / 温一下` can become `加热`.
-- `复查` can become `医院 + 检查` if `复查` is missing.
-- `吃饭` can become `吃 + 食物` or a specific food if `吃饭` is missing.
-- `帮忙 / 扶` can become a more concrete visible action if one exists; otherwise keep it as missing.
-- If `扶` is missing and the sentence has a clear helper and receiver, prefer preserving the relation as `我 + 帮助 + 你`.
-- If the sentence contains a person relation, do not drop it just to shorten the sequence. `我`, `你`, and `我们` are valid pictogram tokens.
-- If the sentence says "give/take something to someone", preserve `我/你 + 拿/给` and location tokens such as `在` and `上` when they are present.
-- If `温水` is missing, prefer `水` for the sequence and list `温水` as a missing concept. Do not turn warm water into hot water, and do not silently pretend the temperature has been expressed.
-- If weather `冷 / 天冷` is missing, do not use the food-related `冷的` picture. Keep the practical response (`大衣 + 穿衣服`) and list `天冷` or `冷` as missing. Preserve `我 + 帮助 + 你` when the caregiver is helping the patient dress.
-- If a yes/no question is addressed to the patient, preserve `你` and `想` when possible.
-- For phone/social intent, preserve order as `你 + 想 + 打电话 + 妈妈` when the sentence asks whether the patient wants to call mother.
-- For emergency or medical meaning, do not over-simplify away the key risk word.
-- For "first/then" order, if `先` is missing, use `第一` for "first" and keep `然后` for the next step when both are important.
-- For "morning", if `早上` is missing, `上午` is a good same-day replacement.
-- For `复查`, use `检查` only when the care intent is "go to the hospital for a check/review"; keep `我们 + 去 + 医院 + 检查` in that order.
-- For `量体温`, either keep `量体温` when it is a keyword hit or use the exact-name token `测体温`; preserve `你 + 发烧 + 我 + 给 + 你`.
-- For benefactive medical care such as `我给你量体温`, use `我 + 帮助/协助 + 你 + 测体温`; do not use `给` because it wrongly suggests handing an object.
-- For device charging, prefer `我 + 帮助 + 你 + 手机 + 电池 + 充电`, and choose the exact `手机` record instead of a generic phone keyword match when available.
-- For location phrases like "on the bedside table", keep `object + 在 + place + 上面`; use `上面` for spatial position, not `上`.
-- If a sentence is a yes/no question and no better grammatical pictogram exists, add `问号` at the end of the sequence for the caregiver review/patient display.
-- If `准备` creates a vague picture in a near-future routine sentence, rewrite to the concrete next action, e.g. `晚上九点我们睡觉`.
-
-## Matching Output
-
-When reporting a result, include:
+Return this structure unless the user asks for a shorter format:
 
 ```ts
 {
   originalText: string
   finalText: string
+  intent: string
   attempts: Array<{
-    sentence: string
-    tokens: string[]
-    missingTokens: string[]
+    searchQueries: Array<{
+      name?: string
+      tag?: string
+      category?: string
+    }>
+    candidateIds: string[]
+    draftedSequence: string[]
+    rejected: Array<{
+      id: string
+      reason: string
+    }>
+    missingConcepts: string[]
   }>
   sequence: Array<{
-    token: string
-    arasaacId: number
+    arasaacId: string
     label: string
     imageUrl: string
-    arasaacUrl: string
+    arasaacUrl?: string
+    role: string
+    verification: string
   }>
   missingConcepts: string[]
 }
 ```
 
-If the user wants a concise answer, show the final text, the token sequence, and missing concepts only.
+`draftedSequence` is a list of intended picture labels, not a segmentation of the source sentence.
 
 ## Quality Bar
 
-- The sequence should be understandable from pictures alone.
-- Prefer fewer, clearer pictures over a long literal word-by-word translation.
-- Patient-facing meaning is more important than grammatical completeness, but do not remove people, receiver, helper, or action order when those are the point of the sentence.
-- Never invent an ARASAAC hit. If the JSON does not contain a true full hit, mark the concept missing or rewrite and retry.
-- Do not use placeholder images for missing tokens.
+- The final sequence should be understandable from pictures alone.
+- Patient-facing clarity is more important than grammatical completeness.
+- Do not delete important meaning just to make the sequence shorter.
+- Do not expose technical matching details in patient-facing text.
+- Do not use placeholder images for missing concepts.

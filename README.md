@@ -218,6 +218,10 @@ This project is released under the GNU General Public License v3.0 or later (`GP
 
 ## Architecture and Decisions
 
+**System architecture:**
+
+- [Architecture Diagrams](docs/architecture.md) — system context, data flow (express / receive), storage & sync, pictogram matching pipeline
+
 **Current decisions:**
 
 - [Decision Index](docs/decision-index.md) — confirmed decisions and open design questions, linked to tracking issues
@@ -227,6 +231,7 @@ This project is released under the GNU General Public License v3.0 or later (`GP
 **Research / background** (informational; may be superseded by decisions above):
 
 - [Product Requirements](docs/prd.md)
+- [Project Logic Tree and Knowledge Map](docs/project-logic-tree-and-knowledge-map.md)
 
 ## Debug and Tools Pages
 

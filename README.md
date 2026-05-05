@@ -20,6 +20,8 @@ The project currently uses `Next.js + React 19 + TypeScript`, with `Dexie` for l
 PicInterpreter welcomes code, documentation, testing, design, accessibility, AAC, rehabilitation, and real-world caregiver feedback.
 
 - [Ways to get involved](docs/get-involved.md)
+- [Contributor recognition](docs/contributor-recognition.md)
+- [Caregiver feedback form](docs/caregiver-feedback-form.md)
 - [Bilingual community recruitment post](docs/community-recruitment-full-bilingual.md)
 - [Short version for social platforms](docs/community-recruitment-social-short-bilingual.md)
 - [Short version for developer communities](docs/community-recruitment-developer-short-bilingual.md)

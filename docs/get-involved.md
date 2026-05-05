@@ -65,6 +65,10 @@
 
 请不要公开上传患者照片、姓名、电话、病历号、家庭地址或其他私人信息。真实反馈可以匿名整理后提交。
 
+建议直接使用：
+
+- [`docs/caregiver-feedback-form.md`](caregiver-feedback-form.md)
+
 ### 学生 / 高校社团 / 开源学习社区
 
 图语家适合作为真实开源实践项目：
@@ -149,6 +153,10 @@
 - 核心贡献者推荐信。
 - 可写入简历 / 作品集的开源贡献经历。
 
+致谢和署名方式见：
+
+- [`docs/contributor-recognition.md`](contributor-recognition.md)
+
 ## 如何开始
 
 1. 阅读 [`README.md`](../README.md) 或 [`README_cn.md`](../README_cn.md)，了解项目是什么。
@@ -178,5 +186,7 @@
 - 当前任务：[`docs/implementation-task-index.md`](implementation-task-index.md)
 - 架构决策：[`docs/decision-index.md`](decision-index.md)
 - 用户研究：[`docs/user-research-playbook.md`](user-research-playbook.md)
+- 家属反馈表：[`docs/caregiver-feedback-form.md`](caregiver-feedback-form.md)
+- 贡献者致谢：[`docs/contributor-recognition.md`](contributor-recognition.md)
 - AAC 参考资料：[`docs/aac-reference-inventory.md`](aac-reference-inventory.md)
 

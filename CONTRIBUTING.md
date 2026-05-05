@@ -311,6 +311,10 @@ PR 模板会提示你填写以下内容：
 
 可以直接在 [GitHub Discussions](https://github.com/picinterpreter/picinterpreter/discussions) 分享，或开一个 issue。
 
+如果你想用更结构化的方式提交，建议先填写：
+
+- [`docs/caregiver-feedback-form.md`](docs/caregiver-feedback-form.md)
+
 ### 核心词库整理
 
 参考 AAC 工具（ARASAAC、Widgit 26、Quick Core 24、Lingraphica ICU 板）和真实照护场景，帮助整理 MVP 核心词表。参见 [#32](https://github.com/picinterpreter/picinterpreter/issues/32)。
@@ -320,6 +324,7 @@ PR 模板会提示你填写以下内容：
 - 完善 README、CONTRIBUTING、issue 模板
 - 把关键文档翻译成英文或简体中文
 - 写教程、截图演示、操作视频
+- 维护贡献者致谢页和参与入口文档
 
 ### issue 整理
 
@@ -348,5 +353,7 @@ PR 模板会提示你填写以下内容：
 ---
 
 感谢你花时间了解图语家。一个小 PR、一条真实场景描述、一次文档改进，都可以帮助一个家庭更好地沟通。
+
+贡献公开致谢和署名方式见 [`docs/contributor-recognition.md`](docs/contributor-recognition.md)。
 
 Thank you for taking the time to understand PicInterpreter. A small PR, a real-world scenario description, or a documentation improvement can all help a family communicate better.

@@ -988,6 +988,27 @@
     "usageCount": 0
   },
   {
+    "id": "p_make_call",
+    "imageUrl": "https://static.arasaac.org/pictograms/6552/6552_300.png",
+    "labels": {
+      "zh": [
+        "打电话"
+      ],
+      "en": [
+        "make a phone call"
+      ]
+    },
+    "categoryId": "actions",
+    "synonyms": [
+      "通电话",
+      "电话联系"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
+    "usageCount": 0
+  },
+  {
     "id": "p_eat",
     "imageUrl": "https://static.arasaac.org/pictograms/2349/2349_hair-A65E26_skin-F5E5DE_500.png",
     "labels": {
@@ -1126,8 +1147,6 @@
     },
     "categoryId": "actions",
     "synonyms": [
-      "要",
-      "想要",
       "希望"
     ],
     "disambiguationHints": {
@@ -1565,12 +1584,13 @@
         "sick"
       ]
     },
-    "categoryId": "emotions",
+    "categoryId": "medical",
     "synonyms": [
-      "病了",
-      "不舒服"
+      "病了"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "medical"
+    },
     "usageCount": 0
   },
   {
@@ -2313,8 +2333,7 @@
     },
     "categoryId": "medical",
     "synonyms": [
-      "大夫",
-      "看病"
+      "大夫"
     ],
     "disambiguationHints": {
       "semanticDomain": "medical"
@@ -2527,7 +2546,7 @@
   },
   {
     "id": "p_nausea",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/39620/39620_300.png",
     "labels": {
       "zh": [
         "恶心"
@@ -2630,9 +2649,7 @@
     "categoryId": "medical",
     "synonyms": [
       "疼",
-      "疼痛",
-      "难受",
-      "不舒服"
+      "疼痛"
     ],
     "disambiguationHints": {
       "semanticDomain": "medical"
@@ -2820,9 +2837,27 @@
     },
     "categoryId": "medical",
     "synonyms": [
-      "吃药",
-      "服药",
       "药物"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "medical"
+    },
+    "usageCount": 0
+  },
+  {
+    "id": "p_take_medicine",
+    "imageUrl": "https://globalsymbols.com/uploads/production/image/imagefile/18202/17_18203_50f222f5-b9ae-4007-86d0-606571bbbce8.png",
+    "labels": {
+      "zh": [
+        "吃药"
+      ],
+      "en": [
+        "take medicine"
+      ]
+    },
+    "categoryId": "medical",
+    "synonyms": [
+      "服药"
     ],
     "disambiguationHints": {
       "semanticDomain": "medical"
@@ -2875,9 +2910,7 @@
       ]
     },
     "categoryId": "medical",
-    "synonyms": [
-      "不舒服"
-    ],
+    "synonyms": [],
     "disambiguationHints": {
       "semanticDomain": "medical"
     },
@@ -3472,8 +3505,7 @@
     },
     "categoryId": "objects",
     "synonyms": [
-      "电话",
-      "打电话"
+      "电话"
     ],
     "disambiguationHints": {
       "semanticDomain": "objects"

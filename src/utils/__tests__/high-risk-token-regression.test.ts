@@ -174,4 +174,159 @@ describe('高风险词 seed 回归', () => {
     })
   })
 
+  // ─────────────────────────────────────────────────────────────────────────
+  // 难受 / 不舒服 — 不能再被泛化到 p_pain；应优先命中各自的独立医疗概念
+  // ─────────────────────────────────────────────────────────────────────────
+  describe('难受 / 不舒服 → 独立医疗概念', () => {
+    it('整体 token "难受" exact 命中 p_uncomfortable，不命中 p_pain', async () => {
+      const result = await matchTextToImages('难受', { preSegmented: ['难受'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_uncomfortable')
+      expect(m.matchType).toBe('exact')
+      expect(m.pictogram?.categoryId).toBe('medical')
+      expect(m.pictogram?.id).not.toBe('p_pain')
+    })
+
+    it('整体 token "不舒服" exact 命中 p_unwell，不命中 p_sick 和 p_pain', async () => {
+      const result = await matchTextToImages('不舒服', { preSegmented: ['不舒服'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_unwell')
+      expect(m.matchType).toBe('exact')
+      expect(m.pictogram?.categoryId).toBe('medical')
+      expect(m.pictogram?.id).not.toBe('p_sick')
+      expect(m.pictogram?.id).not.toBe('p_pain')
+    })
+  })
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // 第二批医疗高风险词 — 应保持在 medical 域中，不被别的近义概念抢走
+  // ─────────────────────────────────────────────────────────────────────────
+  describe('第二批医疗高风险词', () => {
+    it('恶心 exact 命中 p_nausea，且 imageUrl 不为空', async () => {
+      const result = await matchTextToImages('恶心', { preSegmented: ['恶心'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_nausea')
+      expect(m.matchType).toBe('exact')
+      expect(m.pictogram?.categoryId).toBe('medical')
+      expect(m.pictogram?.imageUrl).toBeTruthy()
+    })
+
+    it('想吐 synonym 命中 p_nausea', async () => {
+      const result = await matchTextToImages('想吐', { preSegmented: ['想吐'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_nausea')
+      expect(m.matchType).toBe('synonym')
+    })
+
+    it('药 exact 命中 p_medicine', async () => {
+      const result = await matchTextToImages('药', { preSegmented: ['药'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_medicine')
+      expect(m.matchType).toBe('exact')
+      expect(m.pictogram?.categoryId).toBe('medical')
+    })
+
+    it('吃药 exact 命中 p_take_medicine，而不是 p_medicine', async () => {
+      const result = await matchTextToImages('吃药', { preSegmented: ['吃药'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_take_medicine')
+      expect(m.matchType).toBe('exact')
+      expect(m.pictogram?.id).not.toBe('p_medicine')
+    })
+
+    it('服药 synonym 命中 p_take_medicine', async () => {
+      const result = await matchTextToImages('服药', { preSegmented: ['服药'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_take_medicine')
+      expect(m.matchType).toBe('synonym')
+    })
+
+    it('医生 exact 命中 p_doctor', async () => {
+      const result = await matchTextToImages('医生', { preSegmented: ['医生'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_doctor')
+      expect(m.matchType).toBe('exact')
+      expect(m.pictogram?.categoryId).toBe('medical')
+    })
+
+    it('看病 synonym 命中 p_hospital，而不是 p_doctor', async () => {
+      const result = await matchTextToImages('看病', { preSegmented: ['看病'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_hospital')
+      expect(m.matchType).toBe('synonym')
+      expect(m.pictogram?.id).not.toBe('p_doctor')
+    })
+  })
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // 手机 — 当前只保留对象义，不再把动作义 "打电话" 混进同一张图
+  // ─────────────────────────────────────────────────────────────────────────
+  describe('手机 → p_phone（objects）', () => {
+    it('手机 exact 命中 p_phone', async () => {
+      const result = await matchTextToImages('手机', { preSegmented: ['手机'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_phone')
+      expect(m.matchType).toBe('exact')
+      expect(m.pictogram?.categoryId).toBe('objects')
+    })
+
+    it('p_phone 的 synonyms 不再包含 "打电话"', () => {
+      const phone = seedData.find((p) => p.id === 'p_phone')
+      expect(phone?.synonyms).not.toContain('打电话')
+    })
+  })
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // 打电话 — 应该有独立动作概念，不再回落到手机物品图
+  // ─────────────────────────────────────────────────────────────────────────
+  describe('打电话 → p_make_call（actions）', () => {
+    it('打电话 exact 命中 p_make_call，而不是 p_phone', async () => {
+      const result = await matchTextToImages('打电话', { preSegmented: ['打电话'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_make_call')
+      expect(m.matchType).toBe('exact')
+      expect(m.pictogram?.categoryId).toBe('actions')
+      expect(m.pictogram?.id).not.toBe('p_phone')
+    })
+
+    it('通电话 synonym 命中 p_make_call', async () => {
+      const result = await matchTextToImages('通电话', { preSegmented: ['通电话'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_make_call')
+      expect(m.matchType).toBe('synonym')
+    })
+  })
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // 想 / 要 — 两个核心词都保留，但不再互相吞并
+  // ─────────────────────────────────────────────────────────────────────────
+  describe('想 / 要 → 分开的核心词', () => {
+    it('想 exact 命中 p_want', async () => {
+      const result = await matchTextToImages('想', { preSegmented: ['想'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_want')
+      expect(m.matchType).toBe('exact')
+    })
+
+    it('要 exact 命中 p_想要', async () => {
+      const result = await matchTextToImages('要', { preSegmented: ['要'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_想要')
+      expect(m.matchType).toBe('exact')
+    })
+
+    it('想要 synonym 命中 p_想要，而不是 p_want', async () => {
+      const result = await matchTextToImages('想要', { preSegmented: ['想要'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_想要')
+      expect(m.matchType).toBe('synonym')
+      expect(m.pictogram?.id).not.toBe('p_want')
+    })
+
+    it('p_want 的 synonyms 不再包含 "要"', () => {
+      const want = seedData.find((p) => p.id === 'p_want')
+      expect(want?.synonyms).not.toContain('要')
+    })
+  })
+
 })

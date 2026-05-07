@@ -422,7 +422,7 @@
   },
   {
     "id": "p_help_me",
-    "imageUrl": "https://static.arasaac.org/pictograms/10141/10141_300.png",
+    "imageUrl": "https://static.arasaac.org/pictograms/32648/32648_300.png",
     "labels": {
       "zh": [
         "帮帮我"
@@ -539,7 +539,7 @@
   },
   {
     "id": "p_i_want_rest",
-    "imageUrl": "https://static.arasaac.org/pictograms/28425/28425_300.png",
+    "imageUrl": "https://static.arasaac.org/pictograms/16643/16643_300.png",
     "labels": {
       "zh": [
         "我想休息"
@@ -587,7 +587,7 @@
   },
   {
     "id": "p_i_have_pain",
-    "imageUrl": "https://static.arasaac.org/pictograms/30620/30620_300.png",
+    "imageUrl": "https://static.arasaac.org/pictograms/2367/2367_300.png",
     "labels": {
       "zh": [
         "我痛"
@@ -2058,7 +2058,7 @@
   },
   {
     "id": "p_older_sister",
-    "imageUrl": "https://static.arasaac.org/pictograms/37966/37966_300.png",
+    "imageUrl": "https://static.arasaac.org/pictograms/2422/2422_300.png",
     "labels": {
       "zh": [
         "姐姐"

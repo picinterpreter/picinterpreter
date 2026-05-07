@@ -3149,7 +3149,7 @@
   },
   {
     "id": "p_weekend",
-    "imageUrl": "https://static.arasaac.org/pictograms/27329/27329_300.png",
+    "imageUrl": "https://static.arasaac.org/pictograms/32396/32396_300.png",
     "labels": {
       "zh": [
         "周末"
@@ -3168,7 +3168,7 @@
   },
   {
     "id": "p_morning",
-    "imageUrl": "https://static.arasaac.org/pictograms/6944/6944_300.png",
+    "imageUrl": "https://static.arasaac.org/pictograms/25704/25704_300.png",
     "labels": {
       "zh": [
         "早上"
@@ -3186,7 +3186,7 @@
   },
   {
     "id": "p_tomorrow",
-    "imageUrl": "https://static.arasaac.org/pictograms/38278/38278_300.png",
+    "imageUrl": "https://static.arasaac.org/pictograms/7152/7152_300.png",
     "labels": {
       "zh": [
         "明天"
@@ -3202,7 +3202,7 @@
   },
   {
     "id": "p_yesterday",
-    "imageUrl": "https://static.arasaac.org/pictograms/38279/38279_300.png",
+    "imageUrl": "https://static.arasaac.org/pictograms/6926/6926_300.png",
     "labels": {
       "zh": [
         "昨天"

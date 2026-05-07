@@ -6,6 +6,7 @@ import { useSettingsStore, type GridCols } from '@/stores/settings-store'
 import { generatePlaceholderSvg, resolveImageSrc } from '@/utils/generate-placeholder-svg'
 import { sortPictogramsForDisplay } from '@/utils/pictogram-order'
 import { LineIcon } from '@/components/ui/LineIcon'
+import { CategoryIcon } from '@/components/CategoryIcon/CategoryIcon'
 import type { Category, PictogramEntry } from '@/types'
 
 // Tailwind 类必须是完整字符串，不可动态拼接
@@ -370,7 +371,13 @@ function FolderTile({
     >
       <span className={`absolute left-0 top-0 h-5 w-[48%] bg-sky-200 transition-colors group-hover:bg-sky-100 ${folderTabClassName}`} aria-hidden="true" />
       <span className={iconClassName}>
-        {icon ?? category.icon}
+        {icon ?? (
+          <CategoryIcon
+            category={category}
+            className="h-12 w-12 object-contain sm:h-14 sm:w-14"
+            textClassName="text-[48px] leading-none sm:text-[54px]"
+          />
+        )}
       </span>
       <span className="mt-1 max-w-full truncate text-center text-base font-bold leading-tight text-slate-900">
         {category.name}

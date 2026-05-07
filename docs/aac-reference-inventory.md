@@ -8,7 +8,7 @@ This document indexes the AAC reference materials collected for Tuyujia research
 - PDFs and research documents are under academic copyright
 - The app fetches ARASAAC symbols at runtime via the official API; bundling them would violate the CC BY-NC-SA 4.0 attribution requirement
 
-Local archive path: `docs/aac-reference/` (not committed to GitHub)
+Local archive path: `D:\used-by-codex\picinterpreter\aac-core-sources\` (not committed to GitHub)
 
 ---
 
@@ -203,15 +203,49 @@ OBF is the open standard for AAC board exchange: https://www.openboardformat.org
 |--------|--------|---------|--------|-------|
 | CBoard export | OBF / OBZ | User data | Collected locally | Categories and board structure extracted; evidence tag `LOCAL_CBOARD_EXPORT` in fixture samples |
 | OpenAAC examples | OBF | CC BY-NC-SA 4.0 | Collected | Quick Core boards above |
-| Snap Core First | OBZ | Commercial | Not collected | Reference only |
-| Proloquo2Go | Proprietary | Commercial | Not collected | Reference only |
-| TouchChat | Proprietary | Commercial | Not collected | Reference only |
+| Snap Core First | PDF / ZIP | Commercial public resources | Collected locally | Core First communication books and Chinese low-tech boards under `aac-core-sources/commercial/td-snap-core-first/`; reference only |
+| TD Snap Aphasia | PDF | Commercial public resources | Collected locally | Aphasia implementation guide, communication book, training cards, pocket guide, and support handouts under `aac-core-sources/commercial/td-snap-aphasia/`; reference only |
+| Proloquo2Go / Proloquo / Crescendo | PDF | Commercial public resources | Collected locally | Core word boards and quick communication boards under `aac-core-sources/commercial/assistiveware-proloquo/`; reference only |
+| TouchChat / WordPower / Communication Journey Aphasia | PDF | Commercial public resources | Collected locally | WordPower manuals/QRGs, Chinese QRG/manual, and CJA user guide under `aac-core-sources/commercial/touchchat-wordpower/`; reference only |
+| LAMP Words for Life | PDF | Commercial public resources | Collected locally | Manual boards, low-tech backup, VI board, and implementation support under `aac-core-sources/commercial/lamp-words-for-life/`; reference only |
+| PRC-Saltillo Mandarin / Communication Journey public pages | HTML | Commercial public pages | Collected locally | Saved public pages under `aac-core-sources/commercial/prc-saltillo-communication-journey/`; reference only |
+| PRC-Saltillo WordPower manual boards | PDF | Commercial public resources | Collected locally | Mandarin 96-location, Traditional Chinese WordPower60 Basic, Cantonese 96-location, WordPower 45/60 boards under `aac-core-sources/commercial/wordpower-manual-boards/`; reference only |
+| Unity / Minspeak | HTML / PDF | Commercial theory and product pages | Collected locally | Minspeak and Unity overview pages plus Unity 45/60/84/144 vocabulary charts and Unity workbook under `aac-core-sources/commercial/prc-saltillo-unity/`; strong semantic-compaction reference |
+| Smartbox Super Core | HTML / PDF | Commercial public resources | Partially collected locally | Super Core resource and printable-board pages plus one verified Super Core 50 Widgit board under `aac-core-sources/commercial/smartbox-super-core/`; some PCS/SymbolStix links returned placeholder/error responses |
+| Smartbox Voco Chat | HTML | Commercial public pages | Collected locally | Voco Chat resource and product pages under `aac-core-sources/commercial/smartbox-voco-chat/`; useful as a pragmatics-driven architecture reference |
+| Avaz AAC | PDF | Commercial public resources | Collected locally | Core board and topic boards under `aac-core-sources/commercial/avaz-aac/`; reference only |
+| Dialogue AAC | PDF | Commercial public resources | Collected locally | Dialogue manual and Essence QRG under `aac-core-sources/commercial/dialogue-aac/`; reference only |
+| AbleNet QuickTalker Freestyle | PDF | Commercial public resources | Collected locally | Monthly core-words packet under `aac-core-sources/commercial/ablenet-quicktalker/`; reference only |
+| Weave Chat AAC | HTML / PDF | Commercial public resources | Collected locally | Adult-oriented core board, early-intervention board, health/safety/accessibility fringe boards under `aac-core-sources/commercial/weave-chat/`; reference only |
+| CoughDrop public communication boards | HTML | Commercial public pages / open AAC ecosystem | Collected locally | Public board service page and OpenAAC GitHub pages under `aac-core-sources/commercial/coughdrop-public-boards/`; useful for low-tech board + QR/digital-grid workflow |
+| Project Core Universal Core | HTML / PDF | Public educational resource | Collected locally | Communication-systems page plus core board PDFs under `aac-core-sources/commercial/project-core/`, including 36-location PCS / High Contrast / SymbolStix / Widgit and 4-square / 4-inline examples |
 
 OBF import support is planned for Phase 2 (issue #30). When implemented, imported OBF content will carry the source license in `PictogramSource` and will not merge with or override the app's seed library.
 
 ---
 
-## 5. Chinese / Cantonese-Specific Gaps
+## 5. Commercial Architecture Patterns To Track
+
+These are design patterns to learn from, not vocabularies to copy.
+
+| Pattern | Reference systems | What Tuyujia should learn |
+|---------|-------------------|---------------------------|
+| Motor automaticity | LAMP Words for Life, TD Snap Motor Plan | Keep patient-side high-frequency buttons stable. Avoid moving core controls when categories change. |
+| Visual categorization | Proloquo2Go / Crescendo, CBoard-style folders | Useful for receiver-side browsing and caregiver setup, but should not be the only navigation method for patients. |
+| Semantic compaction | Unity / Minspeak | A single pictogram can carry multiple meanings depending on sequence/context. This is useful for metadata design, aliases, and disambiguation, even if Tuyujia does not implement Minspeak. |
+| Syntax-driven layout | WordPower, Core First | Color/category ordering can teach sentence structure and make common sentence patterns faster. |
+| Pragmatics-driven layout | Voco Chat | Entry points can be "why I am communicating" (ask, tell, refuse, repair, regulate emotion) rather than only nouns/verbs/categories. |
+| Progressive visibility | Crescendo VocaPriority, TD Snap grid growth | Do not overwhelm new users with every possible word. Phase 2 could support caregiver-controlled visibility levels. |
+| Low-tech / high-tech pairing | TD Snap books, LAMP manual boards, CoughDrop public boards, Weave Chat PDFs | Every digital page set should have a printable fallback or at least a printable core/quick board. |
+
+### Verified corrections from current research
+
+- Crescendo's public description supports the broader idea of VocaPriority and storage vocabulary, but the exact split should be written conservatively as roughly 4,750 accessible unique words plus roughly 7,250 storage words unless AssistiveWare's own current page gives more detail.
+- CoughDrop should not be linked to `github.com/bcarter/coughdrop` without evidence. The current public open-source references are the OpenAAC ecosystem repositories, including `github.com/open-aac/sweet-suite-aac` and `github.com/open-aac/openboardformat`.
+- Smartbox Super Core and Voco Chat should be tracked separately: Super Core is the core-vocabulary/grid reference; Voco Chat is the pragmatics/intent-pathway reference.
+- Unity / Minspeak is now collected strongly enough to serve as a real architecture reference. Its main value for Tuyujia is future symbol metadata, ambiguity control, and compact semantic grouping rather than direct seed-library copying.
+
+## 6. Chinese / Cantonese-Specific Gaps
 
 The following sources have been identified as relevant but not yet collected. These are the highest-priority gaps for improving Tuyujia's fit for Chinese-speaking users.
 
@@ -226,7 +260,7 @@ The following sources have been identified as relevant but not yet collected. Th
 
 ---
 
-## 6. Fixture Sample Evidence Map
+## 7. Fixture Sample Evidence Map
 
 The fixture samples in `fixtures/receiver-samples.json` and `docs/receiver-fixture-samples-evidence.md` draw from the sources above. Evidence tags map as follows:
 
@@ -243,17 +277,17 @@ The fixture samples in `fixtures/receiver-samples.json` and `docs/receiver-fixtu
 
 ---
 
-## 7. How to Add New Reference Material
+## 8. How to Add New Reference Material
 
 1. Check the license before downloading. Materials with NC (non-commercial) clauses are fine for research and fixture design but cannot be bundled into a GPL-3.0 app binary.
-2. If the license permits local storage, place files under `docs/aac-reference/<source-name>/`.
+2. If the license permits local storage, place files under `D:\used-by-codex\picinterpreter\aac-core-sources\<source-name>\`.
 3. Add an entry to this document under the appropriate section.
 4. If the material informs fixture samples, add a corresponding evidence tag to `receiver-samples.schema.json` (the `evidence[].source` enum).
-5. Do **not** commit raw symbol files, PDFs, or third-party board JSON to the GitHub repository. Add the path to `.gitignore` and document the local path here instead.
+5. Do **not** commit raw symbol files, PDFs, or third-party board JSON to the GitHub repository. Keep them in the local archive and document the local path here instead.
 6. If the material reveals vocabulary gaps (concepts with no matching pictogram), add them to the missing token tracking workflow (issue #19, #62).
 
 ---
 
-*Last updated: 2026-05-02*  
+*Last updated: 2026-05-06*  
 *Closes: #75*  
 *Related issues: #11 #19 #30 #32 #38 #74*

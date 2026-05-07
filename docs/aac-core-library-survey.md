@@ -11,7 +11,7 @@ For Tuyujia MVP, the safest direction is:
 1. Use a **Board / PictureSet** model instead of a flat category list.
 2. Use **ARASAAC** as the main pictogram source, while preserving per-pictogram license metadata.
 3. Use **CBoard / OBF / AsTeRICS** as structural references.
-4. Use commercial AAC systems only as product-pattern references.
+4. Use mature commercial AAC systems as high-priority pattern references, but do not copy proprietary vocabulary, artwork, or board content.
 5. Build a first offline core library around **300-500 scene-first pictograms**, then expand toward 500-800 after caregiver testing.
 
 ## Reusable Or Open References
@@ -26,7 +26,13 @@ For Tuyujia MVP, the safest direction is:
 
 ## Commercial Pattern References
 
-These are not direct data sources. They are useful for understanding how mature AAC products structure vocabulary.
+These are not direct data sources. They are high-priority product-pattern references because mature commercial AAC systems have been tested in clinical, school, and family settings over many years. Tuyujia should not copy their proprietary vocabulary, artwork, or board files, but should learn from their public structure:
+
+- how they separate core vocabulary, fringe vocabulary, quick messages, and topic pages
+- how they keep high-frequency words stable across pages
+- how they support different grid sizes and access needs
+- how they organize adult, aphasia, hospital, school, and daily-care scenarios
+- how they handle personalization, quick repair phrases, and caregiver setup
 
 | Product | Pattern To Learn | Tuyujia Implication |
 |---|---|---|
@@ -35,6 +41,56 @@ These are not direct data sources. They are useful for understanding how mature 
 | TouchChat WordPower | Core vocabulary with category/fringe pages | Do not make categories the only navigation method; keep core access stable. |
 | LAMP Words for Life | Motor planning and stable word locations | Avoid moving core buttons unpredictably; patient-side UI should stay stable. |
 | Avaz AAC | Core vocabulary plus practical categories for daily communication | Use simple, caregiver-understandable scene groupings for first-run setup. |
+
+### Commercial Reference Priority
+
+Commercial products should be reviewed in this order:
+
+| Priority | Product / Family | Why It Matters |
+|---|---|---|
+| High | TD Snap / Core First / Communication Journey Aphasia | Most relevant for adult aphasia, quick messages, topics, behavior supports, and Mandarin/Simplified Chinese aphasia vocabulary references. |
+| High | Proloquo2Go / Crescendo | Strong public discussion of core/fringe vocabulary, grid-size progression, and robust vocabulary organization. |
+| High | TouchChat / WordPower | Mature core-plus-category pattern; useful for understanding how category pages should not replace stable core access. |
+| High | LAMP Words for Life | Best reference for motor-planning and stable location principles. |
+| High | PRC-Saltillo Unity / Minspeak | Best reference for semantic compaction: multi-meaning icons and short icon sequences can reduce folder navigation. |
+| High | Smartbox Super Core | Strong reference for printable core boards, grid-size progression, and stable core/fringe positioning. |
+| Medium | Smartbox Voco Chat | Useful for pragmatics-driven navigation: users start from communication intent, not only word category. |
+| Medium | CoughDrop | Useful for cloud-first AAC workflow, teams/supporters, and cross-device board management, but not primarily a core-library source. |
+| Medium | Avaz AAC | Useful for practical category organization and culturally aware AAC patterns. |
+
+For each mature product, the useful output is not a copied word list. The useful output is a checklist:
+
+1. Which categories or scenes are always present?
+2. Which words stay available as core words?
+3. Which phrases are treated as quick messages?
+4. Which content is adult/aphasia-specific rather than child-focused?
+5. Which structure should Tuyujia test against its own 300-500 MVP library?
+
+This means commercial products should be used for **coverage validation**: after Tuyujia drafts its own core library from open and clinical sources, compare it against the public structure of mature products to find missing scenes, missing quick phrases, and weak category design.
+
+### Commercial Architecture Design Axes
+
+Recent review of mature commercial AAC systems suggests that Tuyujia should explicitly choose where it sits on several design axes instead of copying any one product.
+
+| Design Axis | Mature Examples | Tuyujia Implication |
+|---|---|---|
+| Motor automaticity vs visual categorization | LAMP / TD Snap Motor Plan keep word locations stable; Crescendo and CBoard-style systems rely more on folder/category browsing | Patient expression should prioritise stable locations for core actions and needs. Caregiver/receiver-side browsing can tolerate richer categories. |
+| Syntax-driven vs pragmatics-driven layout | WordPower and Core First support sentence-building patterns; Voco Chat groups by communication reason such as asking, telling, refusing, repairing, or emotional regulation | Tuyujia needs both: sentence reconstruction for receiver mode, plus fast intent-first buttons for patient mode. |
+| Progressive visibility vs full vocabulary exposure | Crescendo VocaPriority and TD Snap grid growth reveal vocabulary gradually; many simple boards show everything available | MVP can stay simple, but Phase 2 should allow caregivers to hide/reveal vocabulary without changing stable core positions. |
+| Semantic compaction vs one-symbol-one-word | Unity / Minspeak uses multi-meaning icon sequences; most grid systems use direct symbol-word mapping | Tuyujia does not need Minspeak now, but should design metadata so one pictogram can have aliases, contexts, exclusions, and disambiguation hints. |
+| Low-tech fallback vs app-only interaction | TD Snap books, LAMP manual boards, Super Core printables, CoughDrop public boards, and Weave Chat PDFs all treat paper backup as normal AAC practice | Every critical digital workflow should have a printable core/quick board fallback, especially for hospital, bathing, outdoor, and device-failure scenarios. |
+
+Two practical takeaways for Tuyujia:
+
+1. The receiver side can stay more semantic/category oriented because a caregiver or clinician usually controls it.
+2. The patient expression side should be more motor-stable and intent-first because the cost of visual search is higher for aphasia users.
+
+### Corrections And Source Caution
+
+- Do not cite `github.com/bcarter/coughdrop` as the CoughDrop source repository without verification. Use OpenAAC references such as `github.com/open-aac/sweet-suite-aac` and `github.com/open-aac/openboardformat`.
+- Treat third-party manual mirrors and old Dropbox links as leads only. Prefer official vendor pages, official support centers, AAC Language Lab, OpenAAC, or organization-owned resource pages.
+- Crescendo VocaPriority should be described conservatively as a progressive visibility/storage mechanism. Current public descriptions support roughly 4,750 accessible unique words plus roughly 7,250 storage words, but exact sublevel counts should be verified against AssistiveWare's current documentation before being used as hard product requirements.
+- Smartbox Super Core and Voco Chat are different lessons: Super Core informs stable core-board structure; Voco Chat informs pragmatics/intent-based communication paths.
 
 ## AsTeRICS Findings
 

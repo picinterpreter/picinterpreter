@@ -103,16 +103,27 @@ site:github.com text-to-pictogram
 site:ceur-ws.org pictogram translation
 ```
 
-### GitHub Topics 定向搜索
+### GitHub 双轨搜索（冷门交叉领域必须两条都跑）
 
-比全文搜索精准，用于找开源项目：
+Topics 对主流领域有效，但对 AAC + NLP + 中文这类冷门交叉领域会漏掉很多相关仓库。固定同时跑两条：
 
+**第一轨：Topics 标签**
 ```
 github.com/topics/aac
 github.com/topics/pictogram
 github.com/topics/augmentative-communication
 github.com/topics/symbol-communication
 ```
+
+**第二轨：site 搜索 + 论文名 / 方法名 / 系统名**
+```
+site:github.com "Arasaac-WN"
+site:github.com "text-to-picto"
+site:github.com ARASAAC WordNet
+site:github.com "word sense disambiguation" pictogram
+```
+
+两轨结果取并集。Topics 找不到的，第二轨往往能补上。
 
 ---
 
@@ -201,10 +212,11 @@ github.com/topics/symbol-communication
   先搜: site:aclanthology.org "text-to-pictograph"
         site:ceur-ws.org pictogram translation
 
-通用 GitHub Topics:
+GitHub 双轨（两条都跑）:
   github.com/topics/aac
   github.com/topics/pictogram
   github.com/topics/augmentative-communication
+  site:github.com "<论文名 / 方法名 / 系统名>"
 
 证据层级: L1临床实践 → L2论文 → L3开源实现 → L4产品设计
 三池: 候选 → 已核实 → 入库

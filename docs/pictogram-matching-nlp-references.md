@@ -23,14 +23,13 @@ Results:
 | Verbs (actions) | Medium–Low | Needs more candidate symbols or personal photos |
 | Adjectives (states, qualities) | Low | Highest ambiguity; personal upload support most critical here |
 
-**Direct implications for Tuyujia:**
+**How to use this finding:**
 
-- `conceptType === 'verb'` and `conceptType === 'adjective'` are the concept classes most in need of:
-  - multiple candidate symbols (`ConceptSymbolLink` alternates)
-  - patient-specific preferred image (`PatientConceptPreference`)
-  - custom uploaded photo fallback (`#10`)
-- Medical and body vocabulary (mostly nouns) is the most universally understood category and appropriate for the core seed library
-- Caregiver correction data (`#64 ReceiverCorrection`) is the closest available proxy for individual comprehension tracking — no open-source tool exists for predicting single-patient symbol comprehension
+This is a group-level study on the general population, not an individual-level predictor for post-stroke aphasia patients. Do not read it as "this symbol will be understood by this patient." Use it as a design heuristic:
+
+- Verbs and adjectives are the word classes where standardised symbols are *most likely* to fail; they are the best candidates for offering multiple alternates (`ConceptSymbolLink`) and prompting caregivers to upload personal photos (`PatientConceptPreference`, `#10`)
+- Medical and body vocabulary (mostly nouns) is the most stable across users and appropriate for the core seed library as reliable defaults
+- Individual comprehension tracking still requires real usage data — `ReceiverCorrection` event logs (`#64`) are the closest available proxy for this in Tuyujia
 
 ---
 
@@ -49,7 +48,9 @@ The only publicly available bridge between a pictogram database and a semantic k
 
 **Relevance for Tuyujia:**
 
-The key gap is Chinese. The path that currently exists:
+In V1, `ConceptAlias` and `ConceptExclusion` serve the same disambiguation function via hand-curated rules (see [#15](https://github.com/picinterpreter/picinterpreter/issues/15)).
+
+For Phase 2, a plausible engineering path would be:
 
 ```
 Chinese input word
@@ -59,8 +60,7 @@ Chinese input word
   → ARASAAC API fetch
 ```
 
-No open-source tool has assembled this full chain for Chinese. This is a Phase 2 opportunity.  
-In V1, `ConceptAlias` and `ConceptExclusion` serve the same function via hand-curated rules (see [#15](https://github.com/picinterpreter/picinterpreter/issues/15)).
+**Note:** this chain is an *inferred engineering design*, not a confirmed existing open-source pipeline. No tool has assembled this full path for Chinese. Each link in the chain (CWN, cross-lingual WordNet alignment, Arasaac-WN) exists independently and would need to be wired together. Flag this as a Phase 2 research task, not a drop-in dependency.
 
 ### WSD for Medical AAC Pictograms — BERT / Word2Vec approach
 
@@ -79,66 +79,73 @@ Key finding: **medical-domain language models outperform general ones** when the
 
 ### Chinese NLP tools relevant to matching
 
-| Tool | Use in Tuyujia | Repository |
+| Tool | Role | Repository |
 |---|---|---|
-| OpenHowNet | Sememe-based Chinese semantic hierarchy; `快乐` and `开心果` have completely disjoint sememes — provides the theoretical basis for hard-exclusion rules | [thunlp/OpenHowNet](https://github.com/thunlp/OpenHowNet) |
-| HanLP | Full Chinese NLP pipeline: dependency parsing, semantic similarity, semantic role labelling; useful for pre-processing before candidate lookup | [hankcs/HanLP](https://github.com/hankcs/HanLP) |
+| OpenHowNet | Sememe-based Chinese semantic hierarchy. `快乐` sememe = `happy\|快乐`; `开心果` sememe = `pistachio\|开心果(植物)` — completely disjoint. Useful for *reasoning about* why an exclusion rule is correct, and for building new rules systematically. Not a ready-made AAC disambiguator. | [thunlp/OpenHowNet](https://github.com/thunlp/OpenHowNet) |
+| HanLP | Chinese NLP pipeline covering segmentation, dependency parsing, and semantic role labelling. Useful as a structural pre-processing step before candidate lookup. Not an AAC-specific tool — needs integration work to feed into Tuyujia's matching pipeline. | [hankcs/HanLP](https://github.com/hankcs/HanLP) |
 
-**Current project coverage:** alias lookup (`ConceptAlias`), hard-block and soft-penalty exclusions (`ConceptExclusion`), semantic domain weighting — these are V1 implementations of the same disambiguation logic that these research systems implement more formally.
+Neither tool is a plug-in Chinese AAC disambiguator. They are NLP components that would need to be wired into Tuyujia's matching pipeline by the development team.
+
+**Current project coverage:** alias lookup (`ConceptAlias`), hard-block and soft-penalty exclusions (`ConceptExclusion`), semantic domain weighting — these are V1 hand-curated implementations of the same logic that these tools would make more systematic in Phase 2.
 
 ---
 
 ## Problem 3 — Bidirectional Sentence-Pictogram Reconstruction
 
-### ToPicto — Fine-tuned seq2seq text-to-pictogram system
+### ToPicto and related text-to-picto research (Phase 2/3 route reference only)
+
+> These are research prototypes and competition notebooks, not mature engineering components. Treat them as route confirmation, not as engineering dependencies.
 
 **Papers:**
-- [CEUR 2024 — Text-To-Picto Using Lexical Simplification](https://ceur-ws.org/Vol-3740/paper-146.pdf)
-- [RANLP 2021 — Extending a Text-to-Pictograph System to French and to Arasaac](https://aclanthology.org/2021.ranlp-1.118.pdf)
+- [RANLP 2021 — Extending a Text-to-Pictograph System to French and to Arasaac](https://aclanthology.org/2021.ranlp-1.118.pdf): established the text → picto seq2seq route; combines ARASAAC and WordNet; French only; no public repository
+- [CEUR 2024 — Text-To-Picto Using Lexical Simplification](https://ceur-ws.org/Vol-3740/paper-146.pdf): CLEF 2024 competition notebook; lexical simplification approach; PictoER ~18.5%; research prototype, not a packaged library
+- [CEUR 2024 — A Transformer Based Approach for Text-to-Picto Generation](https://ceur-ws.org/Vol-3740/paper-154.pdf): CLEF 2024 competition notebook; T5-based seq2seq; PictoER ~13.9%; research prototype, not a packaged library
 
-**Method:** Fine-tunes Helsinki-NLP translation models to treat text → picto-sequence as a seq2seq "translation" task. Best published PictoER (Picto-term Error Rate) is ~18.5%.
+**What these confirm:** treating text → picto conversion as a seq2seq translation task is the current research direction. In an LLM context this maps to prompt-based or fine-tuned Chinese models (Qwen, DeepSeek). This is a Phase 2/3 research path for Tuyujia, after the V1 alias/exclusion layer is stable.
 
-**Status:** No public repository; dataset is French only.
+**What these do not provide:** no public code, no Chinese dataset, no production-ready component.
 
-**Implication for Tuyujia:** This confirms that the "treat it as machine translation" approach is the current state of the art for the reconstruction problem. In the LLM era this maps cleanly to a Chinese-language fine-tune or prompt-based pipeline using models like Qwen or DeepSeek-V3. Tuyujia's receiver pipeline already implements a version of this at the sentence segmentation and candidate-ranking stage.
-
-### Transformer-based text-to-picto generation
-
-**Paper:** [CEUR 2024 — A Transformer Based Approach for Text-to-Picto Generation](https://ceur-ws.org/Vol-3740/paper-154.pdf)
-
-A parallel approach to ToPicto using a Transformer seq2seq architecture. Same research group; no public repository.
-
-### Lexical simplification — reusable component libraries
-
-Text simplification can serve as the first stage of a text → picto pipeline (sentence → simplified tokens → pictogram lookup):
+### Lexical simplification tools (English only, architecture reference)
 
 | Tool | What it does | Repository |
 |---|---|---|
 | lightls | Language-agnostic lexical simplification | [codogogo/lightls](https://github.com/codogogo/lightls) |
 | cocoxu/simplification | English text simplification system and dataset | [cocoxu/simplification](https://github.com/cocoxu/simplification) |
 
-These are English-focused and not directly pluggable for Chinese, but the architecture (complex word → simpler synonym → concept lookup) is the same pattern that `ConceptAlias` implements in the project's hand-curated form.
+English-only; not directly pluggable for Chinese. The architecture pattern (complex word → simpler synonym → concept lookup) is the same as what `ConceptAlias` implements by hand in V1.
 
 ---
 
-## Summary: New vs Already Covered
+## Summary
 
-| Problem | Already in Tuyujia | New from this research |
+### What is new and immediately usable
+
+| Resource | Type | Value |
 |---|---|---|
-| Pictogram comprehension | custom upload / personal preference / caregiver correction | 2024 data: verbs and adjectives need the most multi-candidate and photo support |
-| Word-to-pictogram matching | alias / exclusion / OpenHowNet / jieba / THUOCL | **Arasaac-WN** (WordNet↔ARASAAC bridge); RANLP 2023 WSD+Word2Vec approach; CWN→WordNet→ARASAAC chain as Phase 2 path |
-| Sentence-pictogram reconstruction | receiver pipeline / caregiver correction / conversation context | ToPicto seq2seq approach; lightls lexical simplification as preprocessing |
+| **Arasaac-WN** ([github.com/getalp/Arasaac-WN](https://github.com/getalp/Arasaac-WN)) | Open-source dataset | Only public WordNet ↔ ARASAAC bridge; directly relevant to #15 disambiguation |
+| **RANLP 2023 WSD paper** ([link](https://aclanthology.org/2023.ranlp-1.87/)) | Research finding | Word2Vec/fastText + domain weighting outperforms general LLMs for medical pictogram selection; validates `semanticDomain` and `medicalRelevance` schema fields |
+
+### What is useful as design inspiration
+
+| Resource | How to use it |
+|---|---|
+| **2024 ARASAAC transparency study** | Heuristic: verbs and adjectives need more candidate symbols and personal photo support than nouns. Do not treat it as a predictor for individual aphasia patients. |
+
+### What is Phase 2/3 route reference only (not an engineering dependency)
+
+| Resource | Status |
+|---|---|
+| ToPicto (RANLP 2021 + CEUR 2024) | Research prototypes; French only; no public repository |
+| CWN → WordNet → Arasaac-WN chain | Inferred engineering path; each link exists independently but no one has assembled it for Chinese |
+| HanLP, OpenHowNet | Valid Chinese NLP components; need integration work; not ready-made AAC disambiguators |
 
 ---
 
-## Phase 2 Recommendation
+## Recommended sequence (per Codex review)
 
-The single highest-value external resource not yet used is **Arasaac-WN**.
-
-In V1, the gap is covered by hand-curated `ConceptExclusion` rules.  
-In Phase 2, a Chinese WordNet → English WordNet → Arasaac-WN bridge would provide a principled semantic disambiguation path that does not require manually enumerating every ambiguous word pair.
-
-This would be the foundation for replacing or supplementing the exclusion rule list with data-driven word-sense disambiguation.
+1. V1: implement alias / exclusion / semantic domain (hand-curated, already in schema)
+2. Phase 2: explore WordNet / sememe semantic bridging using Arasaac-WN as the ARASAAC anchor
+3. Phase 3: consider seq2seq text-to-picto approaches (ToPicto-style) once the V1 library is stable
 
 ---
 

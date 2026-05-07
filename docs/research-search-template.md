@@ -39,16 +39,18 @@
 | **L1 临床 / 行业实践** | AAC 机构、协会、成熟产品手册 | ASHA · ARASAAC · Tobii Dynavox · AssistiveWare · Smartbox | 已经被验证可落地的设计决策 |
 | **L2 论文 / 评测** | 学术论文、基准测试、数据集 | ACL Anthology · Frontiers · CEUR · PubMed | 有实验证据支持的方法和数字 |
 | **L3 开源实现** | GitHub 仓库、模型、数据集 | GitHub · Hugging Face · Papers With Code | 真实可运行的代码和数据 |
-| **L4 产品设计** | 商业软件的实际结构 | 各 AAC 产品 App / 手册 PDF | 很多最佳实践只体现在产品里，不在论文里 |
+| **L4 商业产品结构观察** | 商业软件的实际词库、板面、交互结构 | 各 AAC 产品 App / 手册 PDF | 很多最佳实践只体现在产品里，不在论文和指南里 |
 
-**图语家优先级顺序（不是泛研究，是落地决策）：**
+> L1 是机构 / 协会 / 临床指南；L4 是商业产品的实际设计结构。两者来源不同，不要混用。
+
+**图语家默认优先顺序（不是泛研究，是落地决策）：**
 
 ```
-L1 成熟商业 AAC 怎么做
-→ L1 公开临床 / AAC 指南怎么说
-→ L2 有没有直接相关论文
-→ L3 有没有能跑的开源实现
-→ 最后才考虑更远的泛 AI 技术路线
+① 商业 AAC 产品的实际结构（L4）
+② 临床 / AAC 协会指南（L1）
+③ 有没有直接相关论文（L2）
+④ 有没有能跑的开源实现（L3）
+⑤ 最后才考虑更远的泛 AI 技术路线
 ```
 
 ---
@@ -75,6 +77,7 @@ site:arasaac.org "<主题词>"
 site:tobiidynavox.com "<主题词>"
 site:assistiveware.com "<主题词>"
 site:smartboxat.com "<主题词>"
+site:thinksmartbox.com "<主题词>"
 site:praacticalaac.org "<主题词>"
 site:asha.org "<主题词>"
 ```

@@ -895,7 +895,7 @@
   },
   {
     "id": "p_do",
-    "imageUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%0A%20%20%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2212%22%20fill%3D%22%234A90D9%22%20opacity%3D%220.15%22/%3E%0A%20%20%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2212%22%20fill%3D%22none%22%20stroke%3D%22%234A90D9%22%20stroke-width%3D%222%22/%3E%0A%20%20%20%20%3Ctext%20x%3D%2250%22%20y%3D%2255%22%20text-anchor%3D%22middle%22%20font-size%3D%2224%22%20font-family%3D%22sans-serif%22%20fill%3D%22%234A90D9%22%3E%E5%81%9A%3C/text%3E%0A%20%20%3C/svg%3E",
+    "imageUrl": "https://static.arasaac.org/pictograms/32751/32751_300.png",
     "labels": {
       "zh": [
         "做"
@@ -1158,7 +1158,7 @@
   },
   {
     "id": "p_take",
-    "imageUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%0A%20%20%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2212%22%20fill%3D%22%234A90D9%22%20opacity%3D%220.15%22/%3E%0A%20%20%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2212%22%20fill%3D%22none%22%20stroke%3D%22%234A90D9%22%20stroke-width%3D%222%22/%3E%0A%20%20%20%20%3Ctext%20x%3D%2250%22%20y%3D%2255%22%20text-anchor%3D%22middle%22%20font-size%3D%2224%22%20font-family%3D%22sans-serif%22%20fill%3D%22%234A90D9%22%3E%E6%8B%BF%3C/text%3E%0A%20%20%3C/svg%3E",
+    "imageUrl": "https://static.arasaac.org/pictograms/10148/10148_300.png",
     "labels": {
       "zh": [
         "拿"
@@ -2308,7 +2308,7 @@
   },
   {
     "id": "p_unwell",
-    "imageUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%0A%20%20%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2212%22%20fill%3D%22%234A90D9%22%20opacity%3D%220.15%22/%3E%0A%20%20%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2212%22%20fill%3D%22none%22%20stroke%3D%22%234A90D9%22%20stroke-width%3D%222%22/%3E%0A%20%20%20%20%3Ctext%20x%3D%2250%22%20y%3D%2255%22%20text-anchor%3D%22middle%22%20font-size%3D%2224%22%20font-family%3D%22sans-serif%22%20fill%3D%22%234A90D9%22%3E%E4%B8%8D%E8%88%92%E6%9C%8D%3C/text%3E%0A%20%20%3C/svg%3E",
+    "imageUrl": "https://static.arasaac.org/pictograms/37183/37183_300.png",
     "labels": {
       "zh": [
         "不舒服"
@@ -2554,7 +2554,7 @@
   },
   {
     "id": "p_left",
-    "imageUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%0A%20%20%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2212%22%20fill%3D%22%234A90D9%22%20opacity%3D%220.15%22/%3E%0A%20%20%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2212%22%20fill%3D%22none%22%20stroke%3D%22%234A90D9%22%20stroke-width%3D%222%22/%3E%0A%20%20%20%20%3Ctext%20x%3D%2250%22%20y%3D%2255%22%20text-anchor%3D%22middle%22%20font-size%3D%2224%22%20font-family%3D%22sans-serif%22%20fill%3D%22%234A90D9%22%3E%E5%B7%A6%E8%BE%B9%3C/text%3E%0A%20%20%3C/svg%3E",
+    "imageUrl": "https://static.arasaac.org/pictograms/9203/9203_300.png",
     "labels": {
       "zh": [
         "左边"
@@ -2631,7 +2631,7 @@
   },
   {
     "id": "p_hand",
-    "imageUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%0A%20%20%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2212%22%20fill%3D%22%234A90D9%22%20opacity%3D%220.15%22/%3E%0A%20%20%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2212%22%20fill%3D%22none%22%20stroke%3D%22%234A90D9%22%20stroke-width%3D%222%22/%3E%0A%20%20%20%20%3Ctext%20x%3D%2250%22%20y%3D%2255%22%20text-anchor%3D%22middle%22%20font-size%3D%2224%22%20font-family%3D%22sans-serif%22%20fill%3D%22%234A90D9%22%3E%E6%89%8B%3C/text%3E%0A%20%20%3C/svg%3E",
+    "imageUrl": "https://static.arasaac.org/pictograms/2928/2928_300.png",
     "labels": {
       "zh": [
         "手"
@@ -3010,7 +3010,7 @@
   },
   {
     "id": "p_uncomfortable",
-    "imageUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%0A%20%20%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2212%22%20fill%3D%22%234A90D9%22%20opacity%3D%220.15%22/%3E%0A%20%20%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2212%22%20fill%3D%22none%22%20stroke%3D%22%234A90D9%22%20stroke-width%3D%222%22/%3E%0A%20%20%20%20%3Ctext%20x%3D%2250%22%20y%3D%2255%22%20text-anchor%3D%22middle%22%20font-size%3D%2224%22%20font-family%3D%22sans-serif%22%20fill%3D%22%234A90D9%22%3E%E9%9A%BE%E5%8F%97%3C/text%3E%0A%20%20%3C/svg%3E",
+    "imageUrl": "https://static.arasaac.org/pictograms/32528/32528_300.png",
     "labels": {
       "zh": [
         "难受"
@@ -3028,7 +3028,7 @@
   },
   {
     "id": "p_numb",
-    "imageUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%0A%20%20%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2212%22%20fill%3D%22%234A90D9%22%20opacity%3D%220.15%22/%3E%0A%20%20%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2212%22%20fill%3D%22none%22%20stroke%3D%22%234A90D9%22%20stroke-width%3D%222%22/%3E%0A%20%20%20%20%3Ctext%20x%3D%2250%22%20y%3D%2255%22%20text-anchor%3D%22middle%22%20font-size%3D%2224%22%20font-family%3D%22sans-serif%22%20fill%3D%22%234A90D9%22%3E%E9%BA%BB%3C/text%3E%0A%20%20%3C/svg%3E",
+    "imageUrl": "https://static.arasaac.org/pictograms/34276/34276_300.png",
     "labels": {
       "zh": [
         "麻"

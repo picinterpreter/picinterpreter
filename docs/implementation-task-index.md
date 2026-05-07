@@ -147,6 +147,47 @@ The MVP needs both automated regression checks and real-device acceptance checks
 
 ---
 
+## P1: Pictogram Metadata and Board Library
+
+**Decision source**
+
+- [#11 Build a structured pictogram database from AAC image sources](https://github.com/picinterpreter/picinterpreter/issues/11)
+- [#10 Support user-uploaded custom pictures](https://github.com/picinterpreter/picinterpreter/issues/10)
+- [#15 Map negated and compound phrases to semantic pictogram equivalents](https://github.com/picinterpreter/picinterpreter/issues/15)
+- [#30 Support importing exported picture libraries from CBoard and other AAC tools](https://github.com/picinterpreter/picinterpreter/issues/30)
+- [Pictogram metadata implementation task package](pictogram-metadata-implementation-task-package.md) — rationale and task overview
+- [Pictogram metadata dev checklist](pictogram-metadata-dev-checklist.md) — **executable: exact tables, fields, issue titles, done criteria**
+
+**Intent**
+
+The AAC library should evolve from a flat picture collection into a structured local library with:
+
+- stable concepts
+- symbol provenance
+- fixed boards
+- ambiguity guardrails
+- patient-specific preferred symbols
+
+**Planned task split**
+
+These are the recommended next implementation tasks to open or track:
+
+| Order | Planned task | Purpose | Depends on |
+|-------|--------------|---------|------------|
+| 1 | Define source-file schema and validation for curated pictogram metadata | Create stable curated records for concepts, symbols, boards, and exclusions | #11 |
+| 2 | Add Dexie tables for concept, symbol, board, and exclusion metadata | Materialize the curated library in local runtime storage | #11, #35 |
+| 3 | Load structured boards from curated metadata instead of flat category data | Move patient UI toward stable AAC boards | #11, #30 |
+| 4 | Use concept exclusions to block known ambiguity mismatches | Fix known failures such as `开心 -> 开心果` structurally | #15 |
+| 5 | Store patient-specific preferred symbol overrides locally | Support personal default images without mutating the base library | #10, #11 |
+
+**Notes**
+
+- This work should stay mostly local-first in MVP.
+- Do not force the full curated library schema into Prisma unless server-side editing becomes a real requirement.
+- Patient-specific symbol preferences should remain local-only in MVP.
+
+---
+
 ## Current Contributor Entry Points
 
 These are smaller or well-bounded tasks that contributors can pick up after reading the linked issue:

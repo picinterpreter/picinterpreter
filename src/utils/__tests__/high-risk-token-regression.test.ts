@@ -259,6 +259,75 @@ describe('高风险词 seed 回归', () => {
   })
 
   // ─────────────────────────────────────────────────────────────────────────
+  // 第三批医疗精细化词 — 痛的具体短语 + 医疗角色词
+  // ─────────────────────────────────────────────────────────────────────────
+  describe('第三批医疗精细化词', () => {
+    it('头痛 exact 命中 p_headache，而不是 p_head 或 p_pain', async () => {
+      const result = await matchTextToImages('头痛', { preSegmented: ['头痛'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_headache')
+      expect(m.matchType).toBe('exact')
+      expect(m.pictogram?.id).not.toBe('p_head')
+      expect(m.pictogram?.id).not.toBe('p_pain')
+    })
+
+    it('头疼 synonym 命中 p_headache', async () => {
+      const result = await matchTextToImages('头疼', { preSegmented: ['头疼'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_headache')
+      expect(m.matchType).toBe('synonym')
+    })
+
+    it('肚子疼 exact 命中 p_stomachache，而不是 p_belly 或 p_pain', async () => {
+      const result = await matchTextToImages('肚子疼', { preSegmented: ['肚子疼'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_stomachache')
+      expect(m.matchType).toBe('exact')
+      expect(m.pictogram?.id).not.toBe('p_belly')
+      expect(m.pictogram?.id).not.toBe('p_pain')
+    })
+
+    it('胸口疼 exact 命中 p_chest_pain，而不是 p_chest 或 p_pain', async () => {
+      const result = await matchTextToImages('胸口疼', { preSegmented: ['胸口疼'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_chest_pain')
+      expect(m.matchType).toBe('exact')
+      expect(m.pictogram?.id).not.toBe('p_chest')
+      expect(m.pictogram?.id).not.toBe('p_pain')
+    })
+
+    it('治疗师 exact 命中 p_therapist', async () => {
+      const result = await matchTextToImages('治疗师', { preSegmented: ['治疗师'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_therapist')
+      expect(m.matchType).toBe('exact')
+      expect(m.pictogram?.categoryId).toBe('medical')
+    })
+
+    it('康复师 synonym 命中 p_therapist', async () => {
+      const result = await matchTextToImages('康复师', { preSegmented: ['康复师'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_therapist')
+      expect(m.matchType).toBe('synonym')
+    })
+
+    it('看护人 exact 命中 p_caregiver', async () => {
+      const result = await matchTextToImages('看护人', { preSegmented: ['看护人'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_caregiver')
+      expect(m.matchType).toBe('exact')
+      expect(m.pictogram?.categoryId).toBe('people')
+    })
+
+    it('照护者 synonym 命中 p_caregiver', async () => {
+      const result = await matchTextToImages('照护者', { preSegmented: ['照护者'] })
+      const m = result.matches[0]
+      expect(m.pictogram?.id).toBe('p_caregiver')
+      expect(m.matchType).toBe('synonym')
+    })
+  })
+
+  // ─────────────────────────────────────────────────────────────────────────
   // 手机 — 当前只保留对象义，不再把动作义 "打电话" 混进同一张图
   // ─────────────────────────────────────────────────────────────────────────
   describe('手机 → p_phone（objects）', () => {

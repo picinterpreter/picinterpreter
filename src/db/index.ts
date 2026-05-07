@@ -52,6 +52,15 @@ class TuYuJiaDB extends Dexie {
       syncOutbox: 'id, createdAt, entityType, recordId',
       syncState: 'id',
     })
+    this.version(5).stores({
+      categories: 'id, sortOrder',
+      pictograms: 'id, categoryId, *synonyms, usageCount, lastUsedAt, manualOrder',
+      expressions: 'id, sessionId, createdAt, isFavorite, updatedAt',
+      savedPhrases: 'id, usageCount, lastUsedAt, updatedAt',
+      textToImageResults: 'id, createdAt',
+      syncOutbox: 'id, createdAt, entityType, recordId',
+      syncState: 'id',
+    })
   }
 }
 
@@ -63,7 +72,7 @@ export const db = new TuYuJiaDB()
  * 触发自动清空并重新导入种子数据。
  * 注意：用户自己的 expressions / savedPhrases 不受影响。
  */
-const SEED_VERSION = 6
+const SEED_VERSION = 7
 const SEED_VERSION_KEY = 'tuyujia_seed_version'
 
 /** 检查并导入种子数据（首次加载或版本升级时执行） */
@@ -90,8 +99,7 @@ export async function ensureSeedData(): Promise<void> {
   const pictograms: PictogramEntry[] = await pictogramsRes.json()
 
   await db.transaction('rw', db.categories, db.pictograms, async () => {
-    // 先读出用户已有的 linkedCategoryIds（用户手动维护的数据）
-    // 种子文件不提供链接信息，所以仅需保留旧记录里的该字段
+    // 保留用户已有的 linkedCategoryIds，并与 seed 默认链接合并。
     const existing = await db.categories.toArray()
     const userLinksById = new Map<string, string[]>()
     for (const c of existing) {
@@ -100,22 +108,42 @@ export async function ensureSeedData(): Promise<void> {
       }
     }
 
-    // 合并：种子分类 + 保留对应 id 的用户链接
+    const existingPictograms = await db.pictograms.toArray()
+    const manualOrderById = new Map<string, number>()
+    for (const p of existingPictograms) {
+      if (typeof p.manualOrder === 'number') {
+        manualOrderById.set(p.id, p.manualOrder)
+      }
+    }
+
+    // 合并：seed 默认链接 + 用户保留链接
     // 清理逻辑：若某个 linkedId 在新种子里不存在，过滤掉避免悬空引用
     const newIdSet = new Set(categories.map((c) => c.id))
     const merged: Category[] = categories.map((c) => {
-      const userLinks = userLinksById.get(c.id)
-      if (!userLinks) return c
-      const stillValid = userLinks.filter((id) => newIdSet.has(id))
+      const seedLinks = c.linkedCategoryIds ?? []
+      const userLinks = userLinksById.get(c.id) ?? []
+      const stillValid = [...new Set([...seedLinks, ...userLinks])].filter((id) => newIdSet.has(id))
       return stillValid.length > 0
         ? { ...c, linkedCategoryIds: stillValid }
         : c
     })
 
+    const seedOrderByCategory = new Map<string, number>()
+    const mergedPictograms: PictogramEntry[] = pictograms.map((p) => {
+      const currentIndex = seedOrderByCategory.get(p.categoryId) ?? 0
+      seedOrderByCategory.set(p.categoryId, currentIndex + 1)
+      const preservedOrder = manualOrderById.get(p.id)
+
+      return {
+        ...p,
+        manualOrder: preservedOrder ?? currentIndex,
+      }
+    })
+
     await db.categories.clear()
     await db.pictograms.clear()
     await db.categories.bulkAdd(merged)
-    await db.pictograms.bulkAdd(pictograms)
+    await db.pictograms.bulkAdd(mergedPictograms)
   })
 
   localStorage.setItem(SEED_VERSION_KEY, String(SEED_VERSION))

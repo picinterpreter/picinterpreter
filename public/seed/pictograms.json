@@ -233,7 +233,7 @@
     "usageCount": 0
   },
   {
-    "id": "p_停",
+    "id": "p_stop",
     "imageUrl": "https://globalsymbols.com/uploads/production/image/imagefile/18309/17_18310_fc8c0a61-476d-408b-83e0-0ed2476b3525.png",
     "labels": {
       "zh": [
@@ -400,7 +400,7 @@
     "usageCount": 0
   },
   {
-    "id": "p_结束",
+    "id": "p_end",
     "imageUrl": "https://static.arasaac.org/pictograms/28429/28429_hair-A65E26_skin-F5E5DE_500.png",
     "labels": {
       "zh": [
@@ -439,7 +439,7 @@
     "usageCount": 0
   },
   {
-    "id": "p_开门",
+    "id": "p_open_door",
     "imageUrl": "https://globalsymbols.com/uploads/production/image/imagefile/20748/17_20749_41d29b61-55c1-4af7-a0e3-0777ff2a8ba4.png",
     "labels": {
       "zh": [
@@ -472,7 +472,7 @@
     "usageCount": 0
   },
   {
-    "id": "p_我不明白",
+    "id": "p_i_dont_understand",
     "imageUrl": "https://globalsymbols.com/uploads/production/image/imagefile/21403/17_21404_d4e4c70b-79b9-4875-a126-107d4691f566.png",
     "labels": {
       "zh": [
@@ -486,7 +486,7 @@
     "usageCount": 0
   },
   {
-    "id": "p_我不懂",
+    "id": "p_i_dont_get_it",
     "imageUrl": "https://static.arasaac.org/pictograms/37827/37827_500.png",
     "labels": {
       "zh": [
@@ -602,7 +602,7 @@
     "usageCount": 0
   },
   {
-    "id": "p_喝水",
+    "id": "p_drink_water",
     "imageUrl": "https://static.arasaac.org/pictograms/37207/37207_hair-A65E26_skin-F5E5DE_500.png",
     "labels": {
       "zh": [
@@ -652,7 +652,7 @@
     "usageCount": 0
   },
   {
-    "id": "p__表示肯定的应答_是",
+    "id": "p_yes_response",
     "imageUrl": "https://static.arasaac.org/pictograms/5583/5583_500.png",
     "labels": {
       "zh": [
@@ -670,7 +670,7 @@
     "usageCount": 0
   },
   {
-    "id": "p_很多",
+    "id": "p_many",
     "imageUrl": "https://static.arasaac.org/pictograms/7168/7168_500.png",
     "labels": {
       "zh": [
@@ -985,13 +985,13 @@
       "找"
     ],
     "disambiguationHints": {
-      "semanticDomain": "medical"
+      "semanticDomain": "actions"
     },
     "usageCount": 0
   },
   {
     "id": "p_make_call",
-    "imageUrl": "https://static.arasaac.org/pictograms/6552/6552_300.png",
+    "imageUrl": "https://static.arasaac.org/pictograms/36305/36305_300.png",
     "labels": {
       "zh": [
         "打电话"
@@ -1031,7 +1031,7 @@
     "usageCount": 0
   },
   {
-    "id": "p_吃早餐",
+    "id": "p_eat_breakfast",
     "imageUrl": "https://globalsymbols.com/uploads/production/image/imagefile/22048/17_22049_8836b948-73a8-450b-a68e-e360704a37f8.png",
     "labels": {
       "zh": [
@@ -1045,7 +1045,7 @@
     "usageCount": 0
   },
   {
-    "id": "p_吃晚饭",
+    "id": "p_eat_dinner",
     "imageUrl": "https://globalsymbols.com/uploads/production/image/imagefile/22052/17_22053_c341c988-e00f-45f2-ad6b-76fe5e19f247.png",
     "labels": {
       "zh": [
@@ -1287,7 +1287,7 @@
     "usageCount": 0
   },
   {
-    "id": "p_给",
+    "id": "p_give",
     "imageUrl": "https://globalsymbols.com/uploads/production/image/imagefile/19563/17_19564_09d49c08-dafd-4e0e-9548-c8f8e91909d8.png",
     "labels": {
       "zh": [
@@ -1303,8 +1303,8 @@
     "usageCount": 0
   },
   {
-    "id": "p_想要",
-    "imageUrl": "https://globalsymbols.com/uploads/production/image/imagefile/16880/17_16881_ad592e23-1149-4398-bc4f-2e6931f0d54a.png",
+    "id": "p_need_want",
+    "imageUrl": "https://static.arasaac.org/pictograms/37160/37160_300.png",
     "labels": {
       "zh": [
         "要"
@@ -1723,7 +1723,7 @@
   },
   {
     "id": "p_water",
-    "imageUrl": "https://static.arasaac.org/pictograms/37207/37207_hair-A65E26_skin-F5E5DE_500.png",
+    "imageUrl": "https://static.arasaac.org/pictograms/32464/32464_300.png",
     "labels": {
       "zh": [
         "水"
@@ -1886,7 +1886,7 @@
     "usageCount": 0
   },
   {
-    "id": "p_菜",
+    "id": "p_vegetable",
     "imageUrl": "https://globalsymbols.com/uploads/production/image/imagefile/16005/17_16006_7717f5e5-b4df-4d96-817d-b1799146f9df.png",
     "labels": {
       "zh": [
@@ -1918,7 +1918,7 @@
     "usageCount": 0
   },
   {
-    "id": "p_面",
+    "id": "p_noodles",
     "imageUrl": "https://static.arasaac.org/pictograms/25486/25486_hair-A65E26_skin-F5E5DE_500.png",
     "labels": {
       "zh": [
@@ -2162,7 +2162,7 @@
   },
   {
     "id": "p_caregiver",
-    "imageUrl": "https://static.arasaac.org/pictograms/8486/8486_300.png",
+    "imageUrl": "https://static.arasaac.org/pictograms/15994/15994_300.png",
     "labels": {
       "zh": [
         "看护人"
@@ -2326,7 +2326,7 @@
   },
   {
     "id": "p_bleed",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/2803/2803_300.png",
     "labels": {
       "zh": [
         "出血"
@@ -2364,7 +2364,7 @@
   },
   {
     "id": "p_fever",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/32530/32530_300.png",
     "labels": {
       "zh": [
         "发烧"
@@ -2419,7 +2419,7 @@
   },
   {
     "id": "p_breathe",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/34377/34377_300.png",
     "labels": {
       "zh": [
         "呼吸困难"
@@ -2438,7 +2438,7 @@
   },
   {
     "id": "p_cough",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/3406/3406_300.png",
     "labels": {
       "zh": [
         "咳嗽"
@@ -2492,7 +2492,7 @@
   },
   {
     "id": "p_head",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/2673/2673_300.png",
     "labels": {
       "zh": [
         "头"
@@ -2513,7 +2513,7 @@
   },
   {
     "id": "p_headache",
-    "imageUrl": "https://static.arasaac.org/pictograms/2367/2367_300.png",
+    "imageUrl": "https://static.arasaac.org/pictograms/28651/28651_300.png",
     "labels": {
       "zh": [
         "头痛"
@@ -2533,7 +2533,7 @@
   },
   {
     "id": "p_dizzy",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/2464/2464_300.png",
     "labels": {
       "zh": [
         "头晕"
@@ -2590,7 +2590,7 @@
   },
   {
     "id": "p_therapist",
-    "imageUrl": "https://static.arasaac.org/pictograms/25165/25165_300.png",
+    "imageUrl": "https://static.arasaac.org/pictograms/2454/2454_300.png",
     "labels": {
       "zh": [
         "治疗师"
@@ -2610,7 +2610,7 @@
   },
   {
     "id": "p_nausea",
-    "imageUrl": "https://static.arasaac.org/pictograms/39620/39620_300.png",
+    "imageUrl": "https://static.arasaac.org/pictograms/38403/38403_300.png",
     "labels": {
       "zh": [
         "恶心"
@@ -2649,7 +2649,7 @@
   },
   {
     "id": "p_arm_body",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/2669/2669_300.png",
     "labels": {
       "zh": [
         "手臂"
@@ -2724,7 +2724,7 @@
   },
   {
     "id": "p_eye_body",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/6573/6573_300.png",
     "labels": {
       "zh": [
         "眼睛"
@@ -2742,7 +2742,7 @@
   },
   {
     "id": "p_ear_body",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/2871/2871_300.png",
     "labels": {
       "zh": [
         "耳朵"
@@ -2760,7 +2760,7 @@
   },
   {
     "id": "p_belly",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/2786/2786_300.png",
     "labels": {
       "zh": [
         "肚子"
@@ -2781,7 +2781,7 @@
   },
   {
     "id": "p_stomachache",
-    "imageUrl": "https://static.arasaac.org/pictograms/2367/2367_300.png",
+    "imageUrl": "https://static.arasaac.org/pictograms/28766/28766_300.png",
     "labels": {
       "zh": [
         "肚子疼"
@@ -2801,7 +2801,7 @@
   },
   {
     "id": "p_shoulder",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/2977/2977_300.png",
     "labels": {
       "zh": [
         "肩膀"
@@ -2819,7 +2819,7 @@
   },
   {
     "id": "p_back_body",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/7775/7775_300.png",
     "labels": {
       "zh": [
         "背部"
@@ -2838,7 +2838,7 @@
   },
   {
     "id": "p_chest",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/2853/2853_300.png",
     "labels": {
       "zh": [
         "胸口"
@@ -2859,7 +2859,7 @@
   },
   {
     "id": "p_chest_pain",
-    "imageUrl": "https://static.arasaac.org/pictograms/2367/2367_300.png",
+    "imageUrl": "https://static.arasaac.org/pictograms/28781/28781_300.png",
     "labels": {
       "zh": [
         "胸口疼"
@@ -2879,7 +2879,7 @@
   },
   {
     "id": "p_neck",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/2727/2727_300.png",
     "labels": {
       "zh": [
         "脖子"
@@ -2898,7 +2898,7 @@
   },
   {
     "id": "p_foot_body",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/25327/25327_300.png",
     "labels": {
       "zh": [
         "脚"
@@ -2917,7 +2917,7 @@
   },
   {
     "id": "p_leg_body",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/8666/8666_300.png",
     "labels": {
       "zh": [
         "腿"
@@ -2956,7 +2956,7 @@
   },
   {
     "id": "p_take_medicine",
-    "imageUrl": "https://globalsymbols.com/uploads/production/image/imagefile/18202/17_18203_50f222f5-b9ae-4007-86d0-606571bbbce8.png",
+    "imageUrl": "https://static.arasaac.org/pictograms/2855/2855_300.png",
     "labels": {
       "zh": [
         "吃药"
@@ -2994,7 +2994,7 @@
   },
   {
     "id": "p_wheelchair",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/25471/25471_300.png",
     "labels": {
       "zh": [
         "轮椅"
@@ -3046,7 +3046,7 @@
   },
   {
     "id": "p_always",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/17322/17322_300.png",
     "labels": {
       "zh": [
         "一直"
@@ -3149,7 +3149,7 @@
   },
   {
     "id": "p_weekend",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/27329/27329_300.png",
     "labels": {
       "zh": [
         "周末"
@@ -3218,7 +3218,7 @@
   },
   {
     "id": "p_everyday",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/37371/37371_300.png",
     "labels": {
       "zh": [
         "每天"
@@ -3252,7 +3252,7 @@
   },
   {
     "id": "p_wait",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/36914/36914_300.png",
     "labels": {
       "zh": [
         "等一下"
@@ -3271,7 +3271,7 @@
   },
   {
     "id": "p_soon",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/5306/5306_300.png",
     "labels": {
       "zh": [
         "马上"
@@ -3338,7 +3338,7 @@
   },
   {
     "id": "p_change_clothes",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/6627/6627_300.png",
     "labels": {
       "zh": [
         "换衣服"
@@ -3404,7 +3404,7 @@
   },
   {
     "id": "p_haircut",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/28683/28683_300.png",
     "labels": {
       "zh": [
         "理发"
@@ -3422,7 +3422,7 @@
   },
   {
     "id": "p_read_book",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/2447/2447_300.png",
     "labels": {
       "zh": [
         "看书"
@@ -3441,7 +3441,7 @@
   },
   {
     "id": "p_watch_tv",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/29123/29123_300.png",
     "labels": {
       "zh": [
         "看电视"
@@ -3494,7 +3494,7 @@
   },
   {
     "id": "p_exercise",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/10156/10156_300.png",
     "labels": {
       "zh": [
         "运动"
@@ -3531,7 +3531,7 @@
   },
   {
     "id": "p_book",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/25191/25191_300.png",
     "labels": {
       "zh": [
         "书"
@@ -3566,7 +3566,7 @@
   },
   {
     "id": "p_bag",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/23849/23849_300.png",
     "labels": {
       "zh": [
         "包"
@@ -3586,7 +3586,7 @@
   },
   {
     "id": "p_bed",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/25900/25900_300.png",
     "labels": {
       "zh": [
         "床"
@@ -3624,7 +3624,7 @@
   },
   {
     "id": "p_cup",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/2582/2582_300.png",
     "labels": {
       "zh": [
         "杯子"
@@ -3643,7 +3643,7 @@
   },
   {
     "id": "p_pillow",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/2250/2250_300.png",
     "labels": {
       "zh": [
         "枕头"
@@ -3659,7 +3659,7 @@
   },
   {
     "id": "p_chair",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/3155/3155_300.png",
     "labels": {
       "zh": [
         "椅子"
@@ -3677,7 +3677,7 @@
   },
   {
     "id": "p_computer",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/7190/7190_300.png",
     "labels": {
       "zh": [
         "电脑"
@@ -3696,7 +3696,7 @@
   },
   {
     "id": "p_television",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/25498/25498_300.png",
     "labels": {
       "zh": [
         "电视"
@@ -3715,7 +3715,7 @@
   },
   {
     "id": "p_glasses",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/3329/3329_300.png",
     "labels": {
       "zh": [
         "眼镜"
@@ -3733,7 +3733,7 @@
   },
   {
     "id": "p_bowl",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/3257/3257_300.png",
     "labels": {
       "zh": [
         "碗"
@@ -3749,7 +3749,7 @@
   },
   {
     "id": "p_pen",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/10313/10313_300.png",
     "labels": {
       "zh": [
         "笔"
@@ -3784,7 +3784,7 @@
   },
   {
     "id": "p_tissue",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/8647/8647_300.png",
     "labels": {
       "zh": [
         "纸巾"
@@ -3803,7 +3803,7 @@
   },
   {
     "id": "p_clothes",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/7233/7233_300.png",
     "labels": {
       "zh": [
         "衣服"
@@ -3821,7 +3821,7 @@
   },
   {
     "id": "p_remote",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/26182/26182_300.png",
     "labels": {
       "zh": [
         "遥控器"
@@ -3839,7 +3839,7 @@
   },
   {
     "id": "p_key",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/8153/8153_300.png",
     "labels": {
       "zh": [
         "钥匙"
@@ -3855,7 +3855,7 @@
   },
   {
     "id": "p_umbrella",
-    "imageUrl": "",
+    "imageUrl": "https://static.arasaac.org/pictograms/2500/2500_300.png",
     "labels": {
       "zh": [
         "雨伞"

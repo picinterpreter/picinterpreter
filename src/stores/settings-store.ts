@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import type { PictogramSortMode } from '@/utils/pictogram-order'
 
 export type FontSize = 'normal' | 'large' | 'xlarge'
 export type GridCols = 2 | 3 | 4
@@ -22,6 +23,9 @@ interface SettingsState {
   /** 在分类栏隐藏的分类 ID 列表（患者不需要的分类，照护者可以隐藏） */
   hiddenCategoryIds: string[]
 
+  /** 图片卡片排序方式 */
+  pictogramSortMode: PictogramSortMode
+
   // Actions
   setTtsRate: (rate: number) => void
   setTtsVoiceName: (name: string) => void
@@ -29,6 +33,7 @@ interface SettingsState {
   setFontSize: (v: FontSize) => void
   setGridCols: (v: GridCols) => void
   toggleCategoryVisibility: (id: string) => void
+  setPictogramSortMode: (mode: PictogramSortMode) => void
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -40,12 +45,14 @@ export const useSettingsStore = create<SettingsState>()(
       fontSize: 'normal',
       gridCols: 3,
       hiddenCategoryIds: [],
+      pictogramSortMode: 'manual',
 
       setTtsRate: (rate) => set({ ttsRate: rate }),
       setTtsVoiceName: (name) => set({ ttsVoiceName: name }),
       setHighContrast: (v) => set({ highContrast: v }),
       setFontSize: (v) => set({ fontSize: v }),
       setGridCols: (v) => set({ gridCols: v }),
+      setPictogramSortMode: (mode) => set({ pictogramSortMode: mode }),
 
       toggleCategoryVisibility: (id) =>
         set((state) => ({

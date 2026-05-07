@@ -2,8 +2,10 @@ import type { ReactNode, SVGProps } from 'react'
 
 type IconName =
   | 'alert'
+  | 'arrowDown'
   | 'arrowLeft'
   | 'arrowRight'
+  | 'arrowUp'
   | 'book'
   | 'check'
   | 'clock'
@@ -38,8 +40,10 @@ interface LineIconProps extends Omit<SVGProps<SVGSVGElement>, 'name'> {
 
 const PATHS: Record<IconName, ReactNode> = {
   alert: <path d="M12 8v4m0 4h.01M10.3 3.7 2.7 17.1A2 2 0 0 0 4.4 20h15.2a2 2 0 0 0 1.7-2.9L13.7 3.7a2 2 0 0 0-3.4 0Z" />,
+  arrowDown: <path d="M12 5v14m0 0 6-6m-6 6-6-6" />,
   arrowLeft: <path d="M19 12H5m0 0 6-6m-6 6 6 6" />,
   arrowRight: <path d="M5 12h14m0 0-6-6m6 6-6 6" />,
+  arrowUp: <path d="M12 19V5m0 0-6 6m6-6 6 6" />,
   book: <path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H20v15H7.5A2.5 2.5 0 0 0 5 20.5V5.5Zm0 0A2.5 2.5 0 0 0 2.5 3H4m1 17.5A2.5 2.5 0 0 0 7.5 23H20" />,
   check: <path d="m5 12 4 4L19 6" />,
   clock: <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0-13v5l3 2" />,

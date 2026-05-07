@@ -1,62 +1,86 @@
 [
   {
     "id": "quickchat",
-    "name": "快速沟通",
-    "icon": "https://globalsymbols.com/uploads/production/image/imagefile/23541/17_23542_dcf1387a-222b-4639-8ef8-067182ee5dee.png",
-    "sortOrder": 1
+    "name": "快速表达",
+    "icon": "https://static.arasaac.org/pictograms/6552/6552_300.png",
+    "sortOrder": 1,
+    "linkedCategoryIds": ["repair", "medical", "food", "daily", "people"]
   },
   {
     "id": "actions",
-    "name": "动作",
-    "icon": "https://globalsymbols.com/uploads/production/image/imagefile/16880/17_16881_ad592e23-1149-4398-bc4f-2e6931f0d54a.png",
-    "sortOrder": 2
+    "name": "核心词",
+    "icon": "https://static.arasaac.org/pictograms/36305/36305_300.png",
+    "sortOrder": 2,
+    "linkedCategoryIds": ["medical", "food", "daily", "emotions", "people", "places", "activities", "time", "repair"]
   },
   {
-    "id": "emotions",
-    "name": "情绪感觉",
-    "icon": "https://static.arasaac.org/pictograms/10265/10265_300.png",
-    "sortOrder": 3
+    "id": "repair",
+    "name": "修正澄清",
+    "icon": "https://static.arasaac.org/pictograms/2398/2398_300.png",
+    "sortOrder": 3,
+    "linkedCategoryIds": ["quickchat", "actions", "medical"]
+  },
+  {
+    "id": "medical",
+    "name": "身体医疗",
+    "icon": "https://static.arasaac.org/pictograms/6561/6561_300.png",
+    "sortOrder": 4,
+    "linkedCategoryIds": ["repair", "people"]
   },
   {
     "id": "food",
-    "name": "食物饮品",
-    "icon": "https://globalsymbols.com/uploads/production/image/imagefile/15528/17_15529_418cdc5b-93ea-4506-969e-d8bd5c86f203.png",
-    "sortOrder": 4
+    "name": "吃喝",
+    "icon": "https://static.arasaac.org/pictograms/2349/2349_300.png",
+    "sortOrder": 5,
+    "linkedCategoryIds": ["daily", "activities"]
+  },
+  {
+    "id": "daily",
+    "name": "厕所卫生",
+    "icon": "https://static.arasaac.org/pictograms/37331/37331_300.png",
+    "sortOrder": 6,
+    "linkedCategoryIds": ["medical", "repair"]
+  },
+  {
+    "id": "emotions",
+    "name": "情绪",
+    "icon": "https://static.arasaac.org/pictograms/10265/10265_300.png",
+    "sortOrder": 7,
+    "linkedCategoryIds": ["repair", "people"]
   },
   {
     "id": "people",
-    "name": "人物关系",
+    "name": "家人与人物",
     "icon": "https://static.arasaac.org/pictograms/8486/8486_300.png",
-    "sortOrder": 5
+    "sortOrder": 8,
+    "linkedCategoryIds": ["medical", "places"]
   },
   {
     "id": "places",
     "name": "地点",
     "icon": "https://static.arasaac.org/pictograms/39203/39203_300.png",
-    "sortOrder": 6
+    "sortOrder": 9,
+    "linkedCategoryIds": ["people", "medical", "activities"]
   },
   {
-    "id": "medical",
-    "name": "身体医疗",
-    "icon": "https://globalsymbols.com/uploads/production/image/imagefile/18202/17_18203_50f222f5-b9ae-4007-86d0-606571bbbce8.png",
-    "sortOrder": 7
+    "id": "activities",
+    "name": "日常活动",
+    "icon": "https://static.arasaac.org/pictograms/6044/6044_300.png",
+    "sortOrder": 10,
+    "linkedCategoryIds": ["food", "places", "objects", "time"]
   },
   {
     "id": "time",
-    "name": "时间",
+    "name": "时间方向",
     "icon": "https://static.arasaac.org/pictograms/7131/7131_300.png",
-    "sortOrder": 8
-  },
-  {
-    "id": "daily",
-    "name": "日常生活",
-    "icon": "https://static.arasaac.org/pictograms/38582/38582_hair-A65E26_skin-F5E5DE_500.png",
-    "sortOrder": 9
+    "sortOrder": 11,
+    "linkedCategoryIds": ["activities"]
   },
   {
     "id": "objects",
-    "name": "物品",
+    "name": "休息舒适",
     "icon": "https://static.arasaac.org/pictograms/25269/25269_300.png",
-    "sortOrder": 10
+    "sortOrder": 12,
+    "linkedCategoryIds": ["food", "activities", "daily"]
   }
 ]

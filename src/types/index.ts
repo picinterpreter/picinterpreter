@@ -27,6 +27,7 @@ export interface PictogramEntry {
   disambiguationHints: Record<string, string>
   emotionTag?: string
   source?: PictogramSource
+  manualOrder?: number
   usageCount: number
   lastUsedAt?: number
 }

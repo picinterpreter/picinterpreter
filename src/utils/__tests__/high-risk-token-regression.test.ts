@@ -377,17 +377,17 @@ describe('高风险词 seed 回归', () => {
       expect(m.matchType).toBe('exact')
     })
 
-    it('要 exact 命中 p_想要', async () => {
+    it('要 exact 命中 p_need_want', async () => {
       const result = await matchTextToImages('要', { preSegmented: ['要'] })
       const m = result.matches[0]
-      expect(m.pictogram?.id).toBe('p_想要')
+      expect(m.pictogram?.id).toBe('p_need_want')
       expect(m.matchType).toBe('exact')
     })
 
-    it('想要 synonym 命中 p_想要，而不是 p_want', async () => {
+    it('想要 synonym 命中 p_need_want，而不是 p_want', async () => {
       const result = await matchTextToImages('想要', { preSegmented: ['想要'] })
       const m = result.matches[0]
-      expect(m.pictogram?.id).toBe('p_想要')
+      expect(m.pictogram?.id).toBe('p_need_want')
       expect(m.matchType).toBe('synonym')
       expect(m.pictogram?.id).not.toBe('p_want')
     })

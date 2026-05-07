@@ -4,6 +4,7 @@ import { db } from '@/db'
 import { useAppStore } from '@/stores/app-store'
 import { useSettingsStore, type GridCols } from '@/stores/settings-store'
 import { generatePlaceholderSvg, resolveImageSrc } from '@/utils/generate-placeholder-svg'
+import { sortPictogramsForDisplay } from '@/utils/pictogram-order'
 import { LineIcon } from '@/components/ui/LineIcon'
 import type { Category, PictogramEntry } from '@/types'
 
@@ -26,12 +27,14 @@ const ROOT_MEDIA_SLOT_CLASS = 'size-[76px] sm:size-20'
 const CATEGORY_COLORS: Record<string, string> = {
   quickchat: '#1d4ed8',
   actions:   '#16a34a',
+  repair:    '#7c3aed',
   emotions:  '#ea580c',
   food:      '#dc2626',
   people:    '#7c3aed',
   places:    '#0891b2',
   medical:   '#0d9488',
   time:      '#d97706',
+  activities:'#2563eb',
   animals:   '#65a30d',
   colors:    '#db2777',
   daily:     '#4A90D9',
@@ -43,12 +46,14 @@ const GRID_TONE_CLASS: Record<string, string> = {
   recent:    'bg-amber-50',
   quickchat: 'bg-sky-50',
   actions:   'bg-emerald-50',
+  repair:    'bg-violet-50',
   emotions:  'bg-orange-50',
   food:      'bg-rose-50',
   people:    'bg-violet-50',
   places:    'bg-cyan-50',
   medical:   'bg-teal-50',
   time:      'bg-yellow-50',
+  activities:'bg-blue-50',
   animals:   'bg-lime-50',
   colors:    'bg-pink-50',
   daily:     'bg-blue-50',
@@ -76,6 +81,7 @@ export function PictogramGrid() {
   const setShowSavedPhrases = useAppStore((s) => s.setShowSavedPhrases)
   const setShowCategoryLinks = useAppStore((s) => s.setShowCategoryLinks)
   const gridCols = useSettingsStore((s) => s.gridCols)
+  const pictogramSortMode = useSettingsStore((s) => s.pictogramSortMode)
   const hiddenCategoryIds = useSettingsStore((s) => s.hiddenCategoryIds)
 
   const allCategories = useLiveQuery(() =>
@@ -119,8 +125,8 @@ export function PictogramGrid() {
     }
 
     const ownItems = await db.pictograms.where('categoryId').equals(activeCategoryId).toArray()
-    return ownItems.sort((a, b) => (b.usageCount ?? 0) - (a.usageCount ?? 0))
-  }, [activeCategoryId])
+    return sortPictogramsForDisplay(ownItems, pictogramSortMode)
+  }, [activeCategoryId, pictogramSortMode])
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: 0 })

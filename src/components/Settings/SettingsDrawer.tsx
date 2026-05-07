@@ -7,6 +7,7 @@ import { ONBOARDING_STORAGE_KEY } from '@/components/Onboarding/OnboardingModal'
 import { LineIcon } from '@/components/ui/LineIcon'
 import { CategoryIcon } from '@/components/CategoryIcon/CategoryIcon'
 import { db } from '@/db'
+import { movePictogramManualOrder, sortPictogramsForDisplay } from '@/utils/pictogram-order'
 
 interface AIBackendStatus {
   configured: boolean
@@ -18,6 +19,7 @@ export function SettingsDrawer() {
   const showSettings = useAppStore((s) => s.showSettings)
   const setShowSettings = useAppStore((s) => s.setShowSettings)
   const setShowOnboarding = useAppStore((s) => s.setShowOnboarding)
+  const activeCategoryId = useAppStore((s) => s.activeCategoryId)
   const settings = useSettingsStore()
 
   const [rate, setRate] = useState(settings.ttsRate)
@@ -33,8 +35,26 @@ export function SettingsDrawer() {
   const [testStatus, setTestStatus] = useState<TestStatus>('idle')
   const [testMessage, setTestMessage] = useState<string | null>(null)
   const testAbortRef = useRef<AbortController | null>(null)
+  const [orderingCategoryId, setOrderingCategoryId] = useState('')
+  const [reorderingId, setReorderingId] = useState<string | null>(null)
 
   const allCategories = useLiveQuery(() => db.categories.orderBy('sortOrder').toArray())
+  const orderingPictograms = useLiveQuery(async () => {
+    if (!orderingCategoryId) return []
+    const items = await db.pictograms.where('categoryId').equals(orderingCategoryId).toArray()
+    return sortPictogramsForDisplay(items, 'manual')
+  }, [orderingCategoryId])
+
+  useEffect(() => {
+    if (!allCategories || allCategories.length === 0) return
+    if (orderingCategoryId && allCategories.some((category) => category.id === orderingCategoryId)) return
+
+    const fallbackId = activeCategoryId !== 'root' && activeCategoryId !== 'recent'
+      ? activeCategoryId
+      : allCategories[0]?.id
+
+    if (fallbackId) setOrderingCategoryId(fallbackId)
+  }, [activeCategoryId, allCategories, orderingCategoryId])
 
   useEffect(() => {
     if (!('speechSynthesis' in window)) return
@@ -193,6 +213,23 @@ export function SettingsDrawer() {
       }
     } finally {
       clearTimeout(timeoutId)
+    }
+  }
+
+  async function handleMovePictogram(id: string, direction: 'up' | 'down') {
+    if (!orderingPictograms || orderingPictograms.length === 0) return
+
+    const reordered = movePictogramManualOrder(orderingPictograms, id, direction)
+    setReorderingId(id)
+
+    try {
+      await db.transaction('rw', db.pictograms, async () => {
+        for (const pictogram of reordered) {
+          await db.pictograms.update(pictogram.id, { manualOrder: pictogram.manualOrder })
+        }
+      })
+    } finally {
+      setReorderingId(null)
     }
   }
 
@@ -410,6 +447,95 @@ export function SettingsDrawer() {
                 className="h-5 w-5 accent-blue-600"
               />
             </label>
+          </section>
+
+          <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <h3 className="text-base font-semibold text-slate-800 mb-1">卡片顺序</h3>
+            <p className="text-xs text-slate-500 mb-3">默认使用固定顺序，患者更容易形成稳定记忆；需要时可以切到常用优先。</p>
+
+            <div className="mb-4">
+              <p className="text-sm font-medium text-slate-700 mb-2">排序方式</p>
+              <div className="flex gap-2">
+                {[
+                  { value: 'manual', label: '固定顺序' },
+                  { value: 'popularity', label: '常用优先' },
+                ].map((option) => (
+                  <button
+                    key={option.value}
+                    onClick={() => settings.setPictogramSortMode(option.value as 'manual' | 'popularity')}
+                    className={`flex-1 py-2.5 rounded-xl border text-center transition-colors min-h-[48px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500
+                      ${settings.pictogramSortMode === option.value
+                        ? 'border-blue-500 bg-blue-50 text-blue-700 font-semibold shadow-sm'
+                        : 'border-slate-200 bg-white text-slate-600 hover:border-blue-300 hover:bg-blue-50/40'
+                      }`}
+                  >
+                    <span className="block text-base">{option.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">调整哪个板块</label>
+                <select
+                  value={orderingCategoryId}
+                  onChange={(e) => setOrderingCategoryId(e.target.value)}
+                  className="w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-base text-slate-900 min-h-[44px] focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500"
+                >
+                  {(allCategories ?? []).map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {settings.pictogramSortMode !== 'manual' && (
+                <p className="rounded-xl bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-700 ring-1 ring-amber-100">
+                  现在显示的是“常用优先”。切回“固定顺序”后，会恢复你在下面排好的手动顺序。
+                </p>
+              )}
+
+              {orderingPictograms && orderingPictograms.length > 0 && (
+                <div className="space-y-2">
+                  {orderingPictograms.map((pictogram, index) => (
+                    <div
+                      key={pictogram.id}
+                      className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2"
+                    >
+                      <img
+                        src={pictogram.imageUrl}
+                        alt={pictogram.labels.zh[0]}
+                        className="h-10 w-10 rounded-lg object-contain bg-white"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium text-slate-800">{pictogram.labels.zh[0]}</p>
+                        <p className="text-xs text-slate-400">第 {index + 1} 位</p>
+                      </div>
+                      <div className="flex gap-1">
+                        <button
+                          onClick={() => handleMovePictogram(pictogram.id, 'up')}
+                          disabled={index === 0 || reorderingId === pictogram.id}
+                          className="flex min-h-[40px] min-w-[40px] items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
+                          aria-label={`上移 ${pictogram.labels.zh[0]}`}
+                        >
+                          <LineIcon name="arrowUp" className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => handleMovePictogram(pictogram.id, 'down')}
+                          disabled={index === orderingPictograms.length - 1 || reorderingId === pictogram.id}
+                          className="flex min-h-[40px] min-w-[40px] items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
+                          aria-label={`下移 ${pictogram.labels.zh[0]}`}
+                        >
+                          <LineIcon name="arrowDown" className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </section>
 
           {allCategories && allCategories.length > 0 && (

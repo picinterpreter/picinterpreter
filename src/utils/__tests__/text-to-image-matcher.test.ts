@@ -24,6 +24,9 @@ vi.mock('@/data/lexicon', () => ({
   findEntry: (token: string) => {
     // 只为测试提供一个词条：马桶 → 厕所
     if (token === '马桶') return { zh: '厕所' }
+    if (token === '苹果') return { zh: '苹果', category: 'food' }
+    if (token === '开心') return { zh: '开心', category: 'emotions' }
+    if (token === '高兴') return { zh: '开心', category: 'emotions' }
     return null
   },
 }))
@@ -33,7 +36,11 @@ const { matchTextToImages } = await import('../text-to-image-matcher')
 
 // ─── helpers ─────────────────────────────────────────────────────────────── //
 
-function makePictogram(label: string, synonyms: string[] = []): PictogramEntry {
+function makePictogram(
+  label: string,
+  synonyms: string[] = [],
+  overrides: Partial<PictogramEntry> = {},
+): PictogramEntry {
   return {
     id: `id-${label}`,
     imageUrl: `/seed/${label}.png`,
@@ -42,6 +49,7 @@ function makePictogram(label: string, synonyms: string[] = []): PictogramEntry {
     synonyms,
     disambiguationHints: {},
     usageCount: 0,
+    ...overrides,
   }
 }
 
@@ -198,5 +206,66 @@ describe('matchTextToImages', () => {
     for (const m of result.matches) {
       expect(valid).toContain(m.matchType)
     }
+  })
+
+  it('blocks a misleading synonym candidate via excludeTokens hint', async () => {
+    mockToArray.mockResolvedValue([
+      makePictogram('开心果', ['开心'], {
+        categoryId: 'food',
+        disambiguationHints: { excludeTokens: '开心', semanticDomain: 'food' },
+      }),
+      makePictogram('高兴', ['开心'], {
+        categoryId: 'emotions',
+        disambiguationHints: { semanticDomain: 'emotions' },
+      }),
+    ])
+
+    const result = await matchTextToImages('开心')
+    const match = result.matches[0]
+
+    expect(match.matchType).toBe('synonym')
+    expect(match.pictogram?.labels.zh[0]).toBe('高兴')
+  })
+
+  it('applies excludeTokens to normalized lexicon paths, not only raw input tokens', async () => {
+    mockToArray.mockResolvedValue([
+      makePictogram('开心', [], {
+        id: 'id-happy-food-conflict',
+        categoryId: 'food',
+        disambiguationHints: { excludeTokens: '开心', semanticDomain: 'food' },
+      }),
+      makePictogram('开心', [], {
+        id: 'id-happy-emotion',
+        categoryId: 'emotions',
+        disambiguationHints: { semanticDomain: 'emotions' },
+      }),
+    ])
+
+    const result = await matchTextToImages('高兴')
+    const match = result.matches[0]
+
+    expect(match.matchType).toBe('lexicon-synonym')
+    expect(match.pictogram?.id).toBe('id-happy-emotion')
+  })
+
+  it('prefers the exact candidate whose category matches lexicon semantics', async () => {
+    mockToArray.mockResolvedValue([
+      makePictogram('苹果', [], {
+        id: 'id-apple-device',
+        categoryId: 'objects',
+        disambiguationHints: { semanticDomain: 'objects' },
+      }),
+      makePictogram('苹果', [], {
+        id: 'id-apple-fruit',
+        categoryId: 'food',
+        disambiguationHints: { semanticDomain: 'food' },
+      }),
+    ])
+
+    const result = await matchTextToImages('苹果')
+    const match = result.matches[0]
+
+    expect(match.matchType).toBe('exact')
+    expect(match.pictogram?.id).toBe('id-apple-fruit')
   })
 })

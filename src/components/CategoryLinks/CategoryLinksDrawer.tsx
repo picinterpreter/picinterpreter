@@ -13,6 +13,7 @@ import { db } from '@/db'
 import { useAppStore } from '@/stores/app-store'
 import { wouldCreateCycle } from '@/utils/category-links'
 import { LineIcon } from '@/components/ui/LineIcon'
+import { CategoryIcon } from '@/components/CategoryIcon/CategoryIcon'
 import type { Category } from '@/types'
 
 export function CategoryLinksDrawer() {
@@ -138,7 +139,7 @@ export function CategoryLinksDrawer() {
                       : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50'
                     }`}
                 >
-                  <span className="text-lg leading-none">{cat.icon}</span>
+                  <CategoryIcon category={cat} className="h-8 w-8 rounded-xl object-contain" />
                   <span className="text-xs font-medium leading-tight truncate max-w-full px-1">
                     {cat.name}
                   </span>
@@ -202,7 +203,7 @@ export function CategoryLinksDrawer() {
                         disabled={saving}
                         className="w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl border border-dashed border-slate-300 bg-white text-slate-600 hover:border-slate-400 hover:bg-slate-50 hover:text-slate-950 transition-all text-left disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        <span className="text-xl shrink-0">{cat.icon}</span>
+                        <CategoryIcon category={cat} className="h-8 w-8 shrink-0 rounded-xl object-contain" />
                         <span className="flex-1 text-sm font-medium">{cat.name}</span>
                         <span className="text-lg text-slate-400">＋</span>
                       </button>
@@ -246,7 +247,7 @@ function LinkedCategoryRow({
 }) {
   return (
     <div className="flex items-center gap-3 px-3 py-2.5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-      <span className="text-xl shrink-0">{category.icon}</span>
+      <CategoryIcon category={category} className="h-8 w-8 shrink-0 rounded-xl object-contain" />
       <span className="flex-1 text-sm font-medium text-blue-800">{category.name}</span>
       <button
         onClick={onRemove}

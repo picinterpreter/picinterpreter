@@ -5,6 +5,7 @@ import { useSettingsStore, type FontSize, type GridCols } from '@/stores/setting
 import { AuthSettingsSection } from '@/components/Settings/AuthSettingsSection'
 import { ONBOARDING_STORAGE_KEY } from '@/components/Onboarding/OnboardingModal'
 import { LineIcon } from '@/components/ui/LineIcon'
+import { CategoryIcon } from '@/components/CategoryIcon/CategoryIcon'
 import { db } from '@/db'
 
 interface AIBackendStatus {
@@ -430,7 +431,11 @@ export function SettingsDrawer() {
                       aria-pressed={!isHidden}
                       title={isHidden ? '点击显示此分类' : '点击隐藏此分类'}
                     >
-                      <span className="text-xl w-7 text-center shrink-0">{category.icon}</span>
+                      <CategoryIcon
+                        category={category}
+                        className="h-8 w-8 w-7 shrink-0 rounded-xl object-contain"
+                        textClassName="text-xl w-7 text-center shrink-0"
+                      />
                       <span className={`flex-1 text-base ${isHidden ? 'line-through text-slate-400' : ''}`}>
                         {category.name}
                       </span>

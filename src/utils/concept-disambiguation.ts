@@ -1,6 +1,11 @@
 /**
  * V1 词图消歧核心：ConceptExclusion + ConceptAlias 评分层。
  *
+ * 当前定位：
+ * - 这是 Phase 2 预留的 concept-centered 规则模块
+ * - 现阶段运行时 matcher 仍以 `PictogramEntry.disambiguationHints` 为 V1 生效规则源
+ * - 不应让两套规则在运行时同时生效，避免维护漂移
+ *
  * 职责：
  * - 把候选概念列表中因输入 token 明确错误的条目移除（hard-block）或降权（soft-penalty）
  * - 把 alias 命中的概念以低于精确匹配的分数加入候选列表

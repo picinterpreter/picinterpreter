@@ -4,6 +4,7 @@ import { db } from '@/db'
 import { useAppStore } from '@/stores/app-store'
 import { useSettingsStore } from '@/stores/settings-store'
 import { LineIcon } from '@/components/ui/LineIcon'
+import { CategoryIcon } from '@/components/CategoryIcon/CategoryIcon'
 
 export function CategoryTabs() {
   const allCategories = useLiveQuery(() =>
@@ -111,7 +112,7 @@ export function CategoryTabs() {
               }`}
             aria-pressed={activeCategoryId === cat.id}
           >
-            <span className="text-lg">{cat.icon}</span>
+            <CategoryIcon category={cat} className="h-6 w-6 rounded-lg object-contain" />
             <span>{cat.name}</span>
           </button>
         ))}

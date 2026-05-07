@@ -63,7 +63,7 @@ export const db = new TuYuJiaDB()
  * 触发自动清空并重新导入种子数据。
  * 注意：用户自己的 expressions / savedPhrases 不受影响。
  */
-const SEED_VERSION = 3
+const SEED_VERSION = 4
 const SEED_VERSION_KEY = 'tuyujia_seed_version'
 
 /** 检查并导入种子数据（首次加载或版本升级时执行） */

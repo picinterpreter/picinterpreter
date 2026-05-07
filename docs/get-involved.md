@@ -185,6 +185,7 @@
 - 路线图：[`ROADMAP.md`](../ROADMAP.md)
 - 当前任务：[`docs/implementation-task-index.md`](implementation-task-index.md)
 - 架构决策：[`docs/decision-index.md`](decision-index.md)
+- 项目逻辑树：[`docs/project-logic-tree-and-knowledge-map.md`](project-logic-tree-and-knowledge-map.md)
 - 用户研究：[`docs/user-research-playbook.md`](user-research-playbook.md)
 - 家属反馈表：[`docs/caregiver-feedback-form.md`](caregiver-feedback-form.md)
 - 贡献者致谢：[`docs/contributor-recognition.md`](contributor-recognition.md)

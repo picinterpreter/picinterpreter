@@ -3870,5 +3870,877 @@
     ],
     "disambiguationHints": {},
     "usageCount": 0
+  },
+  {
+    "id": "r_speak_slowly",
+    "imageUrl": "https://static.arasaac.org/pictograms/4676/4676_300.png",
+    "labels": {
+      "zh": [
+        "说慢一点"
+      ],
+      "en": [
+        "speak slowly"
+      ]
+    },
+    "categoryId": "repair",
+    "synonyms": [
+      "慢一点",
+      "慢慢说"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "repair"
+    },
+    "usageCount": 0,
+    "manualOrder": 0
+  },
+  {
+    "id": "r_close_enough",
+    "imageUrl": "https://static.arasaac.org/pictograms/30383/30383_300.png",
+    "labels": {
+      "zh": [
+        "差不多"
+      ],
+      "en": [
+        "close enough",
+        "almost"
+      ]
+    },
+    "categoryId": "repair",
+    "synonyms": [
+      "接近",
+      "大概"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "repair"
+    },
+    "usageCount": 0,
+    "manualOrder": 1
+  },
+  {
+    "id": "r_use_picture",
+    "imageUrl": "https://static.arasaac.org/pictograms/7108/7108_300.png",
+    "labels": {
+      "zh": [
+        "用图片"
+      ],
+      "en": [
+        "use picture",
+        "show picture"
+      ]
+    },
+    "categoryId": "repair",
+    "synonyms": [
+      "给我看图",
+      "图片"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "repair"
+    },
+    "usageCount": 0,
+    "manualOrder": 2
+  },
+  {
+    "id": "r_help_find_word",
+    "imageUrl": "https://static.arasaac.org/pictograms/9837/9837_300.png",
+    "labels": {
+      "zh": [
+        "帮我找词"
+      ],
+      "en": [
+        "help me find the word"
+      ]
+    },
+    "categoryId": "repair",
+    "synonyms": [
+      "帮我说",
+      "找词"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "repair"
+    },
+    "usageCount": 0,
+    "manualOrder": 3
+  },
+  {
+    "id": "r_no_rush",
+    "imageUrl": "https://static.arasaac.org/pictograms/27333/27333_300.png",
+    "labels": {
+      "zh": [
+        "先别急"
+      ],
+      "en": [
+        "no rush",
+        "patience"
+      ]
+    },
+    "categoryId": "repair",
+    "synonyms": [
+      "不急",
+      "等等我"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "repair"
+    },
+    "usageCount": 0,
+    "manualOrder": 4
+  },
+  {
+    "id": "r_i_mean_this",
+    "imageUrl": "https://static.arasaac.org/pictograms/39234/39234_300.png",
+    "labels": {
+      "zh": [
+        "我是这个意思"
+      ],
+      "en": [
+        "I mean this",
+        "confirm"
+      ]
+    },
+    "categoryId": "repair",
+    "synonyms": [
+      "就是这个",
+      "我的意思是"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "repair"
+    },
+    "usageCount": 0,
+    "manualOrder": 5
+  },
+  {
+    "id": "r_know_cant_say",
+    "imageUrl": "https://static.arasaac.org/pictograms/16885/16885_300.png",
+    "labels": {
+      "zh": [
+        "我知道但说不出来"
+      ],
+      "en": [
+        "I know but can't say it"
+      ]
+    },
+    "categoryId": "repair",
+    "synonyms": [
+      "说不出来",
+      "我懂但表达不了"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "repair"
+    },
+    "usageCount": 0,
+    "manualOrder": 6
+  },
+  {
+    "id": "r_forgot_word",
+    "imageUrl": "https://static.arasaac.org/pictograms/26258/26258_300.png",
+    "labels": {
+      "zh": [
+        "我忘了这个词"
+      ],
+      "en": [
+        "I forgot the word"
+      ]
+    },
+    "categoryId": "repair",
+    "synonyms": [
+      "忘词了",
+      "想不起来"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "repair"
+    },
+    "usageCount": 0,
+    "manualOrder": 7
+  },
+  {
+    "id": "r_rephrase",
+    "imageUrl": "https://static.arasaac.org/pictograms/37360/37360_300.png",
+    "labels": {
+      "zh": [
+        "我想换一个说法"
+      ],
+      "en": [
+        "rephrase",
+        "say it another way"
+      ]
+    },
+    "categoryId": "repair",
+    "synonyms": [
+      "换个说法",
+      "换一种方式"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "repair"
+    },
+    "usageCount": 0,
+    "manualOrder": 8
+  },
+  {
+    "id": "a_lie_down",
+    "imageUrl": "https://static.arasaac.org/pictograms/8242/8242_300.png",
+    "labels": {
+      "zh": [
+        "躺"
+      ],
+      "en": [
+        "lie down"
+      ]
+    },
+    "categoryId": "activities",
+    "synonyms": [
+      "躺下",
+      "平躺"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "activities"
+    },
+    "usageCount": 0,
+    "manualOrder": 0
+  },
+  {
+    "id": "a_go_out",
+    "imageUrl": "https://static.arasaac.org/pictograms/2806/2806_300.png",
+    "labels": {
+      "zh": [
+        "出门"
+      ],
+      "en": [
+        "go out",
+        "exit"
+      ]
+    },
+    "categoryId": "activities",
+    "synonyms": [
+      "出去",
+      "外出"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "activities"
+    },
+    "usageCount": 0,
+    "manualOrder": 1
+  },
+  {
+    "id": "a_go_home",
+    "imageUrl": "https://static.arasaac.org/pictograms/39494/39494_300.png",
+    "labels": {
+      "zh": [
+        "回家"
+      ],
+      "en": [
+        "go home",
+        "go back"
+      ]
+    },
+    "categoryId": "activities",
+    "synonyms": [
+      "回去",
+      "返回家"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "activities"
+    },
+    "usageCount": 0,
+    "manualOrder": 2
+  },
+  {
+    "id": "a_rehab_training",
+    "imageUrl": "https://static.arasaac.org/pictograms/14672/14672_300.png",
+    "labels": {
+      "zh": [
+        "康复训练"
+      ],
+      "en": [
+        "rehabilitation",
+        "rehab training"
+      ]
+    },
+    "categoryId": "activities",
+    "synonyms": [
+      "康复",
+      "训练",
+      "康复练习"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "activities"
+    },
+    "usageCount": 0,
+    "manualOrder": 3
+  },
+  {
+    "id": "a_practice",
+    "imageUrl": "https://static.arasaac.org/pictograms/37810/37810_300.png",
+    "labels": {
+      "zh": [
+        "练习"
+      ],
+      "en": [
+        "practice",
+        "exercise"
+      ]
+    },
+    "categoryId": "activities",
+    "synonyms": [
+      "训练",
+      "锻炼"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "activities"
+    },
+    "usageCount": 0,
+    "manualOrder": 4
+  },
+  {
+    "id": "a_wear",
+    "imageUrl": "https://static.arasaac.org/pictograms/14534/14534_300.png",
+    "labels": {
+      "zh": [
+        "穿衣"
+      ],
+      "en": [
+        "put on clothes",
+        "dress"
+      ]
+    },
+    "categoryId": "activities",
+    "synonyms": [
+      "穿",
+      "穿上"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "activities"
+    },
+    "usageCount": 0,
+    "manualOrder": 5
+  },
+  {
+    "id": "a_take_off_clothes",
+    "imageUrl": "https://static.arasaac.org/pictograms/11233/11233_300.png",
+    "labels": {
+      "zh": [
+        "脱衣"
+      ],
+      "en": [
+        "undress",
+        "take off clothes"
+      ]
+    },
+    "categoryId": "activities",
+    "synonyms": [
+      "脱",
+      "脱掉"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "activities"
+    },
+    "usageCount": 0,
+    "manualOrder": 6
+  },
+  {
+    "id": "p_tired",
+    "imageUrl": "https://static.arasaac.org/pictograms/35537/35537_300.png",
+    "labels": {
+      "zh": [
+        "累"
+      ],
+      "en": [
+        "tired",
+        "exhausted"
+      ]
+    },
+    "categoryId": "emotions",
+    "synonyms": [
+      "疲劳",
+      "疲倦",
+      "没力气"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "emotions"
+    },
+    "usageCount": 0,
+    "manualOrder": 1
+  },
+  {
+    "id": "p_nervous",
+    "imageUrl": "https://static.arasaac.org/pictograms/30391/30391_300.png",
+    "labels": {
+      "zh": [
+        "紧张"
+      ],
+      "en": [
+        "nervous",
+        "anxious"
+      ]
+    },
+    "categoryId": "emotions",
+    "synonyms": [
+      "不安",
+      "焦虑"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "emotions"
+    },
+    "usageCount": 0,
+    "manualOrder": 2
+  },
+  {
+    "id": "p_bored",
+    "imageUrl": "https://static.arasaac.org/pictograms/35531/35531_300.png",
+    "labels": {
+      "zh": [
+        "无聊"
+      ],
+      "en": [
+        "bored"
+      ]
+    },
+    "categoryId": "emotions",
+    "synonyms": [
+      "没意思",
+      "闷"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "emotions"
+    },
+    "usageCount": 0,
+    "manualOrder": 3
+  },
+  {
+    "id": "p_anxious",
+    "imageUrl": "https://static.arasaac.org/pictograms/36675/36675_300.png",
+    "labels": {
+      "zh": [
+        "着急"
+      ],
+      "en": [
+        "urgent",
+        "in a hurry"
+      ]
+    },
+    "categoryId": "emotions",
+    "synonyms": [
+      "急",
+      "心急"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "emotions"
+    },
+    "usageCount": 0,
+    "manualOrder": 4
+  },
+  {
+    "id": "p_lonely",
+    "imageUrl": "https://static.arasaac.org/pictograms/7253/7253_300.png",
+    "labels": {
+      "zh": [
+        "孤单"
+      ],
+      "en": [
+        "lonely",
+        "alone"
+      ]
+    },
+    "categoryId": "emotions",
+    "synonyms": [
+      "孤独",
+      "寂寞"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "emotions"
+    },
+    "usageCount": 0,
+    "manualOrder": 5
+  },
+  {
+    "id": "p_dejected",
+    "imageUrl": "https://static.arasaac.org/pictograms/32329/32329_300.png",
+    "labels": {
+      "zh": [
+        "沮丧"
+      ],
+      "en": [
+        "dejected",
+        "downhearted"
+      ]
+    },
+    "categoryId": "emotions",
+    "synonyms": [
+      "失落",
+      "郁闷"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "emotions"
+    },
+    "usageCount": 0,
+    "manualOrder": 6
+  },
+  {
+    "id": "p_calm",
+    "imageUrl": "https://static.arasaac.org/pictograms/31310/31310_300.png",
+    "labels": {
+      "zh": [
+        "平静"
+      ],
+      "en": [
+        "calm",
+        "peaceful"
+      ]
+    },
+    "categoryId": "emotions",
+    "synonyms": [
+      "安静",
+      "放松"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "emotions"
+    },
+    "usageCount": 0,
+    "manualOrder": 7
+  },
+  {
+    "id": "p_upset",
+    "imageUrl": "https://static.arasaac.org/pictograms/10750/10750_300.png",
+    "labels": {
+      "zh": [
+        "难过"
+      ],
+      "en": [
+        "upset",
+        "sad"
+      ]
+    },
+    "categoryId": "emotions",
+    "synonyms": [
+      "不开心",
+      "伤感"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "emotions"
+    },
+    "usageCount": 0,
+    "manualOrder": 8
+  },
+  {
+    "id": "p_bedroom",
+    "imageUrl": "https://static.arasaac.org/pictograms/5988/5988_300.png",
+    "labels": {
+      "zh": [
+        "卧室"
+      ],
+      "en": [
+        "bedroom"
+      ]
+    },
+    "categoryId": "places",
+    "synonyms": [
+      "睡房",
+      "房间"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "places"
+    },
+    "usageCount": 0,
+    "manualOrder": 1
+  },
+  {
+    "id": "p_kitchen",
+    "imageUrl": "https://static.arasaac.org/pictograms/10752/10752_300.png",
+    "labels": {
+      "zh": [
+        "厨房"
+      ],
+      "en": [
+        "kitchen"
+      ]
+    },
+    "categoryId": "places",
+    "synonyms": [],
+    "disambiguationHints": {
+      "semanticDomain": "places"
+    },
+    "usageCount": 0,
+    "manualOrder": 2
+  },
+  {
+    "id": "p_living_room",
+    "imageUrl": "https://static.arasaac.org/pictograms/6211/6211_300.png",
+    "labels": {
+      "zh": [
+        "客厅"
+      ],
+      "en": [
+        "living room"
+      ]
+    },
+    "categoryId": "places",
+    "synonyms": [
+      "大厅",
+      "起居室"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "places"
+    },
+    "usageCount": 0,
+    "manualOrder": 3
+  },
+  {
+    "id": "p_outside",
+    "imageUrl": "https://static.arasaac.org/pictograms/5475/5475_300.png",
+    "labels": {
+      "zh": [
+        "外面"
+      ],
+      "en": [
+        "outside",
+        "outdoors"
+      ]
+    },
+    "categoryId": "places",
+    "synonyms": [
+      "室外",
+      "户外"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "places"
+    },
+    "usageCount": 0,
+    "manualOrder": 4
+  },
+  {
+    "id": "p_shop",
+    "imageUrl": "https://static.arasaac.org/pictograms/35695/35695_300.png",
+    "labels": {
+      "zh": [
+        "商店"
+      ],
+      "en": [
+        "shop",
+        "store"
+      ]
+    },
+    "categoryId": "places",
+    "synonyms": [
+      "商场",
+      "店"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "places"
+    },
+    "usageCount": 0,
+    "manualOrder": 5
+  },
+  {
+    "id": "p_rehab_dept",
+    "imageUrl": "https://static.arasaac.org/pictograms/32712/32712_300.png",
+    "labels": {
+      "zh": [
+        "康复科"
+      ],
+      "en": [
+        "rehabilitation clinic"
+      ]
+    },
+    "categoryId": "places",
+    "synonyms": [
+      "康复中心",
+      "理疗室"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "places"
+    },
+    "usageCount": 0,
+    "manualOrder": 6
+  },
+  {
+    "id": "p_husband",
+    "imageUrl": "https://static.arasaac.org/pictograms/8111/8111_300.png",
+    "labels": {
+      "zh": [
+        "老公/丈夫"
+      ],
+      "en": [
+        "husband"
+      ]
+    },
+    "categoryId": "people",
+    "synonyms": [
+      "丈夫",
+      "老公",
+      "爱人"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "people"
+    },
+    "usageCount": 0,
+    "manualOrder": 1
+  },
+  {
+    "id": "p_wife",
+    "imageUrl": "https://static.arasaac.org/pictograms/8110/8110_300.png",
+    "labels": {
+      "zh": [
+        "老婆/妻子"
+      ],
+      "en": [
+        "wife"
+      ]
+    },
+    "categoryId": "people",
+    "synonyms": [
+      "妻子",
+      "老婆",
+      "爱人"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "people"
+    },
+    "usageCount": 0,
+    "manualOrder": 2
+  },
+  {
+    "id": "p_son",
+    "imageUrl": "https://static.arasaac.org/pictograms/9887/9887_300.png",
+    "labels": {
+      "zh": [
+        "儿子"
+      ],
+      "en": [
+        "son"
+      ]
+    },
+    "categoryId": "people",
+    "synonyms": [
+      "男孩",
+      "孩子"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "people"
+    },
+    "usageCount": 0,
+    "manualOrder": 3
+  },
+  {
+    "id": "p_daughter",
+    "imageUrl": "https://static.arasaac.org/pictograms/9885/9885_300.png",
+    "labels": {
+      "zh": [
+        "女儿"
+      ],
+      "en": [
+        "daughter"
+      ]
+    },
+    "categoryId": "people",
+    "synonyms": [
+      "女孩",
+      "孩子"
+    ],
+    "disambiguationHints": {
+      "semanticDomain": "people"
+    },
+    "usageCount": 0,
+    "manualOrder": 4
+  },
+  {
+    "id": "p_table",
+    "imageUrl": "https://static.arasaac.org/pictograms/3129/3129_300.png",
+    "labels": {
+      "zh": [
+        "桌子"
+      ],
+      "en": [
+        "table"
+      ]
+    },
+    "categoryId": "objects",
+    "synonyms": [
+      "桌",
+      "餐桌"
+    ],
+    "disambiguationHints": {},
+    "usageCount": 0,
+    "manualOrder": 1
+  },
+  {
+    "id": "p_blanket",
+    "imageUrl": "https://static.arasaac.org/pictograms/2459/2459_300.png",
+    "labels": {
+      "zh": [
+        "被子"
+      ],
+      "en": [
+        "blanket",
+        "duvet"
+      ]
+    },
+    "categoryId": "objects",
+    "synonyms": [
+      "毯子",
+      "被褥"
+    ],
+    "disambiguationHints": {},
+    "usageCount": 0,
+    "manualOrder": 2
+  },
+  {
+    "id": "p_lamp",
+    "imageUrl": "https://static.arasaac.org/pictograms/4936/4936_300.png",
+    "labels": {
+      "zh": [
+        "灯"
+      ],
+      "en": [
+        "lamp",
+        "light"
+      ]
+    },
+    "categoryId": "objects",
+    "synonyms": [
+      "电灯",
+      "灯光"
+    ],
+    "disambiguationHints": {},
+    "usageCount": 0,
+    "manualOrder": 3
+  },
+  {
+    "id": "p_rice",
+    "imageUrl": "https://static.arasaac.org/pictograms/6911/6911_300.png",
+    "labels": {
+      "zh": [
+        "饭"
+      ],
+      "en": [
+        "rice",
+        "meal"
+      ]
+    },
+    "categoryId": "food",
+    "synonyms": [
+      "米饭",
+      "白饭"
+    ],
+    "disambiguationHints": {},
+    "usageCount": 0,
+    "manualOrder": 1
+  },
+  {
+    "id": "p_meat",
+    "imageUrl": "https://static.arasaac.org/pictograms/2316/2316_300.png",
+    "labels": {
+      "zh": [
+        "肉"
+      ],
+      "en": [
+        "meat"
+      ]
+    },
+    "categoryId": "food",
+    "synonyms": [
+      "猪肉",
+      "肉类"
+    ],
+    "disambiguationHints": {},
+    "usageCount": 0,
+    "manualOrder": 2
   }
 ]

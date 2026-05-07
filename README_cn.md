@@ -224,6 +224,7 @@ npm run deploy:aliyun -- \
 **研究 / 背景文档**（仅供参考，以上决策文件为准）：
 
 - [产品需求文档](docs/prd.md)
+- [项目逻辑树与知识图谱](docs/project-logic-tree-and-knowledge-map.md)
 
 ## 调试与工具页
 

@@ -53,7 +53,7 @@ describe('seed 数据完整性', () => {
 
   it('semanticDomain 只能是已知合法值', () => {
     const VALID_DOMAINS = new Set([
-      'emotions', 'medical', 'actions', 'food', 'objects',
+      'activities', 'emotions', 'medical', 'actions', 'food', 'objects',
       'people', 'places', 'hygiene', 'time', 'quickchat', 'repair',
     ])
     const invalid = seed

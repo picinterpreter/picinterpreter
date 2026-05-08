@@ -99,14 +99,14 @@ describe('seed 数据完整性', () => {
   })
 
   it('relatedTerms 若存在必须是数组', () => {
-    const bad = seed.filter(e => 'relatedTerms' in e && !Array.isArray((e as any).relatedTerms))
+    const bad = seed.filter(e => 'relatedTerms' in e && !Array.isArray((e as { relatedTerms?: unknown }).relatedTerms))
     expect(bad.map(e => e.id), 'relatedTerms 字段类型错误').toHaveLength(0)
   })
 
   it('relatedTerms 与 synonyms 不重叠（同一个词不能身兼两职）', () => {
     const violations: string[] = []
     for (const e of seed) {
-      const related: string[] = (e as any).relatedTerms ?? []
+      const related: string[] = ((e as { relatedTerms?: string[] }).relatedTerms) ?? []
       for (const term of related) {
         if (e.synonyms.includes(term))
           violations.push(`${e.id}: "${term}" 同时出现在 synonyms 和 relatedTerms`)

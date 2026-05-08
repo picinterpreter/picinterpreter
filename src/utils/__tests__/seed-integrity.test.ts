@@ -145,6 +145,27 @@ describe('seed 数据完整性', () => {
     expect(collisions, `descriptor 主标签被其他分类占用，会导致 exact 级平局：\n${collisions.join('\n')}`).toHaveLength(0)
   })
 
+  it('跨概念高风险 synonym 不得出现（回归）', () => {
+    // 每条规则记录：为什么这个词不该出现在这个条目里
+    const BANNED: Record<string, string[]> = {
+      o_shoes:    ['脚踝'],  // 脚踝=身体部位，不是鞋
+      o_charger:  ['充电'],  // 充电=动作，充电器=物品
+      pl_room:    ['房子'],  // 房子=建筑整体，房间=其中一个空间
+      hy_shampoo: ['洗头'],  // 洗头=动作，洗发水=物品
+    }
+    const violations: string[] = []
+    for (const entry of seed) {
+      const banned = BANNED[entry.id]
+      if (!banned) continue
+      const all = [...(entry.labels?.zh ?? []), ...(entry.synonyms ?? [])]
+      for (const term of banned) {
+        if (all.includes(term))
+          violations.push(`${entry.id} 不应含"${term}"（跨概念 synonym）`)
+      }
+    }
+    expect(violations, violations.join('\n')).toHaveLength(0)
+  })
+
   it('每个 id 唯一', () => {
     const counts = new Map<string, number>()
     for (const e of seed) counts.set(e.id, (counts.get(e.id) ?? 0) + 1)

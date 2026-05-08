@@ -157,6 +157,7 @@ The MVP needs both automated regression checks and real-device acceptance checks
 - [#30 Support importing exported picture libraries from CBoard and other AAC tools](https://github.com/picinterpreter/picinterpreter/issues/30)
 - [Pictogram metadata implementation task package](pictogram-metadata-implementation-task-package.md) — rationale and task overview
 - [Pictogram metadata dev checklist](pictogram-metadata-dev-checklist.md) — **executable: exact tables, fields, issue titles, done criteria**
+- [Seed 词条策展指南](seed-curation-guide.md) — **操作手册：往 seed 加词时 synonyms / relatedTerms 该放什么，测试护栏说明**
 
 **Intent**
 

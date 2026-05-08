@@ -233,4 +233,10 @@ So the practical answer is:
 
 ---
 
-*Last updated: 2026-05-06*
+## See Also
+
+- [Seed 词条策展指南](seed-curation-guide.md) — 操作手册：往 seed 里加词时 `synonyms` / `relatedTerms` / `excludedMeanings` 各该放什么，以及现有的测试护栏说明
+
+---
+
+*Last updated: 2026-05-08*

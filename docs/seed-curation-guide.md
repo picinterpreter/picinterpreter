@@ -41,7 +41,9 @@
 - 情绪词放进相近但不同的情绪条目（`"难过"` → `p_sad.relatedTerms`）
 - 上位概念（`"房间"` → 可以放进 `p_bedroom.relatedTerms`，因为用户说"房间"时更可能是指 `pl_room`）
 
-> `relatedTerms` 目前只做标注，不影响任何运行时行为。
+> **`relatedTerms` 当前不参与 matcher 评分、不影响排序、不触发任何 seed 回归测试以外的运行时逻辑。**
+> 它只是数据层的语义标注，Phase 2 做搜索建议或关联推荐时再接入。
+> 往 `relatedTerms` 写词不会改变任何线上行为。
 
 ### `disambiguationHints.excludedMeanings`（预留，尚未实现）
 

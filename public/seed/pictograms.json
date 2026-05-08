@@ -10,9 +10,11 @@
         "same"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "repair",
     "synonyms": [],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "repair"
+    },
     "usageCount": 0
   },
   {
@@ -26,12 +28,14 @@
         "no"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [
       "没",
       "否"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -45,11 +49,13 @@
         "different"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "repair",
     "synonyms": [
       "不同"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "repair"
+    },
     "usageCount": 0
   },
   {
@@ -64,11 +70,13 @@
         "not okay"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [
       "不能"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -83,11 +91,13 @@
         "not okay"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [
       "不行"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -101,9 +111,11 @@
         "wrong"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "repair",
     "synonyms": [],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "repair"
+    },
     "usageCount": 0
   },
   {
@@ -136,9 +148,11 @@
         "not this"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "repair",
     "synonyms": [],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "repair"
+    },
     "usageCount": 0
   },
   {
@@ -152,13 +166,15 @@
         "dont want"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [
       "不想",
       "不需要",
       "不用"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -172,9 +188,11 @@
         "why"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -188,9 +206,11 @@
         "what"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -205,12 +225,14 @@
         "she"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [
       "他",
       "她"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -224,11 +246,13 @@
         "you"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [
       "您"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -242,12 +266,14 @@
         "stop"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [
       "停",
       "停下"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -261,11 +287,13 @@
         "again"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [
       "再一次"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -297,9 +325,11 @@
         "write it down"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "repair",
     "synonyms": [],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "repair"
+    },
     "usageCount": 0
   },
   {
@@ -336,9 +366,11 @@
         "can"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -352,12 +384,14 @@
         "and"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [
       "跟",
       "与"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -371,9 +405,11 @@
         "where"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -387,14 +423,16 @@
         "good"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [
       "行",
       "嗯",
       "好的",
       "对"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -409,13 +447,15 @@
         "done"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [
       "结束",
       "好了",
       "完了"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -461,12 +501,14 @@
         "I"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [
       "自己",
       "本人"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -644,9 +686,11 @@
         "point to it"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "repair",
     "synonyms": [],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "repair"
+    },
     "usageCount": 0
   },
   {
@@ -660,11 +704,13 @@
         "yes"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [
       "对"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -678,12 +724,14 @@
         "more"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [
       "很多",
       "多一点"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -697,12 +745,14 @@
         "yes"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [
       "对",
       "有的"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -716,9 +766,11 @@
         "show choices"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "repair",
     "synonyms": [],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "repair"
+    },
     "usageCount": 0
   },
   {
@@ -796,9 +848,11 @@
         "who"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -831,9 +885,11 @@
         "this"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -847,9 +903,11 @@
         "that"
       ]
     },
-    "categoryId": "quickchat",
+    "categoryId": "actions",
     "synonyms": [],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    },
     "usageCount": 0
   },
   {
@@ -882,12 +940,14 @@
         "rest"
       ]
     },
-    "categoryId": "actions",
+    "categoryId": "activities",
     "synonyms": [
       "歇",
       "歇歇"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "activities"
+    },
     "usageCount": 0
   },
   {
@@ -938,11 +998,13 @@
         "brush teeth"
       ]
     },
-    "categoryId": "actions",
+    "categoryId": "daily",
     "synonyms": [
       "刷"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "daily"
+    },
     "usageCount": 0
   },
   {
@@ -1036,9 +1098,11 @@
       ],
       "en": []
     },
-    "categoryId": "actions",
+    "categoryId": "food",
     "synonyms": [],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "food"
+    },
     "usageCount": 0
   },
   {
@@ -1050,9 +1114,11 @@
       ],
       "en": []
     },
-    "categoryId": "actions",
+    "categoryId": "food",
     "synonyms": [],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "food"
+    },
     "usageCount": 0
   },
   {
@@ -1201,11 +1267,13 @@
         "wash hands"
       ]
     },
-    "categoryId": "actions",
+    "categoryId": "daily",
     "synonyms": [
       "洗"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "daily"
+    },
     "usageCount": 0
   },
   {
@@ -1256,12 +1324,14 @@
         "sleep"
       ]
     },
-    "categoryId": "actions",
+    "categoryId": "activities",
     "synonyms": [
       "睡",
       "困"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "activities"
+    },
     "usageCount": 0
   },
   {

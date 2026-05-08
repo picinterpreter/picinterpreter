@@ -6,7 +6,7 @@ import { AuthSettingsSection } from '@/components/Settings/AuthSettingsSection'
 import { ONBOARDING_STORAGE_KEY } from '@/components/Onboarding/OnboardingModal'
 import { LineIcon } from '@/components/ui/LineIcon'
 import { CategoryIcon } from '@/components/CategoryIcon/CategoryIcon'
-import { db } from '@/db'
+import { db, forceReseed } from '@/db'
 import { movePictogramManualOrder, sortPictogramsForDisplay } from '@/utils/pictogram-order'
 
 interface AIBackendStatus {
@@ -577,17 +577,20 @@ export function SettingsDrawer() {
 
           <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
             <h3 className="text-base font-semibold text-slate-800 mb-3">关于</h3>
+            <div className="flex flex-col gap-2">
               <button
                 onClick={() => {
                   localStorage.removeItem(ONBOARDING_STORAGE_KEY)
                   setShowSettings(false)
                   setShowOnboarding(true)
                 }}
-              className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl border border-slate-200 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-            >
-              <LineIcon name="refresh" className="h-4 w-4" />
-              重看使用引导
-            </button>
+                className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl border border-slate-200 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+              >
+                <LineIcon name="refresh" className="h-4 w-4" />
+                重看使用引导
+              </button>
+              <ReseedButton />
+            </div>
           </section>
         </div>
 
@@ -602,5 +605,39 @@ export function SettingsDrawer() {
         </div>
       </div>
     </div>
+  )
+}
+
+function ReseedButton() {
+  const [state, setState] = useState<'idle' | 'loading' | 'done' | 'error'>('idle')
+
+  async function handleClick() {
+    if (state === 'loading') return
+    setState('loading')
+    try {
+      await forceReseed()
+      setState('done')
+      setTimeout(() => setState('idle'), 3000)
+    } catch {
+      setState('error')
+      setTimeout(() => setState('idle'), 3000)
+    }
+  }
+
+  const label =
+    state === 'loading' ? '重新加载中…' :
+    state === 'done'    ? '词库已重置 ✓' :
+    state === 'error'   ? '加载失败，请重试' :
+    '重置默认词库'
+
+  return (
+    <button
+      onClick={handleClick}
+      disabled={state === 'loading'}
+      className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl border border-red-200 py-2.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
+    >
+      <LineIcon name={state === 'done' ? 'check' : 'refresh'} className="h-4 w-4" />
+      {label}
+    </button>
   )
 }

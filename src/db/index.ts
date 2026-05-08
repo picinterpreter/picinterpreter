@@ -67,25 +67,26 @@ class TuYuJiaDB extends Dexie {
 export const db = new TuYuJiaDB()
 
 /**
- * 种子数据版本号。
- * 每次更新 categories.json / pictograms.json 时递增，
- * 触发自动清空并重新导入种子数据。
- * 注意：用户自己的 expressions / savedPhrases 不受影响。
+ * Seed 版本管理：基于内容哈希，不需要手动 bump 版本号。
+ *
+ * 启动时先拉取 /seed/manifest.json（轻量），比对其中的 seedHash
+ * 与 localStorage 里存储的上次哈希。不一致时重新导入全量 seed。
+ *
+ * manifest.json 由 `scripts/update-seed-manifest.mjs` 生成，
+ * 在 prebuild / predev 时自动执行，任何 seed 文件改动都会产生新哈希。
  */
-const SEED_VERSION = 11
-const SEED_VERSION_KEY = 'tuyujia_seed_version'
+const SEED_HASH_KEY = 'tuyujia_seed_hash'
 
-/** 检查并导入种子数据（首次加载或版本升级时执行） */
+/** 检查并导入种子数据（首次加载或 seed 内容变化时执行） */
 export async function ensureSeedData(): Promise<void> {
-  const stored = parseInt(localStorage.getItem(SEED_VERSION_KEY) ?? '0', 10)
-  const needsReseed = stored < SEED_VERSION
+  const manifestRes = await fetch('/seed/manifest.json')
+  if (!manifestRes.ok) throw new Error('无法加载 seed manifest')
+  const manifest = await manifestRes.json() as { seedHash: string }
 
-  if (!needsReseed) {
-    // 版本一致，无需重新导入
-    return
-  }
+  const storedHash = localStorage.getItem(SEED_HASH_KEY)
+  if (storedHash === manifest.seedHash) return   // seed 没变，跳过
 
-  // 版本落后 → 清空种子表并重新导入（保留用户数据）
+  // seed 内容有变化 → 清空并重新导入（保留用户数据）
   const [categoriesRes, pictogramsRes] = await Promise.all([
     fetch('/seed/categories.json'),
     fetch('/seed/pictograms.json'),
@@ -145,10 +146,19 @@ export async function ensureSeedData(): Promise<void> {
       await db.pictograms.bulkAdd(mergedPictograms)
     })
   } catch (err) {
-    // 事务失败时清除版本号，确保下次刷新能重试
-    localStorage.removeItem(SEED_VERSION_KEY)
+    // 事务失败时清除哈希，确保下次刷新能重试
+    localStorage.removeItem(SEED_HASH_KEY)
     throw err
   }
 
-  localStorage.setItem(SEED_VERSION_KEY, String(SEED_VERSION))
+  localStorage.setItem(SEED_HASH_KEY, manifest.seedHash)
+}
+
+/**
+ * 强制清空并重新导入 seed（供设置页"重置默认词库"按钮使用）。
+ * 清除本地哈希后直接调用 ensureSeedData()。
+ */
+export async function forceReseed(): Promise<void> {
+  localStorage.removeItem(SEED_HASH_KEY)
+  await ensureSeedData()
 }

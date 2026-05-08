@@ -12,7 +12,8 @@ export function CategoryTabs() {
   )
   const hiddenCategoryIds = useSettingsStore((s) => s.hiddenCategoryIds)
   // Visible categories: filter out ones the caregiver has hidden
-  const categories = allCategories?.filter((c) => !hiddenCategoryIds.includes(c.id))
+  // 同时过滤 seed 隐藏（如 home 板）和用户隐藏
+  const categories = allCategories?.filter((c) => !c.hidden && !hiddenCategoryIds.includes(c.id))
 
   const activeCategoryId = useAppStore((s) => s.activeCategoryId)
   const setActiveCategory = useAppStore((s) => s.setActiveCategory)

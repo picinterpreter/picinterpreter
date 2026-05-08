@@ -11,9 +11,11 @@
 
 import { describe, it, expect } from 'vitest'
 import seedJson from '../../../public/seed/pictograms.json'
-import type { PictogramEntry } from '@/types'
+import categoriesJson from '../../../public/seed/categories.json'
+import type { BoardTile, Category, PictogramEntry } from '@/types'
 
 const seed = seedJson as unknown as PictogramEntry[]
+const categories = categoriesJson as unknown as Category[]
 
 // p_toilet 的 categoryId="quickchat"（UI 板位）和 semanticDomain="hygiene"（语义域）
 // 是有意区分的，不视为错误。同类情况在此白名单里豁免。
@@ -118,6 +120,57 @@ describe('seed 数据完整性', () => {
   it('usageCount 是数字', () => {
     const bad = seed.filter(e => typeof e.usageCount !== 'number')
     expect(bad.map(e => e.id), '以下条目缺少 usageCount').toHaveLength(0)
+  })
+
+  it('category tileIds 若存在必须指向真实 pictogram', () => {
+    const pictogramIds = new Set(seed.map(e => e.id))
+    const missing: string[] = []
+    for (const category of categories) {
+      for (const tileId of category.tileIds ?? []) {
+        if (!pictogramIds.has(tileId)) missing.push(`${category.id}.tileIds -> ${tileId}`)
+      }
+    }
+    expect(missing, `以下 tileIds 指向不存在的 pictogram：\n${missing.join('\n')}`).toHaveLength(0)
+  })
+
+  it('category tiles 若存在必须类型合法并指向真实记录', () => {
+    const pictogramIds = new Set(seed.map(e => e.id))
+    const categoryIds = new Set(categories.map(e => e.id))
+    const errors: string[] = []
+
+    function isBoardTile(tile: unknown): tile is BoardTile {
+      if (!tile || typeof tile !== 'object') return false
+      const candidate = tile as { type?: unknown; id?: unknown; labelOverride?: unknown }
+      if (typeof candidate.type !== 'string' || typeof candidate.id !== 'string') return false
+      if ('labelOverride' in candidate && typeof candidate.labelOverride !== 'string') return false
+      return ['pictogram', 'category', 'savedPhrases'].includes(candidate.type)
+    }
+
+    for (const category of categories) {
+      const seen = new Set<string>()
+      for (const [index, tile] of ((category as { tiles?: unknown[] }).tiles ?? []).entries()) {
+        if (!isBoardTile(tile)) {
+          errors.push(`${category.id}.tiles[${index}] 格式非法`)
+          continue
+        }
+
+        const key = `${tile.type}:${tile.id}`
+        if (seen.has(key)) errors.push(`${category.id}.tiles 重复：${key}`)
+        seen.add(key)
+
+        if (tile.type === 'pictogram' && !pictogramIds.has(tile.id)) {
+          errors.push(`${category.id}.tiles[${index}] pictogram 不存在：${tile.id}`)
+        }
+        if (tile.type === 'category' && !categoryIds.has(tile.id)) {
+          errors.push(`${category.id}.tiles[${index}] category 不存在：${tile.id}`)
+        }
+        if (tile.type === 'savedPhrases' && tile.id !== 'saved-phrases') {
+          errors.push(`${category.id}.tiles[${index}] savedPhrases id 非法：${tile.id}`)
+        }
+      }
+    }
+
+    expect(errors, errors.join('\n')).toHaveLength(0)
   })
 
   it('descriptors 单字主标签不与其他分类精确重叠（防止 exact 级 tie-break 导致不可达）', () => {

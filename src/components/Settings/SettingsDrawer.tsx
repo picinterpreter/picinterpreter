@@ -38,7 +38,11 @@ export function SettingsDrawer() {
   const [orderingCategoryId, setOrderingCategoryId] = useState('')
   const [reorderingId, setReorderingId] = useState<string | null>(null)
 
-  const allCategories = useLiveQuery(() => db.categories.orderBy('sortOrder').toArray())
+  // 过滤 hidden 板（如 home），它们由 seed 直接管理，不在用户设置面板里显示
+  const allCategories = useLiveQuery(async () => {
+    const all = await db.categories.orderBy('sortOrder').toArray()
+    return all.filter((c) => !c.hidden)
+  })
   const orderingPictograms = useLiveQuery(async () => {
     if (!orderingCategoryId) return []
     const items = await db.pictograms.where('categoryIds').equals(orderingCategoryId).toArray()

@@ -28,9 +28,11 @@ export function CategoryLinksDrawer() {
   const [saving, setSaving] = useState(false)
   const [cycleWarning, setCycleWarning] = useState<string | null>(null)
 
-  const categories = useLiveQuery(() =>
-    db.categories.orderBy('sortOrder').toArray(),
-  )
+  // 过滤 hidden 板（如 home），用户不应在此页面编辑其链接
+  const categories = useLiveQuery(async () => {
+    const all = await db.categories.orderBy('sortOrder').toArray()
+    return all.filter((c) => !c.hidden)
+  })
 
   const editingCategory = categories?.find((c) => c.id === editingId)
   const linkedIds: string[] = editingCategory?.linkedCategoryIds ?? []

@@ -7,7 +7,7 @@ import { generatePlaceholderSvg, resolveImageSrc } from '@/utils/generate-placeh
 import { sortPictogramsForDisplay } from '@/utils/pictogram-order'
 import { LineIcon } from '@/components/ui/LineIcon'
 import { CategoryIcon } from '@/components/CategoryIcon/CategoryIcon'
-import type { Category, PictogramEntry } from '@/types'
+import type { BoardTile, Category, PictogramEntry } from '@/types'
 
 // Tailwind 类必须是完整字符串，不可动态拼接
 const GRID_CLASS: Record<GridCols, string> = {
@@ -61,12 +61,18 @@ const GRID_TONE_CLASS: Record<string, string> = {
   objects:   'bg-fuchsia-50',
 }
 
-function asRootAnswer(pictogram: PictogramEntry, label: string): PictogramEntry {
+type GridItem =
+  | { type: 'pictogram'; key: string; pictogram: PictogramEntry }
+  | { type: 'category'; key: string; category: Category }
+  | { type: 'savedPhrases'; key: string; label: string }
+
+function withLabelOverride(pictogram: PictogramEntry, labelOverride?: string): PictogramEntry {
+  if (!labelOverride) return pictogram
   return {
     ...pictogram,
     labels: {
       ...pictogram.labels,
-      zh: [label, ...pictogram.labels.zh.filter((item) => item !== label)],
+      zh: [labelOverride, ...pictogram.labels.zh.filter((item) => item !== labelOverride)],
     },
   }
 }
@@ -88,54 +94,107 @@ export function PictogramGrid() {
   const allCategories = useLiveQuery(() =>
     db.categories.orderBy('sortOrder').toArray(),
   )
-  const categories = allCategories?.filter((c) => !hiddenCategoryIds.includes(c.id)) ?? []
-  const activeCategory = categories.find((c) => c.id === activeCategoryId)
+  const homeCategory = allCategories?.find((c) => c.id === 'home')
   const isRoot = activeCategoryId === 'root'
+  const activeCategory = isRoot
+    ? homeCategory
+    : allCategories?.find((c) => c.id === activeCategoryId)
 
-  const childCategories = isRoot
-    ? categories
-    : (activeCategory?.linkedCategoryIds ?? [])
-      .map((id) => categories.find((c) => c.id === id))
-      .filter((c): c is Category => Boolean(c))
-
-  const pictograms = useLiveQuery(async (): Promise<PictogramEntry[]> => {
-    if (activeCategoryId === 'root') {
-      const [yesById, noById] = await db.pictograms.bulkGet(['p_yes', 'p_no'])
-      const quickItems = !yesById || !noById
-        ? await db.pictograms.where('categoryIds').equals('quickchat').toArray()
-        : []
-      const yes = yesById ?? quickItems.find((p) =>
-        p.labels.zh.includes('是') || p.synonyms.includes('是') || p.labels.en.includes('yes'),
-      )
-      const no = noById ?? quickItems.find((p) =>
-        p.labels.zh.includes('不是') || p.synonyms.includes('不是') || p.labels.en.includes('no'),
-      )
-
-      return [
-        yes ? asRootAnswer(yes, '是') : null,
-        no ? asRootAnswer(no, '不是') : null,
-      ].filter((p): p is PictogramEntry => p !== null)
-    }
-
+  const gridItems = useLiveQuery(async (): Promise<GridItem[]> => {
     // 最近使用：按上次使用时间倒序
     if (activeCategoryId === 'recent') {
       const used = await db.pictograms.filter((p) => (p.lastUsedAt ?? 0) > 0).toArray()
       return used
         .sort((a, b) => (b.lastUsedAt ?? 0) - (a.lastUsedAt ?? 0))
         .slice(0, 24)
+        .map((p) => ({ type: 'pictogram', key: `pictogram:${p.id}`, pictogram: p }))
+    }
+
+    // root 状态映射到 home 板（实际上是 hidden 的 'home' category）
+    const targetId = activeCategoryId === 'root' ? 'home' : activeCategoryId
+
+    const visibleCategory = (category: Category | undefined): category is Category =>
+      Boolean(category && !hiddenCategoryIds.includes(category.id))
+
+    async function resolveTiles(tiles: BoardTile[]): Promise<GridItem[]> {
+      const pictogramIds = tiles.filter((tile) => tile.type === 'pictogram').map((tile) => tile.id)
+      const categoryIds = tiles.filter((tile) => tile.type === 'category').map((tile) => tile.id)
+      const [pictogramsByIndex, categoriesByIndex] = await Promise.all([
+        db.pictograms.bulkGet(pictogramIds),
+        db.categories.bulkGet(categoryIds),
+      ])
+
+      const pictograms = new Map<string, PictogramEntry>()
+      pictogramIds.forEach((id, index) => {
+        const pictogram = pictogramsByIndex[index]
+        if (pictogram) pictograms.set(id, pictogram)
+      })
+
+      const categories = new Map<string, Category>()
+      categoryIds.forEach((id, index) => {
+        const category = categoriesByIndex[index]
+        if (visibleCategory(category)) categories.set(id, category)
+      })
+
+      return tiles.flatMap((tile, index): GridItem[] => {
+        if (tile.type === 'pictogram') {
+          const pictogram = pictograms.get(tile.id)
+          return pictogram
+            ? [{
+                type: 'pictogram',
+                key: `pictogram:${tile.id}:${index}`,
+                pictogram: withLabelOverride(pictogram, tile.labelOverride),
+              }]
+            : []
+        }
+
+        if (tile.type === 'category') {
+          const category = categories.get(tile.id)
+          return category
+            ? [{
+                type: 'category',
+                key: `category:${tile.id}:${index}`,
+                category: tile.labelOverride ? { ...category, name: tile.labelOverride } : category,
+              }]
+            : []
+        }
+
+        return [{
+          type: 'savedPhrases',
+          key: `savedPhrases:${tile.id}:${index}`,
+          label: tile.labelOverride ?? '常用',
+        }]
+      })
     }
 
     // 显式策展优先：Category.tileIds 存在则按列表顺序加载；
-    // 否则 fallback 到 categoryIds 多值索引查询（保持原有行为）。
-    const cat = await db.categories.get(activeCategoryId)
-    if (cat?.tileIds && cat.tileIds.length > 0) {
-      const fetched = await db.pictograms.bulkGet(cat.tileIds)
-      return fetched.filter((p): p is PictogramEntry => Boolean(p))
+    // 否则 fallback 到 categoryIds 多值索引查询。
+    const cat = await db.categories.get(targetId)
+    if (cat?.tiles && cat.tiles.length > 0) {
+      return resolveTiles(cat.tiles)
     }
 
-    const ownItems = await db.pictograms.where('categoryIds').equals(activeCategoryId).toArray()
-    return sortPictogramsForDisplay(ownItems, pictogramSortMode)
-  }, [activeCategoryId, pictogramSortMode])
+    if (cat?.tileIds && cat.tileIds.length > 0) {
+      const fetched = await db.pictograms.bulkGet(cat.tileIds)
+      return fetched
+        .filter((p): p is PictogramEntry => Boolean(p))
+        .map((p) => ({ type: 'pictogram', key: `pictogram:${p.id}`, pictogram: p }))
+    }
+
+    const linkedCategoryIds = cat?.linkedCategoryIds ?? []
+    const linkedCategories = await db.categories.bulkGet(linkedCategoryIds)
+    const categoryItems: GridItem[] = linkedCategoryIds.flatMap((id, index) => {
+      const category = linkedCategories[index]
+      return visibleCategory(category)
+        ? [{ type: 'category', key: `category:${id}`, category }]
+        : []
+    })
+
+    const ownItems = await db.pictograms.where('categoryIds').equals(targetId).toArray()
+    const pictogramItems: GridItem[] = sortPictogramsForDisplay(ownItems, pictogramSortMode)
+      .map((p) => ({ type: 'pictogram', key: `pictogram:${p.id}`, pictogram: p }))
+    return [...categoryItems, ...pictogramItems]
+  }, [activeCategoryId, hiddenCategoryIds, pictogramSortMode])
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: 0 })
@@ -186,74 +245,56 @@ export function PictogramGrid() {
           {/* 图片网格 */}
           <div className="p-3 sm:p-4 lg:p-5">
             <div className={`grid ${GRID_CLASS[gridCols]} gap-3 lg:gap-4`}>
-              {isRoot && pictograms?.map((p) => (
-                <PictogramTile
-                  key={p.id}
-                  pictogram={p}
-                  color="#d97706"
-                  cardTone="bg-yellow-100 border-yellow-200 text-yellow-950"
-                  gridCols={gridCols}
-                  imageClassName={ROOT_MEDIA_SLOT_CLASS}
-                  minHeightClassName={ROOT_TILE_HEIGHT_CLASS}
-                  labelClassName="text-xl sm:text-2xl"
-                  onSelect={() => handleSelect(p)}
-                />
-              ))}
-
-              {isRoot && (
-                <ActionTile
-                  icon={<LineIcon name="star" className="size-12 sm:size-14" />}
-                  label="常用"
-                  minHeightClassName={ROOT_TILE_HEIGHT_CLASS}
-                  onClick={() => setShowSavedPhrases(true)}
-                />
-              )}
-
-              {!isRoot && (
-                <>
-                  {childCategories.map((cat) => (
-                    <FolderTile
-                      key={cat.id}
-                      category={cat}
-                      minHeightClassName={useCompactFolderTiles ? ROOT_TILE_HEIGHT_CLASS : undefined}
-                      isCompactTile={useCompactFolderTiles}
-                      onOpen={() => openCategory(cat.id)}
-                    />
-                  ))}
-
-                  {pictograms?.map((p) => (
+              {gridItems?.map((item) => {
+                if (item.type === 'pictogram') {
+                  return (
                     <PictogramTile
-                      key={p.id}
-                      pictogram={p}
-                      color={color}
+                      key={item.key}
+                      pictogram={item.pictogram}
+                      color={isRoot ? '#d97706' : color}
                       cardTone="bg-yellow-100 border-yellow-200 text-yellow-950"
                       gridCols={gridCols}
-                      onSelect={() => handleSelect(p)}
+                      imageClassName={isRoot ? ROOT_MEDIA_SLOT_CLASS : undefined}
+                      minHeightClassName={isRoot ? ROOT_TILE_HEIGHT_CLASS : undefined}
+                      labelClassName={isRoot ? 'text-xl sm:text-2xl' : undefined}
+                      onSelect={() => handleSelect(item.pictogram)}
                     />
-                  ))}
-                </>
-              )}
+                  )
+                }
 
-              {isRoot && childCategories.map((cat) => (
-                <FolderTile
-                  key={cat.id}
-                  category={cat}
-                  minHeightClassName={ROOT_TILE_HEIGHT_CLASS}
-                  isCompactTile
-                  onOpen={() => openCategory(cat.id)}
-                />
-              ))}
+                if (item.type === 'category') {
+                  return (
+                    <FolderTile
+                      key={item.key}
+                      category={item.category}
+                      minHeightClassName={useCompactFolderTiles || isRoot ? ROOT_TILE_HEIGHT_CLASS : undefined}
+                      isCompactTile={useCompactFolderTiles || isRoot}
+                      onOpen={() => openCategory(item.category.id)}
+                    />
+                  )
+                }
+
+                return (
+                  <ActionTile
+                    key={item.key}
+                    icon={<LineIcon name="star" className="size-12 sm:size-14" />}
+                    label={item.label}
+                    minHeightClassName={isRoot ? ROOT_TILE_HEIGHT_CLASS : undefined}
+                    onClick={() => setShowSavedPhrases(true)}
+                  />
+                )
+              })}
 
             </div>
 
             {/* 空状态 */}
-            {pictograms?.length === 0 && childCategories.length === 0 && activeCategoryId === 'recent' && (
+            {gridItems?.length === 0 && activeCategoryId === 'recent' && (
               <div className="text-center text-slate-400 mt-12 space-y-2">
                 <LineIcon name="clock" className="mx-auto h-10 w-10" />
                 <p className="text-lg">暂无</p>
               </div>
             )}
-            {pictograms?.length === 0 && childCategories.length === 0 && activeCategoryId !== 'recent' && (
+            {gridItems?.length === 0 && activeCategoryId !== 'recent' && (
               <div className="text-center text-slate-400 text-lg mt-12">
                 暂无
               </div>

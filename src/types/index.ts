@@ -1,5 +1,10 @@
 // ===== 图库相关 =====
 
+export type BoardTile =
+  | { type: 'pictogram'; id: string; labelOverride?: string }
+  | { type: 'category'; id: string; labelOverride?: string }
+  | { type: 'savedPhrases'; id: 'saved-phrases'; labelOverride?: string }
+
 /** 图片分类（即"板/board"，patient 端的展示单元） */
 export interface Category {
   id: string
@@ -21,6 +26,18 @@ export interface Category {
    * 等价 cboard 的 Board.tiles[].pictogramId 序列。
    */
   tileIds?: string[]
+  /**
+   * 显式策展的混排格子列表（可选）。
+   * 支持卡片、板块入口、常用表达入口在同一个板内任意排序。
+   * 有值时优先于 tileIds。
+   */
+  tiles?: BoardTile[]
+  /**
+   * 是否在 CategoryTabs / 全局导航中隐藏该板。
+   * 隐藏的板仍可通过 linkedCategoryIds 或 root 状态等内部跳转访问。
+   * 等价 cboard 的 board.hidden。
+   */
+  hidden?: boolean
 }
 
 /** 图片条目 */

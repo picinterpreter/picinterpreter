@@ -4809,7 +4809,6 @@
       "semanticDomain": "descriptors"
     },
     "synonyms": [
-      "很多",
       "许多",
       "多一些"
     ],
@@ -4880,7 +4879,6 @@
       "semanticDomain": "descriptors"
     },
     "synonyms": [
-      "慢一点",
       "更慢",
       "速度慢"
     ],
@@ -5023,7 +5021,6 @@
     "labels": {
       "zh": [
         "外",
-        "外面",
         "外边"
       ],
       "en": [
@@ -5038,7 +5035,6 @@
     },
     "synonyms": [
       "在外面",
-      "外边",
       "外部"
     ],
     "usageCount": 0
@@ -5047,8 +5043,7 @@
     "id": "d_left",
     "labels": {
       "zh": [
-        "左",
-        "左边"
+        "左"
       ],
       "en": [
         "left"
@@ -5061,7 +5056,6 @@
       "semanticDomain": "descriptors"
     },
     "synonyms": [
-      "左边",
       "往左",
       "向左"
     ],
@@ -5071,8 +5065,7 @@
     "id": "d_right",
     "labels": {
       "zh": [
-        "右",
-        "右边"
+        "右"
       ],
       "en": [
         "right"
@@ -5085,7 +5078,6 @@
       "semanticDomain": "descriptors"
     },
     "synonyms": [
-      "右边",
       "往右",
       "向右"
     ],

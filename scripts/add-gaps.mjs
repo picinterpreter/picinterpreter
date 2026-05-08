@@ -29,7 +29,7 @@ const NEW_ENTRIES = [
   {
     id: 'o_shoes',
     labels: { zh: ['鞋'], en: ['shoes'] },
-    synonyms: ['鞋子', '脚踝'],
+    synonyms: ['鞋子'],
     imageUrl: arasaac(2622),
     categoryId: 'objects',
     manualOrder: 5,
@@ -90,7 +90,7 @@ const NEW_ENTRIES = [
   {
     id: 'o_charger',
     labels: { zh: ['充电器'], en: ['charger'] },
-    synonyms: ['充电线', '充电', '电源'],
+    synonyms: ['充电线', '电源'],
     imageUrl: arasaac(27651),
     categoryId: 'objects',
     manualOrder: 11,
@@ -143,7 +143,7 @@ const NEW_ENTRIES = [
   {
     id: 'pl_room',
     labels: { zh: ['房间'], en: ['room'] },
-    synonyms: ['房子', '房里'],
+    synonyms: ['房里'],
     imageUrl: arasaac(32234),
     categoryId: 'places',
     manualOrder: 7,
@@ -192,17 +192,17 @@ const NEW_ENTRIES = [
     categoryId: 'daily',
     manualOrder: 15,
     usageCount: 0,
-    disambiguationHints: { semanticDomain: 'hygiene' },
+    disambiguationHints: { semanticDomain: 'daily' },
   },
   {
     id: 'hy_shampoo',
     labels: { zh: ['洗发水'], en: ['shampoo'] },
-    synonyms: ['洗头', '洗发液'],
+    synonyms: ['洗发液'],
     imageUrl: arasaac(2699),
     categoryId: 'daily',
     manualOrder: 16,
     usageCount: 0,
-    disambiguationHints: { semanticDomain: 'hygiene' },
+    disambiguationHints: { semanticDomain: 'daily' },
   },
   {
     id: 'hy_wet',
@@ -212,7 +212,7 @@ const NEW_ENTRIES = [
     categoryId: 'daily',
     manualOrder: 17,
     usageCount: 0,
-    disambiguationHints: { semanticDomain: 'hygiene' },
+    disambiguationHints: { semanticDomain: 'daily' },
   },
   {
     id: 'hy_dirty',
@@ -222,7 +222,7 @@ const NEW_ENTRIES = [
     categoryId: 'daily',
     manualOrder: 18,
     usageCount: 0,
-    disambiguationHints: { semanticDomain: 'hygiene' },
+    disambiguationHints: { semanticDomain: 'daily' },
   },
 
   // --- actions ---

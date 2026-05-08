@@ -4742,5 +4742,353 @@
     "disambiguationHints": {},
     "usageCount": 0,
     "manualOrder": 2
+  },
+  {
+    "id": "d_big",
+    "labels": {
+      "zh": [
+        "大"
+      ],
+      "en": [
+        "big",
+        "large"
+      ]
+    },
+    "imageUrl": "https://static.arasaac.org/pictograms/4658/4658_300.png",
+    "categoryId": "descriptors",
+    "manualOrder": 0,
+    "disambiguationHints": {
+      "semanticDomain": "descriptors"
+    },
+    "synonyms": [
+      "大的",
+      "很大",
+      "较大"
+    ],
+    "usageCount": 0
+  },
+  {
+    "id": "d_small",
+    "labels": {
+      "zh": [
+        "小"
+      ],
+      "en": [
+        "small",
+        "little"
+      ]
+    },
+    "imageUrl": "https://static.arasaac.org/pictograms/4716/4716_300.png",
+    "categoryId": "descriptors",
+    "manualOrder": 1,
+    "disambiguationHints": {
+      "semanticDomain": "descriptors"
+    },
+    "synonyms": [
+      "小的",
+      "很小",
+      "较小"
+    ],
+    "usageCount": 0
+  },
+  {
+    "id": "d_many",
+    "labels": {
+      "zh": [
+        "多"
+      ],
+      "en": [
+        "many",
+        "a lot"
+      ]
+    },
+    "imageUrl": "https://static.arasaac.org/pictograms/7168/7168_300.png",
+    "categoryId": "descriptors",
+    "manualOrder": 2,
+    "disambiguationHints": {
+      "semanticDomain": "descriptors"
+    },
+    "synonyms": [
+      "很多",
+      "许多",
+      "多一些"
+    ],
+    "usageCount": 0
+  },
+  {
+    "id": "d_few",
+    "labels": {
+      "zh": [
+        "少"
+      ],
+      "en": [
+        "few",
+        "little"
+      ]
+    },
+    "imageUrl": "https://static.arasaac.org/pictograms/7209/7209_300.png",
+    "categoryId": "descriptors",
+    "manualOrder": 3,
+    "disambiguationHints": {
+      "semanticDomain": "descriptors"
+    },
+    "synonyms": [
+      "很少",
+      "少一些",
+      "不多"
+    ],
+    "usageCount": 0
+  },
+  {
+    "id": "d_fast",
+    "labels": {
+      "zh": [
+        "快"
+      ],
+      "en": [
+        "fast",
+        "quick"
+      ]
+    },
+    "imageUrl": "https://static.arasaac.org/pictograms/5306/5306_300.png",
+    "categoryId": "descriptors",
+    "manualOrder": 4,
+    "disambiguationHints": {
+      "semanticDomain": "descriptors"
+    },
+    "synonyms": [
+      "快一点",
+      "更快",
+      "速度快"
+    ],
+    "usageCount": 0
+  },
+  {
+    "id": "d_slow",
+    "labels": {
+      "zh": [
+        "慢"
+      ],
+      "en": [
+        "slow"
+      ]
+    },
+    "imageUrl": "https://static.arasaac.org/pictograms/4676/4676_300.png",
+    "categoryId": "descriptors",
+    "manualOrder": 5,
+    "disambiguationHints": {
+      "semanticDomain": "descriptors"
+    },
+    "synonyms": [
+      "慢一点",
+      "更慢",
+      "速度慢"
+    ],
+    "usageCount": 0
+  },
+  {
+    "id": "d_above",
+    "labels": {
+      "zh": [
+        "上",
+        "上面",
+        "上边"
+      ],
+      "en": [
+        "above",
+        "up",
+        "on top"
+      ]
+    },
+    "imageUrl": "https://static.arasaac.org/pictograms/5451/5451_300.png",
+    "categoryId": "descriptors",
+    "manualOrder": 6,
+    "disambiguationHints": {
+      "semanticDomain": "descriptors"
+    },
+    "synonyms": [
+      "在上面",
+      "上方",
+      "往上"
+    ],
+    "usageCount": 0
+  },
+  {
+    "id": "d_below",
+    "labels": {
+      "zh": [
+        "下",
+        "下面",
+        "下边"
+      ],
+      "en": [
+        "below",
+        "down",
+        "under"
+      ]
+    },
+    "imageUrl": "https://static.arasaac.org/pictograms/5355/5355_300.png",
+    "categoryId": "descriptors",
+    "manualOrder": 7,
+    "disambiguationHints": {
+      "semanticDomain": "descriptors"
+    },
+    "synonyms": [
+      "在下面",
+      "下方",
+      "往下"
+    ],
+    "usageCount": 0
+  },
+  {
+    "id": "d_front",
+    "labels": {
+      "zh": [
+        "前",
+        "前面",
+        "前边"
+      ],
+      "en": [
+        "front",
+        "in front"
+      ]
+    },
+    "imageUrl": "https://static.arasaac.org/pictograms/39779/39779_300.png",
+    "categoryId": "descriptors",
+    "manualOrder": 8,
+    "disambiguationHints": {
+      "semanticDomain": "descriptors"
+    },
+    "synonyms": [
+      "在前面",
+      "前方",
+      "往前"
+    ],
+    "usageCount": 0
+  },
+  {
+    "id": "d_behind",
+    "labels": {
+      "zh": [
+        "后",
+        "后面",
+        "后边"
+      ],
+      "en": [
+        "behind",
+        "back"
+      ]
+    },
+    "imageUrl": "https://static.arasaac.org/pictograms/5443/5443_300.png",
+    "categoryId": "descriptors",
+    "manualOrder": 9,
+    "disambiguationHints": {
+      "semanticDomain": "descriptors"
+    },
+    "synonyms": [
+      "在后面",
+      "后方",
+      "往后"
+    ],
+    "usageCount": 0
+  },
+  {
+    "id": "d_inside",
+    "labels": {
+      "zh": [
+        "里",
+        "里面",
+        "内"
+      ],
+      "en": [
+        "inside",
+        "within"
+      ]
+    },
+    "imageUrl": "https://static.arasaac.org/pictograms/5439/5439_300.png",
+    "categoryId": "descriptors",
+    "manualOrder": 10,
+    "disambiguationHints": {
+      "semanticDomain": "descriptors"
+    },
+    "synonyms": [
+      "在里面",
+      "里边",
+      "内部"
+    ],
+    "usageCount": 0
+  },
+  {
+    "id": "d_outside",
+    "labels": {
+      "zh": [
+        "外",
+        "外面",
+        "外边"
+      ],
+      "en": [
+        "outside"
+      ]
+    },
+    "imageUrl": "https://static.arasaac.org/pictograms/5475/5475_300.png",
+    "categoryId": "descriptors",
+    "manualOrder": 11,
+    "disambiguationHints": {
+      "semanticDomain": "descriptors"
+    },
+    "synonyms": [
+      "在外面",
+      "外边",
+      "外部"
+    ],
+    "usageCount": 0
+  },
+  {
+    "id": "d_left",
+    "labels": {
+      "zh": [
+        "左",
+        "左边"
+      ],
+      "en": [
+        "left"
+      ]
+    },
+    "imageUrl": "https://static.arasaac.org/pictograms/9203/9203_300.png",
+    "categoryId": "descriptors",
+    "manualOrder": 12,
+    "disambiguationHints": {
+      "semanticDomain": "descriptors"
+    },
+    "synonyms": [
+      "左边",
+      "往左",
+      "向左"
+    ],
+    "usageCount": 0
+  },
+  {
+    "id": "d_right",
+    "labels": {
+      "zh": [
+        "右",
+        "右边"
+      ],
+      "en": [
+        "right"
+      ]
+    },
+    "imageUrl": "https://static.arasaac.org/pictograms/4624/4624_300.png",
+    "categoryId": "descriptors",
+    "manualOrder": 13,
+    "disambiguationHints": {
+      "semanticDomain": "descriptors"
+    },
+    "synonyms": [
+      "右边",
+      "往右",
+      "向右"
+    ],
+    "usageCount": 0
   }
 ]

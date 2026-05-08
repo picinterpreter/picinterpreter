@@ -53,7 +53,7 @@ describe('seed 数据完整性', () => {
 
   it('semanticDomain 只能是已知合法值', () => {
     const VALID_DOMAINS = new Set([
-      'activities', 'emotions', 'medical', 'actions', 'food', 'objects',
+      'activities', 'descriptors', 'emotions', 'medical', 'actions', 'food', 'objects',
       'people', 'places', 'hygiene', 'time', 'quickchat', 'repair',
     ])
     const invalid = seed
@@ -91,6 +91,16 @@ describe('seed 数据完整性', () => {
       e => !Array.isArray(e.labels?.zh) || e.labels.zh.length === 0 || !e.labels.zh[0]
     )
     expect(bad.map(e => e.id), '缺少中文标签').toHaveLength(0)
+  })
+
+  it('synonyms 是数组（matcher 依赖 .includes()，缺失会崩溃）', () => {
+    const bad = seed.filter(e => !Array.isArray(e.synonyms))
+    expect(bad.map(e => e.id), '以下条目缺少 synonyms 数组').toHaveLength(0)
+  })
+
+  it('usageCount 是数字', () => {
+    const bad = seed.filter(e => typeof e.usageCount !== 'number')
+    expect(bad.map(e => e.id), '以下条目缺少 usageCount').toHaveLength(0)
   })
 
   it('每个 id 唯一', () => {

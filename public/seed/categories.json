@@ -82,5 +82,12 @@
     "icon": "https://static.arasaac.org/pictograms/25269/25269_300.png",
     "sortOrder": 12,
     "linkedCategoryIds": ["food", "activities", "daily"]
+  },
+  {
+    "id": "descriptors",
+    "name": "描述词",
+    "icon": "https://static.arasaac.org/pictograms/4658/4658_300.png",
+    "sortOrder": 13,
+    "linkedCategoryIds": ["actions", "repair"]
   }
 ]

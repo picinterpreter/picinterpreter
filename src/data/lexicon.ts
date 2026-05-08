@@ -18,7 +18,7 @@ export interface LexiconEntry {
   /** 同义词列表（中文，用于分词后匹配） */
   synonyms: string[]
   /** 分类 */
-  category: 'daily' | 'emotions' | 'actions' | 'objects' | 'people' | 'places' | 'food' | 'time' | 'medical'
+  category: 'daily' | 'emotions' | 'actions' | 'objects' | 'people' | 'places' | 'food' | 'time' | 'medical' | 'descriptors'
 }
 
 /**

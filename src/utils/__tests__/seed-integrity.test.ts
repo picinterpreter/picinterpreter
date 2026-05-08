@@ -103,6 +103,48 @@ describe('seed 数据完整性', () => {
     expect(bad.map(e => e.id), '以下条目缺少 usageCount').toHaveLength(0)
   })
 
+  it('descriptors 单字主标签不与其他分类精确重叠（防止 exact 级 tie-break 导致不可达）', () => {
+    // 这些 descriptor 条目的单字主标签是其唯一稳定入口，不能被其他分类占用
+    const DESCRIPTOR_EXCLUSIVE_LABELS: Record<string, string[]> = {
+      d_left:    ['左'],
+      d_right:   ['右'],
+      d_outside: ['外', '外边'],
+      d_many:    ['多'],
+      d_slow:    ['慢'],
+      d_fast:    ['快'],
+      d_big:     ['大'],
+      d_small:   ['小'],
+      d_few:     ['少'],
+      d_above:   ['上', '上面'],
+      d_below:   ['下', '下面'],
+      d_front:   ['前', '前面'],
+      d_behind:  ['后', '后面'],
+      d_inside:  ['里', '里面'],
+    }
+
+    // Build label → ids map across all non-descriptor entries
+    const otherLabelMap = new Map<string, string[]>()
+    for (const p of seed.filter(e => e.categoryId !== 'descriptors')) {
+      const all = [...(p.labels?.zh ?? []), ...(p.synonyms ?? [])]
+      for (const lbl of all) {
+        if (!otherLabelMap.has(lbl)) otherLabelMap.set(lbl, [])
+        otherLabelMap.get(lbl)!.push(p.id)
+      }
+    }
+
+    const collisions: string[] = []
+    for (const [descriptorId, exclusiveLabels] of Object.entries(DESCRIPTOR_EXCLUSIVE_LABELS)) {
+      for (const lbl of exclusiveLabels) {
+        const others = otherLabelMap.get(lbl)
+        if (others && others.length > 0) {
+          collisions.push(`${descriptorId}("${lbl}") 与 ${others.join(', ')} 重叠`)
+        }
+      }
+    }
+
+    expect(collisions, `descriptor 主标签被其他分类占用，会导致 exact 级平局：\n${collisions.join('\n')}`).toHaveLength(0)
+  })
+
   it('每个 id 唯一', () => {
     const counts = new Map<string, number>()
     for (const e of seed) counts.set(e.id, (counts.get(e.id) ?? 0) + 1)

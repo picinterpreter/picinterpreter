@@ -5579,5 +5579,38 @@
     "disambiguationHints": {
       "semanticDomain": "actions"
     }
+  },
+  {
+    "id": "pl_downstairs",
+    "labels": {
+      "zh": [
+        "楼下"
+      ],
+      "en": [
+        "downstairs"
+      ]
+    },
+    "synonyms": [
+      "下面一层",
+      "一楼"
+    ],
+    "imageUrl": "https://d18vdu4p71yql0.cloudfront.net/libraries/noun-project/Downstairs-9226eabb8f.svg",
+    "categoryId": "places",
+    "manualOrder": 11,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "places"
+    },
+    "source": {
+      "provider": "opensymbols",
+      "name": "OpenSymbols / noun-project",
+      "originalId": "downstairs-eed4634f",
+      "license": "Public Domain",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "author": null,
+      "authorUrl": null,
+      "sourceUrl": "https://www.opensymbols.org/symbols/noun-project/downstairs-eed4634f?id=31785",
+      "repoKey": "noun-project"
+    }
   }
 ]

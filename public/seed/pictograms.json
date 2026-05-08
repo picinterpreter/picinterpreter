@@ -266,13 +266,13 @@
         "stop"
       ]
     },
-    "categoryId": "actions",
+    "categoryId": "quickchat",
     "synonyms": [
       "停",
       "停下"
     ],
     "disambiguationHints": {
-      "semanticDomain": "actions"
+      "semanticDomain": "quickchat"
     },
     "usageCount": 0
   },
@@ -704,12 +704,12 @@
         "yes"
       ]
     },
-    "categoryId": "actions",
+    "categoryId": "quickchat",
     "synonyms": [
       "对"
     ],
     "disambiguationHints": {
-      "semanticDomain": "actions"
+      "semanticDomain": "quickchat"
     },
     "usageCount": 0
   },
@@ -1059,13 +1059,13 @@
         "make a phone call"
       ]
     },
-    "categoryId": "actions",
+    "categoryId": "activities",
     "synonyms": [
       "通电话",
       "电话联系"
     ],
     "disambiguationHints": {
-      "semanticDomain": "actions"
+      "semanticDomain": "activities"
     },
     "usageCount": 0
   },
@@ -1439,11 +1439,13 @@
         "wake up"
       ]
     },
-    "categoryId": "actions",
+    "categoryId": "activities",
     "synonyms": [
       "起来"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "activities"
+    },
     "usageCount": 0
   },
   {
@@ -1457,11 +1459,13 @@
         "run"
       ]
     },
-    "categoryId": "actions",
+    "categoryId": "activities",
     "synonyms": [
       "跑步"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "activities"
+    },
     "usageCount": 0
   },
   {
@@ -3331,12 +3335,14 @@
         "wait"
       ]
     },
-    "categoryId": "time",
+    "categoryId": "quickchat",
     "synonyms": [
       "稍等",
       "等等"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "quickchat"
+    },
     "usageCount": 0
   },
   {
@@ -5621,30 +5627,6 @@
     "usageCount": 0,
     "disambiguationHints": {
       "semanticDomain": "daily"
-    }
-  },
-  {
-    "id": "a_speak",
-    "labels": {
-      "zh": [
-        "说话"
-      ],
-      "en": [
-        "speak",
-        "talk"
-      ]
-    },
-    "synonyms": [
-      "讲话",
-      "发言",
-      "开口"
-    ],
-    "imageUrl": "https://static.arasaac.org/pictograms/6517/6517_300.png",
-    "categoryId": "actions",
-    "manualOrder": 28,
-    "usageCount": 0,
-    "disambiguationHints": {
-      "semanticDomain": "actions"
     }
   },
   {

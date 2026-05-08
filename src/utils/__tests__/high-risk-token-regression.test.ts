@@ -348,13 +348,13 @@ describe('高风险词 seed 回归', () => {
   // ─────────────────────────────────────────────────────────────────────────
   // 打电话 — 应该有独立动作概念，不再回落到手机物品图
   // ─────────────────────────────────────────────────────────────────────────
-  describe('打电话 → p_make_call（actions）', () => {
+  describe('打电话 → p_make_call（activities）', () => {
     it('打电话 exact 命中 p_make_call，而不是 p_phone', async () => {
       const result = await matchTextToImages('打电话', { preSegmented: ['打电话'] })
       const m = result.matches[0]
       expect(m.pictogram?.id).toBe('p_make_call')
       expect(m.matchType).toBe('exact')
-      expect(m.pictogram?.categoryId).toBe('actions')
+      expect(m.pictogram?.categoryId).toBe('activities')
       expect(m.pictogram?.id).not.toBe('p_phone')
     })
 

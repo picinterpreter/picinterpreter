@@ -5082,5 +5082,502 @@
       "向右"
     ],
     "usageCount": 0
+  },
+  {
+    "id": "o_trousers",
+    "labels": {
+      "zh": [
+        "裤子"
+      ],
+      "en": [
+        "trousers",
+        "pants"
+      ]
+    },
+    "synonyms": [
+      "裤",
+      "长裤"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/2565/2565_300.png",
+    "categoryId": "objects",
+    "manualOrder": 4,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "objects"
+    }
+  },
+  {
+    "id": "o_shoes",
+    "labels": {
+      "zh": [
+        "鞋"
+      ],
+      "en": [
+        "shoes"
+      ]
+    },
+    "synonyms": [
+      "鞋子",
+      "脚踝"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/2622/2622_300.png",
+    "categoryId": "objects",
+    "manualOrder": 5,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "objects"
+    }
+  },
+  {
+    "id": "o_socks",
+    "labels": {
+      "zh": [
+        "袜子"
+      ],
+      "en": [
+        "socks"
+      ]
+    },
+    "synonyms": [
+      "袜",
+      "长袜"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/2298/2298_300.png",
+    "categoryId": "objects",
+    "manualOrder": 6,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "objects"
+    }
+  },
+  {
+    "id": "o_coat",
+    "labels": {
+      "zh": [
+        "外套"
+      ],
+      "en": [
+        "coat",
+        "jacket"
+      ]
+    },
+    "synonyms": [
+      "上衣",
+      "外衣",
+      "大衣"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/2242/2242_300.png",
+    "categoryId": "objects",
+    "manualOrder": 7,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "objects"
+    }
+  },
+  {
+    "id": "o_hat",
+    "labels": {
+      "zh": [
+        "帽子"
+      ],
+      "en": [
+        "hat"
+      ]
+    },
+    "synonyms": [
+      "帽",
+      "头盔"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/2572/2572_300.png",
+    "categoryId": "objects",
+    "manualOrder": 8,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "objects"
+    }
+  },
+  {
+    "id": "o_door",
+    "labels": {
+      "zh": [
+        "门"
+      ],
+      "en": [
+        "door"
+      ]
+    },
+    "synonyms": [
+      "门口",
+      "房门"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/3244/3244_300.png",
+    "categoryId": "objects",
+    "manualOrder": 9,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "objects"
+    }
+  },
+  {
+    "id": "o_window",
+    "labels": {
+      "zh": [
+        "窗户"
+      ],
+      "en": [
+        "window"
+      ]
+    },
+    "synonyms": [
+      "窗",
+      "窗口"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/2611/2611_300.png",
+    "categoryId": "objects",
+    "manualOrder": 10,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "objects"
+    }
+  },
+  {
+    "id": "o_charger",
+    "labels": {
+      "zh": [
+        "充电器"
+      ],
+      "en": [
+        "charger"
+      ]
+    },
+    "synonyms": [
+      "充电线",
+      "充电",
+      "电源"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/27651/27651_300.png",
+    "categoryId": "objects",
+    "manualOrder": 11,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "objects"
+    }
+  },
+  {
+    "id": "o_noisy",
+    "labels": {
+      "zh": [
+        "吵"
+      ],
+      "en": [
+        "noisy"
+      ]
+    },
+    "synonyms": [
+      "太吵",
+      "吵闹",
+      "噪音"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/7157/7157_300.png",
+    "categoryId": "objects",
+    "manualOrder": 12,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "objects"
+    }
+  },
+  {
+    "id": "o_quiet",
+    "labels": {
+      "zh": [
+        "安静"
+      ],
+      "en": [
+        "quiet"
+      ]
+    },
+    "synonyms": [
+      "请安静",
+      "保持安静"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/38050/38050_300.png",
+    "categoryId": "objects",
+    "manualOrder": 13,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "objects"
+    }
+  },
+  {
+    "id": "o_light_off",
+    "labels": {
+      "zh": [
+        "关灯"
+      ],
+      "en": [
+        "turn off light"
+      ]
+    },
+    "synonyms": [
+      "灯关掉",
+      "关一下灯"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/38247/38247_300.png",
+    "categoryId": "objects",
+    "manualOrder": 14,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "objects"
+    }
+  },
+  {
+    "id": "o_light_on",
+    "labels": {
+      "zh": [
+        "开灯"
+      ],
+      "en": [
+        "turn on light"
+      ]
+    },
+    "synonyms": [
+      "灯开着",
+      "开一下灯"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/38212/38212_300.png",
+    "categoryId": "objects",
+    "manualOrder": 15,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "objects"
+    }
+  },
+  {
+    "id": "pl_room",
+    "labels": {
+      "zh": [
+        "房间"
+      ],
+      "en": [
+        "room"
+      ]
+    },
+    "synonyms": [
+      "房子",
+      "房里"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/32234/32234_300.png",
+    "categoryId": "places",
+    "manualOrder": 7,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "places"
+    }
+  },
+  {
+    "id": "pl_bus",
+    "labels": {
+      "zh": [
+        "公交车"
+      ],
+      "en": [
+        "bus"
+      ]
+    },
+    "synonyms": [
+      "公交",
+      "巴士",
+      "大巴"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/2262/2262_300.png",
+    "categoryId": "places",
+    "manualOrder": 8,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "places"
+    }
+  },
+  {
+    "id": "pl_taxi",
+    "labels": {
+      "zh": [
+        "出租车"
+      ],
+      "en": [
+        "taxi"
+      ]
+    },
+    "synonyms": [
+      "打车",
+      "的士",
+      "滴滴"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/2580/2580_300.png",
+    "categoryId": "places",
+    "manualOrder": 9,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "places"
+    }
+  },
+  {
+    "id": "pl_subway",
+    "labels": {
+      "zh": [
+        "地铁"
+      ],
+      "en": [
+        "subway",
+        "metro"
+      ]
+    },
+    "synonyms": [
+      "metro",
+      "轨道交通"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/26925/26925_300.png",
+    "categoryId": "places",
+    "manualOrder": 10,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "places"
+    }
+  },
+  {
+    "id": "hy_soap",
+    "labels": {
+      "zh": [
+        "肥皂"
+      ],
+      "en": [
+        "soap"
+      ]
+    },
+    "synonyms": [
+      "洗手液",
+      "皂"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/2964/2964_300.png",
+    "categoryId": "daily",
+    "manualOrder": 15,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "daily"
+    }
+  },
+  {
+    "id": "hy_shampoo",
+    "labels": {
+      "zh": [
+        "洗发水"
+      ],
+      "en": [
+        "shampoo"
+      ]
+    },
+    "synonyms": [
+      "洗头",
+      "洗发液"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/2699/2699_300.png",
+    "categoryId": "daily",
+    "manualOrder": 16,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "daily"
+    }
+  },
+  {
+    "id": "hy_wet",
+    "labels": {
+      "zh": [
+        "湿了"
+      ],
+      "en": [
+        "wet"
+      ]
+    },
+    "synonyms": [
+      "湿",
+      "湿透",
+      "弄湿了"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/37364/37364_300.png",
+    "categoryId": "daily",
+    "manualOrder": 17,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "daily"
+    }
+  },
+  {
+    "id": "hy_dirty",
+    "labels": {
+      "zh": [
+        "脏了"
+      ],
+      "en": [
+        "dirty"
+      ]
+    },
+    "synonyms": [
+      "脏",
+      "弄脏了",
+      "不干净"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/4750/4750_300.png",
+    "categoryId": "daily",
+    "manualOrder": 18,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "daily"
+    }
+  },
+  {
+    "id": "a_speak",
+    "labels": {
+      "zh": [
+        "说话"
+      ],
+      "en": [
+        "speak",
+        "talk"
+      ]
+    },
+    "synonyms": [
+      "讲话",
+      "发言",
+      "开口"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/6517/6517_300.png",
+    "categoryId": "actions",
+    "manualOrder": 28,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    }
+  },
+  {
+    "id": "a_wait",
+    "labels": {
+      "zh": [
+        "等"
+      ],
+      "en": [
+        "wait"
+      ]
+    },
+    "synonyms": [
+      "等等",
+      "等一会",
+      "等候"
+    ],
+    "imageUrl": "https://static.arasaac.org/pictograms/36914/36914_300.png",
+    "categoryId": "actions",
+    "manualOrder": 29,
+    "usageCount": 0,
+    "disambiguationHints": {
+      "semanticDomain": "actions"
+    }
   }
 ]

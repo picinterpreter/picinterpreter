@@ -102,7 +102,7 @@ export function PictogramGrid() {
     if (activeCategoryId === 'root') {
       const [yesById, noById] = await db.pictograms.bulkGet(['p_yes', 'p_no'])
       const quickItems = !yesById || !noById
-        ? await db.pictograms.where('categoryId').equals('quickchat').toArray()
+        ? await db.pictograms.where('categoryIds').equals('quickchat').toArray()
         : []
       const yes = yesById ?? quickItems.find((p) =>
         p.labels.zh.includes('是') || p.synonyms.includes('是') || p.labels.en.includes('yes'),
@@ -125,7 +125,7 @@ export function PictogramGrid() {
         .slice(0, 24)
     }
 
-    const ownItems = await db.pictograms.where('categoryId').equals(activeCategoryId).toArray()
+    const ownItems = await db.pictograms.where('categoryIds').equals(activeCategoryId).toArray()
     return sortPictogramsForDisplay(ownItems, pictogramSortMode)
   }, [activeCategoryId, pictogramSortMode])
 

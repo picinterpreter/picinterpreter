@@ -165,8 +165,10 @@ describe('seed 数据完整性', () => {
   it('synonym 不得是其他条目的 primary label（防止概念被吞噬）', () => {
     // 如果词 W 是条目 A 的 labels.zh[0]，它就是 A 的"正式名"
     // W 出现在条目 B 的 synonyms 里意味着：输入 W 本应命中 A，却可能被 B 抢走
-    const primaryLabel = new Map(
-      seed.map(e => [e.labels?.zh?.[0], e.id]).filter(([l]) => l)
+    const primaryLabel = new Map<string, string>(
+      seed
+        .map(e => [e.labels?.zh?.[0], e.id] as [string, string])
+        .filter(([l]) => l)
     )
     const violations: string[] = []
     for (const e of seed) {

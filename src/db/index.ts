@@ -61,6 +61,23 @@ class TuYuJiaDB extends Dexie {
       syncOutbox: 'id, createdAt, entityType, recordId',
       syncState: 'id',
     })
+    // v6: 添加 *categoryIds 多值索引，支持同一卡片出现在多个板块
+    this.version(6).stores({
+      categories: 'id, sortOrder',
+      pictograms: 'id, categoryId, *categoryIds, *synonyms, usageCount, lastUsedAt, manualOrder',
+      expressions: 'id, sessionId, createdAt, isFavorite, updatedAt',
+      savedPhrases: 'id, usageCount, lastUsedAt, updatedAt',
+      textToImageResults: 'id, createdAt',
+      syncOutbox: 'id, createdAt, entityType, recordId',
+      syncState: 'id',
+    }).upgrade(async (tx) => {
+      const all = await tx.table<PictogramEntry>('pictograms').toArray()
+      for (const p of all) {
+        if (!Array.isArray(p.categoryIds) || p.categoryIds.length === 0) {
+          await tx.table('pictograms').update(p.id, { categoryIds: [p.categoryId] })
+        }
+      }
+    })
   }
 }
 
@@ -133,9 +150,13 @@ export async function ensureSeedData(): Promise<void> {
         const currentIndex = seedOrderByCategory.get(p.categoryId) ?? 0
         seedOrderByCategory.set(p.categoryId, currentIndex + 1)
         const preservedOrder = manualOrderById.get(p.id)
+        const categoryIds = Array.isArray(p.categoryIds) && p.categoryIds.length > 0
+          ? p.categoryIds
+          : [p.categoryId]
 
         return {
           ...p,
+          categoryIds,
           manualOrder: preservedOrder ?? currentIndex,
         }
       })

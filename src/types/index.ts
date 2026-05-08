@@ -23,6 +23,8 @@ export interface PictogramEntry {
     en: string[]
   }
   categoryId: string
+  /** 该卡片出现在哪些板块上（支持多板块）。运行时始终有值；seed 中省略时默认为 [categoryId]。 */
+  categoryIds?: string[]
   synonyms: string[]
   /** 相关但概念不同的词，不参与 matcher 评分，仅供展示/搜索建议 */
   relatedTerms?: string[]

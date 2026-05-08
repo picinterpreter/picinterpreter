@@ -107,6 +107,7 @@ function buildEntry(params: {
       en: [params.enLabel ?? entry?.en ?? ''].filter((label) => label.length > 0),
     },
     categoryId: entry?.category ?? 'daily',
+    categoryIds: [entry?.category ?? 'daily'],
     synonyms: Array.from(synonyms),
     disambiguationHints: {},
     source: {

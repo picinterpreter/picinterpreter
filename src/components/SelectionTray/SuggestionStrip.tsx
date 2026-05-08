@@ -21,7 +21,7 @@ export function buildCategorySuggestions(
   max: number,
 ): PictogramEntry[] {
   return pictograms
-    .filter((p) => p.categoryId === categoryId && !excludeIds.has(p.id))
+    .filter((p) => (p.categoryIds ? p.categoryIds.includes(categoryId) : p.categoryId === categoryId) && !excludeIds.has(p.id))
     .sort((a, b) => (b.usageCount ?? 0) - (a.usageCount ?? 0))
     .slice(0, max)
 }

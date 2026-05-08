@@ -42,6 +42,7 @@ function buildPictogramEntry(row: ImportRow) {
     arasaacId: result?.pictogramId ?? null,
     labels: { zh: [entry.zh], en: [entry.en] },
     categoryId: entry.category,
+    categoryIds: [entry.category],
     synonyms: entry.synonyms,
     disambiguationHints: {},
     usageCount: 0,

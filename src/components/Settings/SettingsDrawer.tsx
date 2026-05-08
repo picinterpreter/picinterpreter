@@ -41,7 +41,7 @@ export function SettingsDrawer() {
   const allCategories = useLiveQuery(() => db.categories.orderBy('sortOrder').toArray())
   const orderingPictograms = useLiveQuery(async () => {
     if (!orderingCategoryId) return []
-    const items = await db.pictograms.where('categoryId').equals(orderingCategoryId).toArray()
+    const items = await db.pictograms.where('categoryIds').equals(orderingCategoryId).toArray()
     return sortPictogramsForDisplay(items, 'manual')
   }, [orderingCategoryId])
 

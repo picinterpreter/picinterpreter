@@ -37,6 +37,7 @@ For implementation sequencing, see [Implementation Task Index](implementation-ta
 | Session boundary | Session ID shared across express + receive flows; new session suggested after 30-min idle or user-triggered reset | [#31](https://github.com/picinterpreter/picinterpreter/issues/31) |
 | Service Worker strategy | App shell cache-first (`picinterpreter-v1-*`); pictogram blobs stored in IndexedDB only; API routes network-only; SW disabled by default, enabled via `NEXT_PUBLIC_ENABLE_SERVICE_WORKER=true` | [#32](https://github.com/picinterpreter/picinterpreter/issues/32) |
 | Correction memory | MVP: workspace-level immediate write-back. Future: family promotion threshold, default ≥3 users, configurable; tombstones 90 days; no cross-workspace learning in MVP | [#26](https://github.com/picinterpreter/picinterpreter/issues/26) |
+| AAC board base | Future production-oriented development should use Cboard as the AAC board-system base, while Tuyujia owns the Chinese semantic matching, caregiver collaboration, AI reconstruction, privacy, and clinical vocabulary layers. | [ADR-003](ADR-003-cboard-secondary-development-base.md) |
 
 ---
 

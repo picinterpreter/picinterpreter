@@ -1,6 +1,6 @@
 // ===== 图库相关 =====
 
-/** 图片分类 */
+/** 图片分类（即"板/board"，patient 端的展示单元） */
 export interface Category {
   id: string
   name: string
@@ -8,10 +8,19 @@ export interface Category {
   sortOrder: number
   /**
    * 链接到其他分类的 ID 列表（可选）。
-   * 当用户浏览本分类时，被链接分类的图片也会自动显示。
-   * 类似 Obsidian 的双向链接 / 虚拟文件夹概念。
+   * 当用户浏览本分类时，被链接分类作为文件夹格子显示。
+   * 等价 cboard 的 Tile.loadBoard。
    */
   linkedCategoryIds?: string[]
+  /**
+   * 显式策展的卡片 ID 列表（可选）。
+   *
+   * 有值：板内容由该列表决定，按列表顺序展示，与 categoryIds 解耦。
+   * 没值：fallback 到 `pictograms.where('categoryIds').equals(boardId)` 查询。
+   *
+   * 等价 cboard 的 Board.tiles[].pictogramId 序列。
+   */
+  tileIds?: string[]
 }
 
 /** 图片条目 */

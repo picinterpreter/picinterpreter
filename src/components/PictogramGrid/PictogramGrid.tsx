@@ -125,6 +125,14 @@ export function PictogramGrid() {
         .slice(0, 24)
     }
 
+    // 显式策展优先：Category.tileIds 存在则按列表顺序加载；
+    // 否则 fallback 到 categoryIds 多值索引查询（保持原有行为）。
+    const cat = await db.categories.get(activeCategoryId)
+    if (cat?.tileIds && cat.tileIds.length > 0) {
+      const fetched = await db.pictograms.bulkGet(cat.tileIds)
+      return fetched.filter((p): p is PictogramEntry => Boolean(p))
+    }
+
     const ownItems = await db.pictograms.where('categoryIds').equals(activeCategoryId).toArray()
     return sortPictogramsForDisplay(ownItems, pictogramSortMode)
   }, [activeCategoryId, pictogramSortMode])

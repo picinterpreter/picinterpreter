@@ -48,7 +48,7 @@ Local archive path: `D:\used-by-codex\picinterpreter\aac-core-sources\` (not com
 | Field | Value |
 |-------|-------|
 | Full name | Sclera Symbol Set |
-| URL | https://www.sclera.be/en/picto/overview |
+| URL | https://www.sclera.be/en/picto/search |
 | Symbol count | ~13,000 symbols |
 | License | CC BY-NC 2.0 |
 | Language support | Dutch primary; multilingual metadata available |
@@ -67,7 +67,19 @@ Local archive path: `D:\used-by-codex\picinterpreter\aac-core-sources\` (not com
 | Local archive | Not collected; accessed via API at runtime |
 | API | Requires `OPENSYMBOLS_SECRET` env variable |
 | Used in project | Runtime backfill fallback when ARASAAC has no match |
-| Notes | Aggregates ARASAAC, Mulberry, Sclera, and others. License of each result depends on source library. `PictogramSource` field in Dexie schema stores per-symbol license. |
+| Notes | Aggregates ARASAAC, Mulberry, Sclera, and others. Total coverage exceeds 50,000 symbols. Most results use CC BY or more permissive licenses. `PictogramSource` field in Dexie schema stores per-symbol license. |
+
+### 1.5 General Icon / Image Libraries
+
+These are not AAC-specific but useful when dedicated AAC libraries return no match, especially for culturally specific Chinese concepts.
+
+| Source | URL | License | Notes |
+|--------|-----|---------|-------|
+| Noun Project | https://thenounproject.com | CC BY 3.0 or royalty-free | Large icon library; good for abstract concepts and verbs. Attribution required for free tier. |
+| iconfont.cn | https://www.iconfont.cn | Varies per icon | Alibaba-maintained Chinese icon platform. Good coverage of everyday Chinese objects and UI concepts. |
+| Pics4Learning | https://www.pics4learning.com | Free for educational use | Copyright-cleared photos for education. Useful for photorealistic AAC symbols when illustration style is inadequate. |
+
+**Usage note:** Icons from these sources require individual license checks before use in the seed library. Prefer CC BY or CC0 licensed items. Add `PictogramSource` metadata when importing.
 
 ---
 
@@ -277,7 +289,64 @@ The fixture samples in `fixtures/receiver-samples.json` and `docs/receiver-fixtu
 
 ---
 
-## 8. How to Add New Reference Material
+## 9. Image Acquisition Strategy
+
+When a concept has no match in the primary AAC libraries, use the following decision matrix to choose the fastest adequate method.
+
+### 9.1 Quick Decision Matrix
+
+| Scenario | Recommended method | Speed | Fit |
+|----------|--------------------|-------|-----|
+| Common noun (apple, bus) | ARASAAC / seed library | Very fast | Consistent style |
+| Specific personal object (user's own phone, family member) | Photo + background removal | Fast | Highest recognition |
+| Complex action or emotion (jealous, pass through) | AI generation (see §9.3) | Medium | Customisable |
+| Motion verb (run, push) | Short video → GIF | Medium | Shows causality well |
+| Abstract concept with no AAC image | Noun Project / iconfont.cn | Fast | Style may vary |
+
+### 9.2 Real Photo Shooting Guidelines
+
+When online resources are insufficient, especially for culturally specific Chinese concepts:
+
+- **Environment**: Bright, natural light. Simple, uncluttered background.
+- **Framing**: Subject prominent and centred. Face/action expression clearly visible.
+- **Consent**: Always obtain consent before photographing people.
+- **Background removal** (critical for AAC use — removes distraction for cognitively impaired users):
+  - iOS/iPhone: Long-press the subject in Photos app → drag or copy to get a clean cutout. Fastest method.
+  - Online: `remove.bg` or Adobe Express free tier.
+  - Desktop: GIMP or Paint.NET.
+- **Action sequences**: For process concepts (e.g., brushing teeth, dressing), photograph multiple consecutive frames. Select keyframes in GIMP/Photoshop and compile into a sequence image or GIF.
+- **Video → GIF**: Record a 2-second video clip. Convert using iOS Shortcuts, WeChat sticker maker, Ezgif.com, or `ffmpeg -i video.mp4 out.gif`. Useful for verbs that are hard to represent as static images.
+
+### 9.3 AI Image Generation
+
+For concepts with no existing AAC pictogram, AI generation can produce a consistent illustration-style image.
+
+**Recommended tool:** 即梦 (Dreamina / Jianmeng) — good at flat illustration style suitable for AAC.
+
+**Prompt formula:**
+
+```
+[Subject description] + [style] + [background]
+
+Example: "一个正在吃苹果的小男孩，极简矢量插画风格，扁平化设计，粗线条，鲜艳色彩，纯白背景"
+```
+
+Key style tokens: `极简矢量插画风格` / `扁平化设计` / `粗线条` / `鲜艳色彩` / `纯白背景`
+
+**Notes:**
+- AI-generated images are not under a standard open license. Do not use in the seed library without a clear rights statement.
+- Preferred use: caregiver-uploaded custom pictograms for personal vocabulary, not the public seed.
+- Keep the style consistent with the rest of the board (flat line art on white background).
+
+### 9.4 Asset Format Notes
+
+- **SVG preferred**: Scalable without quality loss. Available from OpenClipart, SVGRepo, iconfont.cn. Edit colors and size in Inkscape or Illustrator before converting to PNG.
+- **PNG for seed library**: All seed entries use `imageUrl` pointing to a hosted PNG. SVGs should be converted and hosted before adding to the seed.
+- **GIF for animated symbols**: For motion verbs (breathing, blinking), use Ezgif or `ffmpeg` to produce GIF. Store separately from static seed entries; animated symbol support is a Phase 2 feature.
+
+---
+
+## 10. How to Add New Reference Material
 
 1. Check the license before downloading. Materials with NC (non-commercial) clauses are fine for research and fixture design but cannot be bundled into a GPL-3.0 app binary.
 2. If the license permits local storage, place files under `D:\used-by-codex\picinterpreter\aac-core-sources\<source-name>\`.
@@ -288,6 +357,6 @@ The fixture samples in `fixtures/receiver-samples.json` and `docs/receiver-fixtu
 
 ---
 
-*Last updated: 2026-05-06*  
+*Last updated: 2026-05-08*  
 *Closes: #75*  
 *Related issues: #11 #19 #30 #32 #38 #74*

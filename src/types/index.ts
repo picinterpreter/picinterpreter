@@ -24,6 +24,8 @@ export interface PictogramEntry {
   }
   categoryId: string
   synonyms: string[]
+  /** 相关但概念不同的词，不参与 matcher 评分，仅供展示/搜索建议 */
+  relatedTerms?: string[]
   disambiguationHints: Record<string, string>
   emotionTag?: string
   source?: PictogramSource

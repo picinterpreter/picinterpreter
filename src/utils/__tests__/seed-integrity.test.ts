@@ -98,6 +98,23 @@ describe('seed 数据完整性', () => {
     expect(bad.map(e => e.id), '以下条目缺少 synonyms 数组').toHaveLength(0)
   })
 
+  it('relatedTerms 若存在必须是数组', () => {
+    const bad = seed.filter(e => 'relatedTerms' in e && !Array.isArray((e as any).relatedTerms))
+    expect(bad.map(e => e.id), 'relatedTerms 字段类型错误').toHaveLength(0)
+  })
+
+  it('relatedTerms 与 synonyms 不重叠（同一个词不能身兼两职）', () => {
+    const violations: string[] = []
+    for (const e of seed) {
+      const related: string[] = (e as any).relatedTerms ?? []
+      for (const term of related) {
+        if (e.synonyms.includes(term))
+          violations.push(`${e.id}: "${term}" 同时出现在 synonyms 和 relatedTerms`)
+      }
+    }
+    expect(violations, violations.join('\n')).toHaveLength(0)
+  })
+
   it('usageCount 是数字', () => {
     const bad = seed.filter(e => typeof e.usageCount !== 'number')
     expect(bad.map(e => e.id), '以下条目缺少 usageCount').toHaveLength(0)

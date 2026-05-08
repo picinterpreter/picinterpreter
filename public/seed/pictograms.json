@@ -5253,6 +5253,9 @@
       "充电线",
       "电源"
     ],
+    "relatedTerms": [
+      "充电"
+    ],
     "imageUrl": "https://static.arasaac.org/pictograms/27651/27651_300.png",
     "categoryId": "objects",
     "manualOrder": 11,
@@ -5474,6 +5477,9 @@
     },
     "synonyms": [
       "洗发液"
+    ],
+    "relatedTerms": [
+      "洗头"
     ],
     "imageUrl": "https://static.arasaac.org/pictograms/2699/2699_300.png",
     "categoryId": "daily",

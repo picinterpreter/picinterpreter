@@ -3431,12 +3431,14 @@
         "read"
       ]
     },
-    "categoryId": "daily",
+    "categoryId": "activities",
     "synonyms": [
       "阅读",
       "读书"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "activities"
+    },
     "usageCount": 0
   },
   {
@@ -3450,11 +3452,13 @@
         "watch TV"
       ]
     },
-    "categoryId": "daily",
+    "categoryId": "activities",
     "synonyms": [
       "看电视机"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "activities"
+    },
     "usageCount": 0
   },
   {
@@ -3468,9 +3472,11 @@
         "flower"
       ]
     },
-    "categoryId": "daily",
+    "categoryId": "objects",
     "synonyms": [],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "objects"
+    },
     "usageCount": 0
   },
   {
@@ -3484,12 +3490,14 @@
         "car"
       ]
     },
-    "categoryId": "daily",
+    "categoryId": "objects",
     "synonyms": [
       "汽车",
       "开车"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "objects"
+    },
     "usageCount": 0
   },
   {
@@ -3522,11 +3530,13 @@
         "money"
       ]
     },
-    "categoryId": "daily",
+    "categoryId": "objects",
     "synonyms": [
       "付钱"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "objects"
+    },
     "usageCount": 0
   },
   {
@@ -3812,11 +3822,13 @@
         "clothes"
       ]
     },
-    "categoryId": "objects",
+    "categoryId": "daily",
     "synonyms": [
       "衣物"
     ],
-    "disambiguationHints": {},
+    "disambiguationHints": {
+      "semanticDomain": "daily"
+    },
     "usageCount": 0
   },
   {
@@ -5105,11 +5117,11 @@
       "长裤"
     ],
     "imageUrl": "https://static.arasaac.org/pictograms/2565/2565_300.png",
-    "categoryId": "objects",
+    "categoryId": "daily",
     "manualOrder": 4,
     "usageCount": 0,
     "disambiguationHints": {
-      "semanticDomain": "objects"
+      "semanticDomain": "daily"
     }
   },
   {
@@ -5126,11 +5138,11 @@
       "鞋子"
     ],
     "imageUrl": "https://static.arasaac.org/pictograms/2622/2622_300.png",
-    "categoryId": "objects",
+    "categoryId": "daily",
     "manualOrder": 5,
     "usageCount": 0,
     "disambiguationHints": {
-      "semanticDomain": "objects"
+      "semanticDomain": "daily"
     }
   },
   {
@@ -5148,11 +5160,11 @@
       "长袜"
     ],
     "imageUrl": "https://static.arasaac.org/pictograms/2298/2298_300.png",
-    "categoryId": "objects",
+    "categoryId": "daily",
     "manualOrder": 6,
     "usageCount": 0,
     "disambiguationHints": {
-      "semanticDomain": "objects"
+      "semanticDomain": "daily"
     }
   },
   {
@@ -5172,11 +5184,11 @@
       "大衣"
     ],
     "imageUrl": "https://static.arasaac.org/pictograms/2242/2242_300.png",
-    "categoryId": "objects",
+    "categoryId": "daily",
     "manualOrder": 7,
     "usageCount": 0,
     "disambiguationHints": {
-      "semanticDomain": "objects"
+      "semanticDomain": "daily"
     }
   },
   {
@@ -5194,11 +5206,11 @@
       "头盔"
     ],
     "imageUrl": "https://static.arasaac.org/pictograms/2572/2572_300.png",
-    "categoryId": "objects",
+    "categoryId": "daily",
     "manualOrder": 8,
     "usageCount": 0,
     "disambiguationHints": {
-      "semanticDomain": "objects"
+      "semanticDomain": "daily"
     }
   },
   {
@@ -5624,10 +5636,17 @@
   {
     "id": "m_danger",
     "labels": {
-      "zh": ["危险"],
-      "en": ["danger"]
+      "zh": [
+        "危险"
+      ],
+      "en": [
+        "danger"
+      ]
     },
-    "synonyms": ["有危险", "危险！"],
+    "synonyms": [
+      "有危险",
+      "危险！"
+    ],
     "imageUrl": "https://static.arasaac.org/pictograms/25315/25315_300.png",
     "categoryId": "medical",
     "usageCount": 0,
@@ -5638,10 +5657,17 @@
   {
     "id": "m_breathe",
     "labels": {
-      "zh": ["呼吸"],
-      "en": ["breathe"]
+      "zh": [
+        "呼吸"
+      ],
+      "en": [
+        "breathe"
+      ]
     },
-    "synonyms": ["喘气", "呼吸一下"],
+    "synonyms": [
+      "喘气",
+      "呼吸一下"
+    ],
     "imageUrl": "https://static.arasaac.org/pictograms/34377/34377_300.png",
     "categoryId": "medical",
     "usageCount": 0,
@@ -5652,10 +5678,17 @@
   {
     "id": "m_fall",
     "labels": {
-      "zh": ["跌倒"],
-      "en": ["fall"]
+      "zh": [
+        "跌倒"
+      ],
+      "en": [
+        "fall"
+      ]
     },
-    "synonyms": ["摔倒", "摔了"],
+    "synonyms": [
+      "摔倒",
+      "摔了"
+    ],
     "imageUrl": "https://static.arasaac.org/pictograms/6067/6067_300.png",
     "categoryId": "medical",
     "usageCount": 0,
@@ -5666,10 +5699,17 @@
   {
     "id": "r_try_again",
     "labels": {
-      "zh": ["再来一次"],
-      "en": ["try again"]
+      "zh": [
+        "再来一次"
+      ],
+      "en": [
+        "try again"
+      ]
     },
-    "synonyms": ["重试", "再试一次"],
+    "synonyms": [
+      "重试",
+      "再试一次"
+    ],
     "imageUrl": "https://static.arasaac.org/pictograms/37163/37163_300.png",
     "categoryId": "repair",
     "usageCount": 0,
@@ -5680,10 +5720,17 @@
   {
     "id": "e_relieved",
     "labels": {
-      "zh": ["放心"],
-      "en": ["relieved"]
+      "zh": [
+        "放心"
+      ],
+      "en": [
+        "relieved"
+      ]
     },
-    "synonyms": ["别担心", "安心"],
+    "synonyms": [
+      "别担心",
+      "安心"
+    ],
     "imageUrl": "https://static.arasaac.org/pictograms/38931/38931_300.png",
     "categoryId": "emotions",
     "usageCount": 0,
@@ -5694,10 +5741,17 @@
   {
     "id": "a_change_clothes",
     "labels": {
-      "zh": ["换"],
-      "en": ["change clothes"]
+      "zh": [
+        "换"
+      ],
+      "en": [
+        "change clothes"
+      ]
     },
-    "synonyms": ["换一换", "替换"],
+    "synonyms": [
+      "换一换",
+      "替换"
+    ],
     "imageUrl": "https://static.arasaac.org/pictograms/6627/6627_300.png",
     "categoryId": "actions",
     "usageCount": 0,

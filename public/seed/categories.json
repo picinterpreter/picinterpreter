@@ -36,7 +36,7 @@
   },
   {
     "id": "daily",
-    "name": "厕所卫生",
+    "name": "日常护理",
     "icon": "https://static.arasaac.org/pictograms/37331/37331_300.png",
     "sortOrder": 6,
     "linkedCategoryIds": ["medical", "repair"]
@@ -78,7 +78,7 @@
   },
   {
     "id": "objects",
-    "name": "休息舒适",
+    "name": "环境与舒适",
     "icon": "https://static.arasaac.org/pictograms/25269/25269_300.png",
     "sortOrder": 12,
     "linkedCategoryIds": ["food", "activities", "daily"]

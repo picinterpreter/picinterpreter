@@ -15,7 +15,11 @@
     "disambiguationHints": {
       "semanticDomain": "repair"
     },
-    "usageCount": 0
+    "usageCount": 0,
+    "categoryIds": [
+      "repair",
+      "actions"
+    ]
   },
   {
     "id": "p_no",
@@ -56,7 +60,11 @@
     "disambiguationHints": {
       "semanticDomain": "repair"
     },
-    "usageCount": 0
+    "usageCount": 0,
+    "categoryIds": [
+      "repair",
+      "actions"
+    ]
   },
   {
     "id": "p_not_allowed",
@@ -175,7 +183,11 @@
     "disambiguationHints": {
       "semanticDomain": "actions"
     },
-    "usageCount": 0
+    "usageCount": 0,
+    "categoryIds": [
+      "actions",
+      "food"
+    ]
   },
   {
     "id": "p_why",
@@ -352,7 +364,11 @@
     "disambiguationHints": {
       "semanticDomain": "hygiene"
     },
-    "usageCount": 0
+    "usageCount": 0,
+    "categoryIds": [
+      "quickchat",
+      "daily"
+    ]
   },
   {
     "id": "p_okay",
@@ -474,7 +490,11 @@
       "帮我"
     ],
     "disambiguationHints": {},
-    "usageCount": 0
+    "usageCount": 0,
+    "categoryIds": [
+      "quickchat",
+      "medical"
+    ]
   },
   {
     "id": "p_open_door",
@@ -732,7 +752,11 @@
     "disambiguationHints": {
       "semanticDomain": "actions"
     },
-    "usageCount": 0
+    "usageCount": 0,
+    "categoryIds": [
+      "actions",
+      "food"
+    ]
   },
   {
     "id": "p_yes",
@@ -787,7 +811,11 @@
     "categoryId": "quickchat",
     "synonyms": [],
     "disambiguationHints": {},
-    "usageCount": 0
+    "usageCount": 0,
+    "categoryIds": [
+      "quickchat",
+      "medical"
+    ]
   },
   {
     "id": "p_call_family",
@@ -803,7 +831,11 @@
     "categoryId": "quickchat",
     "synonyms": [],
     "disambiguationHints": {},
-    "usageCount": 0
+    "usageCount": 0,
+    "categoryIds": [
+      "quickchat",
+      "people"
+    ]
   },
   {
     "id": "p_call_nurse",
@@ -819,7 +851,11 @@
     "categoryId": "quickchat",
     "synonyms": [],
     "disambiguationHints": {},
-    "usageCount": 0
+    "usageCount": 0,
+    "categoryIds": [
+      "quickchat",
+      "medical"
+    ]
   },
   {
     "id": "p_give_me_time",
@@ -1087,7 +1123,11 @@
       "吃饭"
     ],
     "disambiguationHints": {},
-    "usageCount": 0
+    "usageCount": 0,
+    "categoryIds": [
+      "actions",
+      "food"
+    ]
   },
   {
     "id": "p_eat_breakfast",
@@ -1155,7 +1195,11 @@
       "饮"
     ],
     "disambiguationHints": {},
-    "usageCount": 0
+    "usageCount": 0,
+    "categoryIds": [
+      "actions",
+      "food"
+    ]
   },
   {
     "id": "p_sit",
@@ -1332,7 +1376,11 @@
     "disambiguationHints": {
       "semanticDomain": "activities"
     },
-    "usageCount": 0
+    "usageCount": 0,
+    "categoryIds": [
+      "activities",
+      "actions"
+    ]
   },
   {
     "id": "p_stand",
@@ -1811,7 +1859,11 @@
       "杯水"
     ],
     "disambiguationHints": {},
-    "usageCount": 0
+    "usageCount": 0,
+    "categoryIds": [
+      "food",
+      "actions"
+    ]
   },
   {
     "id": "p_fruit",
@@ -2356,7 +2408,11 @@
       "这边"
     ],
     "disambiguationHints": {},
-    "usageCount": 0
+    "usageCount": 0,
+    "categoryIds": [
+      "places",
+      "medical"
+    ]
   },
   {
     "id": "p_there",
@@ -2374,7 +2430,11 @@
       "那边"
     ],
     "disambiguationHints": {},
-    "usageCount": 0
+    "usageCount": 0,
+    "categoryIds": [
+      "places",
+      "medical"
+    ]
   },
   {
     "id": "p_unwell",
@@ -2794,7 +2854,11 @@
     "disambiguationHints": {
       "semanticDomain": "medical"
     },
-    "usageCount": 0
+    "usageCount": 0,
+    "categoryIds": [
+      "medical",
+      "actions"
+    ]
   },
   {
     "id": "p_eye_body",
@@ -3026,7 +3090,11 @@
     "disambiguationHints": {
       "semanticDomain": "medical"
     },
-    "usageCount": 0
+    "usageCount": 0,
+    "categoryIds": [
+      "medical",
+      "actions"
+    ]
   },
   {
     "id": "p_take_medicine",
@@ -3322,7 +3390,11 @@
     "categoryId": "time",
     "synonyms": [],
     "disambiguationHints": {},
-    "usageCount": 0
+    "usageCount": 0,
+    "categoryIds": [
+      "time",
+      "daily"
+    ]
   },
   {
     "id": "p_wait",
@@ -3343,7 +3415,11 @@
     "disambiguationHints": {
       "semanticDomain": "quickchat"
     },
-    "usageCount": 0
+    "usageCount": 0,
+    "categoryIds": [
+      "quickchat",
+      "daily"
+    ]
   },
   {
     "id": "p_soon",

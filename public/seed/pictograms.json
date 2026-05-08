@@ -29,7 +29,6 @@
     "categoryId": "quickchat",
     "synonyms": [
       "没",
-      "不是",
       "否"
     ],
     "disambiguationHints": {},
@@ -390,7 +389,6 @@
     },
     "categoryId": "quickchat",
     "synonyms": [
-      "可以",
       "行",
       "嗯",
       "好的",
@@ -701,7 +699,6 @@
     },
     "categoryId": "quickchat",
     "synonyms": [
-      "是",
       "对",
       "有的"
     ],
@@ -1262,7 +1259,6 @@
     "categoryId": "actions",
     "synonyms": [
       "睡",
-      "躺",
       "困"
     ],
     "disambiguationHints": {},
@@ -1429,14 +1425,16 @@
     },
     "categoryId": "emotions",
     "synonyms": [
-      "难过",
       "不开心",
       "悲伤"
     ],
     "disambiguationHints": {
       "semanticDomain": "emotions"
     },
-    "usageCount": 0
+    "usageCount": 0,
+    "relatedTerms": [
+      "难过"
+    ]
   },
   {
     "id": "p_cold",
@@ -2050,7 +2048,6 @@
     },
     "categoryId": "people",
     "synonyms": [
-      "姐姐",
       "姐妹"
     ],
     "disambiguationHints": {},
@@ -2263,7 +2260,6 @@
     },
     "categoryId": "places",
     "synonyms": [
-      "商店",
       "商场",
       "购物"
     ],
@@ -2375,11 +2371,13 @@
     },
     "categoryId": "medical",
     "synonyms": [
-      "发热",
       "高烧"
     ],
     "disambiguationHints": {},
-    "usageCount": 0
+    "usageCount": 0,
+    "relatedTerms": [
+      "发热"
+    ]
   },
   {
     "id": "p_feverish",
@@ -2544,13 +2542,15 @@
     },
     "categoryId": "medical",
     "synonyms": [
-      "眩晕",
-      "晕"
+      "眩晕"
     ],
     "disambiguationHints": {
       "semanticDomain": "medical"
     },
-    "usageCount": 0
+    "usageCount": 0,
+    "relatedTerms": [
+      "晕"
+    ]
   },
   {
     "id": "p_left",
@@ -4156,7 +4156,6 @@
     },
     "categoryId": "activities",
     "synonyms": [
-      "康复",
       "训练",
       "康复练习"
     ],
@@ -4164,7 +4163,10 @@
       "semanticDomain": "activities"
     },
     "usageCount": 0,
-    "manualOrder": 3
+    "manualOrder": 3,
+    "relatedTerms": [
+      "康复"
+    ]
   },
   {
     "id": "a_practice",
@@ -4387,14 +4389,16 @@
     },
     "categoryId": "emotions",
     "synonyms": [
-      "安静",
       "放松"
     ],
     "disambiguationHints": {
       "semanticDomain": "emotions"
     },
     "usageCount": 0,
-    "manualOrder": 7
+    "manualOrder": 7,
+    "relatedTerms": [
+      "安静"
+    ]
   },
   {
     "id": "p_upset",
@@ -4432,14 +4436,16 @@
     },
     "categoryId": "places",
     "synonyms": [
-      "睡房",
-      "房间"
+      "睡房"
     ],
     "disambiguationHints": {
       "semanticDomain": "places"
     },
     "usageCount": 0,
-    "manualOrder": 1
+    "manualOrder": 1,
+    "relatedTerms": [
+      "房间"
+    ]
   },
   {
     "id": "p_kitchen",

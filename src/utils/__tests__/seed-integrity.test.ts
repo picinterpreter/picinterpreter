@@ -162,6 +162,23 @@ describe('seed 数据完整性', () => {
     expect(collisions, `descriptor 主标签被其他分类占用，会导致 exact 级平局：\n${collisions.join('\n')}`).toHaveLength(0)
   })
 
+  it('synonym 不得是其他条目的 primary label（防止概念被吞噬）', () => {
+    // 如果词 W 是条目 A 的 labels.zh[0]，它就是 A 的"正式名"
+    // W 出现在条目 B 的 synonyms 里意味着：输入 W 本应命中 A，却可能被 B 抢走
+    const primaryLabel = new Map(
+      seed.map(e => [e.labels?.zh?.[0], e.id]).filter(([l]) => l)
+    )
+    const violations: string[] = []
+    for (const e of seed) {
+      for (const syn of e.synonyms ?? []) {
+        const owner = primaryLabel.get(syn)
+        if (owner && owner !== e.id)
+          violations.push(`${e.id} synonym "${syn}" 是 ${owner} 的主标签`)
+      }
+    }
+    expect(violations, violations.join('\n')).toHaveLength(0)
+  })
+
   it('跨概念高风险 synonym 不得出现（回归）', () => {
     // 每条规则记录：为什么这个词不该出现在这个条目里
     const BANNED: Record<string, string[]> = {

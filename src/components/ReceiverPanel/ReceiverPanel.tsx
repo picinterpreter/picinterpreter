@@ -17,8 +17,9 @@ import { matchTextToImages } from '@/utils/text-to-image-matcher'
 import { aiResegment } from '@/utils/ai-resegment'
 import { resolveImageSrc } from '@/utils/generate-placeholder-svg'
 import { searchAndStoreMissingPictograms } from '@/utils/runtime-pictogram-search'
+import { pictogramsFromSequenceResult, requestPictogramSequence } from '@/utils/pictogram-sequence-agent'
 import { db } from '@/db'
-import type { PictogramEntry } from '@/types'
+import type { PictogramEntry, PictogramSequenceMatchType } from '@/types'
 import type { MatchedToken, TextToImageMatchResult } from '@/utils/text-to-image-matcher'
 import { ReceiverDisplayOverlay, type DisplayItem } from './ReceiverDisplayOverlay'
 import { LineIcon } from '@/components/ui/LineIcon'
@@ -35,7 +36,7 @@ type Phase = 'idle' | 'matching' | 'ai-refining' | 'image-searching' | 'review'
 /**
  * 'manual' = 用户手动通过「换图」选取的图片，区别于自动匹配的几种类型。
  */
-type ItemMatchType = MatchedToken['matchType'] | 'manual'
+type ItemMatchType = MatchedToken['matchType'] | PictogramSequenceMatchType | 'manual'
 
 interface EditableItem {
   /** 稳定 React key，贯穿整个编辑生命周期 */
@@ -67,6 +68,8 @@ const MATCH_TYPE_BADGE: Record<ItemMatchType, string> = {
   exact:             'bg-green-100 text-green-700',
   synonym:           'bg-blue-100 text-blue-700',
   'lexicon-synonym': 'bg-yellow-100 text-yellow-700',
+  keyword:           'bg-yellow-100 text-yellow-700',
+  'ai-normalized':   'bg-indigo-100 text-indigo-700',
   partial:           'bg-orange-100 text-orange-700',
   manual:            'bg-purple-100 text-purple-700',
   none:              'bg-slate-100 text-slate-400',
@@ -76,6 +79,8 @@ const MATCH_TYPE_LABEL: Record<ItemMatchType, string> = {
   exact:             '精确',
   synonym:           '同义词',
   'lexicon-synonym': '词库',
+  keyword:           '词库',
+  'ai-normalized':   'AI',
   partial:           '包含',
   manual:            '手动选图',
   none:              '未匹配',
@@ -168,6 +173,36 @@ export function ReceiverPanel() {
     setMatchError(null)
 
     try {
+      // Step 0: 服务端 ARASAAC agent。失败时继续走原有离线/补图链路。
+      setPhase('ai-refining')
+
+      const agentCtrl = new AbortController()
+      pendingRequestRef.current = agentCtrl
+
+      const agentResult = await requestPictogramSequence(trimmed, agentCtrl.signal)
+      if (agentCtrl.signal.aborted || matchGenRef.current !== gen) return
+
+      if (agentResult && agentResult.items.length > 0) {
+        const agentPictograms = pictogramsFromSequenceResult(agentResult)
+        if (agentPictograms.length > 0) {
+          await db.pictograms.bulkPut(agentPictograms)
+          if (matchGenRef.current !== gen) return
+        }
+
+        setItems(
+          agentResult.items.map((item) => ({
+            id: crypto.randomUUID(),
+            token: item.token,
+            pictogram: item.pictogram,
+            matchType: item.matchType,
+          })),
+        )
+        setPhase('review')
+        return
+      }
+
+      setPhase('matching')
+
       // Step 1: 规则式分词 + 图片匹配
       let result = await matchTextToImages(trimmed)
 

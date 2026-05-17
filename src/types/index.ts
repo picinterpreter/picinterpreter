@@ -144,6 +144,27 @@ export interface TextToImageResult {
   createdAt: number
 }
 
+export type PictogramSequenceMatchType =
+  | 'exact'
+  | 'keyword'
+  | 'synonym'
+  | 'ai-normalized'
+  | 'none'
+
+export interface PictogramSequenceItem {
+  token: string
+  normalizedToken: string
+  pictogram: PictogramEntry | null
+  matchType: PictogramSequenceMatchType
+  confidence: number
+}
+
+export interface PictogramSequenceResponse {
+  items: PictogramSequenceItem[]
+  missingTokens: string[]
+  attempts: number
+}
+
 // ===== Provider 类型 =====
 
 export interface NLGRequest {

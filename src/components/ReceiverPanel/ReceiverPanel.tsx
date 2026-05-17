@@ -19,7 +19,7 @@ import { resolveImageSrc } from '@/utils/generate-placeholder-svg'
 import { searchAndStoreMissingPictograms } from '@/utils/runtime-pictogram-search'
 import { pictogramsFromSequenceResult, requestPictogramSequence } from '@/utils/pictogram-sequence-agent'
 import { db } from '@/db'
-import type { PictogramEntry, PictogramSequenceMatchType } from '@/types'
+import type { PictogramEntry, PictogramSequenceMatchType, PictogramSequenceTrace } from '@/types'
 import type { MatchedToken, TextToImageMatchResult } from '@/utils/text-to-image-matcher'
 import { ReceiverDisplayOverlay, type DisplayItem } from './ReceiverDisplayOverlay'
 import { LineIcon } from '@/components/ui/LineIcon'
@@ -86,12 +86,185 @@ const MATCH_TYPE_LABEL: Record<ItemMatchType, string> = {
   none:              '未匹配',
 }
 
+function toolDisplayName(toolName: string): string {
+  if (toolName === 'planPictogramConcepts') return '理解句意'
+  if (toolName === 'searchPictograms') return '搜索图片'
+  if (toolName === 'getPictogramDetail') return '验证图片'
+  return toolName
+}
+
+function formatToolInput(input: Record<string, string | number | boolean>): string {
+  const values = Object.entries(input)
+    .filter(([, value]) => value !== '')
+    .map(([key, value]) => `${key}: ${String(value)}`)
+
+  return values.length > 0 ? values.join('，') : '无参数'
+}
+
+function formatSearchQuery(query: {
+  name?: string
+  tag?: string
+  category?: string
+}): string {
+  const values = [
+    query.name ? `name=${query.name}` : '',
+    query.tag ? `tag=${query.tag}` : '',
+    query.category ? `category=${query.category}` : '',
+  ].filter(Boolean)
+
+  return values.length > 0 ? values.join('，') : '未记录'
+}
+
+function AgentTracePanel({ trace }: { trace: PictogramSequenceTrace | null }) {
+  if (!trace) return null
+
+  const latestDraft = trace.attempts
+    .flatMap((attempt) => attempt.draftedSequence)
+    .filter((label) => label.length > 0)
+  const hasThinking =
+    Boolean(trace.intent) ||
+    Boolean(trace.finalText) ||
+    latestDraft.length > 0 ||
+    trace.missingConcepts.length > 0 ||
+    trace.verifications.length > 0
+
+  return (
+    <details
+      className="rounded-2xl border border-slate-200 bg-white px-3 py-2.5 text-slate-800 shadow-[0_1px_8px_rgba(15,23,42,0.05)]"
+    >
+      <summary className="flex min-h-[44px] cursor-pointer list-none items-center gap-2 rounded-xl text-sm font-semibold text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 [&::-webkit-details-marker]:hidden">
+        <LineIcon name="sparkle" className="h-5 w-5 text-indigo-500" />
+        <span>Agent 过程</span>
+        <span className="ml-auto rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-500">
+          {trace.toolCalls.length} 次工具
+        </span>
+      </summary>
+
+      <div className="space-y-4 border-t border-slate-100 pt-3">
+        {hasThinking && (
+          <section className="space-y-2">
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+              <LineIcon name="message" className="h-4 w-4" />
+              <span>思路</span>
+            </div>
+            <div className="space-y-2 text-sm leading-relaxed text-slate-700">
+              {trace.intent && (
+                <p>
+                  <span className="font-medium text-slate-900">意图：</span>
+                  {trace.intent}
+                </p>
+              )}
+              {trace.finalText && (
+                <p>
+                  <span className="font-medium text-slate-900">图片句：</span>
+                  {trace.finalText}
+                </p>
+              )}
+              {latestDraft.length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                  {latestDraft.map((label, index) => (
+                    <span
+                      key={`${label}-${index}`}
+                      className="rounded-full bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700"
+                    >
+                      {label}
+                    </span>
+                  ))}
+                </div>
+              )}
+              {trace.missingConcepts.length > 0 && (
+                <p className="text-amber-700">
+                  <span className="font-medium">缺失：</span>
+                  {trace.missingConcepts.join('、')}
+                </p>
+              )}
+            </div>
+          </section>
+        )}
+
+        {trace.toolCalls.length > 0 && (
+          <section className="space-y-2">
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+              <LineIcon name="magnifier" className="h-4 w-4" />
+              <span>工具调用</span>
+            </div>
+            <div className="divide-y divide-slate-100 rounded-xl border border-slate-100">
+              {trace.toolCalls.map((call, index) => (
+                <div key={`${call.step}-${call.toolName}-${index}`} className="space-y-1 px-3 py-2.5">
+                  <div className="flex flex-wrap items-center gap-2 text-sm">
+                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-500">
+                      {call.step}
+                    </span>
+                    <span className="font-medium text-slate-900">{toolDisplayName(call.toolName)}</span>
+                    {call.ids && call.ids.length > 0 && (
+                      <span className="text-xs text-slate-400">
+                        ID {call.ids.slice(0, 6).join('、')}
+                      </span>
+                    )}
+                  </div>
+                  <p className="break-words text-xs leading-relaxed text-slate-500">
+                    {formatToolInput(call.input)}
+                  </p>
+                  <p className="break-words text-sm leading-relaxed text-slate-700">
+                    {call.outputSummary}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {trace.verifications.length > 0 && (
+          <section className="space-y-2">
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+              <LineIcon name="check" className="h-4 w-4" />
+              <span>验证</span>
+            </div>
+            <div className="space-y-1.5">
+              {trace.verifications.map((item) => (
+                <p key={`${item.arasaacId}-${item.label}`} className="text-sm leading-relaxed text-slate-700">
+                  <span className="font-medium text-slate-900">{item.label}</span>
+                  <span className="text-slate-400"> #{item.arasaacId}</span>
+                  {item.role && <span className="text-slate-500"> · {item.role}</span>}
+                  {item.verification && <span>：{item.verification}</span>}
+                </p>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {trace.attempts.length > 0 && (
+          <section className="space-y-2">
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+              <LineIcon name="clock" className="h-4 w-4" />
+              <span>尝试</span>
+            </div>
+            <div className="space-y-2">
+              {trace.attempts.map((attempt, index) => (
+                <div key={index} className="space-y-1 rounded-xl bg-slate-50 px-3 py-2 text-xs leading-relaxed text-slate-600">
+                  <p className="font-medium text-slate-800">第 {index + 1} 轮</p>
+                  {attempt.searchQueries.length > 0 && (
+                    <p>搜索：{attempt.searchQueries.map(formatSearchQuery).join('；')}</p>
+                  )}
+                  {attempt.candidateIds.length > 0 && <p>候选：{attempt.candidateIds.join('、')}</p>}
+                  {attempt.missingConcepts.length > 0 && <p>缺失：{attempt.missingConcepts.join('、')}</p>}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+    </details>
+  )
+}
+
 // ─── 主组件 ──────────────────────────────────────────────────────────────── //
 
 export function ReceiverPanel() {
   const [phase, setPhase] = useState<Phase>('idle')
   const [inputText, setInputText] = useState('')
   const [items, setItems] = useState<EditableItem[]>([])
+  const [agentTrace, setAgentTrace] = useState<PictogramSequenceTrace | null>(null)
 
   // AbortController ref：在组件卸载 / 重置时取消正在进行的 AI/补图请求
   const pendingRequestRef = useRef<AbortController | null>(null)
@@ -171,6 +344,7 @@ export function ReceiverPanel() {
 
     setPhase('matching')
     setMatchError(null)
+    setAgentTrace(null)
 
     try {
       // Step 0: 服务端 ARASAAC agent。失败时继续走原有离线/补图链路。
@@ -183,6 +357,7 @@ export function ReceiverPanel() {
       if (agentCtrl.signal.aborted || matchGenRef.current !== gen) return
 
       if (agentResult && agentResult.items.length > 0) {
+        setAgentTrace(agentResult.trace ?? null)
         const agentPictograms = pictogramsFromSequenceResult(agentResult)
         if (agentPictograms.length > 0) {
           await db.pictograms.bulkPut(agentPictograms)
@@ -202,6 +377,7 @@ export function ReceiverPanel() {
       }
 
       setPhase('matching')
+      setAgentTrace(null)
 
       // Step 1: 规则式分词 + 图片匹配
       let result = await matchTextToImages(trimmed)
@@ -331,6 +507,7 @@ export function ReceiverPanel() {
     setItems([])
     setInputText('')
     setMatchError(null)
+    setAgentTrace(null)
   }
 
   // ── 计算展示用的 matched items ────────────────────────────────────────── //
@@ -543,9 +720,11 @@ export function ReceiverPanel() {
                     {hasImage && (
                       <p className="text-xs text-slate-400 truncate">{item.pictogram!.labels.zh[0]}</p>
                     )}
-                    <span className={`inline-block text-xs px-1.5 py-0.5 rounded-full mt-0.5 ${MATCH_TYPE_BADGE[item.matchType]}`}>
-                      {MATCH_TYPE_LABEL[item.matchType]}
-                    </span>
+                    {item.matchType !== 'ai-normalized' && (
+                      <span className={`inline-block text-xs px-1.5 py-0.5 rounded-full mt-0.5 ${MATCH_TYPE_BADGE[item.matchType]}`}>
+                        {MATCH_TYPE_LABEL[item.matchType]}
+                      </span>
+                    )}
                   </div>
 
                   {/* 排序 + 删除按钮（min 44px touch targets） */}
@@ -578,6 +757,8 @@ export function ReceiverPanel() {
               )
             })}
           </div>
+
+          <AgentTracePanel trace={agentTrace} />
 
           {/* 展示给患者 */}
           <button

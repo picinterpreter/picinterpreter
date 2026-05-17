@@ -39,9 +39,13 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json(result)
-  } catch {
+  } catch (error) {
+    console.error('[pictogram-sequence] request failed', error)
+    const message = process.env.NODE_ENV === 'development' && error instanceof Error
+      ? error.message
+      : 'pictogram sequence failed'
     return NextResponse.json(
-      { error: { message: 'pictogram sequence failed' } },
+      { error: { message } },
       { status: 502 },
     )
   }

@@ -159,10 +159,51 @@ export interface PictogramSequenceItem {
   confidence: number
 }
 
+export interface PictogramAgentToolTrace {
+  step: number
+  toolName: string
+  input: Record<string, string | number | boolean>
+  outputSummary: string
+  resultCount?: number
+  ids?: string[]
+}
+
+export interface PictogramAgentAttemptTrace {
+  searchQueries: Array<{
+    name?: string
+    tag?: string
+    category?: string
+  }>
+  candidateIds: string[]
+  draftedSequence: string[]
+  rejected: Array<{
+    id: string
+    reason: string
+  }>
+  missingConcepts: string[]
+}
+
+export interface PictogramAgentVerificationTrace {
+  arasaacId: string
+  label: string
+  role?: string
+  verification?: string
+}
+
+export interface PictogramSequenceTrace {
+  intent?: string
+  finalText?: string
+  attempts: PictogramAgentAttemptTrace[]
+  verifications: PictogramAgentVerificationTrace[]
+  missingConcepts: string[]
+  toolCalls: PictogramAgentToolTrace[]
+}
+
 export interface PictogramSequenceResponse {
   items: PictogramSequenceItem[]
   missingTokens: string[]
   attempts: number
+  trace?: PictogramSequenceTrace
 }
 
 // ===== Provider 类型 =====

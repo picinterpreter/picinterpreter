@@ -171,6 +171,10 @@ function toPictogramEntry(indexed: IndexedRecord): PictogramEntry {
   }
 }
 
+export function arasaacRecordToPictogramEntry(record: ArasaacRecord): PictogramEntry {
+  return toPictogramEntry(indexRecord(record))
+}
+
 function indexRecord(record: ArasaacRecord): IndexedRecord {
   const zhNames = uniqueStrings([
     record.chineseName,

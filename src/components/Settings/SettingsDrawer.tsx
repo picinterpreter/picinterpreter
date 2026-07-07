@@ -9,6 +9,12 @@ import { CategoryIcon } from '@/components/CategoryIcon/CategoryIcon'
 import { db, forceReseed } from '@/db'
 import { movePictogramManualOrder, sortPictogramsForDisplay } from '@/utils/pictogram-order'
 import { shouldUseServerTts } from '@/utils/tts-environment'
+import {
+  DEFAULT_SERVER_TTS_VOICE_NAME,
+  SERVER_TTS_VOICE_OPTIONS,
+  getServerPresetVoiceName,
+  resolveServerTtsVoiceName,
+} from '@/utils/server-tts-voices'
 
 interface AIBackendStatus {
   configured: boolean
@@ -16,22 +22,6 @@ interface AIBackendStatus {
   baseUrl: string | null
   ttsConfigured?: boolean
   ttsModel?: string | null
-}
-
-const SERVER_TTS_MODEL = 'FunAudioLLM/CosyVoice2-0.5B'
-const SERVER_TTS_VOICE_OPTIONS = [
-  { id: 'anna', label: 'Anna', desc: '稳重女声' },
-  { id: 'bella', label: 'Bella', desc: '热情女声' },
-  { id: 'claire', label: 'Claire', desc: '温柔女声' },
-  { id: 'diana', label: 'Diana', desc: '活泼女声' },
-  { id: 'alex', label: 'Alex', desc: '稳重男声' },
-  { id: 'benjamin', label: 'Benjamin', desc: '低沉男声' },
-  { id: 'charles', label: 'Charles', desc: '磁性男声' },
-  { id: 'david', label: 'David', desc: '活泼男声' },
-] as const
-
-function getServerPresetVoiceName(id: string) {
-  return `${SERVER_TTS_MODEL}:${id}`
 }
 
 type SettingsSurfaceVariant = 'drawer' | 'page'
@@ -53,6 +43,7 @@ function SettingsSurface({ variant }: { variant: SettingsSurfaceVariant }) {
   const [serverPreviewing, setServerPreviewing] = useState(false)
   const [serverPreviewVoiceName, setServerPreviewVoiceName] = useState('')
   const [useCloudVoiceInCurrentBrowser, setUseCloudVoiceInCurrentBrowser] = useState(false)
+  const [saveState, setSaveState] = useState<'idle' | 'saved'>('idle')
   const serverPreviewAudioRef = useRef<HTMLAudioElement | null>(null)
   const previewingRef = useRef(false)
   const serverPreviewingRef = useRef(false)
@@ -136,6 +127,7 @@ function SettingsSurface({ variant }: { variant: SettingsSurfaceVariant }) {
       }
       return
     }
+    setSaveState('idle')
     setUseCloudVoiceInCurrentBrowser(shouldUseServerTts())
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setShowSettings(false) }
     document.addEventListener('keydown', handler)
@@ -205,7 +197,7 @@ function SettingsSurface({ variant }: { variant: SettingsSurfaceVariant }) {
   }
 
   function handlePreviewServerTts(voiceOverride?: string) {
-    const voice = voiceOverride ?? serverVoiceName.trim()
+    const voice = resolveServerTtsVoiceName(voiceOverride ?? serverVoiceName)
 
     if (serverPreviewing) {
       const wasSameVoice = serverPreviewVoiceName === voice
@@ -315,8 +307,15 @@ function SettingsSurface({ variant }: { variant: SettingsSurfaceVariant }) {
   function handleSave() {
     settings.setTtsRate(rate)
     settings.setTtsVoiceName(voiceName)
-    settings.setTtsServerVoiceName(serverVoiceName.trim())
-    if (!isPage) setShowSettings(false)
+    settings.setTtsServerVoiceName(resolveServerTtsVoiceName(serverVoiceName))
+    setSaveState('saved')
+    if (!isPage) {
+      window.setTimeout(() => setShowSettings(false), 700)
+    } else {
+      window.setTimeout(() => {
+        window.location.assign('/')
+      }, 700)
+    }
   }
 
   return (
@@ -514,7 +513,7 @@ function SettingsSurface({ variant }: { variant: SettingsSurfaceVariant }) {
               <div className="flex items-center justify-between gap-3">
                 <p className="text-sm font-medium text-slate-700">云端音色（微信内生效）</p>
                 <span className="shrink-0 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-500">
-                  {serverVoiceName.trim() ? '已选择' : '后端默认'}
+                  {resolveServerTtsVoiceName(serverVoiceName) === DEFAULT_SERVER_TTS_VOICE_NAME ? '默认 Claire' : '已选择'}
                 </span>
               </div>
               <p className="mt-1 text-xs leading-5 text-slate-500">
@@ -525,13 +524,15 @@ function SettingsSurface({ variant }: { variant: SettingsSurfaceVariant }) {
 
               <div className="mt-2 grid grid-cols-2 gap-2">
                 {[
-                  { id: 'default', label: '默认', desc: '后端配置', voiceName: '' },
-                  ...SERVER_TTS_VOICE_OPTIONS.map((voice) => ({
-                    ...voice,
-                    voiceName: getServerPresetVoiceName(voice.id),
-                  })),
+                  { id: 'default', label: '默认', desc: 'Claire 温柔女声', voiceName: DEFAULT_SERVER_TTS_VOICE_NAME },
+                  ...SERVER_TTS_VOICE_OPTIONS
+                    .filter((voice) => voice.id !== 'claire')
+                    .map((voice) => ({
+                      ...voice,
+                      voiceName: getServerPresetVoiceName(voice.id),
+                    })),
                 ].map((voice) => {
-                  const isSelected = serverVoiceName.trim() === voice.voiceName
+                  const isSelected = resolveServerTtsVoiceName(serverVoiceName) === voice.voiceName
                   const isPlaying = serverPreviewing && serverPreviewVoiceName === voice.voiceName
 
                   return (
@@ -569,11 +570,11 @@ function SettingsSurface({ variant }: { variant: SettingsSurfaceVariant }) {
                 type="text"
                 value={serverVoiceName}
                 onChange={(e) => setServerVoiceName(e.target.value)}
-                placeholder="留空使用后端默认音色"
+                placeholder="留空使用 Claire 默认音色"
                 className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-base text-slate-900 min-h-[44px] focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500"
               />
               <p className="mt-1 text-xs leading-5 text-slate-500">
-                微信内使用后端生成语音。需要服务商自定义音色时，可直接填写完整音色 ID。
+                微信内使用后端生成语音。留空或点默认时，会使用 Claire 温柔女声。
               </p>
             </label>
 
@@ -801,8 +802,8 @@ function SettingsSurface({ variant }: { variant: SettingsSurfaceVariant }) {
             onClick={handleSave}
             className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 text-lg font-semibold text-white transition-colors hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
           >
-            <LineIcon name="save" className="h-5 w-5 shrink-0" />
-            <span className="whitespace-nowrap">保存设置</span>
+            <LineIcon name={saveState === 'saved' ? 'check' : 'save'} className="h-5 w-5 shrink-0" />
+            <span className="whitespace-nowrap">{saveState === 'saved' ? '已保存' : '保存设置'}</span>
           </button>
         </div>
       </div>

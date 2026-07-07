@@ -1,3 +1,5 @@
+import { DEFAULT_SERVER_TTS_VOICE_NAME } from '@/utils/server-tts-voices'
+
 export interface ServerAIConfig {
   apiKey: string
   baseUrl: string
@@ -24,7 +26,7 @@ function defaultTtsModel(baseUrl: string): string {
 
 function defaultTtsVoice(baseUrl: string): string {
   return baseUrl.includes('siliconflow')
-    ? 'FunAudioLLM/CosyVoice2-0.5B:anna'
+    ? DEFAULT_SERVER_TTS_VOICE_NAME
     : 'coral'
 }
 

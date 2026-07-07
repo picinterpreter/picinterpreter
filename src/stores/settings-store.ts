@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { PictogramSortMode } from '@/utils/pictogram-order'
+import { DEFAULT_SERVER_TTS_VOICE_NAME } from '@/utils/server-tts-voices'
 
 export type FontSize = 'normal' | 'large' | 'xlarge'
 export type GridCols = 2 | 3 | 4
@@ -44,7 +45,7 @@ export const useSettingsStore = create<SettingsState>()(
     (set) => ({
       ttsRate: 0.9,
       ttsVoiceName: '',
-      ttsServerVoiceName: '',
+      ttsServerVoiceName: DEFAULT_SERVER_TTS_VOICE_NAME,
       highContrast: false,
       fontSize: 'normal',
       gridCols: 3,

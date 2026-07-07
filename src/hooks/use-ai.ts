@@ -13,6 +13,7 @@ import { ServerNLG } from '@/providers/server-nlg'
 import { useSettingsStore } from '@/stores/settings-store'
 import { useConversationStore } from '@/stores/conversation-store'
 import { buildRecentContext } from '@/utils/nlg-context'
+import { resolveServerTtsVoiceName } from '@/utils/server-tts-voices'
 import type { NLGRequest, NLGResponse, TTSRequest, TTSResult } from '@/types'
 
 export interface AIInterface {
@@ -52,7 +53,7 @@ export function useAI(): AIInterface {
         adapter.speak({
           ...req,
           voiceName: ttsVoiceNameRef.current || undefined,
-          serverVoiceName: ttsServerVoiceNameRef.current || undefined,
+          serverVoiceName: resolveServerTtsVoiceName(ttsServerVoiceNameRef.current),
         }),
       stopSpeaking: (): void => adapter.stopSpeaking(),
     }),

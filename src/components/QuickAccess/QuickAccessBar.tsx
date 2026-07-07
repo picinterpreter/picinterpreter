@@ -46,7 +46,7 @@ export function QuickAccessBar() {
           key={phrase.id}
           onClick={() => handleTap(phrase)}
           aria-label={`一键播报：${phrase.sentence}`}
-          className="apple-press min-h-[44px] max-w-[160px] shrink-0 truncate rounded-full bg-white px-3 py-1.5 text-sm font-semibold text-amber-950 shadow-[inset_0_0_0_2px_rgba(251,191,36,0.55)] transition-colors hover:bg-amber-100"
+          className="apple-press min-h-[44px] max-w-[160px] shrink-0 truncate rounded-full border-2 border-amber-300/70 bg-white px-3 py-1.5 text-sm font-semibold text-amber-950 transition-colors hover:bg-amber-100"
         >
           {phrase.sentence}
         </button>

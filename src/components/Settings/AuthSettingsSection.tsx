@@ -149,10 +149,10 @@ export function AuthSettingsSection() {
         </div>
         <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${
           status === 'authenticated'
-            ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200'
+            ? 'border border-emerald-200 bg-emerald-50 text-emerald-700'
             : status === 'loading'
-            ? 'bg-slate-100 text-slate-500 ring-1 ring-slate-200'
-            : 'bg-amber-50 text-amber-700 ring-1 ring-amber-200'
+            ? 'border border-slate-200 bg-slate-100 text-slate-500'
+            : 'border border-amber-200 bg-amber-50 text-amber-700'
         }`}>
           {status === 'authenticated' ? '已登录' : status === 'loading' ? '读取中' : '匿名模式'}
         </span>
@@ -165,7 +165,7 @@ export function AuthSettingsSection() {
         </div>
       ) : status === 'authenticated' && user ? (
         <div className="space-y-3">
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 shadow-sm">
+          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
             <div className="flex items-center gap-3">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-base font-bold text-white">
                 {user.username.slice(0, 1).toUpperCase()}
@@ -185,7 +185,7 @@ export function AuthSettingsSection() {
           <button
             onClick={handleLogout}
             disabled={isBusy}
-            className="w-full rounded-xl border border-rose-200 bg-white py-3 text-base font-semibold text-rose-600 transition-colors hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500"
+            className="w-full rounded-xl border border-rose-200 bg-white py-3 text-base font-semibold whitespace-nowrap text-rose-600 transition-colors hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500"
           >
             {busyAction === 'logout' ? '退出中…' : '退出登录'}
           </button>
@@ -206,9 +206,9 @@ export function AuthSettingsSection() {
                 <button
                   type="button"
                   onClick={() => setLocalDataAction('merge')}
-                  className={`rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors min-h-[44px] ${
+                  className={`rounded-xl border px-3 py-2.5 text-sm font-medium whitespace-nowrap transition-colors min-h-[44px] ${
                     localDataAction === 'merge'
-                      ? 'border-blue-500 bg-white text-blue-700 shadow-sm'
+                      ? 'border-blue-500 bg-white text-blue-700'
                       : 'border-amber-200 bg-white/70 text-slate-600 hover:bg-white'
                   }`}
                 >
@@ -217,9 +217,9 @@ export function AuthSettingsSection() {
                 <button
                   type="button"
                   onClick={() => setLocalDataAction('discard')}
-                  className={`rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors min-h-[44px] ${
+                  className={`rounded-xl border px-3 py-2.5 text-sm font-medium whitespace-nowrap transition-colors min-h-[44px] ${
                     localDataAction === 'discard'
-                      ? 'border-rose-400 bg-white text-rose-600 shadow-sm'
+                      ? 'border-rose-400 bg-white text-rose-600'
                       : 'border-amber-200 bg-white/70 text-slate-600 hover:bg-white'
                   }`}
                 >
@@ -240,9 +240,9 @@ export function AuthSettingsSection() {
               role="tab"
               aria-selected={mode === 'login'}
               onClick={() => switchMode('login')}
-              className={`rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors min-h-[44px] ${
+              className={`rounded-xl px-3 py-2.5 text-sm font-semibold whitespace-nowrap transition-colors min-h-[44px] ${
                 mode === 'login'
-                  ? 'bg-white text-slate-900 shadow-sm'
+                  ? 'border border-slate-200 bg-white text-slate-900'
                   : 'text-slate-500 hover:text-slate-700'
               }`}
             >
@@ -253,9 +253,9 @@ export function AuthSettingsSection() {
               role="tab"
               aria-selected={mode === 'register'}
               onClick={() => switchMode('register')}
-              className={`rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors min-h-[44px] ${
+              className={`rounded-xl px-3 py-2.5 text-sm font-semibold whitespace-nowrap transition-colors min-h-[44px] ${
                 mode === 'register'
-                  ? 'bg-white text-slate-900 shadow-sm'
+                  ? 'border border-slate-200 bg-white text-slate-900'
                   : 'text-slate-500 hover:text-slate-700'
               }`}
             >
@@ -264,7 +264,7 @@ export function AuthSettingsSection() {
           </div>
 
           {mode === 'login' ? (
-            <form onSubmit={handleLoginSubmit} className="space-y-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm" noValidate>
+            <form onSubmit={handleLoginSubmit} className="space-y-3 rounded-2xl border border-slate-200 bg-white p-4" noValidate>
               <div>
                 <label htmlFor="login-username" className="text-sm font-medium text-slate-700">用户名</label>
                 <input
@@ -285,13 +285,13 @@ export function AuthSettingsSection() {
                     onChange={(event) => setLoginPassword(event.target.value)}
                     type={showLoginPassword ? 'text' : 'password'}
                     placeholder="输入密码"
-                    className="min-w-0 flex-1 rounded-l-xl bg-transparent px-3 py-3 text-base text-slate-900 outline-none"
+                    className="min-w-0 flex-1 bg-transparent px-3 py-3 text-base text-slate-900 outline-none"
                     autoComplete="current-password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowLoginPassword((value) => !value)}
-                    className="shrink-0 px-3 text-sm font-medium text-slate-500 hover:text-slate-800 min-h-[44px]"
+                    className="shrink-0 px-3 text-sm font-medium whitespace-nowrap text-slate-500 hover:text-slate-800 min-h-[44px]"
                     aria-label={maskPasswordVisibleLabel(showLoginPassword)}
                   >
                     {showLoginPassword ? '隐藏' : '显示'}
@@ -301,13 +301,13 @@ export function AuthSettingsSection() {
               <button
                 type="submit"
                 disabled={!canLogin}
-                className="w-full rounded-xl bg-blue-600 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+                className="w-full rounded-xl bg-blue-600 py-3 text-base font-semibold whitespace-nowrap text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
               >
                 {busyAction === 'login' ? '登录中…' : '登录并同步'}
               </button>
             </form>
           ) : (
-            <form onSubmit={handleRegisterSubmit} className="space-y-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm" noValidate>
+            <form onSubmit={handleRegisterSubmit} className="space-y-3 rounded-2xl border border-slate-200 bg-white p-4" noValidate>
               <div>
                 <label htmlFor="register-username" className="text-sm font-medium text-slate-700">用户名</label>
                 <input
@@ -340,7 +340,7 @@ export function AuthSettingsSection() {
                     onChange={(event) => setRegisterPassword(event.target.value)}
                     type={showRegisterPassword ? 'text' : 'password'}
                     placeholder="至少 8 位"
-                    className="min-w-0 flex-1 rounded-l-xl bg-transparent px-3 py-3 text-base text-slate-900 outline-none"
+                    className="min-w-0 flex-1 bg-transparent px-3 py-3 text-base text-slate-900 outline-none"
                     autoComplete="new-password"
                     aria-invalid={registerPasswordError ? true : undefined}
                     aria-describedby={registerPasswordError ? 'register-password-error' : undefined}
@@ -348,7 +348,7 @@ export function AuthSettingsSection() {
                   <button
                     type="button"
                     onClick={() => setShowRegisterPassword((value) => !value)}
-                    className="shrink-0 px-3 text-sm font-medium text-slate-500 hover:text-slate-800 min-h-[44px]"
+                    className="shrink-0 px-3 text-sm font-medium whitespace-nowrap text-slate-500 hover:text-slate-800 min-h-[44px]"
                     aria-label={maskPasswordVisibleLabel(showRegisterPassword)}
                   >
                     {showRegisterPassword ? '隐藏' : '显示'}
@@ -378,7 +378,7 @@ export function AuthSettingsSection() {
               <button
                 type="submit"
                 disabled={!canRegister}
-                className="w-full rounded-xl bg-blue-600 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+                className="w-full rounded-xl bg-blue-600 py-3 text-base font-semibold whitespace-nowrap text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
               >
                 {busyAction === 'register' ? '注册中…' : '注册并登录'}
               </button>

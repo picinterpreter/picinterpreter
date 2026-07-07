@@ -60,7 +60,7 @@ export function OnboardingModal() {
       id: 0,
       content: (
         <div className="flex flex-col items-center text-center gap-5">
-          <div className="flex h-16 w-16 items-center justify-center rounded-[24px] bg-slate-950 text-white shadow-lg">
+          <div className="radius-panel flex h-16 w-16 items-center justify-center bg-slate-950 text-white">
             <LineIcon name="message" className="h-8 w-8" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900">欢迎使用图语家</h2>
@@ -143,22 +143,27 @@ export function OnboardingModal() {
       aria-modal="true"
       aria-label="使用引导"
     >
-      <div className="w-full max-w-sm bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+      <div className="flex w-full max-w-sm flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white">
         {/* 步骤指示器 */}
         <div className="flex justify-center gap-2 pt-5 pb-1 px-6">
           {steps.map((s) => (
             <button
               key={s.id}
               onClick={() => setStep(s.id)}
-              className={`h-1.5 rounded-full transition-all ${
-                s.id === step
-                  ? 'w-8 bg-blue-600'
-                  : s.id < step
-                  ? 'w-4 bg-blue-300'
-                  : 'w-4 bg-gray-200'
-              }`}
+              className="flex min-h-11 min-w-11 items-center justify-center rounded-full"
               aria-label={`跳转到第 ${s.id + 1} 步`}
-            />
+            >
+              <span
+                className={`h-1.5 rounded-full transition-all ${
+                  s.id === step
+                    ? 'w-8 bg-blue-600'
+                    : s.id < step
+                    ? 'w-4 bg-blue-300'
+                    : 'w-4 bg-gray-200'
+                }`}
+                aria-hidden="true"
+              />
+            </button>
           ))}
         </div>
 
@@ -175,16 +180,16 @@ export function OnboardingModal() {
                   onClick={() => setStep((s) => s - 1)}
                   className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gray-100 py-3 font-medium text-gray-600 transition-colors hover:bg-gray-200"
                 >
-                  <LineIcon name="arrowLeft" className="h-5 w-5" />
-                  上一步
+                  <LineIcon name="arrowLeft" className="h-5 w-5 shrink-0" />
+                  <span className="whitespace-nowrap">上一步</span>
                 </button>
               )}
               <button
                 onClick={() => setStep((s) => s + 1)}
                 className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 font-semibold text-white transition-colors hover:bg-blue-700"
               >
-                下一步
-                <LineIcon name="arrowRight" className="h-5 w-5" />
+                <span className="whitespace-nowrap">下一步</span>
+                <LineIcon name="arrowRight" className="h-5 w-5 shrink-0" />
               </button>
             </>
           ) : (
@@ -193,15 +198,15 @@ export function OnboardingModal() {
                 onClick={() => setStep((s) => s - 1)}
                 className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gray-100 py-3 font-medium text-gray-600 transition-colors hover:bg-gray-200"
               >
-                <LineIcon name="arrowLeft" className="h-5 w-5" />
-                上一步
+                <LineIcon name="arrowLeft" className="h-5 w-5 shrink-0" />
+                <span className="whitespace-nowrap">上一步</span>
               </button>
               <button
                 onClick={handleFinish}
                 className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 font-semibold text-white transition-colors hover:bg-blue-700"
               >
-                <LineIcon name="check" className="h-5 w-5" />
-                完成
+                <LineIcon name="check" className="h-5 w-5 shrink-0" />
+                <span className="whitespace-nowrap">完成</span>
               </button>
             </>
           )}

@@ -8,25 +8,54 @@ import { LineIcon } from '@/components/ui/LineIcon'
 import { CategoryIcon } from '@/components/CategoryIcon/CategoryIcon'
 import { db, forceReseed } from '@/db'
 import { movePictogramManualOrder, sortPictogramsForDisplay } from '@/utils/pictogram-order'
+import { shouldUseServerTts } from '@/utils/tts-environment'
 
 interface AIBackendStatus {
   configured: boolean
   model: string | null
   baseUrl: string | null
+  ttsConfigured?: boolean
+  ttsModel?: string | null
 }
 
-export function SettingsDrawer() {
-  const showSettings = useAppStore((s) => s.showSettings)
+const SERVER_TTS_MODEL = 'FunAudioLLM/CosyVoice2-0.5B'
+const SERVER_TTS_VOICE_OPTIONS = [
+  { id: 'anna', label: 'Anna', desc: '稳重女声' },
+  { id: 'bella', label: 'Bella', desc: '热情女声' },
+  { id: 'claire', label: 'Claire', desc: '温柔女声' },
+  { id: 'diana', label: 'Diana', desc: '活泼女声' },
+  { id: 'alex', label: 'Alex', desc: '稳重男声' },
+  { id: 'benjamin', label: 'Benjamin', desc: '低沉男声' },
+  { id: 'charles', label: 'Charles', desc: '磁性男声' },
+  { id: 'david', label: 'David', desc: '活泼男声' },
+] as const
+
+function getServerPresetVoiceName(id: string) {
+  return `${SERVER_TTS_MODEL}:${id}`
+}
+
+type SettingsSurfaceVariant = 'drawer' | 'page'
+
+function SettingsSurface({ variant }: { variant: SettingsSurfaceVariant }) {
+  const showSettingsFromStore = useAppStore((s) => s.showSettings)
   const setShowSettings = useAppStore((s) => s.setShowSettings)
   const setShowOnboarding = useAppStore((s) => s.setShowOnboarding)
   const activeCategoryId = useAppStore((s) => s.activeCategoryId)
   const settings = useSettingsStore()
+  const isPage = variant === 'page'
+  const showSettings = isPage || showSettingsFromStore
 
   const [rate, setRate] = useState(settings.ttsRate)
   const [voiceName, setVoiceName] = useState(settings.ttsVoiceName)
+  const [serverVoiceName, setServerVoiceName] = useState(settings.ttsServerVoiceName)
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([])
   const [previewing, setPreviewing] = useState(false)
+  const [serverPreviewing, setServerPreviewing] = useState(false)
+  const [serverPreviewVoiceName, setServerPreviewVoiceName] = useState('')
+  const [useCloudVoiceInCurrentBrowser, setUseCloudVoiceInCurrentBrowser] = useState(false)
+  const serverPreviewAudioRef = useRef<HTMLAudioElement | null>(null)
   const previewingRef = useRef(false)
+  const serverPreviewingRef = useRef(false)
   const canUseSpeechSynthesis = typeof window !== 'undefined' && 'speechSynthesis' in window
 
   type TestStatus = 'idle' | 'testing' | 'ok' | 'error'
@@ -75,12 +104,15 @@ export function SettingsDrawer() {
   }, [])
 
   useEffect(() => { previewingRef.current = previewing }, [previewing])
+  useEffect(() => { serverPreviewingRef.current = serverPreviewing }, [serverPreviewing])
 
   useEffect(() => {
     return () => {
       if (previewingRef.current) {
         window.speechSynthesis?.cancel()
       }
+      serverPreviewAudioRef.current?.pause()
+      serverPreviewAudioRef.current = null
     }
   }, [])
 
@@ -95,8 +127,16 @@ export function SettingsDrawer() {
         setPreviewing(false)
         previewingRef.current = false
       }
+      if (serverPreviewingRef.current) {
+        serverPreviewAudioRef.current?.pause()
+        serverPreviewAudioRef.current = null
+        setServerPreviewing(false)
+        setServerPreviewVoiceName('')
+        serverPreviewingRef.current = false
+      }
       return
     }
+    setUseCloudVoiceInCurrentBrowser(shouldUseServerTts())
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setShowSettings(false) }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
@@ -162,6 +202,41 @@ export function SettingsDrawer() {
 
     window.speechSynthesis.cancel()
     window.speechSynthesis.speak(utterance)
+  }
+
+  function handlePreviewServerTts(voiceOverride?: string) {
+    const voice = voiceOverride ?? serverVoiceName.trim()
+
+    if (serverPreviewing) {
+      const wasSameVoice = serverPreviewVoiceName === voice
+      serverPreviewAudioRef.current?.pause()
+      serverPreviewAudioRef.current = null
+      setServerPreviewing(false)
+      setServerPreviewVoiceName('')
+      if (wasSameVoice) return
+    }
+
+    const params = new URLSearchParams()
+    params.set('text', '你好，这是图语家的云端语音播报效果测试。')
+    params.set('rate', String(rate))
+    if (voice) params.set('voice', voice)
+
+    const audio = new Audio(`/api/ai/tts?${params.toString()}`)
+    serverPreviewAudioRef.current = audio
+    setServerPreviewing(true)
+    setServerPreviewVoiceName(voice)
+
+    const finish = () => {
+      if (serverPreviewAudioRef.current === audio) {
+        serverPreviewAudioRef.current = null
+      }
+      setServerPreviewing(false)
+      setServerPreviewVoiceName('')
+    }
+
+    audio.onended = finish
+    audio.onerror = finish
+    audio.play().catch(finish)
   }
 
   async function handleTestConnection() {
@@ -240,34 +315,57 @@ export function SettingsDrawer() {
   function handleSave() {
     settings.setTtsRate(rate)
     settings.setTtsVoiceName(voiceName)
-    setShowSettings(false)
+    settings.setTtsServerVoiceName(serverVoiceName.trim())
+    if (!isPage) setShowSettings(false)
   }
 
   return (
-    <div className="fixed inset-0 z-40 flex">
-      <div className="flex-1 bg-slate-950/45 backdrop-blur-[1px]" onClick={() => setShowSettings(false)} />
+    <div className={isPage ? 'min-h-dvh bg-slate-50 text-slate-950' : 'fixed inset-0 z-40 flex'}>
+      {!isPage && (
+        <div className="flex-1 bg-slate-950/45 backdrop-blur-[1px]" onClick={() => setShowSettings(false)} />
+      )}
 
-      <div className="flex w-[28rem] max-w-[92vw] flex-col bg-slate-50 shadow-2xl">
+      <div className={isPage ? 'mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-slate-50' : 'flex w-[28rem] max-w-[92vw] flex-col border-r border-slate-200 bg-slate-50'}>
         <div className="border-b border-slate-200 bg-white px-4 py-3">
           <div className="flex items-center justify-between gap-3">
-            <div>
-              <h2 className="text-lg font-bold text-slate-900">设置</h2>
-              <p className="mt-0.5 text-xs text-slate-500">账号、语音和显示偏好</p>
+            <div className="flex min-w-0 items-center gap-3">
+              {isPage && (
+                <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-white">
+                  <LineIcon name="user" className="h-6 w-6" />
+                </div>
+              )}
+              <div className="min-w-0">
+                <h2 className="truncate text-lg font-bold text-slate-900">
+                  {isPage ? '个人主页' : '设置'}
+                </h2>
+                <p className="mt-0.5 text-xs text-slate-500">账号、语音和显示偏好</p>
+              </div>
             </div>
-          <button
-            onClick={() => setShowSettings(false)}
-              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-            aria-label="关闭"
-          >
-            <LineIcon name="close" className="h-5 w-5" />
-          </button>
+            {isPage ? (
+              <a
+                href="/"
+                className="flex min-h-[44px] items-center justify-center gap-1.5 rounded-xl px-3 text-sm font-medium text-slate-500 transition hover:bg-slate-100 hover:text-slate-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+                aria-label="返回首页"
+              >
+                <LineIcon name="arrowLeft" className="h-4 w-4 shrink-0" />
+                <span className="whitespace-nowrap">首页</span>
+              </a>
+            ) : (
+              <button
+                onClick={() => setShowSettings(false)}
+                className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+                aria-label="关闭"
+              >
+                <LineIcon name="close" className="h-5 w-5" />
+              </button>
+            )}
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 space-y-5">
+        <div className={isPage ? 'grid flex-1 gap-5 p-4 sm:grid-cols-2 lg:p-6' : 'flex-1 overflow-y-auto p-4 space-y-5'}>
           <AuthSettingsSection />
 
-          <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <section className="rounded-2xl border border-slate-200 bg-white p-4">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <h3 className="text-base font-semibold text-slate-800">AI 生成</h3>
@@ -275,10 +373,10 @@ export function SettingsDrawer() {
               </div>
               <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${
                 statusLoading
-                  ? 'bg-slate-100 text-slate-500 ring-1 ring-slate-200'
+                  ? 'border border-slate-200 bg-slate-100 text-slate-500'
                   : backendStatus?.configured
-                  ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200'
-                  : 'bg-amber-50 text-amber-700 ring-1 ring-amber-200'
+                  ? 'border border-emerald-200 bg-emerald-50 text-emerald-700'
+                  : 'border border-amber-200 bg-amber-50 text-amber-700'
               }`}>
                 {statusLoading ? '检测中' : backendStatus?.configured ? '已配置' : '未配置'}
               </span>
@@ -289,13 +387,16 @@ export function SettingsDrawer() {
               <p className="text-sm text-slate-600">
                 模型：{backendStatus?.model ?? '未设置'}
               </p>
+              <p className="text-sm text-slate-600">
+                语音：{backendStatus?.ttsConfigured ? backendStatus.ttsModel ?? '已配置' : '未设置'}
+              </p>
               <p className="break-all text-sm text-slate-600">
                 地址：{backendStatus?.baseUrl ?? '未设置'}
               </p>
             </div>
 
             {!backendStatus?.configured && !statusLoading && (
-              <p className="mt-2 rounded-xl bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-700 ring-1 ring-amber-100">
+              <p className="mt-2 rounded-xl border border-amber-100 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-700">
                 未配置后端 AI 时，会自动退回离线模板句，接收模式中的 AI 优化也会停用。
               </p>
             )}
@@ -314,11 +415,11 @@ export function SettingsDrawer() {
                     : 'border-slate-200 text-slate-700 hover:bg-slate-50'
                   }`}
               >
-                {testStatus === 'testing' && <LineIcon name="loader" className="h-4 w-4 animate-spin" />}
-                {testStatus === 'ok' && <LineIcon name="check" className="h-4 w-4" />}
-                {testStatus === 'error' && <LineIcon name="xmark" className="h-4 w-4" />}
-                {testStatus === 'idle' && <LineIcon name="link" className="h-4 w-4" />}
-                <span>
+                {testStatus === 'testing' && <LineIcon name="loader" className="h-4 w-4 shrink-0 animate-spin" />}
+                {testStatus === 'ok' && <LineIcon name="check" className="h-4 w-4 shrink-0" />}
+                {testStatus === 'error' && <LineIcon name="xmark" className="h-4 w-4 shrink-0" />}
+                {testStatus === 'idle' && <LineIcon name="link" className="h-4 w-4 shrink-0" />}
+                <span className="truncate">
                   {testStatus === 'testing' ? '连接测试中…'
                     : testStatus === 'ok' ? '连接成功'
                     : testStatus === 'error' ? '连接失败'
@@ -338,8 +439,14 @@ export function SettingsDrawer() {
             </div>
           </section>
 
-          <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <section className="rounded-2xl border border-slate-200 bg-white p-4">
             <h3 className="text-base font-semibold text-slate-800 mb-3">语音播报</h3>
+            <div className="mb-4 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs leading-5 text-slate-600">
+              <span className="font-medium text-slate-700">当前环境：</span>
+              {useCloudVoiceInCurrentBrowser
+                ? '微信内播放，正式播报会使用下方云端音色。'
+                : '普通浏览器播放，正式播报会优先使用系统语音；云端音色只在微信内生效。'}
+            </div>
 
             <label className="block mb-4">
               <span className="text-sm font-medium text-slate-700">语速：{rate.toFixed(1)}</span>
@@ -356,7 +463,7 @@ export function SettingsDrawer() {
 
             {canUseSpeechSynthesis && (
               <label className="block">
-                <span className="text-sm font-medium text-slate-700">语音</span>
+                <span className="text-sm font-medium text-slate-700">系统语音（普通浏览器）</span>
                 <select
                   value={voiceName}
                   onChange={(e) => setVoiceName(e.target.value)}
@@ -374,6 +481,9 @@ export function SettingsDrawer() {
                     暂未检测到可用语音，将自动使用系统默认语音
                   </p>
                 )}
+                <p className="mt-1 text-xs leading-5 text-slate-500">
+                  Safari、Chrome 等普通浏览器使用这里的语音。微信内无法稳定直接播报时，会改用下方云端音色。
+                </p>
               </label>
             )}
 
@@ -388,20 +498,108 @@ export function SettingsDrawer() {
               >
                 {previewing ? (
                   <>
-                    <LineIcon name="sound" className="h-4 w-4 animate-pulse" />
-                    <span>播放中，点击停止</span>
+                    <LineIcon name="sound" className="h-4 w-4 shrink-0 animate-pulse" />
+                    <span className="truncate">播放中，点击停止</span>
                   </>
                 ) : (
                   <>
-                    <LineIcon name="sound" className="h-4 w-4" />
-                    <span>试听当前语音效果</span>
+                    <LineIcon name="sound" className="h-4 w-4 shrink-0" />
+                    <span className="truncate">试听系统语音</span>
                   </>
                 )}
               </button>
             )}
+
+            <div className="mt-4">
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-sm font-medium text-slate-700">云端音色（微信内生效）</p>
+                <span className="shrink-0 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-500">
+                  {serverVoiceName.trim() ? '已选择' : '后端默认'}
+                </span>
+              </div>
+              <p className="mt-1 text-xs leading-5 text-slate-500">
+                {useCloudVoiceInCurrentBrowser
+                  ? '当前微信环境会使用这组后端语音；上方系统语音设置主要用于普通浏览器。'
+                  : '这组音色只影响微信内的后端语音。当前普通浏览器试听可以听效果，但正式播报仍按上方系统语音设置。'}
+              </p>
+
+              <div className="mt-2 grid grid-cols-2 gap-2">
+                {[
+                  { id: 'default', label: '默认', desc: '后端配置', voiceName: '' },
+                  ...SERVER_TTS_VOICE_OPTIONS.map((voice) => ({
+                    ...voice,
+                    voiceName: getServerPresetVoiceName(voice.id),
+                  })),
+                ].map((voice) => {
+                  const isSelected = serverVoiceName.trim() === voice.voiceName
+                  const isPlaying = serverPreviewing && serverPreviewVoiceName === voice.voiceName
+
+                  return (
+                    <button
+                      key={voice.id}
+                      type="button"
+                      onClick={() => {
+                        setServerVoiceName(voice.voiceName)
+                        handlePreviewServerTts(voice.voiceName)
+                      }}
+                      aria-pressed={isSelected}
+                      className={`flex min-h-[56px] items-center gap-2 rounded-xl border px-3 py-2 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 ${
+                        isSelected
+                          ? 'border-blue-500 bg-blue-50 text-blue-700'
+                          : 'border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50/40'
+                      }`}
+                    >
+                      <LineIcon
+                        name={isPlaying ? 'sound' : 'play'}
+                        className={`h-4 w-4 shrink-0 ${isPlaying ? 'animate-pulse' : ''}`}
+                      />
+                      <span className="min-w-0">
+                        <span className="block truncate text-sm font-semibold">{voice.label}</span>
+                        <span className="block truncate text-xs text-slate-500">{voice.desc}</span>
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
+            <label className="mt-3 block">
+              <span className="text-sm font-medium text-slate-700">自定义音色 ID</span>
+              <input
+                type="text"
+                value={serverVoiceName}
+                onChange={(e) => setServerVoiceName(e.target.value)}
+                placeholder="留空使用后端默认音色"
+                className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-base text-slate-900 min-h-[44px] focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500"
+              />
+              <p className="mt-1 text-xs leading-5 text-slate-500">
+                微信内使用后端生成语音。需要服务商自定义音色时，可直接填写完整音色 ID。
+              </p>
+            </label>
+
+            <button
+              onClick={() => handlePreviewServerTts()}
+              className={`mt-3 w-full py-2.5 rounded-xl border text-base font-semibold transition-colors min-h-[44px] flex items-center justify-center gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 ${
+                serverPreviewing
+                  ? 'border-blue-400 bg-blue-50 text-blue-700'
+                  : 'border-slate-200 text-slate-700 hover:bg-slate-50'
+              }`}
+            >
+              {serverPreviewing ? (
+                <>
+                  <LineIcon name="sound" className="h-4 w-4 shrink-0 animate-pulse" />
+                  <span className="truncate">播放中，点击停止</span>
+                </>
+              ) : (
+                <>
+                  <LineIcon name="sound" className="h-4 w-4 shrink-0" />
+                  <span className="truncate">试听云端音色</span>
+                </>
+              )}
+            </button>
           </section>
 
-          <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <section className="rounded-2xl border border-slate-200 bg-white p-4">
             <h3 className="text-base font-semibold text-slate-800 mb-3">显示</h3>
 
             <div className="mb-4">
@@ -413,7 +611,7 @@ export function SettingsDrawer() {
                     onClick={() => settings.setGridCols(option.value)}
                     className={`flex-1 py-2.5 rounded-xl border text-center transition-colors min-h-[48px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500
                       ${settings.gridCols === option.value
-                        ? 'border-blue-500 bg-blue-50 text-blue-700 font-semibold shadow-sm'
+                        ? 'border-blue-500 bg-blue-50 text-blue-700 font-semibold'
                         : 'border-slate-200 bg-white text-slate-600 hover:border-blue-300 hover:bg-blue-50/40'
                       }`}
                   >
@@ -432,7 +630,7 @@ export function SettingsDrawer() {
                     onClick={() => settings.setFontSize(option.value)}
                     className={`flex-1 py-2.5 rounded-xl border text-center transition-colors min-h-[48px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500
                       ${settings.fontSize === option.value
-                        ? 'border-blue-500 bg-blue-50 text-blue-700 font-semibold shadow-sm'
+                        ? 'border-blue-500 bg-blue-50 text-blue-700 font-semibold'
                         : 'border-slate-200 bg-white text-slate-600 hover:border-blue-300 hover:bg-blue-50/40'
                       }`}
                   >
@@ -453,7 +651,7 @@ export function SettingsDrawer() {
             </label>
           </section>
 
-          <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <section className="rounded-2xl border border-slate-200 bg-white p-4">
             <h3 className="text-base font-semibold text-slate-800 mb-1">卡片顺序</h3>
             <p className="text-xs text-slate-500 mb-3">默认使用固定顺序，患者更容易形成稳定记忆；需要时可以切到常用优先。</p>
 
@@ -469,7 +667,7 @@ export function SettingsDrawer() {
                     onClick={() => settings.setPictogramSortMode(option.value as 'manual' | 'popularity')}
                     className={`flex-1 py-2.5 rounded-xl border text-center transition-colors min-h-[48px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500
                       ${settings.pictogramSortMode === option.value
-                        ? 'border-blue-500 bg-blue-50 text-blue-700 font-semibold shadow-sm'
+                        ? 'border-blue-500 bg-blue-50 text-blue-700 font-semibold'
                         : 'border-slate-200 bg-white text-slate-600 hover:border-blue-300 hover:bg-blue-50/40'
                       }`}
                   >
@@ -496,7 +694,7 @@ export function SettingsDrawer() {
               </div>
 
               {settings.pictogramSortMode !== 'manual' && (
-                <p className="rounded-xl bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-700 ring-1 ring-amber-100">
+                <p className="rounded-xl border border-amber-100 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-700">
                   现在显示的是“常用优先”。切回“固定顺序”后，会恢复你在下面排好的手动顺序。
                 </p>
               )}
@@ -543,7 +741,7 @@ export function SettingsDrawer() {
           </section>
 
           {allCategories && allCategories.length > 0 && (
-            <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <section className="rounded-2xl border border-slate-200 bg-white p-4">
               <h3 className="text-base font-semibold text-slate-800 mb-1">分类管理</h3>
               <p className="text-xs text-slate-500 mb-3">隐藏患者不常用的分类，保持界面简洁</p>
               <div className="space-y-1">
@@ -579,7 +777,7 @@ export function SettingsDrawer() {
             </section>
           )}
 
-          <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <section className="rounded-2xl border border-slate-200 bg-white p-4">
             <h3 className="text-base font-semibold text-slate-800 mb-3">关于</h3>
             <div className="flex flex-col gap-2">
               <button
@@ -590,8 +788,8 @@ export function SettingsDrawer() {
                 }}
                 className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl border border-slate-200 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
               >
-                <LineIcon name="refresh" className="h-4 w-4" />
-                重看使用引导
+                <LineIcon name="refresh" className="h-4 w-4 shrink-0" />
+                <span className="truncate">重看使用引导</span>
               </button>
               <ReseedButton />
             </div>
@@ -601,15 +799,23 @@ export function SettingsDrawer() {
         <div className="border-t border-slate-200 bg-white p-4">
           <button
             onClick={handleSave}
-            className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 text-lg font-semibold text-white shadow-sm transition-colors hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+            className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 text-lg font-semibold text-white transition-colors hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
           >
-            <LineIcon name="save" className="h-5 w-5" />
-            保存设置
+            <LineIcon name="save" className="h-5 w-5 shrink-0" />
+            <span className="whitespace-nowrap">保存设置</span>
           </button>
         </div>
       </div>
     </div>
   )
+}
+
+export function SettingsDrawer() {
+  return <SettingsSurface variant="drawer" />
+}
+
+export function ProfileSettingsPage() {
+  return <SettingsSurface variant="page" />
 }
 
 function ReseedButton() {
@@ -640,8 +846,8 @@ function ReseedButton() {
       disabled={state === 'loading'}
       className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl border border-red-200 py-2.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
     >
-      <LineIcon name={state === 'done' ? 'check' : 'refresh'} className="h-4 w-4" />
-      {label}
+      <LineIcon name={state === 'done' ? 'check' : 'refresh'} className="h-4 w-4 shrink-0" />
+      <span className="truncate">{label}</span>
     </button>
   )
 }

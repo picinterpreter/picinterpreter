@@ -9,3 +9,7 @@ export function shouldDeferTtsAutoplay(): boolean {
 export function shouldUseServerTts(userAgent = typeof navigator === 'undefined' ? '' : navigator.userAgent): boolean {
   return isWeChatWebView(userAgent)
 }
+
+export function shouldUseWebSpeechRecognition(userAgent = typeof navigator === 'undefined' ? '' : navigator.userAgent): boolean {
+  return !isWeChatWebView(userAgent)
+}

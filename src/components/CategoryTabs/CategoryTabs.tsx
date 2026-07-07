@@ -69,10 +69,10 @@ export function CategoryTabs() {
         <button
           data-cat="quickchat"
           onClick={() => setActiveCategory('quickchat')}
-          className={`apple-press flex min-h-[48px] flex-shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-4 py-2.5 text-base font-semibold transition-colors
+          className={`apple-press flex min-h-[48px] flex-shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-4 py-2.5 text-base font-semibold transition-colors
             ${activeCategoryId === 'quickchat'
-              ? 'bg-slate-900 text-white shadow-sm'
-              : 'bg-white text-slate-800 shadow-[inset_0_0_0_1px_rgba(120,113,108,0.26)] hover:bg-stone-100'
+              ? 'border-slate-900 bg-slate-900 text-white'
+              : 'border-stone-300 bg-white text-slate-800 hover:bg-stone-100'
             }`}
           aria-pressed={activeCategoryId === 'quickchat'}
         >
@@ -81,7 +81,7 @@ export function CategoryTabs() {
         </button>
         <button
           onClick={() => setShowSavedPhrases(true)}
-          className="apple-press flex min-h-[56px] flex-shrink-0 items-center gap-2 whitespace-nowrap rounded-full bg-amber-400 px-5 py-3 text-lg font-bold text-amber-950 shadow-md shadow-amber-200/70 transition-colors hover:bg-amber-300"
+          className="apple-press flex min-h-[56px] flex-shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-amber-500/25 bg-amber-400 px-5 py-3 text-lg font-bold text-amber-950 transition-colors hover:bg-amber-300"
           aria-label="常用语"
         >
           <LineIcon name="star" className="h-6 w-6" />
@@ -90,10 +90,10 @@ export function CategoryTabs() {
         <button
           data-cat="recent"
           onClick={() => setActiveCategory('recent')}
-          className={`apple-press flex items-center gap-1.5 px-4 py-2.5 rounded-full text-base font-semibold whitespace-nowrap transition-colors min-h-[48px] flex-shrink-0
+          className={`apple-press flex min-h-[48px] flex-shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-4 py-2.5 text-base font-semibold transition-colors
             ${activeCategoryId === 'recent'
-              ? 'bg-slate-900 text-white shadow-sm'
-              : 'bg-white text-slate-800 shadow-[inset_0_0_0_1px_rgba(120,113,108,0.26)] hover:bg-stone-100'
+              ? 'border-slate-900 bg-slate-900 text-white'
+              : 'border-stone-300 bg-white text-slate-800 hover:bg-stone-100'
             }`}
           aria-pressed={activeCategoryId === 'recent'}
         >
@@ -106,10 +106,10 @@ export function CategoryTabs() {
             key={cat.id}
             data-cat={cat.id}
             onClick={() => setActiveCategory(cat.id)}
-            className={`apple-press flex items-center gap-1.5 px-4 py-2.5 rounded-full text-base font-semibold whitespace-nowrap transition-colors min-h-[48px] flex-shrink-0
+            className={`apple-press flex min-h-[48px] flex-shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-4 py-2.5 text-base font-semibold transition-colors
               ${activeCategoryId === cat.id
-                ? 'bg-slate-900 text-white shadow-sm'
-                : 'bg-white text-slate-800 shadow-[inset_0_0_0_1px_rgba(120,113,108,0.26)] hover:bg-stone-100'
+                ? 'border-slate-900 bg-slate-900 text-white'
+                : 'border-stone-300 bg-white text-slate-800 hover:bg-stone-100'
               }`}
             aria-pressed={activeCategoryId === cat.id}
           >
@@ -119,7 +119,7 @@ export function CategoryTabs() {
         ))}
         <button
           onClick={() => setShowCategoryLinks(true)}
-          className="apple-press flex min-h-[48px] min-w-[48px] flex-shrink-0 items-center justify-center rounded-full bg-white text-slate-700 shadow-[inset_0_0_0_1px_rgba(120,113,108,0.26)] transition-colors hover:bg-stone-100"
+          className="apple-press flex min-h-[48px] min-w-[48px] flex-shrink-0 items-center justify-center rounded-full border border-stone-300 bg-white text-slate-700 transition-colors hover:bg-stone-100"
           aria-label="分类链接管理"
           title="分类链接管理"
         >

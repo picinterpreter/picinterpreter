@@ -42,7 +42,7 @@ function SortableItem({ pictogram, index, onRemove }: {
     <div
       ref={setNodeRef}
       style={style}
-      className="relative flex min-w-[5.25rem] select-none flex-col items-center gap-0.5 rounded-[22px] border-2 border-blue-200 bg-blue-50 p-2 shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_18px_rgba(37,99,235,0.16)]"
+      className="radius-card relative flex min-w-[5.25rem] select-none flex-col items-center gap-0.5 border-2 border-blue-200 bg-blue-50 p-2"
       {...attributes}
       {...listeners}
     >
@@ -59,10 +59,12 @@ function SortableItem({ pictogram, index, onRemove }: {
           e.stopPropagation()
           onRemove(index)
         }}
-        className="absolute -top-1.5 -right-1.5 w-7 h-7 rounded-full bg-slate-950 text-white flex items-center justify-center hover:bg-slate-700 shadow"
+        className="absolute -top-3 -right-3 flex min-h-11 min-w-11 items-center justify-center rounded-full text-white"
         aria-label={`移除 ${pictogram.labels.zh[0]}`}
       >
-        <LineIcon name="close" className="h-3.5 w-3.5" />
+        <span className="flex size-7 items-center justify-center rounded-full bg-slate-950 transition-colors hover:bg-slate-700">
+          <LineIcon name="close" className="h-3.5 w-3.5" />
+        </span>
       </button>
     </div>
   )
@@ -101,7 +103,7 @@ export function SelectionTray() {
   return (
     <>
       <div className="border-b-2 border-blue-200 bg-blue-50 px-3 py-3">
-        <div className="flex items-stretch gap-3">
+        <div className="flex items-stretch gap-2 sm:gap-3">
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
@@ -111,7 +113,7 @@ export function SelectionTray() {
               items={selectedPictograms.map((_, i) => `sel-${i}`)}
               strategy={horizontalListSortingStrategy}
             >
-              <div className="flex min-h-[5.75rem] flex-1 gap-2 overflow-x-auto py-1.5">
+              <div className="flex min-h-[5.75rem] min-w-0 flex-1 gap-2 overflow-x-auto py-1.5">
                 {selectedPictograms.map((p, i) => (
                   <SortableItem
                     key={`${p.id}-${i}`}
@@ -124,21 +126,21 @@ export function SelectionTray() {
             </SortableContext>
           </DndContext>
 
-          <div className="flex w-24 shrink-0 flex-col gap-2 sm:w-32">
+          <div className="flex w-28 shrink-0 flex-col gap-2 sm:w-32">
             <button
               onClick={clearSelection}
-              className="apple-press flex flex-1 items-center justify-center gap-1.5 rounded-[22px] bg-white px-3 py-2 text-base font-semibold text-blue-900 shadow-[inset_0_0_0_2px_rgba(147,197,253,0.8)] transition-colors hover:bg-blue-100"
+              className="apple-press radius-control flex flex-1 items-center justify-center gap-1.5 border-2 border-blue-200 bg-white px-3 py-2 text-base font-semibold text-blue-900 transition-colors hover:bg-blue-100"
             >
-              <LineIcon name="trash" className="h-5 w-5" />
-              清空
+              <LineIcon name="trash" className="h-5 w-5 shrink-0" />
+              <span className="whitespace-nowrap">清空</span>
             </button>
             <button
               onClick={() => setShowCandidatePanel(true)}
               disabled={isGenerating}
-              className="apple-press flex flex-[1.4] items-center justify-center gap-1.5 rounded-[22px] bg-blue-700 px-3 py-2.5 text-base font-semibold text-white shadow-sm transition-colors hover:bg-blue-800 disabled:opacity-45"
+              className="apple-press radius-control flex flex-[1.4] items-center justify-center gap-1.5 bg-blue-700 px-3 py-2.5 text-base font-semibold text-white transition-colors hover:bg-blue-800 disabled:opacity-45"
             >
-              <LineIcon name={isGenerating ? 'loader' : 'sound'} className={`h-5 w-5 ${isGenerating ? 'animate-spin' : ''}`} />
-              {isGenerating ? '生成中' : '说'}
+              <LineIcon name={isGenerating ? 'loader' : 'sound'} className={`h-5 w-5 shrink-0 ${isGenerating ? 'animate-spin' : ''}`} />
+              <span className="whitespace-nowrap">{isGenerating ? '生成中' : '说'}</span>
             </button>
           </div>
         </div>

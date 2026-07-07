@@ -74,6 +74,9 @@ export class ServerAudioTTS implements TTSProvider {
     if (typeof req.rate === 'number') {
       params.set('rate', String(req.rate))
     }
+    if (req.serverVoiceName) {
+      params.set('voice', req.serverVoiceName)
+    }
     return `/api/ai/tts?${params.toString()}`
   }
 }

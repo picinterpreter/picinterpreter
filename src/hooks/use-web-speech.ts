@@ -12,6 +12,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { shouldUseWebSpeechRecognition } from '@/utils/tts-environment'
 
 // 类型扩展：Web Speech API 在 TypeScript DOM lib 中支持不完整，手动补充
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -58,7 +59,7 @@ export function useWebSpeech(): WebSpeechState {
       (window.SpeechRecognition ?? window.webkitSpeechRecognition)) ||
     null
 
-  const isAvailable = SpeechRecognitionImpl !== null
+  const isAvailable = SpeechRecognitionImpl !== null && shouldUseWebSpeechRecognition()
 
   const [isListening, setIsListening] = useState(false)
   const [interimText, setInterimText] = useState('')

@@ -10,6 +10,8 @@ interface SettingsState {
   ttsRate: number
   /** TTS 首选语音名称（空字符串 = 自动选择最佳中文语音） */
   ttsVoiceName: string
+  /** 云端 TTS 音色 ID（空字符串 = 使用后端默认音色） */
+  ttsServerVoiceName: string
 
   /** 高对比度模式 */
   highContrast: boolean
@@ -29,6 +31,7 @@ interface SettingsState {
   // Actions
   setTtsRate: (rate: number) => void
   setTtsVoiceName: (name: string) => void
+  setTtsServerVoiceName: (name: string) => void
   setHighContrast: (v: boolean) => void
   setFontSize: (v: FontSize) => void
   setGridCols: (v: GridCols) => void
@@ -41,6 +44,7 @@ export const useSettingsStore = create<SettingsState>()(
     (set) => ({
       ttsRate: 0.9,
       ttsVoiceName: '',
+      ttsServerVoiceName: '',
       highContrast: false,
       fontSize: 'normal',
       gridCols: 3,
@@ -49,6 +53,7 @@ export const useSettingsStore = create<SettingsState>()(
 
       setTtsRate: (rate) => set({ ttsRate: rate }),
       setTtsVoiceName: (name) => set({ ttsVoiceName: name }),
+      setTtsServerVoiceName: (name) => set({ ttsServerVoiceName: name }),
       setHighContrast: (v) => set({ highContrast: v }),
       setFontSize: (v) => set({ fontSize: v }),
       setGridCols: (v) => set({ gridCols: v }),

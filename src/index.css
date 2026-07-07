@@ -19,9 +19,10 @@
   color: #111 !important;
 }
 
-/* 确保所有可交互元素最小触控面积 */
-button, a, [role="button"] {
-  min-height: 20px;
+/* 确保按钮类交互元素有足够触控面积 */
+button,
+[role="button"] {
+  min-height: 44px;
 }
 
 /* 滚动条优化 */
@@ -42,6 +43,14 @@ body {
   text-rendering: optimizeLegibility;
   background: #f5f5f7;
   color: #0f172a;
+}
+
+:root {
+  --radius-media: 0.75rem;
+  --radius-control: 1rem;
+  --radius-card: 1.25rem;
+  --radius-panel: 1.5rem;
+  --radius-pill: 9999px;
 }
 
 button,
@@ -77,27 +86,85 @@ textarea:focus-visible {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+
+  .candidate-sheet-in {
+    animation: none !important;
+  }
 }
 
 .apple-panel {
   background: rgba(255, 255, 255, 0.82);
   border: 1px solid rgba(15, 23, 42, 0.08);
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 18px 40px rgba(15, 23, 42, 0.08);
   backdrop-filter: blur(22px);
 }
 
 .apple-control {
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgba(255, 255, 255, 0.78);
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), inset 0 0 0 1px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 .apple-press {
-  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+  transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease, color 180ms ease;
 }
 
 .apple-press:active {
   transform: scale(0.97);
+}
+
+@keyframes candidate-sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.candidate-sheet-in {
+  animation: candidate-sheet-in 180ms ease-out;
+}
+
+.radius-media {
+  border-radius: var(--radius-media);
+}
+
+.radius-control {
+  border-radius: var(--radius-control);
+}
+
+.radius-card {
+  border-radius: var(--radius-card);
+}
+
+.radius-panel {
+  border-radius: var(--radius-panel);
+}
+
+.radius-sheet {
+  border-radius: var(--radius-panel) var(--radius-panel) 0 0;
+}
+
+.radius-side-sheet {
+  border-radius: 0;
+}
+
+.radius-pill {
+  border-radius: var(--radius-pill);
+}
+
+.radius-folder-tab {
+  border-top-left-radius: var(--radius-card);
+  border-top-right-radius: var(--radius-media);
+  border-bottom-right-radius: var(--radius-media);
+}
+
+@media (min-width: 640px) {
+  .radius-side-sheet {
+    border-radius: var(--radius-panel) 0 0 var(--radius-panel);
+  }
 }
 
 /* 隐藏滚动条（分类 tab 横向滚动） */

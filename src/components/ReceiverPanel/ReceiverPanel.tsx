@@ -18,6 +18,7 @@ import { aiResegment } from '@/utils/ai-resegment'
 import { resolveImageSrc } from '@/utils/generate-placeholder-svg'
 import { searchAndStoreMissingPictograms } from '@/utils/runtime-pictogram-search'
 import { pictogramsFromSequenceResult, requestPictogramSequence } from '@/utils/pictogram-sequence-agent'
+import { isWeChatWebView } from '@/utils/tts-environment'
 import { db } from '@/db'
 import type { PictogramEntry, PictogramSequenceMatchType } from '@/types'
 import type { MatchedToken, TextToImageMatchResult } from '@/utils/text-to-image-matcher'
@@ -103,6 +104,7 @@ export function ReceiverPanel() {
   // ── 语音输入 ──────────────────────────────────────────────────────────── //
   // Web Speech API（浏览器内置，无需代理）
   const webSpeech = useWebSpeech()
+  const isWeChatBrowser = isWeChatWebView()
   const isListening = webSpeech.isListening
   const interimText = webSpeech.interimText
   const asrError = webSpeech.error
@@ -362,7 +364,7 @@ export function ReceiverPanel() {
 
           <form
             onSubmit={(e) => { e.preventDefault(); doMatch(inputText) }}
-            className="flex gap-2"
+            className="grid grid-cols-[minmax(0,1fr)_auto] gap-2"
           >
             <input
               type="text"
@@ -370,10 +372,10 @@ export function ReceiverPanel() {
               onChange={(e) => { if (!isListening) setInputText(e.target.value) }}
               placeholder={isListening ? '聆听中' : '输入'}
               readOnly={isListening}
-              className={`flex-1 border rounded-2xl px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:border-transparent transition-colors
+              className={`radius-control min-h-[64px] min-w-0 border px-5 py-3 text-lg text-slate-950 outline-none transition-[background-color,border-color]
                 ${isListening
-                  ? 'border-red-300 bg-red-50 text-red-700 focus:ring-red-300'
-                  : 'border-slate-200 focus:ring-purple-400'
+                  ? 'border-rose-200 bg-rose-50/80 text-rose-700 placeholder:text-rose-300 focus:border-rose-300 focus:bg-white focus:ring-4 focus:ring-rose-100'
+                  : 'border-slate-200 bg-white/95 placeholder:text-slate-400 hover:border-slate-300 focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-slate-200/80'
                 }`}
               autoFocus
               aria-live="polite"
@@ -382,15 +384,15 @@ export function ReceiverPanel() {
             <button
               type="submit"
               disabled={!inputText.trim() || isListening}
-              className="flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-slate-950 px-5 py-3 font-medium text-white transition-colors hover:bg-slate-800 disabled:opacity-40"
+              className="radius-control flex min-h-[64px] items-center justify-center gap-1.5 bg-slate-950 px-4 py-3 font-medium text-white transition-colors hover:bg-slate-800 disabled:bg-slate-400 disabled:opacity-70 sm:gap-2 sm:px-5"
             >
-              <LineIcon name="arrowRight" className="h-5 w-5" />
-              转换
+              <LineIcon name="arrowRight" className="h-5 w-5 shrink-0" />
+              <span className="whitespace-nowrap">转换</span>
             </button>
           </form>
 
           {/* 语音输入按钮 */}
-          {webSpeech.isAvailable ? (
+          {!isWeChatBrowser && webSpeech.isAvailable && (
             <button
               type="button"
               onClick={() => {
@@ -413,12 +415,17 @@ export function ReceiverPanel() {
                 }`}
             >
               {isListening
-                ? <><LineIcon name="stop" className="h-5 w-5" /> 停止</>
-                : <><LineIcon name="mic" className="h-5 w-5" /> 录音</>
+                ? <><LineIcon name="stop" className="h-5 w-5 shrink-0" /> <span className="whitespace-nowrap">停止</span></>
+                : <><LineIcon name="mic" className="h-5 w-5 shrink-0" /> <span className="whitespace-nowrap">录音</span></>
               }
             </button>
-          ) : (
-            <LineIcon name="sound" className="mx-auto h-5 w-5 text-slate-300" />
+          )}
+
+          {!isWeChatBrowser && !webSpeech.isAvailable && (
+            <div className="flex min-h-[44px] items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-500">
+              <LineIcon name="mic" className="h-4 w-4 shrink-0" />
+              <span>当前浏览器不支持录音</span>
+            </div>
           )}
 
           {/* ASR 错误提示 */}
@@ -435,7 +442,7 @@ export function ReceiverPanel() {
                 <button
                   key={phrase}
                   onClick={() => { setInputText(phrase); doMatch(phrase) }}
-                  className="text-sm px-3 py-1.5 bg-white hover:bg-slate-50 rounded-full text-slate-700 shadow-[inset_0_0_0_1px_rgba(15,23,42,0.08)] transition-colors"
+                  className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-700 transition-colors hover:bg-slate-50"
                 >
                   {phrase}
                 </button>
@@ -488,8 +495,8 @@ export function ReceiverPanel() {
               onClick={handleReset}
               className="flex min-h-[44px] shrink-0 items-center gap-1.5 rounded-xl px-3 py-2 text-sm text-slate-400 hover:text-gray-600"
             >
-              <LineIcon name="refresh" className="h-4 w-4" />
-              重新输入
+              <LineIcon name="refresh" className="h-4 w-4 shrink-0" />
+              <span className="whitespace-nowrap">重输</span>
             </button>
           </div>
 
@@ -583,10 +590,10 @@ export function ReceiverPanel() {
           <button
             onClick={() => setShowDisplay(true)}
             disabled={matchedCount === 0}
-            className="apple-press flex min-h-[48px] w-full items-center justify-center gap-2 rounded-full bg-slate-950 py-3.5 text-lg font-semibold text-white shadow-sm transition-colors hover:bg-slate-800 disabled:opacity-40"
+            className="apple-press flex min-h-[48px] w-full items-center justify-center gap-2 rounded-full bg-slate-950 py-3.5 text-lg font-semibold text-white transition-colors hover:bg-slate-800 disabled:opacity-40"
           >
-            <LineIcon name="eye" className="h-5 w-5" />
-            展示给患者
+            <LineIcon name="eye" className="h-5 w-5 shrink-0" />
+            <span className="whitespace-nowrap">展示给患者</span>
           </button>
         </div>
       )}
@@ -601,7 +608,7 @@ export function ReceiverPanel() {
           onClick={() => setSwapItemId(null)}
         >
           <div
-            className="w-full bg-white rounded-t-[32px] p-4 max-h-[72vh] flex flex-col gap-3"
+            className="radius-sheet flex max-h-[72vh] w-full flex-col gap-3 bg-white p-4"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between">
@@ -621,7 +628,7 @@ export function ReceiverPanel() {
               value={swapQuery}
               onChange={(e) => setSwapQuery(e.target.value)}
               placeholder="搜索"
-              className="border border-slate-200 rounded-2xl px-4 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-purple-400"
+              className="radius-control border border-slate-200 px-4 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500"
               autoFocus
             />
             <div className="overflow-y-auto grid grid-cols-4 gap-2 pb-2">

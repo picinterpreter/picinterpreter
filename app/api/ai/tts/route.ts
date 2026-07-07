@@ -8,6 +8,7 @@ const MAX_TTS_TEXT_LENGTH = 300
 interface TTSBody {
   text?: unknown
   rate?: unknown
+  voice?: unknown
 }
 
 function parseRate(value: unknown): number | undefined {
@@ -20,6 +21,13 @@ function validateText(value: unknown): string | null {
   const text = value.trim()
   if (!text || text.length > MAX_TTS_TEXT_LENGTH) return null
   return text
+}
+
+function validateVoice(value: unknown): string | undefined {
+  if (typeof value !== 'string') return undefined
+  const voice = value.trim()
+  if (!voice || voice.length > 160) return undefined
+  return voice
 }
 
 function audioResponse(audio: Awaited<ReturnType<typeof synthesizeSpeech>>) {
@@ -45,7 +53,11 @@ export async function GET(request: Request) {
 
   try {
     const audio = await synthesizeSpeech(
-      { text, rate: parseRate(url.searchParams.get('rate')) },
+      {
+        text,
+        rate: parseRate(url.searchParams.get('rate')),
+        voice: validateVoice(url.searchParams.get('voice')),
+      },
       request.signal,
     )
     return audioResponse(audio)
@@ -82,7 +94,7 @@ export async function POST(request: Request) {
 
   try {
     const audio = await synthesizeSpeech(
-      { text, rate: parseRate(body.rate) },
+      { text, rate: parseRate(body.rate), voice: validateVoice(body.voice) },
       request.signal,
     )
     return audioResponse(audio)

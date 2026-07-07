@@ -121,7 +121,7 @@ export function MatcherDemoPage() {
   return (
     <div className="min-h-screen bg-[#f5f5f7] text-slate-950">
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 bg-white/85 text-slate-950 shadow-[0_1px_0_rgba(15,23,42,0.08)] backdrop-blur-xl">
+      <header className="flex items-center justify-between border-b border-slate-200/80 bg-white/85 px-4 py-3 text-slate-950 backdrop-blur-xl">
         <div className="flex min-w-0 items-center gap-2">
           <img src="/logo.png" alt="" className="size-9 rounded-xl" aria-hidden="true" />
           <div className="min-w-0">
@@ -140,7 +140,7 @@ export function MatcherDemoPage() {
       <div className="max-w-2xl mx-auto p-4 space-y-6">
 
         {/* Input */}
-        <section className="apple-panel rounded-[28px] p-4 space-y-3">
+        <section className="apple-panel radius-panel space-y-3 p-4">
           <h2 className="font-semibold text-slate-700">输入文本</h2>
           <form onSubmit={handleSubmit} className="flex gap-2">
             <input
@@ -212,7 +212,7 @@ export function MatcherDemoPage() {
             </section>
 
             {/* Segmentation tokens */}
-            <section className="apple-panel rounded-[28px] p-4 space-y-2">
+            <section className="apple-panel radius-panel space-y-2 p-4">
               <h2 className="font-semibold text-slate-700">分词结果</h2>
               <div className="flex flex-wrap gap-2">
                 {result.segmentation.segments.map((seg, i) => (
@@ -230,7 +230,7 @@ export function MatcherDemoPage() {
             </section>
 
             {/* Image sequence */}
-            <section className="apple-panel rounded-[28px] p-4 space-y-3">
+            <section className="apple-panel radius-panel space-y-3 p-4">
               <h2 className="font-semibold text-slate-700">图片序列</h2>
               <div className="flex gap-3 overflow-x-auto pb-2">
                 {result.matches.map((match, i) => (

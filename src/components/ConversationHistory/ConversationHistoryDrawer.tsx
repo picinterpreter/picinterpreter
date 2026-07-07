@@ -124,7 +124,7 @@ function ExpressionCard({ expr, onPlay }: { expr: Expression; onPlay: PlayFn }) 
 
   return (
     <div
-      className={`rounded-2xl border p-3 space-y-1.5 shadow-sm ${
+      className={`space-y-1.5 rounded-2xl border p-3 ${
         isExpress
           ? 'bg-white border-slate-200'
           : 'bg-white border-slate-200'
@@ -263,7 +263,7 @@ export function ConversationHistoryDrawer() {
       />
 
       {/* 抽屉主体 */}
-      <div className="w-[22rem] max-w-[90vw] bg-slate-50 shadow-2xl flex flex-col">
+      <div className="flex w-[22rem] max-w-[90vw] flex-col border-l border-slate-200 bg-slate-50">
         {/* 头部 */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-white shrink-0">
           <h2 className="text-lg font-bold text-slate-900">对话记录</h2>

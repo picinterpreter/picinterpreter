@@ -133,7 +133,7 @@ export function ImportToolPage() {
   return (
     <div className="min-h-screen bg-[#f5f5f7] text-slate-950">
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 bg-white/85 text-slate-950 shadow-[0_1px_0_rgba(15,23,42,0.08)] backdrop-blur-xl">
+      <header className="flex items-center justify-between border-b border-slate-200/80 bg-white/85 px-4 py-3 text-slate-950 backdrop-blur-xl">
         <div className="flex min-w-0 items-center gap-2">
           <img src="/logo.png" alt="" className="size-9 rounded-xl" aria-hidden="true" />
           <div className="min-w-0">
@@ -150,7 +150,7 @@ export function ImportToolPage() {
       <div className="max-w-3xl mx-auto p-4 space-y-4">
 
         {/* Controls */}
-        <section className="apple-panel rounded-[28px] p-4 space-y-3">
+        <section className="apple-panel radius-panel space-y-3 p-4">
           <div className="flex items-center justify-between flex-wrap gap-3">
             <div>
               <p className="font-semibold text-slate-700">词条数量：{LEXICON.length} 个</p>
@@ -227,7 +227,7 @@ export function ImportToolPage() {
         )}
 
         {/* Results table */}
-        <section className="apple-panel rounded-[28px] overflow-hidden">
+        <section className="apple-panel radius-panel overflow-hidden">
           <div className="px-4 py-2 bg-slate-50 border-b border-slate-200 text-sm font-medium text-slate-600 grid grid-cols-[2fr_1fr_1fr_3fr] gap-2">
             <span>词条</span>
             <span>分类</span>

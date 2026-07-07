@@ -23,6 +23,7 @@ export interface AIInterface {
 
 export function useAI(): AIInterface {
   const ttsVoiceName = useSettingsStore((s) => s.ttsVoiceName)
+  const ttsServerVoiceName = useSettingsStore((s) => s.ttsServerVoiceName)
   const sessionId = useConversationStore((s) => s.sessionId)
 
   // sessionId 用 ref 追踪，避免 adapter 重建触发重新渲染
@@ -31,6 +32,9 @@ export function useAI(): AIInterface {
 
   const ttsVoiceNameRef = useRef(ttsVoiceName)
   ttsVoiceNameRef.current = ttsVoiceName
+
+  const ttsServerVoiceNameRef = useRef(ttsServerVoiceName)
+  ttsServerVoiceNameRef.current = ttsServerVoiceName
 
   const adapter = useMemo(() => new AIAdapter({ onlineNLG: new ServerNLG() }), [])
 
@@ -45,7 +49,11 @@ export function useAI(): AIInterface {
         })
       },
       speak: (req: TTSRequest): Promise<TTSResult> =>
-        adapter.speak({ ...req, voiceName: ttsVoiceNameRef.current || undefined }),
+        adapter.speak({
+          ...req,
+          voiceName: ttsVoiceNameRef.current || undefined,
+          serverVoiceName: ttsServerVoiceNameRef.current || undefined,
+        }),
       stopSpeaking: (): void => adapter.stopSpeaking(),
     }),
     [adapter],

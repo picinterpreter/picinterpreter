@@ -47,7 +47,7 @@ function fallbackContentType(format: string): string {
 }
 
 export async function synthesizeSpeech(
-  input: { text: string; rate?: number },
+  input: { text: string; rate?: number; voice?: string },
   signal?: AbortSignal,
 ): Promise<SpeechAudio> {
   const config = getServerTTSConfig()
@@ -68,7 +68,7 @@ export async function synthesizeSpeech(
       body: JSON.stringify({
         model: config.model,
         input: input.text,
-        voice: config.voice,
+        voice: input.voice ?? config.voice,
         response_format: config.responseFormat,
         speed: clampSpeed(input.rate),
       }),

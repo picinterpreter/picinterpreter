@@ -279,12 +279,12 @@ export function SavedPhrasesDrawer() {
       />
 
       {/* Drawer */}
-      <div className="flex h-dvh w-full flex-col bg-stone-50 shadow-2xl sm:max-w-[560px] sm:rounded-l-[28px] lg:max-w-[680px] xl:max-w-[760px]">
+      <div className="radius-side-sheet flex h-dvh w-full flex-col border-l border-stone-200 bg-stone-50 sm:max-w-[560px] lg:max-w-[680px] xl:max-w-[760px]">
         {/* Header */}
         <div className="border-b border-amber-200 bg-white px-5 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-3">
-              <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-amber-400 text-amber-950 shadow-sm">
+              <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl border border-amber-500/25 bg-amber-400 text-amber-950">
                 <LineIcon name="star" className="h-7 w-7" />
               </div>
               <h2 className="truncate text-2xl font-bold text-slate-950">常用</h2>
@@ -309,26 +309,26 @@ export function SavedPhrasesDrawer() {
               }`}
               aria-label="添加短语"
             >
-              <LineIcon name={showAddForm ? 'close' : 'plus'} className="h-5 w-5" />
-              {showAddForm ? '收起' : '添加'}
+              <LineIcon name={showAddForm ? 'close' : 'plus'} className="h-5 w-5 shrink-0" />
+              <span className="whitespace-nowrap">{showAddForm ? '收起' : '添加'}</span>
             </button>
             <button
               onClick={handleExport}
               disabled={importing}
-              className="apple-press flex min-h-[48px] shrink-0 items-center gap-1.5 rounded-full bg-white px-4 py-2 text-base font-semibold text-slate-700 shadow-[inset_0_0_0_1px_rgba(120,113,108,0.22)] transition-colors hover:bg-stone-100 disabled:cursor-not-allowed disabled:opacity-40"
+              className="apple-press flex min-h-[48px] shrink-0 items-center gap-1.5 rounded-full border border-stone-300 bg-white px-4 py-2 text-base font-semibold text-slate-700 transition-colors hover:bg-stone-100 disabled:cursor-not-allowed disabled:opacity-40"
               title="导出为 JSON 文件"
             >
-              <LineIcon name="download" className="h-5 w-5" />
-              导出
+              <LineIcon name="download" className="h-5 w-5 shrink-0" />
+              <span className="whitespace-nowrap">导出</span>
             </button>
             <button
               onClick={handleImportClick}
               disabled={importing}
-              className="apple-press flex min-h-[48px] shrink-0 items-center gap-1.5 rounded-full bg-white px-4 py-2 text-base font-semibold text-slate-700 shadow-[inset_0_0_0_1px_rgba(120,113,108,0.22)] transition-colors hover:bg-stone-100 disabled:cursor-not-allowed disabled:opacity-40"
+              className="apple-press flex min-h-[48px] shrink-0 items-center gap-1.5 rounded-full border border-stone-300 bg-white px-4 py-2 text-base font-semibold text-slate-700 transition-colors hover:bg-stone-100 disabled:cursor-not-allowed disabled:opacity-40"
               title="从 JSON 文件导入"
             >
-              <LineIcon name={importing ? 'loader' : 'upload'} className={`h-5 w-5 ${importing ? 'animate-spin' : ''}`} />
-              {importing ? '导入中…' : '导入'}
+              <LineIcon name={importing ? 'loader' : 'upload'} className={`h-5 w-5 shrink-0 ${importing ? 'animate-spin' : ''}`} />
+              <span className="whitespace-nowrap">{importing ? '导入中…' : '导入'}</span>
             </button>
             {/* 隐藏的文件选择器 */}
             <input
@@ -368,7 +368,7 @@ export function SavedPhrasesDrawer() {
 
         {/* 手动添加表单 */}
         {showAddForm && (
-          <div className="mx-4 mt-3 space-y-3 rounded-[24px] border border-amber-200 bg-white p-4 shadow-sm">
+          <div className="radius-panel mx-4 mt-3 space-y-3 border border-amber-200 bg-white p-4">
             <p className="text-base font-bold text-slate-900">添加短语</p>
             <input
               ref={addInputRef}
@@ -394,16 +394,16 @@ export function SavedPhrasesDrawer() {
                 onClick={() => setShowAddForm(false)}
                 className="apple-press flex min-h-[48px] flex-1 items-center justify-center gap-1.5 rounded-full bg-slate-100 py-2 text-base font-semibold text-slate-700 transition-colors hover:bg-slate-200"
               >
-                <LineIcon name="close" className="h-4 w-4" />
-                取消
+                <LineIcon name="close" className="h-4 w-4 shrink-0" />
+                <span className="whitespace-nowrap">取消</span>
               </button>
               <button
                 onClick={handleAddPhrase}
                 disabled={!newSentence.trim()}
                 className="apple-press flex min-h-[48px] flex-1 items-center justify-center gap-1.5 rounded-full bg-slate-950 py-2 text-base font-semibold text-white transition-colors hover:bg-slate-800 disabled:opacity-40"
               >
-                <LineIcon name="save" className="h-4 w-4" />
-                保存
+                <LineIcon name="save" className="h-4 w-4 shrink-0" />
+                <span className="whitespace-nowrap">保存</span>
               </button>
             </div>
           </div>
@@ -412,7 +412,7 @@ export function SavedPhrasesDrawer() {
         {/* List */}
         <div className="grid flex-1 auto-rows-max grid-cols-1 gap-3 overflow-y-auto p-4 sm:p-5 lg:grid-cols-2 lg:gap-4 lg:p-6">
           {phrases?.length === 0 && (
-            <div className="mt-8 rounded-[28px] border border-dashed border-amber-300 bg-white p-6 text-center shadow-sm">
+            <div className="radius-panel mt-8 border border-dashed border-amber-300 bg-white p-6 text-center">
               <LineIcon name="star" className="mx-auto h-10 w-10 text-amber-400" />
               <p className="mt-3 text-lg font-bold text-slate-800">暂无常用</p>
             </div>
@@ -426,7 +426,7 @@ export function SavedPhrasesDrawer() {
             return (
               <div
                 key={phrase.id}
-                className="overflow-hidden rounded-[28px] border border-stone-200 bg-white shadow-sm"
+                className="radius-panel overflow-hidden border border-stone-200 bg-white"
               >
                 {/* 图片缩略图行（有图时显示） */}
                 {thumbs.length > 0 && (
@@ -468,15 +468,15 @@ export function SavedPhrasesDrawer() {
                           onClick={cancelEditing}
                           className="apple-press flex min-h-[44px] items-center gap-1 rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200"
                         >
-                          <LineIcon name="close" className="h-3.5 w-3.5" />
-                          取消
+                          <LineIcon name="close" className="h-3.5 w-3.5 shrink-0" />
+                          <span className="whitespace-nowrap">取消</span>
                         </button>
                         <button
                           onClick={() => commitEdit(phrase.id)}
                           className="apple-press flex min-h-[44px] items-center gap-1 rounded-full bg-amber-500 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-600"
                         >
-                          <LineIcon name="save" className="h-3.5 w-3.5" />
-                          保存
+                          <LineIcon name="save" className="h-3.5 w-3.5 shrink-0" />
+                          <span className="whitespace-nowrap">保存</span>
                         </button>
                       </div>
                     </div>
@@ -485,7 +485,7 @@ export function SavedPhrasesDrawer() {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handlePlay(phrase.sentence, phrase.id)}
-                        className="apple-press flex min-h-[64px] flex-1 items-center gap-3 rounded-3xl bg-amber-50 px-4 py-3 text-left text-xl font-bold leading-snug text-slate-950 transition-colors hover:bg-amber-100"
+                        className="apple-press radius-card flex min-h-[64px] flex-1 items-center gap-3 bg-amber-50 px-4 py-3 text-left text-xl font-bold leading-snug text-slate-950 transition-colors hover:bg-amber-100"
                         aria-label={`播报：${phrase.sentence}`}
                       >
                         <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-amber-400 text-amber-950">

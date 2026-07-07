@@ -133,9 +133,9 @@ export function PlaybackOverlay() {
       role="dialog"
       aria-modal="true"
       aria-labelledby="playback-sentence"
-      className="fixed inset-0 z-50 bg-slate-950/70 flex items-center justify-center p-6 backdrop-blur-xl"
+      className="fixed inset-0 z-50 bg-slate-950/70 flex items-center justify-center p-4 backdrop-blur-xl sm:p-6"
     >
-      <div className="apple-panel rounded-[32px] p-8 max-w-lg w-full text-center">
+      <div className="apple-panel radius-panel w-full max-w-lg p-5 text-center sm:p-8">
         {/* 配套图片行（来自收藏短语的图片 ID） */}
         {(playbackPictograms?.length ?? 0) > 0 && (
           <div className="flex flex-wrap justify-center gap-3 mb-6">
@@ -144,7 +144,7 @@ export function PlaybackOverlay() {
                 <img
                   src={resolveImageSrc(p.imageUrl, p.labels.zh[0], '#2563EB')}
                   alt={p.labels.zh[0]}
-                  className="w-16 h-16 sm:w-20 sm:h-20 object-contain rounded-2xl bg-white p-1 shadow-[inset_0_0_0_1px_rgba(15,23,42,0.08)]"
+                  className="w-16 h-16 rounded-2xl border border-slate-200 bg-white object-contain p-1 sm:h-20 sm:w-20"
                 />
                 <span className="text-sm text-slate-600 max-w-[72px] truncate">{p.labels.zh[0]}</span>
               </div>
@@ -152,7 +152,7 @@ export function PlaybackOverlay() {
           </div>
         )}
 
-        <p id="playback-sentence" className="text-3xl md:text-4xl font-semibold text-slate-950 leading-relaxed mb-8">
+        <p id="playback-sentence" className="text-2xl font-semibold text-slate-950 leading-relaxed mb-6 sm:text-3xl md:text-4xl sm:mb-8">
           {playbackSentence}
         </p>
 
@@ -169,33 +169,33 @@ export function PlaybackOverlay() {
           </div>
         )}
 
-        <div className="flex gap-4 justify-center flex-wrap">
+        <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:justify-center sm:gap-4">
           <button
             onClick={handleReplay}
             disabled={isSpeaking}
             aria-label={hasSpoken ? '重新播报' : '播报'}
-            className="apple-press flex min-h-[52px] items-center justify-center gap-2 rounded-full bg-slate-100 px-6 py-3 text-lg font-semibold text-slate-800 transition-colors hover:bg-slate-200 disabled:opacity-50"
+            className="apple-press flex min-h-[52px] min-w-0 items-center justify-center gap-1.5 rounded-full bg-slate-100 px-3 py-3 text-base font-semibold text-slate-800 transition-colors hover:bg-slate-200 disabled:opacity-50 sm:gap-2 sm:px-6 sm:text-lg"
           >
-            <LineIcon name={hasSpoken ? 'refresh' : 'sound'} className="h-5 w-5" />
-            {hasSpoken ? '重播' : '播报'}
+            <LineIcon name={hasSpoken ? 'refresh' : 'sound'} className="h-5 w-5 shrink-0" />
+            <span className="whitespace-nowrap">{hasSpoken ? '重播' : '播报'}</span>
           </button>
           <button
             onClick={handleFavorite}
             disabled={isSpeaking || saved}
             aria-label={saved ? '已收藏' : '收藏此句'}
-            className={`apple-press flex min-h-[52px] items-center justify-center gap-2 rounded-full px-6 py-3 text-lg font-semibold transition-colors disabled:opacity-50
+            className={`apple-press flex min-h-[52px] min-w-0 items-center justify-center gap-1.5 rounded-full px-3 py-3 text-base font-semibold transition-colors disabled:opacity-50 sm:gap-2 sm:px-6 sm:text-lg
               ${saved ? 'bg-slate-100 text-slate-400 cursor-default' : 'bg-slate-100 text-slate-800 hover:bg-slate-200'}`}
           >
-            <LineIcon name={saved ? 'check' : 'star'} className="h-5 w-5" />
-            {saved ? '已收藏' : '收藏'}
+            <LineIcon name={saved ? 'check' : 'star'} className="h-5 w-5 shrink-0" />
+            <span className="whitespace-nowrap">{saved ? '已收藏' : '收藏'}</span>
           </button>
           <button
             onClick={handleDone}
             aria-label="播报完成，关闭"
-            className="apple-press flex min-h-[52px] items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-3 text-lg font-semibold text-white transition-colors hover:bg-slate-800"
+            className="apple-press flex min-h-[52px] min-w-0 items-center justify-center gap-1.5 rounded-full bg-slate-950 px-3 py-3 text-base font-semibold text-white transition-colors hover:bg-slate-800 sm:gap-2 sm:px-6 sm:text-lg"
           >
-            <LineIcon name="check" className="h-5 w-5" />
-            完成
+            <LineIcon name="check" className="h-5 w-5 shrink-0" />
+            <span className="whitespace-nowrap">完成</span>
           </button>
         </div>
       </div>

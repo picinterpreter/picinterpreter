@@ -103,7 +103,7 @@ export function CategoryLinksDrawer() {
         role="dialog"
         aria-modal="true"
         aria-label="管理分类链接"
-        className="w-96 max-w-[90vw] bg-slate-50 shadow-2xl flex flex-col"
+        className="flex w-96 max-w-[90vw] flex-col border-l border-slate-200 bg-slate-50"
       >
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-white">
@@ -119,7 +119,7 @@ export function CategoryLinksDrawer() {
 
         <div className="flex-1 overflow-y-auto p-4 space-y-5">
           {/* 说明 */}
-          <div className="px-3 py-2.5 rounded-2xl bg-white border border-slate-200 text-sm text-slate-600 space-y-1 shadow-sm">
+          <div className="space-y-1 rounded-2xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-600">
             <p className="font-medium">什么是分类链接？</p>
             <p className="text-xs text-blue-600">
               为分类 A 添加分类 B，浏览 A 时会看到 B 文件夹。
@@ -137,7 +137,7 @@ export function CategoryLinksDrawer() {
                   onClick={() => setEditingId(cat.id)}
                   className={`flex flex-col items-center gap-1 py-2.5 px-1 rounded-2xl border-2 text-center transition-all min-h-[56px]
                     ${editingId === cat.id
-                      ? 'border-slate-950 bg-white text-slate-950 shadow-sm'
+                      ? 'border-slate-950 bg-white text-slate-950'
                       : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50'
                     }`}
                 >
@@ -248,7 +248,7 @@ function LinkedCategoryRow({
   disabled: boolean
 }) {
   return (
-    <div className="flex items-center gap-3 px-3 py-2.5 rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-3 py-2.5">
       <CategoryIcon category={category} className="h-8 w-8 shrink-0 rounded-xl object-contain" />
       <span className="flex-1 text-sm font-medium text-blue-800">{category.name}</span>
       <button

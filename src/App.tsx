@@ -6,7 +6,6 @@ import { SelectionTray } from '@/components/SelectionTray/SelectionTray'
 import { CandidatePanel } from '@/components/CandidatePanel/CandidatePanel'
 import { PlaybackOverlay } from '@/components/PlaybackOverlay/PlaybackOverlay'
 import { SavedPhrasesDrawer } from '@/components/SavedPhrases/SavedPhrasesDrawer'
-import { SettingsDrawer } from '@/components/Settings/SettingsDrawer'
 import { CategoryLinksDrawer } from '@/components/CategoryLinks/CategoryLinksDrawer'
 import { ReceiverPanel } from '@/components/ReceiverPanel/ReceiverPanel'
 import { ConversationHistoryDrawer } from '@/components/ConversationHistory/ConversationHistoryDrawer'
@@ -22,7 +21,6 @@ const FONT_SIZE_MAP: Record<FontSize, string> = {
 }
 
 export default function App() {
-  const setShowSettings = useAppStore((s) => s.setShowSettings)
   const setShowHistory = useAppStore((s) => s.setShowHistory)
   const setShowEmergency = useAppStore((s) => s.setShowEmergency)
   const activeMode = useAppStore((s) => s.activeMode)
@@ -39,35 +37,35 @@ export default function App() {
   return (
     <div className={`flex h-dvh flex-col overflow-hidden bg-[#f5f5f7] text-slate-950 ${highContrast ? 'hc' : ''}`}>
       {/* Header */}
-      <header className="flex items-center gap-2 bg-white/85 px-3 py-2 text-slate-950 shadow-[0_1px_0_rgba(15,23,42,0.08)] backdrop-blur-xl sm:px-4">
+      <header className="flex items-center gap-2 border-b border-slate-200/80 bg-white/85 px-3 py-2 text-slate-950 backdrop-blur-xl sm:px-4">
         <div className="hidden min-w-0 shrink-0 items-center gap-2 sm:flex">
           <img src="/logo.png" alt="" className="size-9 rounded-xl" aria-hidden="true" />
           <h1 className="text-xl font-semibold leading-tight tracking-normal">图语家</h1>
         </div>
-        <div className="grid h-11 min-w-[9rem] max-w-[12rem] flex-1 grid-cols-2 gap-1 rounded-full bg-slate-100 p-1 sm:ml-2 sm:flex-none" role="tablist" aria-label="模式切换">
+        <div className="grid h-13 min-w-[9.5rem] max-w-[12rem] flex-1 grid-cols-2 gap-1 rounded-full bg-slate-100 p-1 sm:ml-2 sm:flex-none" role="tablist" aria-label="模式切换">
           <button
             onClick={() => setActiveMode('express')}
             aria-pressed={activeMode === 'express'}
-            className={`flex items-center justify-center gap-1.5 rounded-full px-2 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:text-base ${
+            className={`flex items-center justify-center gap-1.5 rounded-full border px-2 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:text-base ${
               activeMode === 'express'
-                ? 'bg-white text-slate-950 shadow-[0_1px_6px_rgba(15,23,42,0.10)]'
-                : 'text-slate-500 hover:bg-white/60 hover:text-slate-700'
+                ? 'border-slate-200 bg-white text-slate-950'
+                : 'border-transparent text-slate-500 hover:bg-white/60 hover:text-slate-700'
             }`}
           >
-            <LineIcon name="message" className="h-5 w-5" />
-            <span>表达</span>
+            <LineIcon name="message" className="h-5 w-5 shrink-0" />
+            <span className="whitespace-nowrap">表达</span>
           </button>
           <button
             onClick={() => setActiveMode('receive')}
             aria-pressed={activeMode === 'receive'}
-            className={`flex items-center justify-center gap-1.5 rounded-full px-2 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-500 sm:text-base ${
+            className={`flex items-center justify-center gap-1.5 rounded-full border px-2 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-500 sm:text-base ${
               activeMode === 'receive'
-                ? 'bg-white text-slate-950 shadow-[0_1px_6px_rgba(15,23,42,0.10)]'
-                : 'text-slate-500 hover:bg-white/60 hover:text-slate-700'
+                ? 'border-slate-200 bg-white text-slate-950'
+                : 'border-transparent text-slate-500 hover:bg-white/60 hover:text-slate-700'
             }`}
           >
-            <LineIcon name="ear" className="h-5 w-5" />
-            <span>接收</span>
+            <LineIcon name="ear" className="h-5 w-5 shrink-0" />
+            <span className="whitespace-nowrap">接收</span>
           </button>
         </div>
         <div className="ml-auto flex shrink-0 items-center gap-1">
@@ -103,13 +101,14 @@ export default function App() {
           >
             <LineIcon name="book" className="h-5 w-5" />
           </button>
-          <button
-            onClick={() => setShowSettings(true)}
+          <a
+            href="/profile"
             className="p-2 rounded-full min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-500 transition hover:bg-slate-100 hover:text-slate-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-            aria-label="设置"
+            aria-label="个人主页"
+            title="个人主页"
           >
-            <LineIcon name="settings" className="h-5 w-5" />
-          </button>
+            <LineIcon name="user" className="h-5 w-5" />
+          </a>
         </div>
       </header>
 
@@ -134,7 +133,6 @@ export default function App() {
       <PlaybackOverlay />
       <SavedPhrasesDrawer />
       <ConversationHistoryDrawer />
-      <SettingsDrawer />
       <CategoryLinksDrawer />
 
       {/* 紧急求助全屏面板（z-50，覆盖一切） */}

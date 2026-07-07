@@ -118,33 +118,33 @@ export function ReceiverDisplayOverlay({ items, inputText, onDone, onBack }: Pro
       className="fixed inset-0 z-50 bg-slate-950 flex flex-col"
     >
       {/* 顶部操作栏 */}
-      <div className="flex items-center justify-between px-4 py-3 bg-white/10 backdrop-blur-xl">
+      <div className="flex items-center justify-between gap-2 px-3 py-3 bg-white/10 backdrop-blur-xl sm:px-4">
         <button
           onClick={onBack}
-          className="apple-press flex min-h-[44px] items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium text-white/70 hover:bg-white/10 hover:text-white"
+          className="apple-press flex min-h-[44px] shrink-0 items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium text-white/70 hover:bg-white/10 hover:text-white"
           aria-label="返回修改图片"
         >
-          <LineIcon name="arrowLeft" className="h-4 w-4" />
-          返回修改
+          <LineIcon name="arrowLeft" className="h-4 w-4 shrink-0" />
+          <span className="whitespace-nowrap">返回修改</span>
         </button>
 
-        <div className="flex items-center gap-2">
+        <div className="flex min-w-0 flex-1 items-center justify-center gap-2">
           {isSpeaking && (
             <LineIcon name="sound" className="h-5 w-5 text-white/80 animate-pulse" />
           )}
           {ttsError && !isSpeaking && (
-            <span className="text-amber-300 text-sm">无法播报</span>
+            <span className="truncate text-amber-300 text-sm">无法播报</span>
           )}
         </div>
 
         <button
           onClick={speakText}
           disabled={isSpeaking}
-          className="apple-press flex min-h-[44px] items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium text-white/70 hover:bg-white/10 hover:text-white disabled:opacity-40"
+          className="apple-press flex min-h-[44px] shrink-0 items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium text-white/70 hover:bg-white/10 hover:text-white disabled:opacity-40"
           aria-label={hasSpoken ? '重播语音' : '播报语音'}
         >
-          <LineIcon name={hasSpoken ? 'refresh' : 'sound'} className="h-4 w-4" />
-          {hasSpoken ? '重播' : '播报'}
+          <LineIcon name={hasSpoken ? 'refresh' : 'sound'} className="h-4 w-4 shrink-0" />
+          <span className="whitespace-nowrap">{hasSpoken ? '重播' : '播报'}</span>
         </button>
       </div>
 
@@ -154,7 +154,7 @@ export function ReceiverDisplayOverlay({ items, inputText, onDone, onBack }: Pro
           {items.map((item) => (
             <div
               key={item.id}
-            className="flex flex-col items-center gap-2 bg-white/95 rounded-[26px] p-3 w-24 sm:w-28 shadow-[0_18px_45px_rgba(0,0,0,0.24)]"
+            className="radius-card flex w-24 flex-col items-center gap-2 border border-white/70 bg-white/95 p-3 sm:w-28"
             >
               <img
                 src={resolveImageSrc(item.pictogram.imageUrl, item.token, '#7c3aed')}
@@ -180,10 +180,10 @@ export function ReceiverDisplayOverlay({ items, inputText, onDone, onBack }: Pro
       <div className="p-4">
         <button
           onClick={handleDone}
-          className="apple-press flex min-h-[56px] w-full items-center justify-center gap-2 rounded-full bg-white py-4 text-xl font-semibold text-slate-950 shadow-lg transition-colors hover:bg-slate-100"
+          className="apple-press flex min-h-[56px] w-full items-center justify-center gap-2 rounded-full bg-white py-4 text-xl font-semibold text-slate-950 transition-colors hover:bg-slate-100"
         >
-          <LineIcon name="check" className="h-6 w-6" />
-          完成
+          <LineIcon name="check" className="h-6 w-6 shrink-0" />
+          <span className="whitespace-nowrap">完成</span>
         </button>
       </div>
     </div>

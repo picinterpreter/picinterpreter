@@ -210,10 +210,10 @@ export function EmergencyPanel() {
               onClick={() => handleSpeak(phrase)}
               className={`
                 ${phrase.colorClass}
-                apple-press min-h-24 rounded-[28px]
+                apple-press radius-card min-h-24
                 flex flex-col items-center justify-center gap-2
                 text-white font-bold text-xl
-                shadow-lg active:scale-95 transition-transform
+                border border-white/25 active:scale-95 transition-transform
                 focus:outline-none focus:ring-4 focus:ring-white focus:ring-opacity-60
               `}
               aria-label={`播报：${phrase.text}`}

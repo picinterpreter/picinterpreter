@@ -197,6 +197,8 @@ export interface TTSRequest {
   rate?: number
   /** 首选语音名称（来自 speechSynthesis.getVoices()）。留空则自动选择最佳中文语音。 */
   voiceName?: string
+  /** 云端 TTS 音色 ID。留空则使用后端默认音色。 */
+  serverVoiceName?: string
 }
 
 export interface TTSResult {

@@ -23,7 +23,7 @@ export function UpdateBanner() {
         flex items-center justify-between gap-3
         px-4 py-2.5
         bg-white/90 text-slate-900 text-sm
-        shadow-[0_8px_30px_rgba(15,23,42,0.12)] backdrop-blur-xl
+        border border-blue-200/80 backdrop-blur-xl
       "
     >
       <span className="flex items-center gap-2 min-w-0">

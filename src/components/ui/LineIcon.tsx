@@ -32,6 +32,7 @@ type IconName =
   | 'stop'
   | 'trash'
   | 'upload'
+  | 'user'
   | 'xmark'
 
 interface LineIconProps extends Omit<SVGProps<SVGSVGElement>, 'name'> {
@@ -70,6 +71,7 @@ const PATHS: Record<IconName, ReactNode> = {
   stop: <path d="M6 6h12v12H6V6Z" />,
   trash: <path d="M4 7h16M10 11v6m4-6v6M6 7l1 14h10l1-14M9 7V4h6v3" />,
   upload: <path d="M12 21V10m0 0-4 4m4-4 4 4M5 7V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2" />,
+  user: <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 9a7 7 0 0 1 14 0" />,
   xmark: <path d="m7 7 10 10M17 7 7 17" />,
 }
 

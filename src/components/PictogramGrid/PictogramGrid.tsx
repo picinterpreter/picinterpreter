@@ -218,7 +218,7 @@ export function PictogramGrid() {
 
   return (
     <div className={`flex flex-1 flex-col min-h-0 ${gridTone}`}>
-      <div className="z-20 flex min-h-[56px] items-center gap-2 bg-slate-900 px-2 text-white shadow-sm">
+      <div className="z-20 flex min-h-[56px] items-center gap-2 bg-slate-900 px-2 text-white">
         <div className="min-w-[48px]" aria-hidden="true" />
         <h2 className="min-w-0 flex-1 truncate text-center text-lg font-bold leading-tight text-balance">
           {title}
@@ -370,7 +370,7 @@ function PictogramTile({
   return (
     <button
       onClick={onSelect}
-      className={`apple-press relative flex flex-col items-center gap-1.5 rounded-[22px] border-2 p-3 shadow-[0_2px_4px_rgba(15,23,42,0.08),0_10px_22px_rgba(15,23,42,0.10)] transition-all hover:shadow-[0_3px_8px_rgba(15,23,42,0.10),0_16px_30px_rgba(15,23,42,0.12)] ${minHeightClassName} ${cardTone}`}
+      className={`apple-press radius-card relative flex flex-col items-center gap-1.5 border-2 p-3 transition-colors hover:border-slate-300 ${minHeightClassName} ${cardTone}`}
       aria-label={label}
     >
       <img
@@ -410,19 +410,19 @@ function FolderTile({
   onOpen: () => void
 }) {
   const layoutClassName = isCompactTile
-    ? 'justify-center gap-1.5 rounded-[22px] border-2 p-3'
-    : 'justify-end rounded-[18px] border px-3 pb-3 pt-6'
+    ? 'radius-card justify-center gap-1.5 border-2 p-3'
+    : 'radius-card justify-end border px-3 pb-3 pt-6'
   const iconClassName = isCompactTile
     ? `flex ${ROOT_MEDIA_SLOT_CLASS} items-center justify-center text-[48px] leading-none sm:text-[54px]`
     : 'flex min-h-[72px] items-center justify-center text-5xl leading-none sm:text-6xl'
   const folderTabClassName = isCompactTile
-    ? 'rounded-br-[14px] rounded-tl-[22px] rounded-tr-[14px]'
-    : 'rounded-br-[14px] rounded-tl-[18px] rounded-tr-[14px]'
+    ? 'radius-folder-tab'
+    : 'radius-folder-tab'
 
   return (
     <button
       onClick={onOpen}
-      className={`apple-press group relative flex flex-col items-center border-sky-200 bg-sky-100 text-sky-950 shadow-[0_2px_4px_rgba(15,23,42,0.08),0_10px_22px_rgba(15,23,42,0.10)] transition-all hover:bg-sky-50 hover:shadow-[0_3px_8px_rgba(15,23,42,0.10),0_16px_30px_rgba(15,23,42,0.12)] ${layoutClassName} ${minHeightClassName}`}
+      className={`apple-press group relative flex flex-col items-center border-sky-200 bg-sky-100 text-sky-950 transition-colors hover:bg-sky-50 ${layoutClassName} ${minHeightClassName}`}
       aria-label={`打开${category.name}`}
     >
       <span className={`absolute left-0 top-0 h-5 w-[48%] bg-sky-200 transition-colors group-hover:bg-sky-100 ${folderTabClassName}`} aria-hidden="true" />
@@ -460,7 +460,7 @@ function ActionTile({
   return (
     <button
       onClick={onClick}
-      className={`apple-press flex flex-col items-center justify-center gap-1.5 rounded-[22px] border-2 border-emerald-200 bg-emerald-100 p-3 text-emerald-950 shadow-[0_2px_4px_rgba(15,23,42,0.08),0_10px_22px_rgba(15,23,42,0.10)] transition-all hover:bg-emerald-50 hover:shadow-[0_3px_8px_rgba(15,23,42,0.10),0_16px_30px_rgba(15,23,42,0.12)] ${minHeightClassName}`}
+      className={`apple-press radius-card flex flex-col items-center justify-center gap-1.5 border-2 border-emerald-200 bg-emerald-100 p-3 text-emerald-950 transition-colors hover:bg-emerald-50 ${minHeightClassName}`}
       aria-label={label}
     >
       <span className={`flex ${ROOT_MEDIA_SLOT_CLASS} items-center justify-center`}>

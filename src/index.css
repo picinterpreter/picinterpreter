@@ -48,7 +48,7 @@ body {
 :root {
   --radius-media: 0.75rem;
   --radius-control: 1rem;
-  --radius-card: 1.25rem;
+  --radius-card: 0.75rem;
   --radius-panel: 1.5rem;
   --radius-pill: 9999px;
 }
@@ -75,6 +75,11 @@ select:focus-visible,
 textarea:focus-visible {
   outline: 2px solid #007aff;
   outline-offset: 2px;
+}
+
+.receiver-text-input:focus,
+.receiver-text-input:focus-visible {
+  outline: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

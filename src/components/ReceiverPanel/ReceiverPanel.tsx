@@ -372,10 +372,10 @@ export function ReceiverPanel() {
               onChange={(e) => { if (!isListening) setInputText(e.target.value) }}
               placeholder={isListening ? '聆听中' : '输入'}
               readOnly={isListening}
-              className={`radius-control min-h-[64px] min-w-0 border px-5 py-3 text-lg text-slate-950 outline-none transition-[background-color,border-color]
+              className={`receiver-text-input radius-control min-h-[64px] min-w-0 border px-5 py-3 text-lg text-slate-950 outline-none transition-[background-color,border-color] focus-visible:outline-none
                 ${isListening
-                  ? 'border-rose-200 bg-rose-50/80 text-rose-700 placeholder:text-rose-300 focus:border-rose-300 focus:bg-white focus:ring-4 focus:ring-rose-100'
-                  : 'border-slate-200 bg-white/95 placeholder:text-slate-400 hover:border-slate-300 focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-slate-200/80'
+                  ? 'border-rose-200 bg-rose-50/80 text-rose-700 placeholder:text-rose-300 focus:border-rose-300 focus:bg-white focus:ring-0'
+                  : 'border-slate-200 bg-white/95 placeholder:text-slate-400 hover:border-slate-300 focus:border-slate-300 focus:bg-white focus:ring-0'
                 }`}
               autoFocus
               aria-live="polite"

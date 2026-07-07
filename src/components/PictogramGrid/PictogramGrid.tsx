@@ -253,7 +253,6 @@ export function PictogramGrid() {
                       key={item.key}
                       pictogram={item.pictogram}
                       color={isRoot ? '#d97706' : color}
-                      cardTone="bg-yellow-100 border-yellow-200 text-yellow-950"
                       gridCols={gridCols}
                       imageClassName={isRoot ? ROOT_MEDIA_SLOT_CLASS : undefined}
                       minHeightClassName={isRoot ? ROOT_TILE_HEIGHT_CLASS : undefined}
@@ -277,9 +276,8 @@ export function PictogramGrid() {
                 }
 
                 return (
-                  <ActionTile
+                  <SavedPhrasesTile
                     key={item.key}
-                    icon={<LineIcon name="star" className="size-12 sm:size-14" />}
                     label={item.label}
                     minHeightClassName={isRoot ? ROOT_TILE_HEIGHT_CLASS : undefined}
                     labelClassName={isRoot ? ROOT_TILE_LABEL_CLASS : undefined}
@@ -349,7 +347,6 @@ function HierarchyNavRail({
 function PictogramTile({
   pictogram,
   color,
-  cardTone,
   gridCols,
   imageClassName,
   minHeightClassName = 'min-h-[112px]',
@@ -358,7 +355,6 @@ function PictogramTile({
 }: {
   pictogram: PictogramEntry
   color: string
-  cardTone: string
   gridCols: GridCols
   imageClassName?: string
   minHeightClassName?: string
@@ -366,27 +362,33 @@ function PictogramTile({
   onSelect: () => void
 }) {
   const label = pictogram.labels.zh[0]
+  const isNegative = ['不', '不是', '不要', '停止'].some((word) => label.includes(word))
+  const tileTone = isNegative
+    ? 'border-rose-300 bg-rose-200 hover:bg-rose-100'
+    : 'border-yellow-300 bg-yellow-100 hover:bg-yellow-50'
 
   return (
     <button
       onClick={onSelect}
-      className={`apple-press radius-card relative flex flex-col items-center gap-1.5 border-2 p-3 transition-colors hover:border-slate-300 ${minHeightClassName} ${cardTone}`}
+      className={`apple-press radius-card relative flex flex-col items-center justify-between overflow-hidden border-2 p-2 text-slate-950 transition-colors ${tileTone} ${minHeightClassName}`}
       aria-label={label}
     >
-      <img
-        src={resolveImageSrc(pictogram.imageUrl, label, color)}
-        alt={label}
-        className={`${imageClassName ?? IMG_CLASS[gridCols]} object-contain`}
-        loading="lazy"
-        onError={(e) => {
-          const img = e.currentTarget
-          if (!img.src.startsWith('data:')) {
-            img.src = generatePlaceholderSvg(label, color)
-          }
-        }}
-      />
-      <span className="flex h-10 max-w-full items-center justify-center sm:h-11">
-        <span className={`line-clamp-2 max-w-full break-words text-center font-semibold leading-tight text-slate-800 ${labelClassName}`}>
+      <span className="flex min-h-0 flex-1 items-center justify-center px-1 pt-1">
+        <img
+          src={resolveImageSrc(pictogram.imageUrl, label, color)}
+          alt={label}
+          className={`${imageClassName ?? IMG_CLASS[gridCols]} object-contain`}
+          loading="lazy"
+          onError={(e) => {
+            const img = e.currentTarget
+            if (!img.src.startsWith('data:')) {
+              img.src = generatePlaceholderSvg(label, color)
+            }
+          }}
+        />
+      </span>
+      <span className="flex h-9 w-full items-end justify-center px-1 sm:h-10">
+        <span className={`line-clamp-2 max-w-full break-words text-center font-bold leading-tight text-slate-950 ${labelClassName}`}>
           {label}
         </span>
       </span>
@@ -411,13 +413,11 @@ function FolderTile({
 }) {
   const layoutClassName = isCompactTile
     ? 'radius-card justify-center gap-1.5 border-2 p-3'
-    : 'radius-card justify-end border px-3 pb-3 pt-6'
+    : 'radius-card justify-end border-2 px-3 pb-3 pt-6'
   const iconClassName = isCompactTile
     ? `flex ${ROOT_MEDIA_SLOT_CLASS} items-center justify-center text-[48px] leading-none sm:text-[54px]`
-    : 'flex min-h-[72px] items-center justify-center text-5xl leading-none sm:text-6xl'
-  const folderTabClassName = isCompactTile
-    ? 'radius-folder-tab'
-    : 'radius-folder-tab'
+    : 'flex min-h-[72px] items-center justify-center'
+  const folderTabClassName = 'radius-folder-tab'
 
   return (
     <button
@@ -436,7 +436,7 @@ function FolderTile({
         )}
       </span>
       <span className="mt-1 flex h-10 max-w-full items-center justify-center sm:h-11">
-        <span className={`line-clamp-2 max-w-full break-words text-center text-base font-bold leading-tight text-slate-900 ${labelClassName ?? ''}`}>
+        <span className={`line-clamp-2 max-w-full break-words text-center text-base font-bold leading-tight text-slate-950 ${labelClassName ?? ''}`}>
           {category.name}
         </span>
       </span>
@@ -444,14 +444,12 @@ function FolderTile({
   )
 }
 
-function ActionTile({
-  icon,
+function SavedPhrasesTile({
   label,
   minHeightClassName = 'min-h-[150px] sm:min-h-[166px]',
   labelClassName,
   onClick,
 }: {
-  icon: ReactNode
   label: string
   minHeightClassName?: string
   labelClassName?: string
@@ -460,14 +458,26 @@ function ActionTile({
   return (
     <button
       onClick={onClick}
-      className={`apple-press radius-card flex flex-col items-center justify-center gap-1.5 border-2 border-emerald-200 bg-emerald-100 p-3 text-emerald-950 transition-colors hover:bg-emerald-50 ${minHeightClassName}`}
+      className={`apple-press radius-card relative flex flex-col items-center justify-center gap-1.5 border-2 border-orange-400 bg-white p-3 text-orange-950 transition-colors hover:bg-orange-50 ${minHeightClassName}`}
       aria-label={label}
     >
-      <span className={`flex ${ROOT_MEDIA_SLOT_CLASS} items-center justify-center`}>
-        {icon}
+      <span className="absolute left-2 top-2 flex size-8 items-center justify-center rounded-full border-2 border-orange-400 bg-orange-100 text-orange-600" aria-hidden="true">
+        <LineIcon name="star" className="h-4.5 w-4.5" />
+      </span>
+      <span className="relative flex h-20 w-24 items-center justify-center sm:h-24 sm:w-28" aria-hidden="true">
+        <span className="radius-card absolute inset-x-3 inset-y-2 border-2 border-orange-400 bg-orange-50" />
+        <span className="absolute left-3 top-2 h-[calc(100%-1rem)] w-3 border-r-2 border-orange-400 bg-orange-200" />
+        <span className="relative flex flex-col items-start gap-2 pl-4">
+          <span className="h-2 w-12 rounded-full bg-orange-400" />
+          <span className="h-2 w-14 rounded-full bg-orange-300" />
+          <span className="h-2 w-10 rounded-full bg-orange-300" />
+        </span>
+        <span className="absolute bottom-1 right-2 flex size-9 items-center justify-center rounded-full border-2 border-orange-400 bg-white text-orange-600">
+          <LineIcon name="star" className="h-5 w-5" />
+        </span>
       </span>
       <span className="flex h-10 max-w-full items-center justify-center sm:h-11">
-        <span className={`line-clamp-2 max-w-full break-words text-center text-base font-bold leading-tight text-slate-900 ${labelClassName ?? ''}`}>
+        <span className={`line-clamp-2 max-w-full break-words text-center text-base font-bold leading-tight text-orange-950 ${labelClassName ?? ''}`}>
           {label}
         </span>
       </span>

@@ -5,3 +5,7 @@ export function isWeChatWebView(userAgent = typeof navigator === 'undefined' ? '
 export function shouldDeferTtsAutoplay(): boolean {
   return isWeChatWebView()
 }
+
+export function shouldUseServerTts(userAgent = typeof navigator === 'undefined' ? '' : navigator.userAgent): boolean {
+  return isWeChatWebView(userAgent)
+}

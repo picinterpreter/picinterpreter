@@ -7,6 +7,7 @@ import type {
   TTSResult,
 } from '@/types'
 import { TemplateNLG } from './template-nlg'
+import { ServerAudioTTS } from './server-audio-tts'
 import { WebSpeechTTS } from './web-speech-tts'
 
 export interface AIAdapterConfig {
@@ -29,6 +30,7 @@ export class AIAdapter {
     ].filter((p): p is NLGProvider => p != null)
 
     this.ttsProviders = [
+      new ServerAudioTTS(),
       config.cloudTTS,
       new WebSpeechTTS(),
     ].filter((p): p is TTSProvider => p != null)

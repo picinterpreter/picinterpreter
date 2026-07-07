@@ -10,6 +10,7 @@ import { useAI } from '@/hooks/use-ai'
 import { useConversationStore } from '@/stores/conversation-store'
 import { useSettingsStore } from '@/stores/settings-store'
 import { resolveImageSrc } from '@/utils/generate-placeholder-svg'
+import { shouldDeferTtsAutoplay } from '@/utils/tts-environment'
 import { LineIcon } from '@/components/ui/LineIcon'
 import type { PictogramEntry } from '@/types'
 
@@ -38,6 +39,7 @@ export function ReceiverDisplayOverlay({ items, inputText, onDone, onBack }: Pro
   const [ttsError, setTtsError] = useState(false)
   const [recorded, setRecorded] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
+  const [hasSpoken, setHasSpoken] = useState(false)
 
   /**
    * mountedRef: 防止组件卸载后 TTS promise 回调更新 state。
@@ -58,6 +60,7 @@ export function ReceiverDisplayOverlay({ items, inputText, onDone, onBack }: Pro
 
   // 进入全屏后自动播报一次
   useEffect(() => {
+    if (shouldDeferTtsAutoplay()) return
     if (inputText) speakText()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -76,6 +79,7 @@ export function ReceiverDisplayOverlay({ items, inputText, onDone, onBack }: Pro
     const gen = ++speakGenRef.current
     setIsSpeaking(true)
     setTtsError(false)
+    setHasSpoken(true)
     ai.speak({ text: inputText, lang: 'zh-CN', rate: ttsRate }).then((result) => {
       // 若组件已卸载或已被新一轮播放抢占，则忽略
       if (!mountedRef.current || gen !== speakGenRef.current) return
@@ -137,10 +141,10 @@ export function ReceiverDisplayOverlay({ items, inputText, onDone, onBack }: Pro
           onClick={speakText}
           disabled={isSpeaking}
           className="apple-press flex min-h-[44px] items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium text-white/70 hover:bg-white/10 hover:text-white disabled:opacity-40"
-          aria-label="重播语音"
+          aria-label={hasSpoken ? '重播语音' : '播报语音'}
         >
-          <LineIcon name="refresh" className="h-4 w-4" />
-          重播
+          <LineIcon name={hasSpoken ? 'refresh' : 'sound'} className="h-4 w-4" />
+          {hasSpoken ? '重播' : '播报'}
         </button>
       </div>
 

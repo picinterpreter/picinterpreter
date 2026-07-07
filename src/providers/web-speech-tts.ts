@@ -15,7 +15,9 @@ export class WebSpeechTTS implements TTSProvider {
   readonly name = 'web-speech'
 
   isAvailable(): boolean {
-    return 'speechSynthesis' in window
+    return typeof window !== 'undefined'
+      && 'speechSynthesis' in window
+      && 'SpeechSynthesisUtterance' in window
   }
 
   /**

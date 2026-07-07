@@ -4,6 +4,7 @@ import { useAppStore } from '@/stores/app-store'
 import { useSettingsStore } from '@/stores/settings-store'
 import { useAI } from '@/hooks/use-ai'
 import { resolveImageSrc } from '@/utils/generate-placeholder-svg'
+import { shouldDeferTtsAutoplay } from '@/utils/tts-environment'
 import { db } from '@/db'
 import { addSavedPhraseIfMissing } from '@/repositories/saved-phrases-repository'
 import { LineIcon } from '@/components/ui/LineIcon'
@@ -39,6 +40,7 @@ export function PlaybackOverlay() {
   const [isSpeaking, setIsSpeaking] = useState(false)
   const [ttsError, setTtsError] = useState<string | null>(null)
   const [saved, setSaved] = useState(false)
+  const [hasSpoken, setHasSpoken] = useState(false)
 
   /**
    * mountedRef: 防止组件卸载后 TTS promise 回调更新 state。
@@ -61,11 +63,13 @@ export function PlaybackOverlay() {
   useEffect(() => {
     setSaved(false)
     setTtsError(null)
+    setHasSpoken(false)
   }, [playbackSentence])
 
   // 句子或速率变化时自动播报
   useEffect(() => {
     if (!showPlayback || !playbackSentence) return
+    if (shouldDeferTtsAutoplay()) return
     speak()
     return () => {
       ai.stopSpeaking()
@@ -80,6 +84,7 @@ export function PlaybackOverlay() {
     const gen = ++speakGenRef.current
     setIsSpeaking(true)
     setTtsError(null)
+    setHasSpoken(true)
     ai.speak({ text: playbackSentence, lang: 'zh-CN', rate: ttsRate }).then((result) => {
       if (!mountedRef.current || gen !== speakGenRef.current) return
       setIsSpeaking(false)
@@ -168,11 +173,11 @@ export function PlaybackOverlay() {
           <button
             onClick={handleReplay}
             disabled={isSpeaking}
-            aria-label="重新播报"
+            aria-label={hasSpoken ? '重新播报' : '播报'}
             className="apple-press flex min-h-[52px] items-center justify-center gap-2 rounded-full bg-slate-100 px-6 py-3 text-lg font-semibold text-slate-800 transition-colors hover:bg-slate-200 disabled:opacity-50"
           >
-            <LineIcon name="refresh" className="h-5 w-5" />
-            重播
+            <LineIcon name={hasSpoken ? 'refresh' : 'sound'} className="h-5 w-5" />
+            {hasSpoken ? '重播' : '播报'}
           </button>
           <button
             onClick={handleFavorite}

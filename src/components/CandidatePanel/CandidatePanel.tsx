@@ -14,6 +14,7 @@ import { useSettingsStore } from '@/stores/settings-store'
 import { useConversationStore } from '@/stores/conversation-store'
 import { useAI } from '@/hooks/use-ai'
 import { addSavedPhraseIfMissing } from '@/repositories/saved-phrases-repository'
+import { shouldDeferTtsAutoplay } from '@/utils/tts-environment'
 import { LineIcon } from '@/components/ui/LineIcon'
 
 type Phase = 'generating' | 'playing' | 'done' | 'error'
@@ -32,6 +33,7 @@ export function CandidatePanel() {
   const ttsRate = useSettingsStore((s) => s.ttsRate)
   const recordExpression = useConversationStore((s) => s.recordExpression)
   const ai = useAI()
+  const deferTtsAutoplay = shouldDeferTtsAutoplay()
 
   const [phase, setPhase] = useState<Phase>('generating')
   const [playIndex, setPlayIndex] = useState(0)    // 当前播报到第几句（done 阶段表示「选中句」）
@@ -95,6 +97,17 @@ export function CandidatePanel() {
     if (candidateSentences.length === 0) return
     if (isGenerating) return
     if (phase === 'done') return
+
+    if (deferTtsAutoplay) {
+      playRunRef.current += 1
+      stoppedRef.current = true
+      ai.stopSpeaking()
+      setTtsError(false)
+      setIsPlayingOne(false)
+      setPlayIndex(0)
+      setPhase('done')
+      return
+    }
 
     setPhase('playing')
     setPlayIndex(0)
@@ -228,7 +241,7 @@ export function CandidatePanel() {
         <h2 id="candidate-panel-title" className="text-lg font-semibold text-slate-950">
           {phase === 'generating' && '正在生成…'}
           {phase === 'playing' && `播报中 ${playIndex + 1} / ${candidateSentences.length}`}
-          {phase === 'done' && '播报完成'}
+          {phase === 'done' && (deferTtsAutoplay ? '选择播报' : '播报完成')}
           {phase === 'error' && '生成失败'}
         </h2>
         <button
@@ -370,11 +383,12 @@ export function CandidatePanel() {
         {phase === 'done' && (
           <>
             <button
-              onClick={handleReplay}
+              onClick={deferTtsAutoplay ? () => handlePlayOne(playIndex) : handleReplay}
+              disabled={isPlayingOne}
               className="apple-press flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-slate-100 px-5 py-3 text-base font-semibold text-slate-800 transition-colors hover:bg-slate-200"
             >
-              <LineIcon name="refresh" className="h-5 w-5" />
-              全部重播
+              <LineIcon name={deferTtsAutoplay ? 'sound' : 'refresh'} className="h-5 w-5" />
+              {deferTtsAutoplay ? '播报' : '全部重播'}
             </button>
             <button
               onClick={handleSaveFavorite}

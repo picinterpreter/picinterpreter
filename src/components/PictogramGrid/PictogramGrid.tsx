@@ -24,6 +24,7 @@ const IMG_CLASS: Record<GridCols, string> = {
 
 const ROOT_TILE_HEIGHT_CLASS = 'h-[136px] sm:h-[150px]'
 const ROOT_MEDIA_SLOT_CLASS = 'size-[76px] sm:size-20'
+const ROOT_TILE_LABEL_CLASS = 'text-base sm:text-lg'
 
 const CATEGORY_COLORS: Record<string, string> = {
   quickchat: '#1d4ed8',
@@ -256,7 +257,7 @@ export function PictogramGrid() {
                       gridCols={gridCols}
                       imageClassName={isRoot ? ROOT_MEDIA_SLOT_CLASS : undefined}
                       minHeightClassName={isRoot ? ROOT_TILE_HEIGHT_CLASS : undefined}
-                      labelClassName={isRoot ? 'text-xl sm:text-2xl' : undefined}
+                      labelClassName={isRoot ? ROOT_TILE_LABEL_CLASS : undefined}
                       onSelect={() => handleSelect(item.pictogram)}
                     />
                   )
@@ -269,6 +270,7 @@ export function PictogramGrid() {
                       category={item.category}
                       minHeightClassName={useCompactFolderTiles || isRoot ? ROOT_TILE_HEIGHT_CLASS : undefined}
                       isCompactTile={useCompactFolderTiles || isRoot}
+                      labelClassName={isRoot ? ROOT_TILE_LABEL_CLASS : undefined}
                       onOpen={() => openCategory(item.category.id)}
                     />
                   )
@@ -280,6 +282,7 @@ export function PictogramGrid() {
                     icon={<LineIcon name="star" className="size-12 sm:size-14" />}
                     label={item.label}
                     minHeightClassName={isRoot ? ROOT_TILE_HEIGHT_CLASS : undefined}
+                    labelClassName={isRoot ? ROOT_TILE_LABEL_CLASS : undefined}
                     onClick={() => setShowSavedPhrases(true)}
                   />
                 )
@@ -382,8 +385,10 @@ function PictogramTile({
           }
         }}
       />
-      <span className={`text-center font-semibold leading-tight text-slate-800 ${labelClassName}`}>
-        {label}
+      <span className="flex h-10 max-w-full items-center justify-center sm:h-11">
+        <span className={`line-clamp-2 max-w-full break-words text-center font-semibold leading-tight text-slate-800 ${labelClassName}`}>
+          {label}
+        </span>
       </span>
     </button>
   )
@@ -394,12 +399,14 @@ function FolderTile({
   icon,
   minHeightClassName = 'min-h-[124px]',
   isCompactTile = false,
+  labelClassName,
   onOpen,
 }: {
   category: Category
   icon?: ReactNode
   minHeightClassName?: string
   isCompactTile?: boolean
+  labelClassName?: string
   onOpen: () => void
 }) {
   const layoutClassName = isCompactTile
@@ -428,8 +435,10 @@ function FolderTile({
           />
         )}
       </span>
-      <span className="mt-1 max-w-full truncate text-center text-base font-bold leading-tight text-slate-900">
-        {category.name}
+      <span className="mt-1 flex h-10 max-w-full items-center justify-center sm:h-11">
+        <span className={`line-clamp-2 max-w-full break-words text-center text-base font-bold leading-tight text-slate-900 ${labelClassName ?? ''}`}>
+          {category.name}
+        </span>
       </span>
     </button>
   )
@@ -439,11 +448,13 @@ function ActionTile({
   icon,
   label,
   minHeightClassName = 'min-h-[150px] sm:min-h-[166px]',
+  labelClassName,
   onClick,
 }: {
   icon: ReactNode
   label: string
   minHeightClassName?: string
+  labelClassName?: string
   onClick: () => void
 }) {
   return (
@@ -455,8 +466,10 @@ function ActionTile({
       <span className={`flex ${ROOT_MEDIA_SLOT_CLASS} items-center justify-center`}>
         {icon}
       </span>
-      <span className="text-center text-xl font-bold leading-tight text-slate-900 sm:text-2xl">
-        {label}
+      <span className="flex h-10 max-w-full items-center justify-center sm:h-11">
+        <span className={`line-clamp-2 max-w-full break-words text-center text-base font-bold leading-tight text-slate-900 ${labelClassName ?? ''}`}>
+          {label}
+        </span>
       </span>
     </button>
   )

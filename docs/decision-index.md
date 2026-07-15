@@ -3,7 +3,7 @@
 Quick reference for confirmed architectural decisions and open design questions.
 Each row links to the tracking issue where the full context lives.
 
-Last updated: 2026-04-30
+Last updated: 2026-07-15 12:59:05 | Codex (GPT-5)
 
 ---
 
@@ -37,7 +37,7 @@ For implementation sequencing, see [Implementation Task Index](implementation-ta
 | Session boundary | Session ID shared across express + receive flows; new session suggested after 30-min idle or user-triggered reset | [#31](https://github.com/picinterpreter/picinterpreter/issues/31) |
 | Service Worker strategy | App shell cache-first (`picinterpreter-v1-*`); pictogram blobs stored in IndexedDB only; API routes network-only; SW disabled by default, enabled via `NEXT_PUBLIC_ENABLE_SERVICE_WORKER=true` | [#32](https://github.com/picinterpreter/picinterpreter/issues/32) |
 | Correction memory | MVP: workspace-level immediate write-back. Future: family promotion threshold, default ≥3 users, configurable; tombstones 90 days; no cross-workspace learning in MVP | [#26](https://github.com/picinterpreter/picinterpreter/issues/26) |
-| AAC board base | Future production-oriented development should use Cboard as the AAC board-system base, while Tuyujia owns the Chinese semantic matching, caregiver collaboration, AI reconstruction, privacy, and clinical vocabulary layers. | [ADR-003](ADR-003-cboard-secondary-development-base.md) |
+| AAC board base | The existing PicInterpreter MVP has validated Tuyujia's bidirectional communication core. For production and cross-platform delivery, use the Cboard fork as the AAC client, board system, and packaging base; reuse Cboard code by default, keep its default boards/categories for the first production slice, preserve the MVP as the executable specification, and keep Chinese matching, bidirectional communication, privacy, and clinical logic in a neutral Communication Support layer. Every change must record intent, decision, rationale, evidence, and effective scope. | [ADR-003](ADR-003-cboard-secondary-development-base.md) |
 
 ---
 
